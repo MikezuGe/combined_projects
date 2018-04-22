@@ -4,14 +4,25 @@
   "description": "This is a repository of multiple webpages.\r Each webpage has its own folder in the root folder.\r Each webpage's folder has an index file that will be served when a folder is accessed",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "npx nodemon index.js",
+    "build": "npx webpack --watch"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.18.0",
+    "css-loader": "^0.28.11",
     "express": "^4.16.3",
+    "file-loader": "^1.1.11",
     "react": "^16.3.2",
-    "react-dom": "^16.3.2"
+    "react-dom": "^16.3.2",
+    "react-redux": "^5.0.7",
+    "react-router-dom": "^4.2.2",
+    "redux": "^4.0.0",
+    "redux-form": "^7.3.0",
+    "redux-thunk": "^2.2.0",
+    "style-loader": "^0.21.0"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",

@@ -1,9 +1,6 @@
 const path = require('path');
 
 
-
-
-
 const babelLoader = {
   'test': /\.js$/,
   'exclude': /node_modules/,
@@ -15,24 +12,83 @@ const babelLoader = {
   },
 }
 
+const cssLoader = {
+  'test': /\.css$/,
+  'exclude': /node_modules/,
+  'use': {
+    'loader': 'css-loader',
+    'options': {
+      'minimize': false,
+      'sourceMap': false, // Style loader creates the sourcemap
+      'camelCase': false,
+    },
+  },
+};
+
+const styleLoader = {
+  'test': /\.css$/,
+  'exclude': /node_modules/,
+  'use': {
+    'loader': 'style-loader',
+    'options': {
+      'singleton': true,
+      'sourceMap': false, // Create sourcemap here. Cssloader might sourcemap the single css-file styleloader creates
+      'convertToAbsoluteUrls': true,
+    },
+  },
+};
+
+const fileLoader = {
+  'test': /\.svg$/,
+  'exclude': /node_modules/,
+  'use': {
+    'loader': 'file-loader',
+    'options': {},
+  },
+};
+
 
 // Each project should have its own webpack configuration
-const webpack = {
+
+let projectName = 'test';
+const test = {
   'mode': 'development',
-  'entry': './test/src/app.js',
+  'entry': `./public/${projectName}/src/app.js`,
   'output': {
     'filename': 'bundle.js',
-    'path': path.resolve(__dirname, 'test'),
+    'path': path.resolve(__dirname, `public/${projectName}`),
   },
   'module': {
     'rules': [
       babelLoader,
+      styleLoader,
+      cssLoader,
+      fileLoader,
     ],
   },
-}
+};
 
+
+projectName = 'yourbudget';
+const yourbudget = {
+  'mode': 'development',
+  'entry': `./public/${projectName}/src/app.js`,
+  'output': {
+    'filename': 'bundle.js',
+    'path': path.resolve(__dirname, `public/${projectName}`),
+  },
+  'module': {
+    'rules': [
+      babelLoader,
+      styleLoader,
+      cssLoader,
+      fileLoader,
+    ],
+  },
+};
 
 // Add each configuration to the array
 module.exports = [
-  webpack,
+  test,
+  yourbudget,
 ];

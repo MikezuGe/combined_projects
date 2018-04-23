@@ -49,9 +49,9 @@ const fileLoader = {
 
 
 // Each project should have its own webpack configuration
-
+const projects = [];
 let projectName = 'test';
-const test = {
+projects.push({
   'mode': 'development',
   'entry': `./public/${projectName}/src/app.js`,
   'output': {
@@ -66,11 +66,11 @@ const test = {
       fileLoader,
     ],
   },
-};
+});
 
 
 projectName = 'yourbudget';
-const yourbudget = {
+projects.push({
   'mode': 'development',
   'entry': `./public/${projectName}/src/app.js`,
   'output': {
@@ -85,10 +85,27 @@ const yourbudget = {
       fileLoader,
     ],
   },
-};
+});
+
+
+projectName = 'images';
+projects.push({
+  'mode': 'development',
+  'entry': `./public/${projectName}/src/app.js`,
+  'output': {
+    'filename': 'bundle.js',
+    'path': path.resolve(__dirname, `public/${projectName}`),
+  },
+  'module': {
+    'rules': [
+      babelLoader,
+      styleLoader,
+      cssLoader,
+      fileLoader,
+    ],
+  },
+});
+
 
 // Add each configuration to the array
-module.exports = [
-  test,
-  yourbudget,
-];
+module.exports = projects;

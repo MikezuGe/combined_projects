@@ -3,6 +3,9 @@ const path = require('path');
 const fs = require('fs');
 const app = express();
 
+// Custom router imports
+const apiRouter = require('./api');
+
 
 const createHTML = folders => `
   <!DOCTYPE html>
@@ -54,17 +57,22 @@ app
 
 .get('/', (req, res) => {
   // Read public folder, get all folders, create links and create a html file with links and serve it to user
+  console.log('Requesting mainpage');
   fs.readdir('./public', (err, folders) => {
     if (err) {
       res.send('There was an error');
       console.error(err);
     }
-    const html = createHTML(folders);
-    res.send(html);
+    res.send(createHTML(folders));
   });
 })
 
+// Api calls here
+.use(apiRouter)
+
+// When all api calls have been checked, fall back here
 .get('/*', (req, res) => {
+  console.log('Requesting webpage');
   console.log(req.path);
   res.sendFile(path.resolve('./public' + req.path.slice(0, req.path.indexOf('/', 1)), 'index.html'));
 })

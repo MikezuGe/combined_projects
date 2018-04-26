@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npx nodemon index.js",
-    "start:dev": "npx nodemon index.js && npx webapck --watch",
-    "build": "npx webpack --watch"
+    "start": "npx nodemon --watch index.js --watch api index.js",
+    "develop": "npx webpack --watch",
+    "build": "npx webpack"
   },
   "author": "",
   "license": "ISC",
@@ -23,6 +23,7 @@
     "redux": "^4.0.0",
     "redux-form": "^7.3.0",
     "redux-thunk": "^2.2.0",
+    "sharp": "^0.20.1",
     "style-loader": "^0.21.0"
   },
   "devDependencies": {

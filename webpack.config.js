@@ -1,6 +1,19 @@
 const path = require('path');
 
 
+const eslintLoader = {
+  'enforce': 'pre',
+  'test': /\.js$/,
+  'exclude': /node_modules/,
+  'use': {
+    'loader': 'eslint-loader',
+    'options': {
+      'presets': [ 'env', 'stage-2', 'react' ],
+    },
+  },
+}
+
+
 const babelLoader = {
   'test': /\.js$/,
   'exclude': /node_modules/,
@@ -60,6 +73,7 @@ projects.push({
   },
   'module': {
     'rules': [
+      eslintLoader,
       babelLoader,
       styleLoader,
       cssLoader,
@@ -79,6 +93,7 @@ projects.push({
   },
   'module': {
     'rules': [
+      eslintLoader,
       babelLoader,
       styleLoader,
       cssLoader,
@@ -98,6 +113,7 @@ projects.push({
   },
   'module': {
     'rules': [
+      eslintLoader,
       babelLoader,
       styleLoader,
       cssLoader,

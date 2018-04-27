@@ -1,7 +1,11 @@
 import axios from 'axios';
 import ReactDOM from 'react-dom';
 import React, { Component } from 'react';
+
 import './css/style.css';
+
+import Thumbnails from './js/thumbnails';
+import BigImage from './js/bigimage';
 
 
 axios.defaults.baseURL = `${window.location.origin}/api`;
@@ -12,50 +16,44 @@ class App extends Component {
   state = {
     thumbnailUrls: [],
     imageUrls: [],
-    displayedImage: '',
+    bigImageUrl: '',
   }
 
   componentDidMount() {
     axios.get('/images')
       .then(result => {
         const { location, } = window;
-        const { thumbnailUrls, imageUrls, } = result.data;
+        const { thumbnailUrls, bigImageUrls, } = result.data;
         this.setState({
-          imageUrls: imageUrls.map(url => `${location}${url}`),
+          bigImageUrls: bigImageUrls.map(url => `${location}${url}`),
           thumbnailUrls: thumbnailUrls.map(url => `${location}${url}`),
         });
       })
       .catch(err => {
-        console.log(err);
+        throw new Error(err);
       });
   }
 
-  openImage = index => {
-    console.log(index);
-    console.log(this.state.imageUrls[index]);
-    this.setState({
-      displayedImage: this.state.imageUrls[index],
-    });
+  openImage = bigImageUrl => {
+    this.setState({ bigImageUrl, });
   }
 
   closeImage = () => {
-    this.setState({
-      displayedImage: '',
-    })
+    this.setState({ bigImageUrl: '', })
   }
 
   render() {
-    console.log(this.state);
+    const { thumbnailUrls, bigImageUrls, bigImageUrl, } = this.state;
+    const { openImage, closeImage, } = this;
     return <div className={'container'}>
-      { this.state.thumbnailUrls.length > 0 && this.state.thumbnailUrls.map((url, index) => <img className={'image'} key={index} onClick={() => { this.openImage(index) }} src={url} />) }
-      { this.state.displayedImage && bigImage(this.state.displayedImage, this.closeImage) }
+      { thumbnailUrls.length > 0 && bigImageUrls.length > 0 &&
+        <Thumbnails openImage={openImage} thumbnailUrls={thumbnailUrls} bigImageUrls={bigImageUrls} /> }
+      { bigImageUrl.length > 0 &&
+        <BigImage closeImage={closeImage} bigImageUrl={bigImageUrl} /> }
     </div>
   }
 
 }
-
-
-const bigImage = (url, close) => <img onClick={close} src={url} />;
 
 
 ReactDOM.render(

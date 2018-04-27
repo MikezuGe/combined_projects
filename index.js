@@ -12,6 +12,9 @@ const createHTML = folders => `
   <html>
     <head>
       <title>Kontioweb</title>
+      <meta charset='utf-8'>
+      <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+      <link rel="icon" type="image/gif" href="shared_assets/favicon/favicogifslow.gif">
       <style>
         * {
           margin: 0;
@@ -58,12 +61,12 @@ app
 .get('/', (req, res) => {
   // Read public folder, get all folders, create links and create a html file with links and serve it to user
   console.log('Requesting mainpage');
-  fs.readdir('./public', (err, folders) => {
+  fs.readdir('./public', (err, files) => {
     if (err) {
-      res.send('There was an error');
+      res.send('Unable to read public');
       console.error(err);
     }
-    res.send(createHTML(folders));
+    res.send(createHTML(files.filter(file => fs.readdirSync(`./public/${file}`).includes('index.html'))));
   });
 })
 

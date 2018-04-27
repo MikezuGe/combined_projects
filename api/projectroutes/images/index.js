@@ -38,7 +38,7 @@ router
       .then(() => {
         res.send({
           thumbnailUrls: filteredFileNames.map(fileName => `${'data/thumbnails/'}${fileName}`),
-          imageUrls: filteredFileNames.map(fileName => `${'data/'}${fileName}`),
+          bigImageUrls: filteredFileNames.map(fileName => `${'data/'}${fileName}`),
         });
       })
       .catch(err => console.log(err));

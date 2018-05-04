@@ -7,7 +7,7 @@ const BUDGET_LOADING = 'BUDGET_LOADING';
 const BUDGET_ERROR = 'BUDGET_ERROR';
 
 
-axios.defaults.baseURL = 'http://localhost/yourbudget/';
+axios.defaults.baseURL = `${window.location.origin}/api/yourbudget/`;
 
 export const addBudget = budget => dispatch => {
   dispatch({ type: BUDGET_LOADING, });

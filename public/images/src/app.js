@@ -42,7 +42,7 @@ class App extends Component {
     this.setState({ bigImageUrl: '', })
   }
 
-  render() {
+  render = () => {
     const { thumbnailUrls, bigImageUrls, bigImageUrl, } = this.state;
     const { openImage, closeImage, } = this;
     return <div className={'container'}>

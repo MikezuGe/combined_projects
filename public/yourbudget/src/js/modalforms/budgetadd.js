@@ -1,6 +1,5 @@
 import React, { Component, } from 'react';
 import { connect, } from 'react-redux';
-import { Field, reduxForm, } from 'redux-form';
 import PropTypes from 'prop-types';
 
 import '../../css/modalforms/common.css';
@@ -11,34 +10,10 @@ import { addBudget, } from '../redux';
 
 export const budgetAddModalForm = 'BUDGET_ADD_MODAL_FORM';
 
-
+/*
 const firstLetterToUpperCase = word => word.charAt(0).toUpperCase() + word.slice(1);
-
-
-const fieldComponent = ({ type, placeholder, input, meta: { touched, error, }, }) => type === 'checkbox'
-  ? <div className={'commonfield'}>
-    <div className={'switchlabel'}>{'Income'}</div>
-    <div className={'switchcontainer'}>
-      <input className={'switchinput'} {...input} type={type} placeholder={placeholder} />
-      <div className={'switchvisible'} />
-    </div>
-    <div className={'switchlabel'}>{'Expense'}</div>
-  </div>
-  : <div className={'commonfield'}>
-    <div className={'fieldname'}>{`${firstLetterToUpperCase(input.name)}:`}</div>
-    <input className={'fieldinput'} {...input} type={type} placeholder={placeholder} />
-    <div className={'fielderror'}>{ touched && error || '' }</div>
-  </div>;
-
-
-fieldComponent.propTypes = {
-  type: PropTypes.string.isRequired,
-  placeholder: PropTypes.string,
-  input: PropTypes.object.isRequired,
-  meta: PropTypes.object.isRequired,
-};
-
-
+*/
+/*
 const validate = ({ name, amount, date, }) => {
   const errors = {};
 
@@ -67,24 +42,41 @@ const validate = ({ name, amount, date, }) => {
 
   return errors;
 };
-
+*/
 
 class BudgetAdd extends Component {
 
-  formSubmit = values => {
-    console.log(values);
+  formSubmit = e => {
+    // eslint-disable-next-line
+    console.log(e);
   }
 
   render () {
     return (
-      <form className={'commonform budgetadd'} onSubmit={this.props.handleSubmit(this.formSubmit)}>
-        <Field name='name' component={fieldComponent} type='text' placeholder='example-name' />
-        <Field name='amount' component={fieldComponent} type='text' placeholder='-xx.xx' />
-        <Field name='date' component={fieldComponent} type='date' />
-        <Field name='isIncome' component={fieldComponent} type='checkbox' />
-        <div className={'commonfield'}>
-          <button type='submit'>{'Submit and add'}</button>
-          <button type='submit'>{'Submit and close'}</button>
+      <form className={'form'} onSubmit={this.formSubmit}>
+        <div className={'form_field'}>
+          <label htmlFor='name_input' className={'form_label'}>{'Name:'}</label>
+          <input id='name_input' className={'form_input'} type='text' placeholder={'example-name'}></input>
+          <label id='name_error' htmlFor='name_input' className={'form_error'}></label>
+        </div>
+        <div className={'form_field'}>
+          <label htmlFor='amount_input' className={'form_label'}>{'Amount:'}</label>
+          <input id='amount_input' className={'form_input'} type='text' placeholder={'xxx,xx'}></input>
+          <label id='amount_error' htmlFor='amount_input' className={'form_error'}></label>
+        </div>
+        <div className={'form_field'}>
+          <label htmlFor='date_input' className={'form_label'}>{'Date:'}</label>
+          <input id='date_input' className={'form_input'} type='date' placeholder={/*Current date here*/'asd'}></input>
+          <label id='date_error' htmlFor='date_input' className={'form_error'}></label>
+        </div>
+        <div className={'form_field'}>
+          <label htmlFor='isincome_input' className={'form_label'}>{'Is income:'}</label>
+          <input id='isincome_input' className={'form_input'} type='checkbox' placeholder={'example-name'}></input>
+          <label id='isincome_error' htmlFor='isincome_input' className={'form_error'}></label>
+        </div>
+        <div className={'form_field'}>
+          <button type='submit' className={'form_submit_button'}>{'Submit and add'}</button>
+          <button type='submit' className={'form_submit_button'}>{'Submit and close'}</button>
         </div>
       </form>
     );
@@ -109,7 +101,4 @@ const mapDispatchToProps = dispatch => ({
 });
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(reduxForm({
-  form: 'budgetAdd',
-  validate,
-})(BudgetAdd));
+export default connect(mapStateToProps, mapDispatchToProps)(BudgetAdd);

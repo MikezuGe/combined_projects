@@ -43,7 +43,6 @@ class Budget extends Component {
 
   render () {
     const { data, } = this.props;
-
     return (
       <div className={'budget commoncontainer'}>
         { data.length <= 0

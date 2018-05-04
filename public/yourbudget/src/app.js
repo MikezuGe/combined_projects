@@ -13,7 +13,6 @@ import store from './js/redux';
 /* eslint-disable */
 const { pathname, } = window.location;
 const base = pathname.slice(0, pathname.indexOf('/', 1));
-console.log(base);
 /* eslint-enable */
 
 

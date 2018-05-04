@@ -1,19 +1,21 @@
 const express = require('express');
 const router = express.Router();
 
-// Custom router imports
+
 const imageRouter = require('./projectroutes/images');
+const yourbudgetRouter = require('./projectroutes/yourbudget');
 
 
 router
 
-.get('/api/*', (req, res, next) => {
-  console.log('Requesting api');
-  console.log(req.path);
-  next();
-})
+  .use('/api', (req, res, next) => {
+    console.log('----- Requesting api');
+    console.log(req.originalUrl);
+    next();
+  })
 
-.use(imageRouter);
+  .use(imageRouter)
+  .use(yourbudgetRouter);
 
 
 module.exports = router;

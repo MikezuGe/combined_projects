@@ -1,6 +1,6 @@
 const express = require('express');
 const fs = require('fs');
-const router = express.Router();
+const imageRouter = express.Router();
 const sharp = require('sharp');
 
 // Custom router imports
@@ -11,7 +11,7 @@ const projectRoot = './public/images/';
 const dataRoot = './public/images/data/';
 const thumbnailRoot = './public/images/data/thumbnails/';
 
-router
+imageRouter
 
 .get('/api/images', (req, res) => {
   fs.readdir(`${dataRoot}`, (err, fileNames) => {
@@ -46,4 +46,4 @@ router
 });
 
 
-module.exports = router;
+module.exports = imageRouter;

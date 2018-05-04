@@ -7,7 +7,7 @@ const app = express();
 const apiRouter = require('./api');
 
 
-const createHTML = folders => `
+const createHTML = files => `
   <!DOCTYPE html>
   <html>
     <head>
@@ -47,7 +47,7 @@ const createHTML = folders => `
     </head>
     <body>
       <div id='root'>
-        ${folders.map(name => `<a class='links' href='${name}'>${name}</a>`).join('')}
+        ${files.map(file => `<a class='links' href='${file}'>${file}</a>`).join('')}
       </div>
     </body>
   </html>
@@ -56,30 +56,27 @@ const createHTML = folders => `
 
 app
 
-.use(express.static(path.join(__dirname + '/public')))
+  .use(express.static(path.join(__dirname + '/public')))
 
-.get('/', (req, res) => {
-  // Read public folder, get all folders, create links and create a html file with links and serve it to user
-  console.log('Requesting mainpage');
-  fs.readdir('./public', (err, files) => {
-    if (err) {
-      res.send('Unable to read public');
-      console.error(err);
-    }
-    res.send(createHTML(files.filter(file => fs.readdirSync(`./public/${file}`).includes('index.html'))));
+  .get('/', (req, res) => {
+    console.log('----- Requesting mainpage');
+    fs.readdir('./public', (err, files) => {
+      if (err) {
+        console.error(err);
+        res.send('Unable to read public');
+      }
+      res.send(createHTML(files.filter(file => fs.readdirSync(`./public/${file}`).includes('index.html'))));
+    });
+  })
+
+  .use(apiRouter)
+
+  .get('/*', (req, res) => {
+    console.log('----- Requesting subpage');
+    console.log(req.originalUrl);
+    res.sendFile(path.resolve('./public' + req.path.slice(0, req.path.indexOf('/', 1)), 'index.html'));
+  })
+
+  .listen(80, () => {
+    console.log('Listening to port 80');
   });
-})
-
-// Api calls here
-.use(apiRouter)
-
-// When all api calls have been checked, fall back here
-.get('/*', (req, res) => {
-  console.log('Requesting webpage');
-  console.log(req.path);
-  res.sendFile(path.resolve('./public' + req.path.slice(0, req.path.indexOf('/', 1)), 'index.html'));
-})
-
-.listen(80, () => {
-  console.log('Listening to port 80');
-});

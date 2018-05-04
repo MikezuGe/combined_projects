@@ -16,11 +16,9 @@ const imageElements = ({ openImage, thumbnailUrls, bigImageUrls, }) => {
 
 class Thumbnails extends Component {
 
-  render() {
-    return <div>
-      { imageElements(this.props) }
-    </div>;
-  }
+  render = () => <div>
+    { imageElements(this.props) }
+  </div>;
 
 }
 

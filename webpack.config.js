@@ -1,4 +1,5 @@
 const path = require('path');
+const fs = require('fs');
 
 
 const eslintLoader = {
@@ -61,67 +62,23 @@ const fileLoader = {
 };
 
 
-// Each project should have its own webpack configuration
-const projects = [];
-let projectName = 'test';
-projects.push({
-  'mode': 'development',
-  'entry': `./public/${projectName}/src/app.js`,
-  'output': {
-    'filename': 'bundle.js',
-    'path': path.resolve(__dirname, `public/${projectName}`),
-  },
-  'module': {
-    'rules': [
-      eslintLoader,
-      babelLoader,
-      styleLoader,
-      cssLoader,
-      fileLoader,
-    ],
-  },
-});
-
-
-projectName = 'yourbudget';
-projects.push({
-  'mode': 'development',
-  'entry': `./public/${projectName}/src/app.js`,
-  'output': {
-    'filename': 'bundle.js',
-    'path': path.resolve(__dirname, `public/${projectName}`),
-  },
-  'module': {
-    'rules': [
-      eslintLoader,
-      babelLoader,
-      styleLoader,
-      cssLoader,
-      fileLoader,
-    ],
-  },
-});
-
-
-projectName = 'images';
-projects.push({
-  'mode': 'development',
-  'entry': `./public/${projectName}/src/app.js`,
-  'output': {
-    'filename': 'bundle.js',
-    'path': path.resolve(__dirname, `public/${projectName}`),
-  },
-  'module': {
-    'rules': [
-      eslintLoader,
-      babelLoader,
-      styleLoader,
-      cssLoader,
-      fileLoader,
-    ],
-  },
-});
-
-
-// Add each configuration to the array
-module.exports = projects;
+module.exports = fs.readdirSync('./public')
+  .filter(file => fs.readdirSync(`./public/${file}`).includes('index.html'))
+  .map(project => ({
+    'mode': 'development',
+    'entry': `./public/${project}/src/app.js`,
+    'output': {
+      'filename': 'bundle.js',
+      'path': path.resolve(__dirname, `public/${project}`),
+    },
+    'devtool': 'source-map',
+    'module': {
+      'rules': [
+        eslintLoader,
+        babelLoader,
+        styleLoader,
+        cssLoader,
+        fileLoader,
+      ],
+    },
+  }));

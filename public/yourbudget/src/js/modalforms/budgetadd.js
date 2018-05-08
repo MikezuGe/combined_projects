@@ -43,44 +43,60 @@ const validate = ({ name, amount, date, }) => {
   return errors;
 };
 */
+const getNameValuePair = input => {
+  const nameValuePair = {};
+  const { name, value, checked, } = input;
+  nameValuePair.name = name;
+  nameValuePair.value = value || checked;
+  return nameValuePair;
+}
+
 
 class BudgetAdd extends Component {
 
-  formSubmit = e => {
+  onChangeHandler = e => {
     // eslint-disable-next-line
     console.log(e);
   }
 
-  render () {
-    return (
-      <form className={'form'} onSubmit={this.formSubmit}>
-        <div className={'form_field'}>
-          <label htmlFor='name_input' className={'form_label'}>{'Name:'}</label>
-          <input id='name_input' className={'form_input'} type='text' placeholder={'example-name'}></input>
-          <label id='name_error' htmlFor='name_input' className={'form_error'}></label>
-        </div>
-        <div className={'form_field'}>
-          <label htmlFor='amount_input' className={'form_label'}>{'Amount:'}</label>
-          <input id='amount_input' className={'form_input'} type='text' placeholder={'xxx,xx'}></input>
-          <label id='amount_error' htmlFor='amount_input' className={'form_error'}></label>
-        </div>
-        <div className={'form_field'}>
-          <label htmlFor='date_input' className={'form_label'}>{'Date:'}</label>
-          <input id='date_input' className={'form_input'} type='date' placeholder={/*Current date here*/'asd'}></input>
-          <label id='date_error' htmlFor='date_input' className={'form_error'}></label>
-        </div>
-        <div className={'form_field'}>
-          <label htmlFor='isincome_input' className={'form_label'}>{'Is income:'}</label>
-          <input id='isincome_input' className={'form_input'} type='checkbox' placeholder={'example-name'}></input>
-          <label id='isincome_error' htmlFor='isincome_input' className={'form_error'}></label>
-        </div>
-        <div className={'form_field'}>
-          <button type='submit' className={'form_submit_button'}>{'Submit and add'}</button>
-          <button type='submit' className={'form_submit_button'}>{'Submit and close'}</button>
-        </div>
-      </form>
-    );
+  formSubmit = e => {
+    e.preventDefault();
+    const form = e.target;
+    const nameValuePairs = [];
+    for (const input of form) {
+      nameValuePairs.push(getNameValuePair(input));
+    }
+    // eslint-disable-next-line
+    console.log(nameValuePairs);
   }
+
+  render = () => <form className='form' onSubmit={this.formSubmit}>
+      <div className='form_field'>
+        <label htmlFor='name_input' className='form_label'>{'Name:'}</label>
+        <input name='name' className='form_input' type='text' placeholder='example-name' value='test' onChange={this.onChangeHandler}></input>
+        <label id='name_error' htmlFor='name_input' className='form_error'></label>
+      </div>
+      <div className='form_field'>
+        <label htmlFor='amount_input' className='form_label'>{'Amount:'}</label>
+        <input name='amount' className='form_input' type='text' placeholder='xxx,xx' value='14,55' onChange={this.onChangeHandler}></input>
+        <label id='amount_error' htmlFor='amount_input' className='form_error'></label>
+      </div>
+      <div className='form_field'>
+        <label htmlFor='date_input' className='form_label'>{'Date:'}</label>
+        <input name='date' className='form_input' type='date' value='2018-05-05' onChange={this.onChangeHandler}></input>
+        <label id='date_error' htmlFor='date_input' className='form_error'></label>
+      </div>
+      <div className='form_field switch'>
+        <label htmlFor='isincome_input' className='form_label switch_label'>{'Expense'}</label>
+        <input name='isincome' className='form_input hidden' type='checkbox'></input>
+        <label htmlFor='isincome_input' className='switch_toggle'></label>
+        <label htmlFor='isincome_input' className='form_label switch_label'>{'Income'}</label>
+      </div>
+      <div className='form_field submit'>
+        <button type='submit' className='form_submit_button'>{'Submit and add'}</button>
+        <button type='submit' className='form_submit_button'>{'Submit and close'}</button>
+      </div>
+    </form>;
 
 }
 
@@ -88,7 +104,6 @@ class BudgetAdd extends Component {
 BudgetAdd.propTypes = {
   addBudget: PropTypes.func.isRequired,
   close: PropTypes.func.isRequired,
-  handleSubmit: PropTypes.func.isRequired,
 };
 
 

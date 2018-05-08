@@ -1,4 +1,26 @@
+
 .form_field {
   display: flex;
   flex-direction: column;
+  margin-bottom: 5px;
+}
+
+.form_label {
+  cursor: pointer;
+}
+
+.form_submit_button {
+  margin: 2.5px 5px;
+}
+
+.form_submit_button:first-child {
+  margin-top: 0;
+}
+
+.form_submit_button:last-child {
+  margin-bottom: 0;
+}
+
+.hidden {
+  display: none;
 }

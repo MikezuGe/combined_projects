@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://kontioweb.fi/yourbudget');
+mongoose.connect('mongodb://root:testpass@kontioweb.fi/yourbudget');
 
 
 mongoose.model('BudgetModel', mongoose.Schema({
@@ -15,14 +15,14 @@ mongoose.model('BudgetModel', mongoose.Schema({
 mongoose.models.BudgetModel.find({}, (err, budget) => {
   if (err) {
     console.error('Error occurred while trying to find budget data');
+    return;
   }
-  console.log('Budgetdata found!');
   if (budget.length > 0) {
     return;
   }
+  console.log('Adding test data');
   const formatDateToString = date => `${date.getDay()}.${date.getMonth()}.${date.getFullYear()}`;
   const timeNow = Date.now();
-  console.log('Adding test data');
   const testData = [
     new mongoose.models.BudgetModel({
       name: 'K-Market',

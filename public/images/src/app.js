@@ -8,7 +8,7 @@ import Thumbnails from './js/thumbnails';
 import BigImage from './js/bigimage';
 
 
-axios.defaults.baseURL = `${window.location.origin}/api`;
+axios.defaults.baseURL = `${window.location.origin}/api/images`;
 
 
 class App extends Component {
@@ -20,7 +20,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    axios.get('/images')
+    axios.get('/')
       .then(result => {
         const { location, } = window;
         const { thumbnailUrls, bigImageUrls, } = result.data;

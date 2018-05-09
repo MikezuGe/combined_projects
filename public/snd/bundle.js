@@ -66,7 +66,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = "./public/test/src/app.js");
+/******/ 	return __webpack_require__(__webpack_require__.s = "./public/snd/src/app.js");
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -657,10 +657,10 @@ module.exports = function(a, b){
 
 /***/ }),
 
-/***/ "./node_modules/css-loader/index.js??ref--7!./public/test/src/style.css":
-/*!*********************************************************************!*\
-  !*** ./node_modules/css-loader??ref--7!./public/test/src/style.css ***!
-  \*********************************************************************/
+/***/ "./node_modules/css-loader/index.js??ref--7!./public/snd/src/style.css":
+/*!********************************************************************!*\
+  !*** ./node_modules/css-loader??ref--7!./public/snd/src/style.css ***!
+  \********************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -7530,10 +7530,10 @@ module.exports = yeast;
 
 /***/ }),
 
-/***/ "./public/test/src/app.js":
-/*!********************************!*\
-  !*** ./public/test/src/app.js ***!
-  \********************************/
+/***/ "./public/snd/src/app.js":
+/*!*******************************!*\
+  !*** ./public/snd/src/app.js ***!
+  \*******************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -7546,17 +7546,17 @@ var _socket = __webpack_require__(/*! socket.io-client */ "./node_modules/socket
 
 var _socket2 = _interopRequireDefault(_socket);
 
-var _canvas = __webpack_require__(/*! ./canvas */ "./public/test/src/canvas.js");
+var _canvas = __webpack_require__(/*! ./canvas */ "./public/snd/src/canvas.js");
 
-var _time = __webpack_require__(/*! ./time */ "./public/test/src/time.js");
+var _time = __webpack_require__(/*! ./time */ "./public/snd/src/time.js");
 
 var _time2 = _interopRequireDefault(_time);
 
-var _me = __webpack_require__(/*! ./me */ "./public/test/src/me.js");
+var _me = __webpack_require__(/*! ./me */ "./public/snd/src/me.js");
 
 var _me2 = _interopRequireDefault(_me);
 
-__webpack_require__(/*! ./style.css */ "./public/test/src/style.css");
+__webpack_require__(/*! ./style.css */ "./public/snd/src/style.css");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -7705,10 +7705,10 @@ socket.on('update', function (players) {
 
 /***/ }),
 
-/***/ "./public/test/src/canvas.js":
-/*!***********************************!*\
-  !*** ./public/test/src/canvas.js ***!
-  \***********************************/
+/***/ "./public/snd/src/canvas.js":
+/*!**********************************!*\
+  !*** ./public/snd/src/canvas.js ***!
+  \**********************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -7720,7 +7720,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.ctx = exports.canvas = undefined;
 
-var _event = __webpack_require__(/*! ./event */ "./public/test/src/event.js");
+var _event = __webpack_require__(/*! ./event */ "./public/snd/src/event.js");
 
 var canvas = document.getElementById('canvas');
 canvas.resize = function () {
@@ -7736,10 +7736,10 @@ exports.ctx = ctx;
 
 /***/ }),
 
-/***/ "./public/test/src/event.js":
-/*!**********************************!*\
-  !*** ./public/test/src/event.js ***!
-  \**********************************/
+/***/ "./public/snd/src/event.js":
+/*!*********************************!*\
+  !*** ./public/snd/src/event.js ***!
+  \*********************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -7921,10 +7921,10 @@ exports.windowContextMenuEvent = windowContextMenuEvent;
 
 /***/ }),
 
-/***/ "./public/test/src/input.js":
-/*!**********************************!*\
-  !*** ./public/test/src/input.js ***!
-  \**********************************/
+/***/ "./public/snd/src/input.js":
+/*!*********************************!*\
+  !*** ./public/snd/src/input.js ***!
+  \*********************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -7937,7 +7937,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _event = __webpack_require__(/*! ./event */ "./public/test/src/event.js");
+var _event = __webpack_require__(/*! ./event */ "./public/snd/src/event.js");
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -8097,10 +8097,10 @@ exports.default = input;
 
 /***/ }),
 
-/***/ "./public/test/src/me.js":
-/*!*******************************!*\
-  !*** ./public/test/src/me.js ***!
-  \*******************************/
+/***/ "./public/snd/src/me.js":
+/*!******************************!*\
+  !*** ./public/snd/src/me.js ***!
+  \******************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -8113,13 +8113,13 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _canvas = __webpack_require__(/*! ./canvas */ "./public/test/src/canvas.js");
+var _canvas = __webpack_require__(/*! ./canvas */ "./public/snd/src/canvas.js");
 
-var _time = __webpack_require__(/*! ./time */ "./public/test/src/time.js");
+var _time = __webpack_require__(/*! ./time */ "./public/snd/src/time.js");
 
 var _time2 = _interopRequireDefault(_time);
 
-var _input = __webpack_require__(/*! ./input */ "./public/test/src/input.js");
+var _input = __webpack_require__(/*! ./input */ "./public/snd/src/input.js");
 
 var _input2 = _interopRequireDefault(_input);
 
@@ -8320,15 +8320,15 @@ exports.default = Me;
 
 /***/ }),
 
-/***/ "./public/test/src/style.css":
-/*!***********************************!*\
-  !*** ./public/test/src/style.css ***!
-  \***********************************/
+/***/ "./public/snd/src/style.css":
+/*!**********************************!*\
+  !*** ./public/snd/src/style.css ***!
+  \**********************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var content = __webpack_require__(/*! !../../../node_modules/css-loader??ref--7!./style.css */ "./node_modules/css-loader/index.js??ref--7!./public/test/src/style.css");
+var content = __webpack_require__(/*! !../../../node_modules/css-loader??ref--7!./style.css */ "./node_modules/css-loader/index.js??ref--7!./public/snd/src/style.css");
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -8350,10 +8350,10 @@ if(false) {}
 
 /***/ }),
 
-/***/ "./public/test/src/time.js":
-/*!*********************************!*\
-  !*** ./public/test/src/time.js ***!
-  \*********************************/
+/***/ "./public/snd/src/time.js":
+/*!********************************!*\
+  !*** ./public/snd/src/time.js ***!
+  \********************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 

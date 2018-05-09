@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://root:testpass@kontioweb.fi/yourbudget');
+mongoose.connect('mongodb://budgetmanager:manag3r@kontioweb.fi/yourbudget');
 
 
 mongoose.model('BudgetModel', mongoose.Schema({

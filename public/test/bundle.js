@@ -7548,6 +7548,10 @@ var _socket = __webpack_require__(/*! socket.io-client */ "./node_modules/socket
 
 var _socket2 = _interopRequireDefault(_socket);
 
+var _input = __webpack_require__(/*! ./input */ "./public/test/src/input.js");
+
+var _input2 = _interopRequireDefault(_input);
+
 __webpack_require__(/*! ./style.css */ "./public/test/src/style.css");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -7563,15 +7567,10 @@ canvas.resize = function () {
 canvas.resize();
 var ctx = canvas.getContext('2d');
 
-/* Keyup event */
-document.body.addEventListener('keyup', function (e) {
-  e.preventDefault();
-  game.updateMe(e.key);
-});
-
 /* Game */
 var frame = function frame() {
   requestAnimationFrame(frame);
+  game.updateMe();
   game.render();
 };
 
@@ -7586,25 +7585,49 @@ var Game = function () {
     this.me = players[myId];
     this.players = players;
     this.players[myId] = null;
-    console.log(this.players, this.me);
+    this.playersNext = players;
+    this.playersNext[myId] = null;
+    this.input = _input2.default;
   }
 
   _createClass(Game, [{
     key: 'updateMe',
-    value: function updateMe(key) {
+    value: function updateMe() {
       var me = this.me;
+      var _iteratorNormalCompletion = true;
+      var _didIteratorError = false;
+      var _iteratorError = undefined;
 
-      switch (key) {
-        case 'w':
-          me.y -= 10;break;
-        case 's':
-          me.y += 10;break;
-        case 'a':
-          me.x -= 10;break;
-        case 'd':
-          me.x += 10;break;
-        default:
-          break;
+      try {
+        for (var _iterator = this.input.keys[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          var key = _step.value;
+
+          switch (key) {
+            case 'w':
+              me.y -= 10;break;
+            case 's':
+              me.y += 10;break;
+            case 'a':
+              me.x -= 10;break;
+            case 'd':
+              me.x += 10;break;
+            default:
+              break;
+          }
+        }
+      } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion && _iterator.return) {
+            _iterator.return();
+          }
+        } finally {
+          if (_didIteratorError) {
+            throw _iteratorError;
+          }
+        }
       }
     }
   }, {
@@ -7631,7 +7654,7 @@ var Game = function () {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.beginPath();
       ctx.fillStyle = 'lime';
-      ctx.moveTo(me.x + me.r / 2, me.y);
+      ctx.moveTo(me.x + me.r, me.y);
       ctx.arc(me.x, me.y, me.r, 0, 2 * Math.PI);
       ctx.fill();
 
@@ -7641,28 +7664,28 @@ var Game = function () {
       if (nonNullPlayers.length > 0) {
         ctx.beginPath();
         ctx.fillStyle = 'black';
-        var _iteratorNormalCompletion = true;
-        var _didIteratorError = false;
-        var _iteratorError = undefined;
+        var _iteratorNormalCompletion2 = true;
+        var _didIteratorError2 = false;
+        var _iteratorError2 = undefined;
 
         try {
-          for (var _iterator = nonNullPlayers[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-            var p = _step.value;
+          for (var _iterator2 = nonNullPlayers[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+            var p = _step2.value;
 
-            ctx.moveTo(p.x + p.r / 2, p.y);
+            ctx.moveTo(p.x + p.r, p.y);
             ctx.arc(p.x, p.y, p.r, 0, 2 * Math.PI);
           }
         } catch (err) {
-          _didIteratorError = true;
-          _iteratorError = err;
+          _didIteratorError2 = true;
+          _iteratorError2 = err;
         } finally {
           try {
-            if (!_iteratorNormalCompletion && _iterator.return) {
-              _iterator.return();
+            if (!_iteratorNormalCompletion2 && _iterator2.return) {
+              _iterator2.return();
             }
           } finally {
-            if (_didIteratorError) {
-              throw _iteratorError;
+            if (_didIteratorError2) {
+              throw _iteratorError2;
             }
           }
         }
@@ -7689,6 +7712,367 @@ socket.on('update', function (players) {
   socket.emit('update', _extends({}, game.me));
   game.updatePlayers(players);
 });
+
+/***/ }),
+
+/***/ "./public/test/src/event.js":
+/*!**********************************!*\
+  !*** ./public/test/src/event.js ***!
+  \**********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * Create DOM or custom event
+ * @example <caption>Creating DOM event</caption>
+ * const domEvent = new Event('resize', document.getElementById('canavs'), true, true);
+ * @example <caption>Creating custom event</caption>
+ * const customEvent = new Event();
+ * @example <caption>Subscribing to any event</caption>
+ * customEvent.subscribe(boundFunction);
+ * @example <caption>Invoking custom event</caption>
+ * customEvent.invoke();
+ * @example <caption>Unsubscriping from event</caption>
+ * customEvent.unsubscribe(subscribedBoundFunction);
+ */
+
+var Event =
+
+/**
+ * @param {string} type - String of DOM event type. If supplied, creates a DOM event listener, otherwise create custom event
+ * @param {DOM element} element - DOM element to attach the event to. If not supplied, the event is attached to global window
+ * @param {boolean} preventDefault - Boolean for if default action of DOM event listener should be prevented
+ * @param {boolean} stopPropagation - Boolean for if propagation of DOM event listener should be prevented
+ * @property {string} type Container for DOM event type
+ * @property {DOM element} element Container for DOM element
+ * @property {DOM event listener} listener Contains the event listener that is created if type is supplied
+ * @property {array} subscribers Array of functions that are called when invoker is called
+ * @property {function} invoker Is the function that is called when DOM event triggers or can be called manually if no DOM event exists
+ * @property {boolean} disableInvoke Invoking manually disabled if type exists (DOM event exists)
+ */
+
+function Event(type, element, preventDefault, stopPropagation) {
+  _classCallCheck(this, Event);
+
+  _initialiseProps.call(this);
+
+  this.type = type || null;
+  this.element = type && (element || window) || null;
+  this.listener = null;
+
+  this.subscribers = [];
+  this.invoker = null;
+  this.disableInvoke = this.type !== null;
+  this.createListener(preventDefault || false, stopPropagation || false);
+}
+
+/**
+ * Creates DOM event listener if type is supplied
+ * Creates invokeable event if no type is supplied
+ * @returns No return value
+ * @property {boolean} preventDefault Prevent default action of DOM event listener
+ * @property {boolean} stopPropagation Prevent bubbling of DOM event listener
+ */
+
+/**
+ * Calls invoker when called
+ * Disabled if type is supplied (DOM event listener exists)
+ * @return No return value
+ */
+
+/**
+ * @return No return value
+ */
+
+/**
+ * @return No return value
+ */
+
+;
+
+/**
+ * Create and export some basic DOM event listeners
+ * Import needed events and add a function with subscribe that should be called whenever the event triggers
+ */
+
+var _initialiseProps = function _initialiseProps() {
+  var _this = this;
+
+  this.createListener = function (preventDefault, stopPropagation) {
+    if (!_this.disableInvoke) {
+      // Create custom event (Not a DOM event, that's why return)
+      _this.invoker = function () {
+        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+          args[_key] = arguments[_key];
+        }
+
+        return _this.subscribers.forEach(function (fn) {
+          return fn.apply(undefined, args);
+        });
+      };
+      return;
+    } else if (preventDefault && stopPropagation) {
+      // DOM event with both preventdefault and stoppropagation
+      _this.invoker = function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        _this.subscribers.forEach(function (fn) {
+          return fn(event);
+        });
+      };
+    } else if (preventDefault) {
+      // DOM event with only preventdefault
+      _this.invoker = function (event) {
+        event.preventDefault();
+        _this.subscribers.forEach(function (fn) {
+          return fn(event);
+        });
+      };
+    } else if (stopPropagation) {
+      // DOM event with only stoppropagation
+      _this.invoker = function (event) {
+        event.stopPropagation();
+        _this.subscribers.forEach(function (fn) {
+          return fn(event);
+        });
+      };
+    } else {
+      // DOM event without preventdefault and stoppropagation
+      _this.invoker = function () {
+        for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+          args[_key2] = arguments[_key2];
+        }
+
+        return _this.subscribers.forEach(function (fn) {
+          return fn.apply(undefined, args);
+        });
+      };
+    }
+    _this.listener = _this.element.addEventListener(_this.type, _this.invoker, false);
+  };
+
+  this.invoke = function () {
+    return !_this.disableInvoke && _this.invoker();
+  };
+
+  this.subscribe = function (subscriber) {
+    return _this.subscribers.push(subscriber);
+  };
+
+  this.unsubscribe = function (subscriber) {
+    var subscriberIndex = _this.subscribers.indexOf(subscriber);
+    if (subscriberIndex !== -1) {
+      _this.subscribers.splice(subscriberIndex, 1);
+    }
+  };
+};
+
+exports.default = Event;
+var windowResizeEvent = new Event('resize', window, true, true);
+// Preventing default (second to last boolean) -> f5 key won't refresh
+var windowKeyDownEvent = new Event('keydown', window, false, true);
+var windowKeyUpEvent = new Event('keyup', window, true, true);
+var windowMouseDownEvent = new Event('mousedown', window, true, true);
+var windowMouseUpEvent = new Event('mouseup', window, true, true);
+var windowMouseMoveEvent = new Event('mousemove', window, true, true);
+// Preventing default (second to last boolean) -> Mouse wheel stops working
+var windowWheelEvent = new Event('wheel', window, false, true);
+// Preventing default (second to last boolean) -> right click won't display context menu
+var windowContextMenuEvent = new Event('contextmenu', window, false, true);
+
+exports.windowResizeEvent = windowResizeEvent;
+exports.windowKeyDownEvent = windowKeyDownEvent;
+exports.windowKeyUpEvent = windowKeyUpEvent;
+exports.windowMouseDownEvent = windowMouseDownEvent;
+exports.windowMouseUpEvent = windowMouseUpEvent;
+exports.windowMouseMoveEvent = windowMouseMoveEvent;
+exports.windowWheelEvent = windowWheelEvent;
+exports.windowContextMenuEvent = windowContextMenuEvent;
+
+/***/ }),
+
+/***/ "./public/test/src/input.js":
+/*!**********************************!*\
+  !*** ./public/test/src/input.js ***!
+  \**********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _event = __webpack_require__(/*! ./event */ "./public/test/src/event.js");
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var btns = ['Mouse0', 'Mouse1', 'Mouse2'];
+
+var Input = function () {
+  function Input() {
+    var _this = this;
+
+    _classCallCheck(this, Input);
+
+    this.handleMouseDown = function (event) {
+      _this['Mouse' + event.button].pressed = true;
+      _this.mouseBtnPressed = true;
+    };
+
+    this.handleMouseUp = function (event) {
+      var btn = 'Mouse' + event.button;
+      _this[btn].pressed = false;
+      if (!_this.Mouse0.pressed && !_this.Mouse2.pressed && !_this.Mouse1.pressed) {
+        _this.mouseBtnPressed = false;
+      }
+    };
+
+    this.handleMouseMove = function (event) {
+      var clientX = event.clientX,
+          clientY = event.clientY;
+
+      if (_this.mouseDeltaX === null) {
+        _this.mouseDeltaX = clientX - _this.mouseCurrentX;
+        _this.mouseDeltaY = _this.mouseCurrentY - clientY;
+      } else {
+        _this.mouseDeltaX += clientX - _this.mouseCurrentX;
+        _this.mouseDeltaY += _this.mouseCurrentY - clientY;
+      }
+      _this.mouseCurrentX = clientX;
+      _this.mouseCurrentY = clientY;
+      if (!_this.mouseBtnPressed) {
+        return;
+      }
+      btns.forEach(function (btn) {
+        if (!_this[btn].pressed) {
+          return;
+        }
+        if (_this[btn].startX === null) {
+          _this[btn].startX = clientX;
+          _this[btn].startY = clientY;
+        } else {
+          _this[btn].endX = clientX;
+          _this[btn].endY = clientY;
+        }
+        if (_this[btn].drag || Math.abs(_this[btn].startX - clientX) > 20 || Math.abs(_this[btn].startY - clientY) > 20) {
+          _this[btn].minX = _this[btn].startX < _this[btn].endX ? (_this[btn].maxX = _this[btn].endX, _this[btn].startX) : (_this[btn].maxX = _this[btn].startX, _this[btn].endX);
+          _this[btn].minY = _this[btn].startY < _this[btn].endY ? (_this[btn].maxY = _this[btn].endY, _this[btn].startY) : (_this[btn].maxY = _this[btn].startY, _this[btn].endY);
+          _this[btn].drag = true;
+        }
+      });
+    };
+
+    this.handleMouseWheel = function (event) {
+      _this.mouseScroll = _this.mouseScroll === null ? event.deltaY : _this.mouseScroll + event.deltaY;
+    };
+
+    this.handleKeyDown = function (event) {
+      if (!_this.keys.includes(event.key)) {
+        _this.keys.push(event.key);
+      }
+    };
+
+    this.handleKeyUp = function (event) {
+      if (_this.keys.includes(event.key)) {
+        _this.keys.splice(_this.keys.indexOf(event.key), 1);
+      }
+    };
+
+    var _iteratorNormalCompletion = true;
+    var _didIteratorError = false;
+    var _iteratorError = undefined;
+
+    try {
+      for (var _iterator = btns[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+        var btn = _step.value;
+
+        this[btn] = {};
+        this[btn].pressed = false;
+        this[btn].drag = false;
+        this[btn].startX = null;
+        this[btn].startY = null;
+        this[btn].endX = null;
+        this[btn].endY = null;
+        this[btn].minX = null;
+        this[btn].minY = null;
+        this[btn].maxX = null;
+        this[btn].maxY = null;
+      }
+    } catch (err) {
+      _didIteratorError = true;
+      _iteratorError = err;
+    } finally {
+      try {
+        if (!_iteratorNormalCompletion && _iterator.return) {
+          _iterator.return();
+        }
+      } finally {
+        if (_didIteratorError) {
+          throw _iteratorError;
+        }
+      }
+    }
+
+    this.mouseBtnPressed = false;
+    this.mouseCurrentX = null;
+    this.mouseCurrentY = null;
+    this.mouseScroll = 0;
+    this.mouseDeltaX = 0;
+    this.mouseDeltaY = 0;
+    this.keys = [];
+  }
+
+  _createClass(Input, [{
+    key: 'clear',
+    value: function clear() {
+      var _this2 = this;
+
+      btns.forEach(function (btn) {
+        if (!_this2[btn].pressed) {
+          _this2[btn].drag = false;
+          _this2[btn].startX = null;
+          _this2[btn].startY = null;
+          _this2[btn].endX = null;
+          _this2[btn].endY = null;
+          _this2[btn].minX = null;
+          _this2[btn].minY = null;
+          _this2[btn].maxX = null;
+          _this2[btn].maxY = null;
+        }
+      });
+      this.mouseDeltaX = 0;
+      this.mouseDeltaY = 0;
+      this.mouseScroll = 0;
+    }
+  }]);
+
+  return Input;
+}();
+
+var input = new Input();
+
+_event.windowMouseDownEvent.subscribe(input.handleMouseDown);
+_event.windowMouseUpEvent.subscribe(input.handleMouseUp);
+_event.windowMouseMoveEvent.subscribe(input.handleMouseMove);
+_event.windowWheelEvent.subscribe(input.handleMouseWheel);
+_event.windowKeyDownEvent.subscribe(input.handleKeyDown);
+_event.windowKeyUpEvent.subscribe(input.handleKeyUp);
+
+exports.default = input;
 
 /***/ }),
 

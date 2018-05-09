@@ -121,7 +121,7 @@ io.on('connect', socket => {
   console.log(`Socket connected, playerId: ${socket.playerId}`);
 
 
-  socket.emit('startInfo', { myId: socket.playerId, players });
+  socket.emit('startInfo', { myId: socket.playerId, players, });
 
 
   socket.on('disconnect', () => {

@@ -1,4 +1,5 @@
 import io from 'socket.io-client';
+import input from './input';
 import './style.css';
 
 
@@ -12,16 +13,10 @@ canvas.resize();
 const ctx = canvas.getContext('2d');
 
 
-/* Keyup event */
-document.body.addEventListener('keyup', e => {
-  e.preventDefault();
-  game.updateMe(e.key);
-})
-
-
 /* Game */
 const frame = () => {
   requestAnimationFrame(frame);
+  game.updateMe();
   game.render();
 };
 
@@ -32,17 +27,21 @@ class Game {
     this.me = players[myId];
     this.players = players;
     this.players[myId] = null;
-    console.log(this.players, this.me);
+    this.playersNext = players;
+    this.playersNext[myId] = null;
+    this.input = input;
   }
 
-  updateMe (key) {
+  updateMe () {
     const { me, } = this;
-    switch (key) {
-      case 'w': me.y -= 10; break;
-      case 's': me.y += 10; break;
-      case 'a': me.x -= 10; break;
-      case 'd': me.x += 10; break;
-      default: break;
+    for (const key of this.input.keys) {
+      switch (key) {
+        case 'w': me.y -= 10; break;
+        case 's': me.y += 10; break;
+        case 'a': me.x -= 10; break;
+        case 'd': me.x += 10; break;
+        default: break;
+      }
     }
   }
 
@@ -65,7 +64,7 @@ class Game {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.beginPath();
     ctx.fillStyle = 'lime';
-    ctx.moveTo(me.x + me.r / 2, me.y);
+    ctx.moveTo(me.x + me.r, me.y);
     ctx.arc(me.x, me.y, me.r, 0, 2 * Math.PI);
     ctx.fill();
 
@@ -74,7 +73,7 @@ class Game {
       ctx.beginPath()
       ctx.fillStyle = 'black';
       for (const p of nonNullPlayers) {
-        ctx.moveTo(p.x + p.r / 2, p.y);
+        ctx.moveTo(p.x + p.r, p.y);
         ctx.arc(p.x, p.y, p.r, 0, 2 * Math.PI);
       }
       ctx.fill();

@@ -86,9 +86,9 @@ server.listen(80, () => {
 class Player {
 
   constructor () {
-    this.x = Math.floor(Math.random() * 458) + 42;
-    this.y = Math.floor(Math.random() * 458) + 42;
-    this.r = 10;
+    this.x = (Math.random() * 458) | 0 + 42;
+    this.y = (Math.random() * 458) | 0 + 42;
+    this.r = 10; // Radius
   }
 
 }

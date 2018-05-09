@@ -7552,6 +7552,8 @@ var _input = __webpack_require__(/*! ./input */ "./public/test/src/input.js");
 
 var _input2 = _interopRequireDefault(_input);
 
+var _event = __webpack_require__(/*! ./event */ "./public/test/src/event.js");
+
 __webpack_require__(/*! ./style.css */ "./public/test/src/style.css");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -7561,16 +7563,30 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 /* Canvas */
 var canvas = document.getElementById('canvas');
 canvas.resize = function () {
-  canvas.width = Math.floor(window.innerWidth / 2);
-  canvas.height = Math.floor(window.innerHeight / 2);
+  canvas.width = window.innerWidth / 2 | 0;
+  canvas.height = window.innerHeight / 2 | 0;
 };
 canvas.resize();
 var ctx = canvas.getContext('2d');
 
+/* Time */
+var startTime = performance.now();
+var lastFrame = performance.now();
+var currentFrame = performance.now();
+var deltaTime = 0;
+
+/* Events */
+_event.windowResizeEvent.subscribe(canvas.resize);
+
 /* Game */
 var frame = function frame() {
   requestAnimationFrame(frame);
-  game.updateMe();
+
+  currentFrame = performance.now();
+  deltaTime = (currentFrame - lastFrame) / 1000; // In seconds
+  lastFrame = currentFrame;
+
+  game.update();
   game.render();
 };
 
@@ -7582,110 +7598,251 @@ var Game = function () {
     _classCallCheck(this, Game);
 
     this.myId = myId;
+
+    this.velocity = 0;
+    this.acceleration = 1.5;
+    this.maxVelocity = 2;
+    this.reverseAcceleration = 0.5;
+    this.maxReverseVelocity = -2;
+    this.breakAcceleration = 4;
+    this.naturalDeceleration = 0.5;
+
+    this.direction = 0; // From 0 to 2 * Math.PI
+    this.turnVelocity = 0;
+    this.turnAcceleration = 0.1;
+    this.turnDeceleration = 0.5;
+    this.maxTurnVelocity = 0.03;
+
     this.me = players[myId];
-    this.players = players;
-    this.players[myId] = null;
+    this.playersCurrent = players;
     this.playersNext = players;
-    this.playersNext[myId] = null;
     this.input = _input2.default;
+
+    this.playersCurrent[myId] = null;
+    this.playersNext[myId] = null;
   }
 
   _createClass(Game, [{
+    key: 'meOutsideofScreen',
+    value: function meOutsideofScreen(width, height) {
+      var _me = this.me,
+          x = _me.x,
+          y = _me.y,
+          r = _me.r;
+
+      return x + r < 0 || x - r > width || y + r < 0 || y - r > height;
+    }
+  }, {
     key: 'updateMe',
     value: function updateMe() {
-      var me = this.me;
-      var _iteratorNormalCompletion = true;
-      var _didIteratorError = false;
-      var _iteratorError = undefined;
+      var keys = this.input.keys;
 
-      try {
-        for (var _iterator = this.input.keys[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-          var key = _step.value;
+      // Forward/backward velocity logic
 
-          switch (key) {
-            case 'w':
-              me.y -= 10;break;
-            case 's':
-              me.y += 10;break;
-            case 'a':
-              me.x -= 10;break;
-            case 'd':
-              me.x += 10;break;
-            default:
-              break;
+      if (keys.includes('w')) {
+        // Break and accelerate
+        if (this.velocity < 0) {
+          // Stop if going backwards
+          this.velocity += this.breakAcceleration * deltaTime;
+          if (this.velocity > 0) {
+            this.velocity = 0;
+          }
+        } else {
+          // Acceleration from 0 to max
+          if (this.velocity < this.maxVelocity) {
+            this.velocity += this.acceleration * deltaTime;
+            if (this.velocity > this.maxVelocity) {
+              this.velocity = this.maxVelocity;
+            }
           }
         }
-      } catch (err) {
-        _didIteratorError = true;
-        _iteratorError = err;
-      } finally {
-        try {
-          if (!_iteratorNormalCompletion && _iterator.return) {
-            _iterator.return();
+      } else if (keys.includes('s')) {
+        // Break and decelerate
+        if (this.velocity > 0) {
+          // Stops if going forward
+          this.velocity -= this.breakAcceleration * deltaTime;
+          if (this.velocity < 0) {
+            this.velocity = 0;
           }
-        } finally {
-          if (_didIteratorError) {
-            throw _iteratorError;
+        } else {
+          // Decelerate from 0 to max
+          if (this.maxReverseVelocity < this.velocity) {
+            this.velocity -= this.reverseAcceleration * deltaTime;
+            if (this.maxReverseVelocity > this.velocity) {
+              this.velocity = this.maxReverseVelocity;
+            }
           }
         }
+      } else {
+        // Naturally slow down and halt
+        if (this.velocity > 0) {
+          // Going forward, naturally slow down
+          this.velocity -= this.naturalDeceleration * deltaTime;
+          if (this.velocity < 0) {
+            this.velocity = 0;
+          }
+        } else if (this.velocity < 0) {
+          this.velocity += this.naturalDeceleration * deltaTime;
+          if (this.velocity > 0) {
+            this.velocity = 0;
+          }
+        }
+      }
+
+      // Turning velocity logic
+      if (keys.includes('d')) {
+        if (this.turnVelocity < 0) {
+          this.turnVelocity += this.turnDeceleration * 3 * deltaTime;
+        } else {
+          if (this.turnVelocity < this.maxTurnVelocity) {
+            this.turnVelocity += this.turnAcceleration * deltaTime;
+            if (this.turnVelocity > this.maxTurnVelocity) {
+              this.turnVelocity = this.maxTurnVelocity;
+            }
+          }
+        }
+      } else if (keys.includes('a')) {
+        if (this.turnVelocity > 0) {
+          this.turnVelocity -= this.turnDeceleration * 3 * deltaTime;
+        } else {
+          if (-this.maxTurnVelocity < this.turnVelocity) {
+            this.turnVelocity -= this.turnAcceleration * deltaTime;
+            if (-this.maxTurnVelocity > this.turnVelocity) {
+              this.turnVelocity = -this.maxTurnVelocity;
+            }
+          }
+        }
+      } else {
+        if (this.turnVelocity < 0) {
+          this.turnVelocity += this.turnDeceleration * 0.33 * deltaTime;
+          if (this.turnVelocity > 0) {
+            this.turnVelocity = 0;
+          }
+        } else if (this.turnVelocity > 0) {
+          this.turnVelocity -= this.turnDeceleration * 0.33 * deltaTime;
+          if (this.turnVelocity < 0) {
+            this.turnVelocity = 0;
+          }
+        }
+      }
+
+      // Direction correction
+      this.direction += this.turnVelocity;
+      // Direction correction
+      if (this.direction > 2 * Math.PI) {
+        this.direction -= Math.PI * 2;
+      } else if (this.direction < 0) {
+        this.direction += Math.PI * 2;
+      }
+
+      // Position
+      if (this.velocity !== 0) {
+        this.me.x += Math.cos(this.direction) * this.velocity;
+        this.me.y += Math.sin(this.direction) * this.velocity;
       }
     }
   }, {
     key: 'updatePlayers',
-    value: function updatePlayers(latestPlayers) {
-      var pl = this.players.length;
-      var lpl = latestPlayers.length;
+    value: function updatePlayers(players) {
+      var plc = this.playersCurrent.length;
+      var pl = players.length;
 
-      latestPlayers[this.myId] = null;
-      if (lpl < pl) {
-        this.players.splice(lpl - 1, pl - lpl);
+      players[this.myId] = null;
+      if (pl < plc) {
+        this.playersCurrent.splice(pl - 1, plc - pl);
+        this.playersNext.splice(pl - 1, plc - pl);
       }
 
-      for (var i = 0; i < lpl; i += 1) {
-        this.players[i] = latestPlayers[i];
+      for (var i = 0; i < pl; i += 1) {
+        this.playersNext[i] = players[i];
       }
+    }
+  }, {
+    key: 'updateOthers',
+    value: function updateOthers() {
+      var playersCurrent = this.playersCurrent,
+          playersNext = this.playersNext;
+
+      var pl = playersCurrent.length;
+      for (var i = 0; i < pl; i += 1) {
+        if (playersCurrent[i] === null) {
+          continue;
+        }
+        var pc = playersCurrent[i];
+        var pn = playersNext[i];
+        var dx = pn.x - pc.x;
+        var dy = pn.x - pc.x;
+        var dr = pn.x - pc.x;
+        this.playersCurrent[i].x = Math.abs(dx) < 1 ? pn.x : dx * 0.25;
+        this.playersCurrent[i].y = Math.abs(dy) < 1 ? pn.y : dy * 0.25;
+        this.playersCurrent[i].r = Math.abs(dy) < 1 ? pn.r : dr * 0.25;
+      }
+    }
+  }, {
+    key: 'update',
+    value: function update() {
+      this.updateOthers();
+      this.updateMe();
     }
   }, {
     key: 'render',
     value: function render() {
       var me = this.me,
-          players = this.players;
+          playersCurrent = this.playersCurrent;
+      var width = canvas.width,
+          height = canvas.height;
 
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.clearRect(0, 0, width, height);
       ctx.beginPath();
       ctx.fillStyle = 'lime';
       ctx.moveTo(me.x + me.r, me.y);
       ctx.arc(me.x, me.y, me.r, 0, 2 * Math.PI);
+      ctx.strokeStyle = 'black';
+      ctx.moveTo(me.x, me.y);
+      ctx.lineTo(me.x + me.r * Math.cos(this.direction), me.y + me.r * Math.sin(this.direction));
+      if (this.meOutsideofScreen(width, height)) {
+        var middleX = width / 2 | 0;
+        var middleY = height / 2 | 0;
+        var dirX = me.x - middleX;
+        var dirY = me.y - middleY;
+        var len = Math.sqrt(dirX * dirX + dirY * dirY);
+        var normalizedX = dirX / len;
+        var normalizedY = dirY / len;
+        console.log(normalizedX, normalizedY);
+        ctx.moveTo(middleX, middleY);
+        ctx.lineTo(middleX + normalizedX * 50, middleY + normalizedY * 50);
+      }
       ctx.fill();
+      ctx.stroke();
 
-      var nonNullPlayers = players.filter(function (player) {
+      var nonNullPlayers = playersCurrent.filter(function (player) {
         return player !== null;
       });
       if (nonNullPlayers.length > 0) {
         ctx.beginPath();
         ctx.fillStyle = 'black';
-        var _iteratorNormalCompletion2 = true;
-        var _didIteratorError2 = false;
-        var _iteratorError2 = undefined;
+        var _iteratorNormalCompletion = true;
+        var _didIteratorError = false;
+        var _iteratorError = undefined;
 
         try {
-          for (var _iterator2 = nonNullPlayers[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-            var p = _step2.value;
+          for (var _iterator = nonNullPlayers[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+            var p = _step.value;
 
             ctx.moveTo(p.x + p.r, p.y);
             ctx.arc(p.x, p.y, p.r, 0, 2 * Math.PI);
           }
         } catch (err) {
-          _didIteratorError2 = true;
-          _iteratorError2 = err;
+          _didIteratorError = true;
+          _iteratorError = err;
         } finally {
           try {
-            if (!_iteratorNormalCompletion2 && _iterator2.return) {
-              _iterator2.return();
+            if (!_iteratorNormalCompletion && _iterator.return) {
+              _iterator.return();
             }
           } finally {
-            if (_didIteratorError2) {
-              throw _iteratorError2;
+            if (_didIteratorError) {
+              throw _iteratorError;
             }
           }
         }

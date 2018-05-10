@@ -4,5 +4,5 @@ import './style.css';
 
 const scene = new Scene();
 let node = scene.addChild();
-scene.getResource('test.obj');
+scene.getResource('monkey.obj');
 scene.getResource('puppy.png');

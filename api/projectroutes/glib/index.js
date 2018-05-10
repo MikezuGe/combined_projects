@@ -13,24 +13,23 @@ glibRouter
   .get('/api/glib/:url', (req, res) => {
     const { url, } = req.params;
     let resourcePath = '';
+    const head = {};
+    const options = {};
     switch (url.slice(url.indexOf('.'), url.length)) {
     case '.obj':
       resourcePath = `${rootPath}${meshesFolder}${url}`;
-      res.writeHead(200, {
-        'Content-Type': 'text/plain',
-      });
-      fs.createReadStream(resourcePath).pipe(res);
+      head['Content-Type'] = 'text/plain';
       break;
     case '.png':
       resourcePath = `${rootPath}${texturesFolder}${url}`;
-      res.writeHead(200, {
-        'Content-Type': 'image/png',
-      });
-      fs.createReadStream(resourcePath, { encoding: 'base64' }).pipe(res);
+      head['Content-Type'] = 'image/png';
+      options.encoding = 'base64';
       break;
     default:
       break;
     }
+    res.writeHead(200, head);
+    fs.createReadStream(resourcePath, options).pipe(res);
     
   });
 

@@ -2583,7 +2583,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var scene = new _scene2.default();
 var node = scene.addChild();
-scene.getResource('test.obj');
+scene.getResource('monkey.obj');
 scene.getResource('puppy.png');
 
 /***/ }),
@@ -2949,6 +2949,1231 @@ exports.default = SceneNode;
 
 /***/ }),
 
+/***/ "./public/glib/src/math/color.js":
+/*!***************************************!*\
+  !*** ./public/glib/src/math/color.js ***!
+  \***************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Color = function () {
+  _createClass(Color, null, [{
+    key: 'fromArray',
+    value: function fromArray(a) {
+      return new (Function.prototype.bind.apply(Color, [null].concat(_toConsumableArray(a))))();
+    }
+  }, {
+    key: 'fromHex',
+    value: function fromHex(h) {
+      return new (Function.prototype.bind.apply(Color, [null].concat(_toConsumableArray([h.slice(2, 4), h.slice(4, 6), h.slice(6, 8)].map(function (he) {
+        return parseInt(he, 16) / 255;
+      })))))();
+    }
+  }, {
+    key: 'white',
+    get: function get() {
+      return new Color(1.0, 1.0, 1.0);
+    }
+  }, {
+    key: 'red',
+    get: function get() {
+      return new Color(1.0, 0.0, 0.0);
+    }
+  }, {
+    key: 'green',
+    get: function get() {
+      return new Color(0.0, 1.0, 0.0);
+    }
+  }, {
+    key: 'blue',
+    get: function get() {
+      return new Color(0.0, 0.0, 1.0);
+    }
+  }, {
+    key: 'black',
+    get: function get() {
+      return new Color(0.0, 0.0, 0.0);
+    }
+  }]);
+
+  function Color(r, g, b) {
+    _classCallCheck(this, Color);
+
+    this.r = r || 0.0;
+    this.g = g || 0.0;
+    this.b = b || 0.0;
+  }
+
+  _createClass(Color, [{
+    key: 'copy',
+    get: function get() {
+      return new Color(this.r, this.g, this.b);
+    }
+  }, {
+    key: 'toArray',
+    get: function get() {
+      return [this.r, this.g, this.b];
+    }
+  }, {
+    key: 'toHex',
+    get: function get() {
+      return '0x' + [(this.r * 255).toString(16), (this.g * 255).toString(16), (this.b * 255).toString(16)].map(function (cl) {
+        return cl.length < 2 ? '"0"' + cl : cl;
+      }).join('');
+    }
+  }]);
+
+  return Color;
+}();
+
+exports.default = Color;
+
+/***/ }),
+
+/***/ "./public/glib/src/math/easing.js":
+/*!****************************************!*\
+  !*** ./public/glib/src/math/easing.js ***!
+  \****************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Easing = function () {
+    _createClass(Easing, null, [{
+        key: 'linear',
+
+
+        // no easing, no acceleration
+        value: function linear(t) {
+            return t;
+        }
+        // accelerating from zero velocity
+
+    }, {
+        key: 'easeInQuad',
+        value: function easeInQuad(t) {
+            return t * t;
+        }
+        // decelerating to zero velocity
+
+    }, {
+        key: 'easeOutQuad',
+        value: function easeOutQuad(t) {
+            return t * (2 - t);
+        }
+        // acceleration until halfway, then deceleration
+
+    }, {
+        key: 'easeInOutQuad',
+        value: function easeInOutQuad(t) {
+            return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+        }
+        // accelerating from zero velocity
+
+    }, {
+        key: 'easeInCubic',
+        value: function easeInCubic(t) {
+            return t * t * t;
+        }
+        // decelerating to zero velocity
+
+    }, {
+        key: 'easeOutCubic',
+        value: function easeOutCubic(t) {
+            return (t -= 1) * t * t + 1;
+        }
+        // acceleration until halfway, then deceleration
+
+    }, {
+        key: 'easeInOutCubic',
+        value: function easeInOutCubic(t) {
+            return t < 0.5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1;
+        }
+        // accelerating from zero velocity
+
+    }, {
+        key: 'easeInQuart',
+        value: function easeInQuart(t) {
+            return t * t * t * t;
+        }
+        // decelerating to zero velocity
+
+    }, {
+        key: 'easeOutQuart',
+        value: function easeOutQuart(t) {
+            return 1 - (t -= 1) * t * t * t;
+        }
+        // acceleration until halfway, then deceleration
+
+    }, {
+        key: 'easeInOutQuart',
+        value: function easeInOutQuart(t) {
+            return t < 0.5 ? 8 * t * t * t * t : 1 - 8 * (t -= 1) * t * t * t;
+        }
+        // accelerating from zero velocity
+
+    }, {
+        key: 'easeInQuint',
+        value: function easeInQuint(t) {
+            return t * t * t * t * t;
+        }
+        // decelerating to zero velocity
+
+    }, {
+        key: 'easeOutQuint',
+        value: function easeOutQuint(t) {
+            return 1 + (t -= 1) * t * t * t * t;
+        }
+        // acceleration until halfway, then deceleration
+
+    }, {
+        key: 'easeInOutQuint',
+        value: function easeInOutQuint(t) {
+            return t < 0.5 ? 16 * t * t * t * t * t : 1 + 16 * (t -= 1) * t * t * t * t;
+        }
+    }]);
+
+    function Easing() {
+        _classCallCheck(this, Easing);
+
+        throw new Error('You should not use Easing contructor...');
+    }
+
+    return Easing;
+}();
+
+exports.default = Easing;
+
+/***/ }),
+
+/***/ "./public/glib/src/math/index.js":
+/*!***************************************!*\
+  !*** ./public/glib/src/math/index.js ***!
+  \***************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Easing = exports.Quat = exports.Mat4 = exports.Mat3 = exports.Vec3 = exports.Vec2 = exports.Color = undefined;
+
+var _color = __webpack_require__(/*! ./color */ "./public/glib/src/math/color.js");
+
+var _color2 = _interopRequireDefault(_color);
+
+var _vec = __webpack_require__(/*! ./vec2 */ "./public/glib/src/math/vec2.js");
+
+var _vec2 = _interopRequireDefault(_vec);
+
+var _vec3 = __webpack_require__(/*! ./vec3 */ "./public/glib/src/math/vec3.js");
+
+var _vec4 = _interopRequireDefault(_vec3);
+
+var _mat = __webpack_require__(/*! ./mat3 */ "./public/glib/src/math/mat3.js");
+
+var _mat2 = _interopRequireDefault(_mat);
+
+var _mat3 = __webpack_require__(/*! ./mat4 */ "./public/glib/src/math/mat4.js");
+
+var _mat4 = _interopRequireDefault(_mat3);
+
+var _quat = __webpack_require__(/*! ./quat */ "./public/glib/src/math/quat.js");
+
+var _quat2 = _interopRequireDefault(_quat);
+
+var _easing = __webpack_require__(/*! ./easing */ "./public/glib/src/math/easing.js");
+
+var _easing2 = _interopRequireDefault(_easing);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.Color = _color2.default;
+exports.Vec2 = _vec2.default;
+exports.Vec3 = _vec4.default;
+exports.Mat3 = _mat2.default;
+exports.Mat4 = _mat4.default;
+exports.Quat = _quat2.default;
+exports.Easing = _easing2.default;
+
+/***/ }),
+
+/***/ "./public/glib/src/math/mat3.js":
+/*!**************************************!*\
+  !*** ./public/glib/src/math/mat3.js ***!
+  \**************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _ = __webpack_require__(/*! ./ */ "./public/glib/src/math/index.js");
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var sqrt = Math.sqrt;
+
+var Mat3 = function () {
+  _createClass(Mat3, null, [{
+    key: 'identity',
+    get: function get() {
+      return new Mat3(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0);
+    }
+  }]);
+
+  function Mat3(m00, m01, m02, m10, m11, m12, m20, m21, m22) {
+    _classCallCheck(this, Mat3);
+
+    this.m00 = m00;this.m01 = m01;this.m02 = m02;
+    this.m10 = m10;this.m11 = m11;this.m12 = m12;
+    this.m20 = m20;this.m21 = m21;this.m22 = m22;
+  }
+
+  _createClass(Mat3, [{
+    key: 'multiplyVector',
+    value: function multiplyVector(v) {
+      return new Mat3(this.m00 * v.x + this.m01 * v.y + this.m02 * v.z, this.m10 * v.x + this.m11 * v.y + this.m12 * v.z, this.m20 * v.x + this.m21 * v.y + this.m22 * v.z);
+    }
+  }, {
+    key: 'add',
+    value: function add(m) {
+      return new Mat3(this.m00 + m.m00, this.m01 + m.m01, this.m02 + m.m02, this.m10 + m.m10, this.m11 + m.m11, this.m12 + m.m12, this.m20 + m.m20, this.m21 + m.m21, this.m22 + m.m22);
+    }
+  }, {
+    key: 'sub',
+    value: function sub(m) {
+      return new Mat3(this.m00 - m.m00, this.m01 - m.m01, this.m02 - m.m02, this.m10 - m.m10, this.m11 - m.m11, this.m12 - m.m12, this.m20 - m.m20, this.m21 - m.m21, this.m22 - m.m22);
+    }
+  }, {
+    key: 'mul',
+    value: function mul(m) {
+      var a00 = this.m01;var a01 = this.m02;var a02 = this.m03;
+      var a10 = this.m11;var a11 = this.m12;var a12 = this.m13;
+      var a20 = this.m21;var a21 = this.m22;var a22 = this.m23;
+      var b00 = m.m01;var b01 = m.m02;var b02 = m.m03;
+      var b10 = m.m11;var b11 = m.m12;var b12 = m.m13;
+      var b20 = m.m21;var b21 = m.m22;var b22 = m.m23;
+      return new Mat3(a00 * b00 + a01 * b10 + a02 * b20, a00 * b01 + a01 * b11 + a02 * b21, a00 * b02 + a01 * b12 + a02 * b22, a10 * b00 + a11 * b10 + a12 * b20, a10 * b01 + a11 * b11 + a12 * b21, a10 * b02 + a11 * b12 + a12 * b22, a20 * b00 + a21 * b10 + a22 * b20, a20 * b01 + a21 * b11 + a22 * b21, a20 * b02 + a21 * b12 + a22 * b22);
+    }
+  }, {
+    key: 'clone',
+    get: function get() {
+      return new Mat3(this.m00, this.m01, this.m02, this.m10, this.m11, this.m12, this.m20, this.m21, this.m22);
+    }
+  }, {
+    key: 'toArray',
+    get: function get() {
+      return [this.m00, this.m01, this.m02, this.m10, this.m11, this.m12, this.m20, this.m21, this.m22];
+    }
+  }, {
+    key: 'toFloat32Array',
+    get: function get() {
+      return new Float32Array([this.m00, this.m01, this.m02, this.m10, this.m11, this.m12, this.m20, this.m21, this.m22]);
+    }
+  }, {
+    key: 'toMat4',
+    get: function get() {
+      return new _.Mat4(this.m00, this.m01, this.m02, 0.0, this.m10, this.m11, this.m12, 0.0, this.m20, this.m21, this.m22, 0.0, 0.0, 0.0, 0.0, 1.0);
+    }
+  }, {
+    key: 'toQuat',
+    get: function get() {
+      var trace = this.m00 + this.m11 + this.m22;
+      var s = void 0;
+      if (trace > 0) {
+        s = 0.5 / sqrt(trace + 1.0);
+        return new _.Quat(0.25 / s, (this.m21 - this.m12) * s, (this.m02 - this.m20) * s);
+      }
+      if (this.m00 > this.m11 && this.m00 > this.m22) {
+        s = 2.0 * sqrt(1.0 + this.m00 - this.m11 - this.m22);
+        return new _.Quat((this.m21 - this.m12) / s, 0.25 * s, (this.m01 + this.m10) / s, (this.m02 + this.m20) / s);
+      } else if (this.m11 > this.m22) {
+        s = 2.0 * sqrt(1.0 + this.m11 - this.m00 - this.m22);
+        return new _.Quat((this.m02 - this.m20) / s, (this.m01 + this.m10) / s, 0.25 * s, (this.m12 + this.m21) / s);
+      }
+      s = 2.0 * sqrt(1.0 + this.m22 - this.m00 - this.m11);
+      return new _.Quat((this.m10 - this.m01) / s, (this.m02 + this.m20) / s, (this.m12 + this.m21) / s);
+    }
+  }]);
+
+  return Mat3;
+}();
+
+Mat3.fromArray = function (m) {
+  return new (Function.prototype.bind.apply(Mat3, [null].concat(_toConsumableArray(m))))();
+};
+
+exports.default = Mat3;
+
+/***/ }),
+
+/***/ "./public/glib/src/math/mat4.js":
+/*!**************************************!*\
+  !*** ./public/glib/src/math/mat4.js ***!
+  \**************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _ = __webpack_require__(/*! ./ */ "./public/glib/src/math/index.js");
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var sin = Math.sin,
+    cos = Math.cos,
+    tan = Math.tan;
+
+var Mat4 = function () {
+  _createClass(Mat4, null, [{
+    key: 'fromArray',
+    value: function fromArray(a) {
+      return new (Function.prototype.bind.apply(Mat4, [null].concat(_toConsumableArray(a))))();
+    }
+  }, {
+    key: 'perspective',
+    value: function perspective(fovrad, aspectRatio, near, far) {
+      var f = 1.0 / tan(fovrad / 2);
+      var rangeInv = 1 / (near - far);
+      return new Mat4(f / aspectRatio, 0.0, 0.0, 0.0, 0.0, f, 0.0, 0.0, 0.0, 0.0, (near + far) * rangeInv, -1.0, 0.0, 0.0, near * far * rangeInv * 2, 0.0);
+    }
+  }, {
+    key: 'orthographic',
+    value: function orthographic(left, right, bottom, top, near, far) {
+      var lr = 1 / (left - right);
+      var bt = 1 / (bottom - top);
+      var nf = 1 / (near - far);
+      return new Mat4(2 * lr, 0, 0, 0, 0, 2 * bt, 0, 0, 0, 0, 2 * nf, 0, (left + right) * lr, (top + bottom) * bt, (far + near) * nf, 1);
+    }
+  }, {
+    key: 'lookAt',
+    value: function lookAt(camPos, target, up) {
+      var zAxis = camPos.sub(target).normalize;
+      var xAxis = up.cross(zAxis);
+      var yAxis = zAxis.cross(xAxis);
+      return new Mat4(xAxis.x, xAxis.y, xAxis.z, 0.0, yAxis.x, yAxis.y, yAxis.z, 0.0, zAxis.x, zAxis.y, zAxis.z, 0.0, camPos.x, camPos.y, camPos.z, 1.0);
+    }
+  }, {
+    key: 'translate',
+    value: function translate(x, y, z) {
+      return new Mat4(1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, x, y, z, 1.0);
+    }
+  }, {
+    key: 'scale',
+    value: function scale(w, h, d) {
+      return new Mat4(w, 0.0, 0.0, 0.0, 0.0, h, 0.0, 0.0, 0.0, 0.0, d, 0.0, 0.0, 0.0, 0.0, 1.0);
+    }
+  }, {
+    key: 'rotateX',
+    value: function rotateX(angle) {
+      var cos = cos(angle);
+      var sin = sin(angle);
+      return new Mat4(1.0, 0.0, 0.0, 0.0, 0.0, cos, -sin, 0.0, 0.0, sin, cos, 0.0, 0.0, 0.0, 0.0, 1.0);
+    }
+  }, {
+    key: 'rotateY',
+    value: function rotateY(angle) {
+      var cos = cos(angle);
+      var sin = sin(angle);
+      return new Mat4(cos, 0.0, sin, 0.0, 0.0, 1.0, 0.0, 0.0, -sin, 0.0, cos, 0.0, 0.0, 0.0, 0.0, 1.0);
+    }
+  }, {
+    key: 'rotateZ',
+    value: function rotateZ(angle) {
+      var cos = cos(angle);
+      var sin = sin(angle);
+      return new Mat4(cos, -sin, 0.0, 0.0, sin, cos, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+    }
+  }, {
+    key: 'identity',
+    get: function get() {
+      return new Mat4(1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+    }
+  }]);
+
+  function Mat4(m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, m22, m23, m30, m31, m32, m33) {
+    _classCallCheck(this, Mat4);
+
+    this.m00 = m00 || 0;this.m01 = m01 || 0;this.m02 = m02 || 0;this.m03 = m03 || 0;
+    this.m10 = m10 || 0;this.m11 = m11 || 0;this.m12 = m12 || 0;this.m13 = m13 || 0;
+    this.m20 = m20 || 0;this.m21 = m21 || 0;this.m22 = m22 || 0;this.m23 = m23 || 0;
+    this.m30 = m30 || 0;this.m31 = m31 || 0;this.m32 = m32 || 0;this.m33 = m33 || 0;
+  }
+
+  _createClass(Mat4, [{
+    key: 'add',
+    value: function add(v) {
+      return new Mat4(this.m00 + v.m00, this.m01 + v.m01, this.m02 + v.m02, this.m03 + v.m03, this.m10 + v.m10, this.m11 + v.m11, this.m12 + v.m12, this.m13 + v.m13, this.m20 + v.m20, this.m21 + v.m21, this.m22 + v.m22, this.m23 + v.m23, this.m30 + v.m30, this.m31 + v.m31, this.m32 + v.m32, this.m33 + v.m33);
+    }
+  }, {
+    key: 'sub',
+    value: function sub(v) {
+      return new Mat4(this.m00 - v.m00, this.m01 - v.m01, this.m02 - v.m02, this.m03 - v.m03, this.m10 - v.m10, this.m11 - v.m11, this.m12 - v.m12, this.m13 - v.m13, this.m20 - v.m20, this.m21 - v.m21, this.m22 - v.m22, this.m23 - v.m23, this.m30 - v.m30, this.m31 - v.m31, this.m32 - v.m32, this.m33 - v.m33);
+    }
+  }, {
+    key: 'mul',
+    value: function mul(v) {
+      return new Mat4(v.m00 * this.m00 + v.m01 * this.m10 + v.m02 * this.m20 + v.m03 * this.m30, v.m00 * this.m01 + v.m01 * this.m11 + v.m02 * this.m21 + v.m03 * this.m31, v.m00 * this.m02 + v.m01 * this.m12 + v.m02 * this.m22 + v.m03 * this.m32, v.m00 * this.m03 + v.m01 * this.m13 + v.m02 * this.m23 + v.m03 * this.m33, v.m10 * this.m00 + v.m11 * this.m10 + v.m12 * this.m20 + v.m13 * this.m30, v.m10 * this.m01 + v.m11 * this.m11 + v.m12 * this.m21 + v.m13 * this.m31, v.m10 * this.m02 + v.m11 * this.m12 + v.m12 * this.m22 + v.m13 * this.m32, v.m10 * this.m03 + v.m11 * this.m13 + v.m12 * this.m23 + v.m13 * this.m33, v.m20 * this.m00 + v.m21 * this.m10 + v.m22 * this.m20 + v.m23 * this.m30, v.m20 * this.m01 + v.m21 * this.m11 + v.m22 * this.m21 + v.m23 * this.m31, v.m20 * this.m02 + v.m21 * this.m12 + v.m22 * this.m22 + v.m23 * this.m32, v.m20 * this.m03 + v.m21 * this.m13 + v.m22 * this.m23 + v.m23 * this.m33, v.m30 * this.m00 + v.m31 * this.m10 + v.m32 * this.m20 + v.m33 * this.m30, v.m30 * this.m01 + v.m31 * this.m11 + v.m32 * this.m21 + v.m33 * this.m31, v.m30 * this.m02 + v.m31 * this.m12 + v.m32 * this.m22 + v.m33 * this.m32, v.m30 * this.m03 + v.m31 * this.m13 + v.m32 * this.m23 + v.m33 * this.m33);
+    }
+  }, {
+    key: 'clone',
+    get: function get() {
+      return new Mat4(this.m00, this.m01, this.m02, this.m03, this.m10, this.m11, this.m12, this.m13, this.m20, this.m21, this.m22, this.m23, this.m30, this.m31, this.m32, this.m33);
+    }
+  }, {
+    key: 'toArray',
+    get: function get() {
+      return [this.m00, this.m01, this.m02, this.m03, this.m10, this.m11, this.m12, this.m13, this.m20, this.m21, this.m22, this.m23, this.m30, this.m31, this.m32, this.m33];
+    }
+  }, {
+    key: 'toFloat32Array',
+    get: function get() {
+      return new Float32Array([this.m00, this.m01, this.m02, this.m03, this.m10, this.m11, this.m12, this.m13, this.m20, this.m21, this.m22, this.m23, this.m30, this.m31, this.m32, this.m33]);
+    }
+  }, {
+    key: 'toMat3',
+    get: function get() {
+      return new _.Mat3(this.m00, this.m01, this.m02, this.m10, this.m11, this.m12, this.m20, this.m21, this.m22);
+    }
+  }, {
+    key: 'toQuat',
+    get: function get() {
+      return this.toMat3.toQuat;
+    }
+  }, {
+    key: 'invert',
+    get: function get() {
+      var m00 = this.m00,
+          m01 = this.m01,
+          m02 = this.m02,
+          m03 = this.m03,
+          m10 = this.m10,
+          m11 = this.m11,
+          m12 = this.m12,
+          m13 = this.m13,
+          m20 = this.m20,
+          m21 = this.m21,
+          m22 = this.m22,
+          m23 = this.m23,
+          m30 = this.m30,
+          m31 = this.m31,
+          m32 = this.m32,
+          m33 = this.m33;
+
+      var a00 = m11 * m22 * m33 - m11 * m23 * m32 - m21 * m12 * m33 + m21 * m13 * m32 + m31 * m12 * m23 - m31 * m13 * m22;
+      var a10 = -m10 * m22 * m33 + m10 * m23 * m32 + m20 * m12 * m33 - m20 * m13 * m32 - m30 * m12 * m23 + m30 * m13 * m22;
+      var a20 = m10 * m21 * m33 - m10 * m23 * m31 - m20 * m11 * m33 + m20 * m13 * m31 + m30 * m11 * m23 - m30 * m13 * m21;
+      var a30 = -m10 * m21 * m32 + m10 * m22 * m31 + m20 * m11 * m32 - m20 * m12 * m31 - m30 * m11 * m22 + m30 * m12 * m21;
+
+      var det = m00 * a00 + m01 * a10 + m02 * a20 + m03 * a30;
+      if (det === 0) {
+        throw new Error('Cannot invert matrix: ' + m);
+      }
+      det = 1.0 / det;
+
+      return new Mat4(det * a00, det * -m01 * m22 * m33 + m01 * m23 * m32 + m21 * m02 * m33 - m21 * m03 * m32 - m31 * m02 * m23 + m31 * m03 * m22, det * m01 * m12 * m33 - m01 * m13 * m32 - m11 * m02 * m33 + m11 * m03 * m32 + m31 * m02 * m13 - m31 * m03 * m12, det * -m01 * m12 * m23 + m01 * m13 * m22 + m11 * m02 * m23 - m11 * m03 * m22 - m21 * m02 * m13 + m21 * m03 * m12, det * a10, det * m00 * m22 * m33 - m00 * m23 * m32 - m20 * m02 * m33 + m20 * m03 * m32 + m30 * m02 * m23 - m30 * m03 * m22, det * -m00 * m12 * m33 + m00 * m13 * m32 + m10 * m02 * m33 - m10 * m03 * m32 - m30 * m02 * m13 + m30 * m03 * m12, det * m00 * m12 * m23 - m00 * m13 * m22 - m10 * m02 * m23 + m10 * m03 * m22 + m20 * m02 * m13 - m20 * m03 * m12, det * a20, det * -m00 * m21 * m33 + m00 * m23 * m31 + m20 * m01 * m33 - m20 * m03 * m31 - m30 * m01 * m23 + m30 * m03 * m21, det * m00 * m11 * m33 - m00 * m13 * m31 - m10 * m01 * m33 + m10 * m03 * m31 + m30 * m01 * m13 - m30 * m03 * m11, det * -m00 * m11 * m23 + m00 * m13 * m21 + m10 * m01 * m23 - m10 * m03 * m21 - m20 * m01 * m13 + m20 * m03 * m11, det * a30, det * m00 * m21 * m32 - m00 * m22 * m31 - m20 * m01 * m32 + m20 * m02 * m31 + m30 * m01 * m22 - m30 * m02 * m21, det * -m00 * m11 * m32 + m00 * m12 * m31 + m10 * m01 * m32 - m10 * m02 * m31 - m30 * m01 * m12 + m30 * m02 * m11, det * m00 * m11 * m22 - m00 * m12 * m21 - m10 * m01 * m22 + m10 * m02 * m21 + m20 * m01 * m12 - m20 * m02 * m11);
+    }
+  }, {
+    key: 'transpose',
+    get: function get() {
+      return new Mat4(this.m00, this.m10, this.m20, this.m30, this.m01, this.m11, this.m21, this.m31, this.m02, this.m12, this.m22, this.m32, this.m03, this.m13, this.m23, this.m33);
+    }
+  }, {
+    key: 'translation',
+    get: function get() {
+      return new _.Vec3(this.m30, this.m31, this.m32);
+    }
+  }, {
+    key: 'scale',
+    get: function get() {
+      return new _.Vec3(new _.Vec3(this.m00, this.m10, this.m20).len, new _.Vec3(this.m01, this.m11, this.m21).len, new _.Vec3(this.m02, this.m12, this.m22).len);
+    }
+  }, {
+    key: 'rotation',
+    get: function get() {
+      return new _.Mat3(this.m00, this.m01, this.m02, this.m10, this.m11, this.m12, this.m20, this.m21, this.m22);
+    }
+  }]);
+
+  return Mat4;
+}();
+
+exports.default = Mat4;
+
+/***/ }),
+
+/***/ "./public/glib/src/math/quat.js":
+/*!**************************************!*\
+  !*** ./public/glib/src/math/quat.js ***!
+  \**************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _ = __webpack_require__(/*! ./ */ "./public/glib/src/math/index.js");
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var sin = Math.sin,
+    cos = Math.cos,
+    acos = Math.acos,
+    abs = Math.abs,
+    sqrt = Math.sqrt;
+
+var Quat = function () {
+  _createClass(Quat, null, [{
+    key: 'fromArray',
+    value: function fromArray(a) {
+      return new (Function.prototype.bind.apply(Quat, [null].concat(_toConsumableArray(a))))();
+    }
+  }, {
+    key: 'fromEulers',
+    value: function fromEulers(x, y, z) {
+      var c1 = cos(y * 0.5);
+      var c2 = cos(z * 0.5);
+      var c3 = cos(x * 0.5);
+      var s1 = sin(y * 0.5);
+      var s2 = sin(z * 0.5);
+      var s3 = sin(x * 0.5);
+      return new Quat(c1 * c2 * c3 - s1 * s2 * s3, c1 * c2 * s3 + s1 * s2 * c3, s1 * c2 * c3 + c1 * s2 * s3, c1 * s2 * c3 - s1 * c2 * s3).normalize;
+    }
+  }, {
+    key: 'fromAxisAngle',
+    value: function fromAxisAngle(axis, angle) {
+      var r = 1 / axis.len;
+      var s = sin(angle / 2);
+      return new Quat(cos(angle / 2), s * axis.x * r, s * axis.y * r, s * axis.z * r).normalize;
+    }
+  }, {
+    key: 'fromRotation',
+    value: function fromRotation(v1, v2) {
+      // https://stackoverflow.com/a/1171995
+      var half = v1.add(v2);
+      var axis = v1.cross(half);
+      var angle = v1.dot(half);
+      return new Quat(angle, axis.x, axis.y, axis.z).normalize;
+    }
+  }, {
+    key: 'identity',
+    get: function get() {
+      return new Quat(1.000, 0.000, 0.000, 0.000);
+    }
+  }, {
+    key: 'up',
+    get: function get() {
+      return new Quat(0.707, 0.707, 0.000, 0.000);
+    }
+  }, {
+    key: 'down',
+    get: function get() {
+      return new Quat(0.707, -0.707, 0.000, 0.000);
+    }
+  }, {
+    key: 'left',
+    get: function get() {
+      return new Quat(0.707, 0.000, 0.707, 0.000);
+    }
+  }, {
+    key: 'right',
+    get: function get() {
+      return new Quat(0.707, 0.000, -0.707, 0.000);
+    }
+  }, {
+    key: 'backward',
+    get: function get() {
+      return new Quat(0.000, 0.000, 1.000, 0.000);
+    }
+  }, {
+    key: 'upsideDown',
+    get: function get() {
+      return new Quat(0.000, 0.000, 0.000, 1.000);
+    }
+  }, {
+    key: 'tiltLeft',
+    get: function get() {
+      return new Quat(0.707, 0.000, 0.000, 0.707);
+    }
+  }, {
+    key: 'tiltRight',
+    get: function get() {
+      return new Quat(0.707, 0.000, 0.000, -0.707);
+    }
+  }]);
+
+  function Quat(w, x, y, z) {
+    _classCallCheck(this, Quat);
+
+    this.w = w || 0.0;
+    this.x = x || 0.0;
+    this.y = y || 0.0;
+    this.z = z || 0.0;
+  }
+
+  _createClass(Quat, [{
+    key: 'mul',
+    value: function mul(q) {
+      var aw = this.w;
+      var ax = this.x;
+      var ay = this.y;
+      var az = this.z;
+      var bw = q.w;
+      var bx = q.x;
+      var by = q.y;
+      var bz = q.z;
+      return new Quat(aw * bw - ax * bx - ay * by - az * bz, ax * bw + aw * bx + ay * bz - az * by, ay * bw + aw * by + az * bx - ax * bz, az * bw + aw * bz + ax * by - ay * bx).normalize;
+    }
+  }, {
+    key: 'dot',
+    value: function dot(q) {
+      return this.w * q.w + this.x * q.x + this.y * q.y + this.z * q.z;
+    }
+  }, {
+    key: 'cross',
+    value: function cross(q) {
+      throw new Error('Quaternion cross not implemented');
+    }
+  }, {
+    key: 'scaleRotation',
+    value: function scaleRotation(t) {
+      // Redundant multiplication
+      var angle = acos(this.w) * t;
+      var axis = new _.Vec3(this.x, this.y, this.z).scale(sin(angle));
+      return new Quat(cos(angle), axis.x, axis.y, axis.z);
+    }
+  }, {
+    key: 'lerp',
+    value: function lerp(q, t) {
+      return t >= 1.0 ? q : this.scaleRotation(1 - t).multiply(q.scaleRotation(t));
+    }
+  }, {
+    key: 'nlerp',
+    value: function nlerp(q, t) {
+      return this.lerp(q, t).normalize;
+    }
+  }, {
+    key: 'slerp',
+    value: function slerp(q, t) {
+      // http://www.euclideanspace.com/maths/algebra/realNormedAlgebra/quaternions/slerp/
+      if (t <= 0.0) {
+        return this;
+      } else if (t >= 1.0) {
+        return q;
+      }
+      // Calculate angle between a and b
+      var cosHalfTheta = this.dot(q);
+      // if a=b or a=-b then theta = 0 and we can return a
+      if (abs(cosHalfTheta) >= 1.0) {
+        return this;
+      }
+
+      if (cosHalfTheta < 0.0) {
+        q.w = -q.w;q.x = -q.x;q.y = -q.y;q.z = -q.z;
+        cosHalfTheta = -cosHalfTheta;
+      }
+
+      // Calculate temporary values
+      var sinHalfTheta = sqrt(1.0 - cosHalfTheta * cosHalfTheta);
+
+      // if theta = 180 degrees then result is not fully defined, we could rotate around any axis normal to a or b
+      if (abs(sinHalfTheta) < 0.001) {
+        return new Quat((this.w + q.w) * 0.5, (this.x + q.x) * 0.5, (this.y + q.y) * 0.5, (this.z + q.z) * 0.5).normalize;
+      }
+
+      var halfTheta = acos(cosHalfTheta);
+      var ratioA = sin((1 - t) * halfTheta) / sinHalfTheta;
+      var ratioB = sin(t * halfTheta) / sinHalfTheta;
+      return new Quat(this.w * ratioA + q.w * ratioB, this.x * ratioA + q.x * ratioB, this.y * ratioA + q.y * ratioB, this.z * ratioA + q.z * ratioB).normalize;
+    }
+  }, {
+    key: 'copy',
+    get: function get() {
+      return new Quat(this.w, this.x, this.y, this.z);
+    }
+  }, {
+    key: 'toArray',
+    get: function get() {
+      return [this.w, this.x, this.y, this.z];
+    }
+  }, {
+    key: 'toMat3',
+    get: function get() {
+      var w = this.w,
+          x = this.x,
+          y = this.y,
+          z = this.z;
+
+      var xw = x * w;
+      var xx = x * x;
+      var xy = x * y;
+      var xz = x * z;
+      var yw = y * w;
+      var yy = y * y;
+      var yz = y * z;
+      var zw = z * w;
+      var zz = z * z;
+      return new _.Mat3(1 - 2 * (yy + zz), 2 * (xy - zw), 2 * (xz + yw), 2 * (xy + zw), 1 - 2 * (xx + zz), 2 * (yz - xw), 2 * (xz - yw), 2 * (yz + xw), 1 - 2 * (xx + yy));
+    }
+  }, {
+    key: 'toMat4',
+    get: function get() {
+      return this.toMat3.toMat4;
+    }
+  }, {
+    key: 'toEulers',
+    get: function get() {
+      throw new Error('Quaternion toEuler not implemented');
+    }
+  }, {
+    key: 'len',
+    get: function get() {
+      return sqrt(this.w * this.w + this.x * this.x + this.y * this.y + this.z * this.z);
+    }
+  }, {
+    key: 'lenSqrt',
+    get: function get() {
+      return this.w * this.w + this.x * this.x + this.y * this.y + this.z * this.z;
+    }
+  }, {
+    key: 'conjugate',
+    get: function get() {
+      return new Quat(this.w, -this.x, -this.y, -this.z);
+    }
+  }, {
+    key: 'normalize',
+    get: function get() {
+      var r = q.len;
+      if (r > 0) {
+        r = 1 / r;
+        return new Quat(this.w * r, this.x * r, this.y * r, this.z * r);
+      }
+      return new Quat(1.0, 0.0, 0.0, 0.0);
+    }
+  }, {
+    key: 'invert',
+    get: function get() {
+      var r = 1 / this.len;
+      return new Quat(this.w * r, -this.x * r, -this.y * r, -this.z * r);
+    }
+  }]);
+
+  return Quat;
+}();
+
+exports.default = Quat;
+
+/***/ }),
+
+/***/ "./public/glib/src/math/vec2.js":
+/*!**************************************!*\
+  !*** ./public/glib/src/math/vec2.js ***!
+  \**************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var sqrt = Math.sqrt;
+
+var Vec2 = function () {
+  _createClass(Vec2, null, [{
+    key: "fromArray",
+    value: function fromArray(a) {
+      return new (Function.prototype.bind.apply(Vec2, [null].concat(_toConsumableArray(a))))();
+    }
+  }, {
+    key: "zero",
+    get: function get() {
+      return new Vec2(0, 0);
+    }
+  }, {
+    key: "up",
+    get: function get() {
+      return new Vec2(0, 1);
+    }
+  }, {
+    key: "down",
+    get: function get() {
+      return new Vec2(0, -1);
+    }
+  }, {
+    key: "left",
+    get: function get() {
+      return new Vec2(-1, 0);
+    }
+  }, {
+    key: "right",
+    get: function get() {
+      return new Vec2(1, 0);
+    }
+  }]);
+
+  function Vec2(x, y) {
+    _classCallCheck(this, Vec2);
+
+    this.x = x || 0;
+    this.y = y || 0;
+  }
+
+  _createClass(Vec2, [{
+    key: "add",
+    value: function add(v) {
+      return new Vec2(this.x + v.x, this.y + v.y);
+    }
+  }, {
+    key: "sub",
+    value: function sub(v) {
+      return new Vec2(this.x - v.x, this.y - v.y);
+    }
+  }, {
+    key: "scale",
+    value: function scale(f) {
+      return new Vec2(this.x * f, this.y * f);
+    }
+  }, {
+    key: "dot",
+    value: function dot(v) {
+      return this.x * v.x + this.y * v.y;
+    }
+  }, {
+    key: "getAngle",
+    value: function getAngle(v) {
+      return this.normalize.dot(v.normalize);
+    }
+  }, {
+    key: "invert",
+    value: function invert() {
+      return new Vec2(-this.x, -this.y);
+    }
+  }, {
+    key: "clone",
+    get: function get() {
+      return new Vec2(this.x, this.y);
+    }
+  }, {
+    key: "len",
+    get: function get() {
+      return sqrt(this.x * this.x + this.y * this.y);
+    }
+  }, {
+    key: "lenSqrt",
+    get: function get() {
+      return this.x * this.x + this.y * this.y;
+    }
+  }, {
+    key: "normalize",
+    get: function get() {
+      var r = sqrt(this.x * this.x + this.y * this.y);
+      if (r > 0) {
+        r = 1 / r;
+        return new Vec2(this.x * r, this.y * r);
+      }
+      return new Vec2(0, 0);
+    }
+  }]);
+
+  return Vec2;
+}();
+
+exports.default = Vec2;
+
+/***/ }),
+
+/***/ "./public/glib/src/math/vec3.js":
+/*!**************************************!*\
+  !*** ./public/glib/src/math/vec3.js ***!
+  \**************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var sqrt = Math.sqrt;
+
+var Vec3 = function () {
+  _createClass(Vec3, null, [{
+    key: "fromArray",
+    value: function fromArray(a) {
+      return new (Function.prototype.bind.apply(Vec3, [null].concat(_toConsumableArray(a))))();
+    }
+  }, {
+    key: "fromQuat",
+    value: function fromQuat(q) {
+      var x = this.x;
+      var y = this.y;
+      var z = this.z;
+      var qx = q.x;
+      var qy = q.y;
+      var qz = q.z;
+      var qw = q.w;
+      var ix = qw * x + qy * z - qz * y;
+      var iy = qw * y + qz * x - qx * z;
+      var iz = qw * z + qx * y - qy * x;
+      var iw = -qx * x - qy * y - qz * z;
+      return new Vec3(ix * qw + iw * -qx + iy * -qz - iz * -qy, iy * qw + iw * -qy + iz * -qx - ix * -qz, iz * qw + iw * -qz + ix * -qy - iy * -qx);
+    }
+  }, {
+    key: "fromMat4",
+    value: function fromMat4(m) {
+      return new Vec3(m.a14 + m.a11 * this.x + m.a12 * this.y + m.a13 * this.z, m.a24 + m.a21 * this.x + m.a22 * this.y + m.a23 * this.z, m.a34 + m.a31 * this.x + m.a32 * this.y + m.a33 * this.z);
+    }
+  }, {
+    key: "zero",
+    get: function get() {
+      return new Vec3(0, 0, 0);
+    }
+  }, {
+    key: "up",
+    get: function get() {
+      return new Vec3(0, 1, 0);
+    }
+  }, {
+    key: "down",
+    get: function get() {
+      return new Vec3(0, -1, 0);
+    }
+  }, {
+    key: "left",
+    get: function get() {
+      return new Vec3(-1, 0, 0);
+    }
+  }, {
+    key: "right",
+    get: function get() {
+      return new Vec3(1, 0, 0);
+    }
+  }, {
+    key: "forward",
+    get: function get() {
+      return new Vec3(0, 0, 1);
+    }
+  }, {
+    key: "backward",
+    get: function get() {
+      return new Vec3(0, 0, -1);
+    }
+  }]);
+
+  function Vec3(x, y, z) {
+    _classCallCheck(this, Vec3);
+
+    this.x = x || 0;
+    this.y = y || 0;
+    this.z = z || 0;
+  }
+
+  _createClass(Vec3, [{
+    key: "add",
+    value: function add(v) {
+      return new Vec3(this.x + v.x, this.y + v.y, this.z + v.z);
+    }
+  }, {
+    key: "sub",
+    value: function sub(v) {
+      return new Vec3(this.x - v.x, this.y - v.y, this.z - v.z);
+    }
+  }, {
+    key: "scale",
+    value: function scale(f) {
+      return new Vec3(this.x * f, this.y * f, this.z * f);
+    }
+  }, {
+    key: "dot",
+    value: function dot(v) {
+      return this.x * v.x + this.y * v.y + this.z * v.z;
+    }
+  }, {
+    key: "cross",
+    value: function cross(v) {
+      return new Vec3(this.y * v.z - this.z * v.y, this.z * v.x - this.x * v.z, this.x * v.y - this.y * v.x);
+    }
+  }, {
+    key: "lerp",
+    value: function lerp(v, t) {
+      return new Vec3(this.x + (v.x - this.x) * t, this.y + (v.y - this.y) * t, this.z + (v.z - this.z) * t);
+    }
+  }, {
+    key: "getNormal",
+    value: function getNormal(b, c) {
+      return this.sub(b).cross(this.sub(c)).normalize;
+    }
+  }, {
+    key: "getAngle",
+    value: function getAngle(v) {
+      return this.normalize.dot(v.normalize);
+    }
+  }, {
+    key: "forward",
+    get: function get() {
+      return this.normalize;
+    }
+  }, {
+    key: "backward",
+    get: function get() {
+      return this.normalize.invert;
+    }
+  }, {
+    key: "left",
+    get: function get() {
+      return this.forward.cross(Vec3.up).normalize;
+    }
+  }, {
+    key: "right",
+    get: function get() {
+      return this.forward.cross(Vec3.up).normalize.invert;
+    }
+  }, {
+    key: "down",
+    get: function get() {
+      return this.forward.cross(this.left).normalize;
+    }
+  }, {
+    key: "up",
+    get: function get() {
+      return this.forward.cross(this.left).normalize.invert;
+    }
+  }, {
+    key: "clone",
+    get: function get() {
+      return new Vec3(this.x, this.y, this.z);
+    }
+  }, {
+    key: "len",
+    get: function get() {
+      return sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
+    }
+  }, {
+    key: "lenSqrt",
+    get: function get() {
+      return this.x * this.x + this.y * this.y + this.z * this.z;
+    }
+  }, {
+    key: "normalize",
+    get: function get() {
+      var r = sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
+      if (r > 0) {
+        r = 1 / r;
+        return new Vec3(this.x * r, this.y * r, this.z * r);
+      }
+      return new Vec3(0, 0, 0);
+    }
+  }, {
+    key: "invert",
+    get: function get() {
+      return new Vec3(-this.x, -this.y, -this.z);
+    }
+  }]);
+
+  return Vec3;
+}();
+
+exports.default = Vec3;
+
+/***/ }),
+
+/***/ "./public/glib/src/model/geometry.js":
+/*!*******************************************!*\
+  !*** ./public/glib/src/model/geometry.js ***!
+  \*******************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Geometry = function Geometry(vertexOffset, vertexCount) {
+  _classCallCheck(this, Geometry);
+
+  this.vertexOffset = vertexOffset;
+  this.vertexCount = vertexCount;
+  this.mesh = null;
+};
+
+exports.default = Geometry;
+
+/***/ }),
+
 /***/ "./public/glib/src/model/mesh.js":
 /*!***************************************!*\
   !*** ./public/glib/src/model/mesh.js ***!
@@ -2969,7 +4194,15 @@ var _resource = __webpack_require__(/*! ../core/resource */ "./public/glib/src/c
 
 var _resource2 = _interopRequireDefault(_resource);
 
+var _geometry = __webpack_require__(/*! ./geometry */ "./public/glib/src/model/geometry.js");
+
+var _geometry2 = _interopRequireDefault(_geometry);
+
+var _math = __webpack_require__(/*! ../math */ "./public/glib/src/math/index.js");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -2977,25 +4210,124 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+var generateGeometries = function generateGeometries(ind) {
+  var geometries = [];
+  var count = 0;
+  var regex = /[a-z_]+(?:\.\w+)?/i;
+  geometries.push(new _geometry2.default(0, null));
+  if (regex.test(ind[0])) {
+    ind.splice(0, 1);
+  }
+  for (var i = 0; i < ind.length; i += 1) {
+    if (regex.test(ind[i])) {
+      ind.splice(i, 1);
+      geometries[geometries.length - 1].vertexCount = count * 3;
+      geometries.push(new _geometry2.default(i * 3, null));
+      count = 0;
+      i -= 1;
+      continue;
+    }
+    count += 1;
+  }
+  geometries[geometries.length - 1].count = count * 3;
+  return geometries;
+};
+var generateNormals = function generateNormals(vertices, indices, hasTexCoords) {
+  var normals = [];
+  var newIndices = [];
+  if (indices) {
+    var il = indices.length;
+    if (hasTexCoords) {
+      for (var i = 0; i < il; i += 6) {
+        var normal = vertices[indices[i + 0]].getNormal(vertices[indices[i + 2]], vertices[indices[i + 4]]);
+        normals.push(normal, normal, normal);
+        newIndices.push(indices[i + 0], indices[i + 1], i / 2 + 0, indices[i + 2], indices[i + 3], i / 2 + 1, indices[i + 4], indices[i + 5], i / 2 + 2);
+      }
+    } else {
+      for (var _i = 0; _i < il; _i += 3) {
+        var _normal = vertices[indices[_i + 0]].getNormal(vertices[indices[_i + 1]], vertices[indices[_i + 2]]);
+        normals.push(_normal, _normal, _normal);
+        newIndices.push(indices[_i + 0], normalIndice, _i + 0, indices[_i + 1], normalIndice, _i + 1, indices[_i + 2], normalIndice, _i + 2);
+      }
+    }
+  } else {
+    var vl = vertices.length;
+    for (var _i2 = 0; _i2 < vl; _i2 += 3) {
+      var _normal2 = vertices[_i2 + 0].getNormal(vertices[_i2 + 1], vertices[_i2 + 2]);
+      normals.push(_normal2, _normal2, _normal2);
+    }
+  }
+  return { normals: normals, indices: newIndices };
+};
+
 var Mesh = function (_Resource) {
   _inherits(Mesh, _Resource);
 
   _createClass(Mesh, null, [{
     key: 'parse',
     value: function parse(resource, data) {
-      console.log(data);
-      var iterator = 0;
+      var vertices = [];
+      var texCoords = [];
+      var normals = [];
+      var indices = [];
+
+      var nextLine = /^(\w+) (.+)$/gm;
+      var allFloats = /-?\d+\.\d+/g;
+      var allInts = /\d+/g;
       var line = '';
-      console.log('one at a time----');
-      while (line = data.match(/^.*$/gm)) {
-        console.log(line);
-        if (iterator++ > 10) {
-          console.log('Iterator over 10');
-          break;
+      while (line = lineRegEx.exec(nextLine)) {
+        switch (line[1]) {
+          // Vertice
+          case 'v':
+            vertices.push(new (Function.prototype.bind.apply(_math.Vec3, [null].concat(_toConsumableArray(line[2].match(allFloats).map(parseFloat)))))());break;
+          // Texturecoordinate
+          case 'vt':
+            texCoords.push(new (Function.prototype.bind.apply(_math.Vec2, [null].concat(_toConsumableArray(line[2].match(allFloats).map(parseFloat)))))());break;
+          // Normal
+          case 'vn':
+            normals.push(new (Function.prototype.bind.apply(_math.Vec3, [null].concat(_toConsumableArray(line[2].match(allFloats).map(parseFloat)))))());break;
+          // Indices for next 3 vertices
+          case 'f':
+            indices.push.apply(indices, _toConsumableArray(line[2].match(allInts).map(function (num) {
+              return parseInt(num, 10) - 1;
+            })));break;
+          // Point where material usage starts
+          case 'g':
+            indices.push(line[2]);break;
+          // Comment
+          case '#':
+            break;
+          // Object name
+          case 'o':
+            break;
+          // Name to switch to at this point of indices
+          case 'usemtl':
+            break;
+          // Smooth shading 1 (on) or off (off)
+          case 's':
+            break;
+          // Materials library and filename
+          case 'mtllib':
+            break;
+          // For now log if there is unknown line start
+          default:
+            throw new Error(row);
         }
       }
-      console.log(line);
-      return;
+
+      var geometries = generateGeometries(indices);
+
+      if (vertices.length > 0) {
+        attributes.push('a_position');
+      }
+      var hasTexCoords = texCoords.length > 0;
+      if (hasTexCoords) {
+        attributes.push('a_texcoord');
+      }
+      if (normals.length === 0) {
+        normals.push(generateNormals(vertices, indices.length > 0 ? indices : null, hasTexCoords));
+      }
+      attributes.push('a_normal');
     }
   }]);
 

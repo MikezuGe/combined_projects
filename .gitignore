@@ -1,6 +1,6 @@
 node_modules
-!favico.png
 *.png
+!favico.png
 *.jpg
 *.jpeg
 restart.sh

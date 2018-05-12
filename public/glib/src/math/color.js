@@ -19,7 +19,7 @@ export default class Color {
   get toArray () { return [ this.r, this.g, this.b, ]; }
   get toHex () {
     return `0x${[ (this.r * 255).toString(16), (this.g * 255).toString(16), (this.b * 255).toString(16), ]
-      .map(cl => cl.length < 2 ? `"0"${cl}` : cl)
+      .map(cl => cl.length < 2 ? `'0'${cl}` : cl)
       .join('')}`;
   }
 

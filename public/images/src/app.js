@@ -6,6 +6,7 @@ import './css/style.css';
 
 import Thumbnails from './js/thumbnails';
 import BigImage from './js/bigimage';
+import Modal from './js/modal';
 
 
 axios.defaults.baseURL = `${window.location.origin}/api/images`;
@@ -14,6 +15,7 @@ axios.defaults.baseURL = `${window.location.origin}/api/images`;
 class App extends Component {
 
   state = {
+    error: '',
     thumbnailUrls: [],
     imageUrls: [],
     bigImageUrl: '',
@@ -22,6 +24,10 @@ class App extends Component {
   componentDidMount() {
     axios.get('/')
       .then(result => {
+        if (result.status !== 200) {
+          this.setState({ error: result.data, });
+          return;
+        }
         const { location, } = window;
         const { thumbnailUrls, bigImageUrls, } = result.data;
         this.setState({
@@ -30,7 +36,7 @@ class App extends Component {
         });
       })
       .catch(err => {
-        throw new Error(err);
+        this.setState({ error: `${err.response.status}: ${err.response.data}`, });
       });
   }
 
@@ -43,9 +49,11 @@ class App extends Component {
   }
 
   render = () => {
-    const { thumbnailUrls, bigImageUrls, bigImageUrl, } = this.state;
+    const { thumbnailUrls, bigImageUrls, bigImageUrl, error, } = this.state;
     const { openImage, closeImage, } = this;
     return <div className={'container'}>
+      { error.length > 0 &&
+        <Modal message={error} /> }
       { thumbnailUrls.length > 0 && bigImageUrls.length > 0 &&
         <Thumbnails openImage={openImage} thumbnailUrls={thumbnailUrls} bigImageUrls={bigImageUrls} /> }
       { bigImageUrl.length > 0 &&

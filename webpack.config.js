@@ -1,3 +1,4 @@
+const webpack = require('webpack');
 const path = require('path');
 const fs = require('fs');
 
@@ -62,10 +63,19 @@ const fileLoader = {
 };
 
 
+const mode = 'development';
+//const mode = 'production';
+
+
+const pluginEnvSetter = new webpack.DefinePlugin({
+  'process.env.NODE_ENV': JSON.stringify(mode),
+});
+
+
 module.exports = fs.readdirSync('./public')
   .filter(file => fs.readdirSync(`./public/${file}`).includes('index.html'))
   .map(project => ({
-    'mode': 'development',
+    mode,
     'entry': `./public/${project}/src/app.js`,
     'output': {
       'filename': 'bundle.js',
@@ -81,4 +91,7 @@ module.exports = fs.readdirSync('./public')
         fileLoader,
       ],
     },
+    plugins: [
+      pluginEnvSetter,
+    ]
   }));

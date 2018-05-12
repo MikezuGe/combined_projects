@@ -22244,6 +22244,10 @@ var _bigimage = __webpack_require__(/*! ./js/bigimage */ "./public/images/src/js
 
 var _bigimage2 = _interopRequireDefault(_bigimage);
 
+var _modal = __webpack_require__(/*! ./js/modal */ "./public/images/src/js/modal.js");
+
+var _modal2 = _interopRequireDefault(_modal);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -22269,6 +22273,7 @@ var App = function (_Component) {
     }
 
     return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = App.__proto__ || Object.getPrototypeOf(App)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
+      error: '',
       thumbnailUrls: [],
       imageUrls: [],
       bigImageUrl: ''
@@ -22280,7 +22285,8 @@ var App = function (_Component) {
       var _this$state = _this.state,
           thumbnailUrls = _this$state.thumbnailUrls,
           bigImageUrls = _this$state.bigImageUrls,
-          bigImageUrl = _this$state.bigImageUrl;
+          bigImageUrl = _this$state.bigImageUrl,
+          error = _this$state.error;
       var _this2 = _this,
           openImage = _this2.openImage,
           closeImage = _this2.closeImage;
@@ -22288,6 +22294,7 @@ var App = function (_Component) {
       return _react2.default.createElement(
         'div',
         { className: 'container' },
+        error.length > 0 && _react2.default.createElement(_modal2.default, { message: error }),
         thumbnailUrls.length > 0 && bigImageUrls.length > 0 && _react2.default.createElement(_thumbnails2.default, { openImage: openImage, thumbnailUrls: thumbnailUrls, bigImageUrls: bigImageUrls }),
         bigImageUrl.length > 0 && _react2.default.createElement(_bigimage2.default, { closeImage: closeImage, bigImageUrl: bigImageUrl })
       );
@@ -22300,6 +22307,10 @@ var App = function (_Component) {
       var _this3 = this;
 
       _axios2.default.get('/').then(function (result) {
+        if (result.status !== 200) {
+          _this3.setState({ error: result.data });
+          return;
+        }
         var _window = window,
             location = _window.location;
         var _result$data = result.data,
@@ -22315,7 +22326,7 @@ var App = function (_Component) {
           })
         });
       }).catch(function (err) {
-        throw new Error(err);
+        _this3.setState({ error: err.response.status + ': ' + err.response.data });
       });
     }
   }]);
@@ -22431,6 +22442,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 var _react = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 
 var _react2 = _interopRequireDefault(_react);
@@ -22453,24 +22466,21 @@ var BigImage = function (_Component) {
   _inherits(BigImage, _Component);
 
   function BigImage() {
-    var _ref;
-
-    var _temp, _this, _ret;
-
     _classCallCheck(this, BigImage);
 
-    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
+    return _possibleConstructorReturn(this, (BigImage.__proto__ || Object.getPrototypeOf(BigImage)).apply(this, arguments));
+  }
 
-    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = BigImage.__proto__ || Object.getPrototypeOf(BigImage)).call.apply(_ref, [this].concat(args))), _this), _this.render = function () {
-      var _this$props = _this.props,
-          bigImageUrl = _this$props.bigImageUrl,
-          closeImage = _this$props.closeImage;
+  _createClass(BigImage, [{
+    key: 'render',
+    value: function render() {
+      var _props = this.props,
+          bigImageUrl = _props.bigImageUrl,
+          closeImage = _props.closeImage;
 
       return _react2.default.createElement('img', { src: bigImageUrl, onClick: closeImage });
-    }, _temp), _possibleConstructorReturn(_this, _ret);
-  }
+    }
+  }]);
 
   return BigImage;
 }(_react.Component);
@@ -22481,6 +22491,73 @@ BigImage.propTypes = {
 };
 
 exports.default = BigImage;
+
+/***/ }),
+
+/***/ "./public/images/src/js/modal.js":
+/*!***************************************!*\
+  !*** ./public/images/src/js/modal.js ***!
+  \***************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+
+var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Modal = function (_Component) {
+    _inherits(Modal, _Component);
+
+    function Modal() {
+        _classCallCheck(this, Modal);
+
+        return _possibleConstructorReturn(this, (Modal.__proto__ || Object.getPrototypeOf(Modal)).apply(this, arguments));
+    }
+
+    _createClass(Modal, [{
+        key: 'render',
+        value: function render() {
+            return _react2.default.createElement(
+                'div',
+                null,
+                _react2.default.createElement(
+                    'div',
+                    null,
+                    this.props.message
+                )
+            );
+        }
+    }]);
+
+    return Modal;
+}(_react.Component);
+
+Modal.propTypes = {
+    message: _propTypes2.default.string.isRequired
+};
+
+exports.default = Modal;
 
 /***/ }),
 

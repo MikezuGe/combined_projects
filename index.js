@@ -17,7 +17,7 @@ const createHTML = files => `
       <title>Kontioweb</title>
       <meta charset='utf-8'>
       <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-      <link rel="icon" type="image/gif" href="shared_assets/favicon/favicogifslow.gif">
+      <link rel='icon' type='image/gif' href='shared_assets/favico/favicogifslow.gif'>
       <style>
         * {
           margin: 0;
@@ -66,6 +66,7 @@ app.get('/', (req, res) => {
       console.error(err);
       res.send('Unable to read public');
     }
+    console.log(files.filter(file => fs.readdirSync(`./public/${file}`).includes('index.html')));
     res.send(createHTML(files.filter(file => fs.readdirSync(`./public/${file}`).includes('index.html'))));
   });
 });

@@ -6,7 +6,7 @@ import '../css/bigimage.css';
 
 class BigImage extends Component {
 
-  render = () => {
+  render () {
     const { bigImageUrl, closeImage, } = this.props;
     return <img src={bigImageUrl} onClick={closeImage} />;
   }

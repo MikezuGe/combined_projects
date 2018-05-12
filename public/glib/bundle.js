@@ -3031,7 +3031,7 @@ var Color = function () {
     key: 'toHex',
     get: function get() {
       return '0x' + [(this.r * 255).toString(16), (this.g * 255).toString(16), (this.b * 255).toString(16)].map(function (cl) {
-        return cl.length < 2 ? '"0"' + cl : cl;
+        return cl.length < 2 ? '\'0\'' + cl : cl;
       }).join('');
     }
   }]);

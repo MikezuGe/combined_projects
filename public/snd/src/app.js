@@ -6,6 +6,7 @@ import Me from './me';
 
 import './style.css';
 
+console.log(process.env.NODE_ENV);
 
 class Game {
 

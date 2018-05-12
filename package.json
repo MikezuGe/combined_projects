@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npx nodemon --watch index.js --watch api index.js",
+    "start": "npx nodemon --watch index.js --watch api --watch utility index.js",
     "develop": "npx webpack --watch",
     "build": "npx webpack"
   },
@@ -14,31 +14,31 @@
   "dependencies": {
     "axios": "^0.18.0",
     "express": "^4.16.3",
-    "mongoose": "^5.0.17",
+    "mongoose": "^5.1.0",
     "react": "^16.3.2",
     "react-dom": "^16.3.2",
     "react-redux": "^5.0.7",
     "react-router-dom": "^4.2.2",
     "redux": "^4.0.0",
     "redux-thunk": "^2.2.0",
-    "sharp": "0.20.1",
+    "sharp": "^0.20.2",
     "socket.io": "^2.1.0"
   },
   "devDependencies": {
-    "babel-core": "^6.26.0",
+    "babel-core": "^6.26.3",
     "babel-eslint": "^8.2.3",
     "babel-loader": "^7.1.4",
-    "babel-preset-env": "^1.6.1",
+    "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
     "css-loader": "^0.28.11",
     "eslint": "^4.19.1",
     "eslint-loader": "^2.0.0",
-    "eslint-plugin-react": "^7.7.0",
+    "eslint-plugin-react": "^7.8.1",
     "file-loader": "^1.1.11",
-    "nodemon": "^1.17.3",
+    "nodemon": "^1.17.4",
     "style-loader": "^0.21.0",
-    "webpack": "^4.6.0",
-    "webpack-cli": "^2.0.14"
+    "webpack": "^4.8.2",
+    "webpack-cli": "^2.1.3"
   }
 }

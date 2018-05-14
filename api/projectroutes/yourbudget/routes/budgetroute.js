@@ -2,30 +2,28 @@ const express = require('express');
 const budgetRoute = express.Router();
 
 
-const mongoose = require('mongoose');
+const models = require('../models');
 
 
-budgetRoute
+budgetRoute.post('/api/yourbudget/budget', (req, res) => {
+  console.log('post');
+  res.send(['post']);
+});
 
-  .post('/api/yourbudget/budget', (req, res) => {
-    console.log('post');
-    res.send(['post']);
-  })
+budgetRoute.delete('/api/yourbudget/budget', (req, res) => {
+  console.log('delete');
+  res.send(['delete']);
+});
 
-  .delete('/api/yourbudget/budget', (req, res) => {
-    console.log('delete');
-    res.send(['delete']);
-  })
-
-  .get('/api/yourbudget/budget', (req, res) => {
-    mongoose.models.BudgetModel.find({})
-      .then(data => {
-        res.send(data);
-      })
-      .catch(err => {
-        console.log('Budget get error: ', err);
-      })
-  });
+budgetRoute.get('/api/yourbudget/budget', (req, res) => {
+  models.Budget.find({})
+    .then(data => {
+      res.send(data);
+    })
+    .catch(err => {
+      console.log(`Budget get error: ${err}`);
+    });
+});
 
 
 module.exports = budgetRoute;

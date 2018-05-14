@@ -2588,6 +2588,196 @@ scene.getResource('puppy.png');
 
 /***/ }),
 
+/***/ "./public/glib/src/core/event.js":
+/*!***************************************!*\
+  !*** ./public/glib/src/core/event.js ***!
+  \***************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Event = function Event(type, element, preventDefault, stopPropagation) {
+  _classCallCheck(this, Event);
+
+  _initialiseProps.call(this);
+
+  this.type = type || null;
+  this.element = type && (element || window) || null;
+  this.listener = null;
+
+  this.subscribers = [];
+  this.invoker = null;
+  this.disableInvoke = this.type !== null;
+  this.createListener(preventDefault || false, stopPropagation || false);
+};
+
+var _initialiseProps = function _initialiseProps() {
+  this.createListener = function (preventDefault, stopPropagation) {
+    var _this = this;
+
+    if (!this.disableInvoke) {
+      this.invoker = function () {
+        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+          args[_key] = arguments[_key];
+        }
+
+        return _this.subscribers.forEach(function (fn) {
+          return fn.apply(undefined, args);
+        });
+      };
+      return;
+    } else if (preventDefault && stopPropagation) {
+      this.invoker = function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        _this.subscribers.forEach(function (fn) {
+          return fn(event);
+        });
+      };
+    } else if (preventDefault) {
+      this.invoker = function (event) {
+        event.preventDefault();
+        _this.subscribers.forEach(function (fn) {
+          return fn(event);
+        });
+      };
+    } else if (stopPropagation) {
+      this.invoker = function (event) {
+        event.stopPropagation();
+        _this.subscribers.forEach(function (fn) {
+          return fn(event);
+        });
+      };
+    } else {
+      this.invoker = function () {
+        for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+          args[_key2] = arguments[_key2];
+        }
+
+        return _this.subscribers.forEach(function (fn) {
+          return fn.apply(undefined, args);
+        });
+      };
+    }
+    this.listener = this.element.addEventListener(this.type, this.invoker, false);
+  };
+
+  this.invoke = function () {
+    !this.disableInvoke && this.invoker();
+  };
+
+  this.subscribe = function () {
+    var _subscribers;
+
+    (_subscribers = this.subscribers).push.apply(_subscribers, arguments);
+  };
+
+  this.unsubscribe = function () {
+    for (var _len3 = arguments.length, subscribers = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+      subscribers[_key3] = arguments[_key3];
+    }
+
+    var _iteratorNormalCompletion = true;
+    var _didIteratorError = false;
+    var _iteratorError = undefined;
+
+    try {
+      for (var _iterator = subscribers[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+        var subscriber = _step.value;
+
+        var subscriberIndex = this.subscribers.indexOf(subscriber);
+        if (subscriberIndex !== -1) {
+          this.subscribers.splice(subscriberIndex, 1);
+        }
+      }
+    } catch (err) {
+      _didIteratorError = true;
+      _iteratorError = err;
+    } finally {
+      try {
+        if (!_iteratorNormalCompletion && _iterator.return) {
+          _iterator.return();
+        }
+      } finally {
+        if (_didIteratorError) {
+          throw _iteratorError;
+        }
+      }
+    }
+  };
+};
+
+exports.default = Event;
+
+
+var windowResizeEvent = new Event('resize', window, true, true);
+// Preventing default (second to last boolean) -> f5 key won't refresh
+var windowKeyDownEvent = new Event('keydown', window, false, true);
+var windowKeyUpEvent = new Event('keyup', window, true, true);
+var windowMouseDownEvent = new Event('mousedown', window, true, true);
+var windowMouseUpEvent = new Event('mouseup', window, true, true);
+var windowMouseMoveEvent = new Event('mousemove', window, true, true);
+// Preventing default (second to last boolean) -> Mouse wheel stops working
+var windowWheelEvent = new Event('wheel', window, false, true);
+// Preventing default (second to last boolean) -> right click won't display context menu
+var windowContextMenuEvent = new Event('contextmenu', window, false, true);
+
+exports.windowResizeEvent = windowResizeEvent;
+exports.windowKeyDownEvent = windowKeyDownEvent;
+exports.windowKeyUpEvent = windowKeyUpEvent;
+exports.windowMouseDownEvent = windowMouseDownEvent;
+exports.windowMouseUpEvent = windowMouseUpEvent;
+exports.windowMouseMoveEvent = windowMouseMoveEvent;
+exports.windowWheelEvent = windowWheelEvent;
+exports.windowContextMenuEvent = windowContextMenuEvent;
+
+/***/ }),
+
+/***/ "./public/glib/src/core/gl.js":
+/*!************************************!*\
+  !*** ./public/glib/src/core/gl.js ***!
+  \************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.gl = exports.canvas = undefined;
+
+var _event = __webpack_require__(/*! ./event */ "./public/glib/src/core/event.js");
+
+var canvas = document.getElementById('canvas');
+if (!canvas) {
+  exports.canvas = canvas = document.createElement('canvas');
+  document.getElementById('root').appendChild(canvas);
+}
+var gl = canvas.getContext('webgl2');
+(canvas.resize = function () {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+})();
+(gl.resize = function () {
+  gl.viewport(0, 0, window.innerWidth, window.innerHeight);
+})();
+_event.windowResizeEvent.subscribe(canvas.resize, gl.resize);
+
+exports.canvas = canvas;
+exports.gl = gl;
+
+/***/ }),
+
 /***/ "./public/glib/src/core/resource.js":
 /*!******************************************!*\
   !*** ./public/glib/src/core/resource.js ***!
@@ -2695,6 +2885,7 @@ var ResourceLoader = function () {
           document.getElementById('root').appendChild(resource.img);
         }
       }).catch(function (err) {
+        _this.resourcesLoading.delete(resource.url);
         console.error('Unable to load resource ' + resource.url + ' ' + err);
       });
     }
@@ -3410,23 +3601,23 @@ var Mat4 = function () {
   }, {
     key: 'rotateX',
     value: function rotateX(angle) {
-      var cos = cos(angle);
-      var sin = sin(angle);
-      return new Mat4(1.0, 0.0, 0.0, 0.0, 0.0, cos, -sin, 0.0, 0.0, sin, cos, 0.0, 0.0, 0.0, 0.0, 1.0);
+      var cosi = cos(angle);
+      var sine = sin(angle);
+      return new Mat4(1.0, 0.0, 0.0, 0.0, 0.0, cosi, -sine, 0.0, 0.0, sine, cosi, 0.0, 0.0, 0.0, 0.0, 1.0);
     }
   }, {
     key: 'rotateY',
     value: function rotateY(angle) {
-      var cos = cos(angle);
-      var sin = sin(angle);
-      return new Mat4(cos, 0.0, sin, 0.0, 0.0, 1.0, 0.0, 0.0, -sin, 0.0, cos, 0.0, 0.0, 0.0, 0.0, 1.0);
+      var cosi = cos(angle);
+      var sine = sin(angle);
+      return new Mat4(cosi, 0.0, sine, 0.0, 0.0, 1.0, 0.0, 0.0, -sine, 0.0, cosi, 0.0, 0.0, 0.0, 0.0, 1.0);
     }
   }, {
     key: 'rotateZ',
     value: function rotateZ(angle) {
-      var cos = cos(angle);
-      var sin = sin(angle);
-      return new Mat4(cos, -sin, 0.0, 0.0, sin, cos, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+      var cosi = cos(angle);
+      var sine = sin(angle);
+      return new Mat4(cosi, -sine, 0.0, 0.0, sine, cosi, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
     }
   }, {
     key: 'identity',
@@ -3511,7 +3702,7 @@ var Mat4 = function () {
 
       var det = m00 * a00 + m01 * a10 + m02 * a20 + m03 * a30;
       if (det === 0) {
-        throw new Error('Cannot invert matrix: ' + m);
+        throw new Error('Cannot invert matrix: ' + this);
       }
       det = 1.0 / det;
 
@@ -3684,7 +3875,7 @@ var Quat = function () {
   }, {
     key: 'cross',
     value: function cross(q) {
-      throw new Error('Quaternion cross not implemented');
+      throw new Error('Quaternion cross not implemented ' + q);
     }
   }, {
     key: 'scaleRotation',
@@ -3795,7 +3986,7 @@ var Quat = function () {
   }, {
     key: 'normalize',
     get: function get() {
-      var r = q.len;
+      var r = sqrt(this.w * this.w + this.x * this.x + this.y * this.y + this.z * this.z);
       if (r > 0) {
         r = 1 / r;
         return new Quat(this.w * r, this.x * r, this.y * r, this.z * r);
@@ -3908,6 +4099,16 @@ var Vec2 = function () {
     key: "invert",
     value: function invert() {
       return new Vec2(-this.x, -this.y);
+    }
+  }, {
+    key: "toArray",
+    get: function get() {
+      return [this.x, this.y];
+    }
+  }, {
+    key: "toFloat32Array",
+    get: function get() {
+      return new Float32Array([this.x, this.y]);
     }
   }, {
     key: "clone",
@@ -4108,6 +4309,16 @@ var Vec3 = function () {
       return this.forward.cross(this.left).normalize.invert;
     }
   }, {
+    key: "toArray",
+    get: function get() {
+      return [this.x, this.y, this.z];
+    }
+  }, {
+    key: "toFloat32Array",
+    get: function get() {
+      return new Float32Array([this.x, this.y, this.z]);
+    }
+  }, {
     key: "clone",
     get: function get() {
       return new Vec3(this.x, this.y, this.z);
@@ -4190,6 +4401,8 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _gl = __webpack_require__(/*! ../core/gl */ "./public/glib/src/core/gl.js");
+
 var _resource = __webpack_require__(/*! ../core/resource */ "./public/glib/src/core/resource.js");
 
 var _resource2 = _interopRequireDefault(_resource);
@@ -4210,17 +4423,62 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var generateGeometries = function generateGeometries(ind) {
-  var geometries = [];
+var getAttributeInfo = function getAttributeInfo(attributes) {
+  var attr = [];
+  var offset = 0;
+  attributes.forEach(function (attribute) {
+    switch (attribute) {
+      case 'a_position':
+        attr.push({ name: 'a_position', vertices: 3, offset: offset });offset += 3;break;
+      case 'a_texcoord':
+        attr.push({ name: 'a_texcoord', vertices: 2, offset: offset });offset += 2;break;
+      case 'a_normal':
+        attr.push({ name: 'a_normal', vertices: 3, offset: offset });offset += 3;break;
+      case 'a_tangent':
+        attr.push({ name: 'a_tangent', vertices: 3, offset: offset });offset += 3;break;
+      case 'a_bitangent':
+        attr.push({ name: 'a_bitangent', vertices: 3, offset: offset });offset += 3;break;
+      default:
+        throw new Error('Unknown mesh attribute name: ' + attribute);
+    }
+  });
+  return attr;
+};
+
+var calculateVertexSize = function calculateVertexSize(attributes) {
+  var size = 0;
+  attributes.forEach(function (attribute) {
+    switch (attribute) {
+      case 'a_position':
+        size += 3;break;
+      case 'a_texcoord':
+        size += 2;break;
+      case 'a_normal':
+        size += 3;break;
+      case 'a_tangent':
+        size += 3;break;
+      case 'a_bitangent':
+        size += 3;break;
+      default:
+        throw new Error('Unknown mesh attribute: ' + attribute);
+    }
+  });
+  return size;
+};
+
+var generateGeometries = function generateGeometries(geometries, indices, hasTexCoords) {
+  // Expects indices to contain indices for position and normals, optionally for texturecoordinates
+  // Geometries are expected to be split at vertice that can be divided by 3
   var count = 0;
-  var regex = /[a-z_]+(?:\.\w+)?/i;
+  var increment = hasTexCoords ? 9 : 6;
+  var isWordRegEx = /[a-z_]+(?:\.\w+)?/i;
   geometries.push(new _geometry2.default(0, null));
-  if (regex.test(ind[0])) {
-    ind.splice(0, 1);
+  if (isWordRegEx.test(indices[0])) {
+    indices.splice(0, 1);
   }
-  for (var i = 0; i < ind.length; i += 1) {
-    if (regex.test(ind[i])) {
-      ind.splice(i, 1);
+  for (var i = 0; i < indices.length; i += increment) {
+    if (isWordRegEx.test(indices[i])) {
+      indices.splice(i, 1);
       geometries[geometries.length - 1].vertexCount = count * 3;
       geometries.push(new _geometry2.default(i * 3, null));
       count = 0;
@@ -4229,35 +4487,83 @@ var generateGeometries = function generateGeometries(ind) {
     }
     count += 1;
   }
-  geometries[geometries.length - 1].count = count * 3;
-  return geometries;
+  geometries[geometries.length - 1].vertexCount = count * 3;
 };
-var generateNormals = function generateNormals(vertices, indices, hasTexCoords) {
-  var normals = [];
-  var newIndices = [];
-  if (indices) {
-    var il = indices.length;
+
+var generateNormals = function generateNormals(normals, indices, vertices, hasTexCoords) {
+  if (indices && indices.length > 0) {
     if (hasTexCoords) {
-      for (var i = 0; i < il; i += 6) {
-        var normal = vertices[indices[i + 0]].getNormal(vertices[indices[i + 2]], vertices[indices[i + 4]]);
-        normals.push(normal, normal, normal);
-        newIndices.push(indices[i + 0], indices[i + 1], i / 2 + 0, indices[i + 2], indices[i + 3], i / 2 + 1, indices[i + 4], indices[i + 5], i / 2 + 2);
+      var newil = indices.length / 2 * 3;
+      for (var i = 0; i < newil; i += 9) {
+        var normalIndice = i / 9;
+        normals.push(vertices[indices[i + 0]].getNormal(vertices[indices[i + 2]], vertices[indices[i + 4]]));
+        indices.splice(i + 2, 0, normalIndice);
+        indices.splice(i + 5, 0, normalIndice);
+        indices.splice(i + 8, 0, normalIndice);
       }
     } else {
-      for (var _i = 0; _i < il; _i += 3) {
-        var _normal = vertices[indices[_i + 0]].getNormal(vertices[indices[_i + 1]], vertices[indices[_i + 2]]);
-        normals.push(_normal, _normal, _normal);
-        newIndices.push(indices[_i + 0], normalIndice, _i + 0, indices[_i + 1], normalIndice, _i + 1, indices[_i + 2], normalIndice, _i + 2);
+      var _newil = indices.length * 2;
+      for (var _i = 0; _i < _newil; _i += 6) {
+        var _normalIndice = _i / 6;
+        normals.push(vertices[indices[_i + 0]].getNormal(vertices[indices[_i + 1]], vertices[indices[_i + 2]]));
+        indices.splice(_i + 1, 0, _normalIndice);
+        indices.splice(_i + 3, 0, _normalIndice);
+        indices.splice(_i + 5, 0, _normalIndice);
       }
     }
   } else {
     var vl = vertices.length;
     for (var _i2 = 0; _i2 < vl; _i2 += 3) {
-      var _normal2 = vertices[_i2 + 0].getNormal(vertices[_i2 + 1], vertices[_i2 + 2]);
-      normals.push(_normal2, _normal2, _normal2);
+      var normal = vertices[_i2 + 0].getNormal(vertices[_i2 + 1], vertices[_i2 + 2]);
+      normals.push(normal, normal, normal);
     }
   }
-  return { normals: normals, indices: newIndices };
+};
+
+var generateTanAndBitan = function generateTanAndBitan(tangents, bitangents, vertices, texCoords, indices) {
+  // Expects indices to contain indices for position, texturecoordinates and normals
+  var newil = indices.length / 3 * 5;
+  for (var i = 0; i < newil; i += 15) {
+    var v1 = vertices[indices[i + 0]];
+    var v2 = vertices[indices[i + 3]];
+    var v3 = vertices[indices[i + 6]];
+    var w1 = texCoords[indices[i + 1]];
+    var w2 = texCoords[indices[i + 4]];
+    var w3 = texCoords[indices[i + 7]];
+
+    var x1 = v2.x - v1.x;
+    var x2 = v3.x - v1.x;
+    var y1 = v2.y - v1.y;
+    var y2 = v3.y - v1.y;
+    var z1 = v2.z - v1.z;
+    var z2 = v3.z - v1.z;
+
+    var s1 = w2.x - w1.x;
+    var s2 = w3.x - w1.x;
+    var t1 = w2.y - w1.y;
+    var t2 = w3.y - w1.y;
+
+    var r = 1.0 / (s1 * t2 - s2 * t1);
+    var tan = new _math.Vec3((t2 * x1 - t1 * x2) * r, (t2 * y1 - t1 * y2) * r, (t2 * z1 - t1 * z2) * r).normalize;
+    var bitan = new _math.Vec3((s1 * x2 - s2 * x1) * r, (s1 * y2 - s2 * y1) * r, (s1 * z2 - s2 * z1) * r).normalize;
+
+    tangents.push(tan);
+    bitangents.push(bitan);
+    var newIndice = i / 15;
+    indices.splice(i + 3, 0, newIndice, newIndice);
+    indices.splice(i + 8, 0, newIndice, newIndice);
+    indices.splice(i + 13, 0, newIndice, newIndice);
+  }
+};
+
+var uploadToGPU = function uploadToGPU(vertexData, indices) {
+  var vertexBuffer = _gl.gl.createBuffer();
+  _gl.gl.bindBuffer(_gl.gl.ARRAY_BUFFER, vertexBuffer);
+  _gl.gl.bufferData(_gl.gl.ARRAY_BUFFER, vertexData, _gl.gl.STATIC_DRAW);
+  var indiceBuffer = _gl.gl.createBuffer();
+  _gl.gl.bindBuffer(_gl.gl.ELEMENT_ARRAY_BUFFER, indiceBuffer);
+  _gl.gl.bufferData(_gl.gl.ELEMENT_ARRAY_BUFFER, indices, _gl.gl.STATIC_DRAW);
+  return { vertexBuffer: vertexBuffer, indiceBuffer: indiceBuffer };
 };
 
 var Mesh = function (_Resource) {
@@ -4266,16 +4572,24 @@ var Mesh = function (_Resource) {
   _createClass(Mesh, null, [{
     key: 'parse',
     value: function parse(resource, data) {
+      var _this2 = this;
+
       var vertices = [];
       var texCoords = [];
       var normals = [];
+      var tangents = [];
+      var bitangents = [];
       var indices = [];
+
+      var geometries = [];
+      var attributes = [];
+      var vertexData = [];
 
       var nextLine = /^(\w+) (.+)$/gm;
       var allFloats = /-?\d+\.\d+/g;
       var allInts = /\d+/g;
       var line = '';
-      while (line = lineRegEx.exec(nextLine)) {
+      while (line = nextLine.exec(data)) {
         switch (line[1]) {
           // Vertice
           case 'v':
@@ -4311,12 +4625,9 @@ var Mesh = function (_Resource) {
             break;
           // For now log if there is unknown line start
           default:
-            throw new Error(row);
+            throw new Error(line[2]);
         }
       }
-
-      var geometries = generateGeometries(indices);
-
       if (vertices.length > 0) {
         attributes.push('a_position');
       }
@@ -4325,9 +4636,46 @@ var Mesh = function (_Resource) {
         attributes.push('a_texcoord');
       }
       if (normals.length === 0) {
-        normals.push(generateNormals(vertices, indices.length > 0 ? indices : null, hasTexCoords));
+        generateNormals(normals, indices, vertices, hasTexCoords);
       }
       attributes.push('a_normal');
+
+      generateGeometries(geometries, indices, hasTexCoords);
+      geometries.map(function (g) {
+        g.mesh = _this2;
+      });
+
+      if (hasTexCoords) {
+        generateTanAndBitan(tangents, bitangents, vertices, texCoords, indices);
+        attributes.push('a_tangent', 'a_bitangent');
+      }
+
+      if (texCoords) {
+        var il = indices.length;
+        for (var i = 0; i < il; i += 5) {
+          vertexData.push.apply(vertexData, _toConsumableArray(vertices[indices[i + 0]].toArray));
+          vertexData.push.apply(vertexData, _toConsumableArray(texCoords[indices[i + 1]].toArray));
+          vertexData.push.apply(vertexData, _toConsumableArray(normals[indices[i + 2]].toArray));
+          vertexData.push.apply(vertexData, _toConsumableArray(tangents[indices[i + 3]].toArray));
+          vertexData.push.apply(vertexData, _toConsumableArray(bitangents[indices[i + 4]].toArray));
+        }
+      } else {
+        var _il = indices.length;
+        for (var _i3 = 0; _i3 < _il; _i3 += 2) {
+          vertexData.push.apply(vertexData, _toConsumableArray(vertices[indices[_i3 + 0]].toArray));
+          vertexData.push.apply(vertexData, _toConsumableArray(normals[indices[_i3 + 2]].toArray));
+        }
+      }
+
+      var buffers = uploadToGPU(new Float32Array(vertexData), new Int16Array(indices));
+
+      console.log(vertices);
+      console.log(texCoords);
+      console.log(normals);
+      console.log(tangents);
+      console.log(bitangents);
+      console.log(indices);
+      console.log(geometries);
     }
   }]);
 
@@ -4336,6 +4684,9 @@ var Mesh = function (_Resource) {
 
     var _this = _possibleConstructorReturn(this, (Mesh.__proto__ || Object.getPrototypeOf(Mesh)).call(this, url));
 
+    _this.geometries = [];
+    _this.attributes = [];
+    _this.vertexSize = null;
     _this.vertexBuffer = null;
     _this.indexBuffer = null;
     return _this;

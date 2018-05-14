@@ -51,6 +51,8 @@ export default class Vec3 {
   get down () { return this.forward.cross(this.left).normalize; }
   get up () { return this.forward.cross(this.left).normalize.invert; }
 
+  get toArray () { return [ this.x, this.y, this.z, ]; }
+  get toFloat32Array () { return new Float32Array([ this.x, this.y, this.z, ]); }
   get clone () { return new Vec3(this.x, this.y, this.z); }
   get len () { return sqrt(this.x * this.x + this.y * this.y + this.z * this.z); }
   get lenSqrt() { return this.x * this.x + this.y * this.y + this.z * this.z; }

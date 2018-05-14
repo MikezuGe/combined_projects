@@ -77,7 +77,7 @@ export default class Quat {
   get lenSqrt () { return this.w * this.w + this.x * this.x + this.y * this.y + this.z * this.z; }
   get conjugate () { return new Quat(this.w, -this.x, -this.y, -this.z); }
   get normalize () {
-    let r = q.len;
+    let r = sqrt(this.w * this.w + this.x * this.x + this.y * this.y + this.z * this.z);
     if (r > 0) {
       r = 1 / r;
       return new Quat(this.w * r, this.x * r, this.y * r, this.z * r);
@@ -107,7 +107,7 @@ export default class Quat {
     ).normalize;
   }
   dot (q) { return this.w * q.w + this.x * q.x + this.y * q.y + this.z * q.z; }
-  cross (q) { throw new Error('Quaternion cross not implemented'); }
+  cross (q) { throw new Error(`Quaternion cross not implemented ${q}`); }
 
   scaleRotation (t) {
     // Redundant multiplication

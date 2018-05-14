@@ -1,6 +1,6 @@
 import io from 'socket.io-client';
 
-import { canvas, ctx, } from './canvas';
+import { ctx, canvas, } from './ctx';
 import time from './time';
 import Me from './me';
 

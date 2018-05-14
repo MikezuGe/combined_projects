@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://budgetmanager:manag3r@kontioweb.fi/yourbudget');
+const db = mongoose.createConnection('mongodb://mngryb:dbmng3ryb!@kontioweb.fi/yourbudget');
 
 
-mongoose.model('BudgetModel', mongoose.Schema({
+db.model('Budget', mongoose.Schema({
   dateAdded: { type: Date, default: Date.now, },
   isIncome: Boolean,
   name: String,
@@ -12,7 +12,7 @@ mongoose.model('BudgetModel', mongoose.Schema({
 
 
 /* FOR INSERTING TEST DATA */
-mongoose.models.BudgetModel.find({}, (err, budget) => {
+db.models.Budget.find({}, (err, budget) => {
   if (err) {
     console.error('Error occurred while trying to find budget data');
     return;
@@ -24,28 +24,28 @@ mongoose.models.BudgetModel.find({}, (err, budget) => {
   const formatDateToString = date => `${date.getDay()}.${date.getMonth()}.${date.getFullYear()}`;
   const timeNow = Date.now();
   const testData = [
-    new mongoose.models.BudgetModel({
+    new db.models.Budget({
       name: 'K-Market',
       amount: 4.99,
       date: formatDateToString(new Date(timeNow - 172800000)),
       dateAdded: timeNow,
       isIncome: false,
     }),
-    new mongoose.models.BudgetModel({
+    new db.models.Budget({
       name: 'Prisma',
       amount: 14.99,
       date: formatDateToString(new Date(timeNow - 142800000)),
       dateAdded: timeNow,
       isIncome: false,
     }),
-    new mongoose.models.BudgetModel({
+    new db.models.Budget({
       name: 'Livion',
       amount: 250.00,
       date: formatDateToString(new Date(timeNow - 102800000)),
       dateAdded: timeNow,
       isIncome: true,
     }),
-    new mongoose.models.BudgetModel({
+    new db.models.Budget({
       name: 'ABC',
       amount: 60.00,
       date: formatDateToString(new Date(timeNow - 2800000)),
@@ -53,7 +53,7 @@ mongoose.models.BudgetModel.find({}, (err, budget) => {
       isIncome: false,
     }),
   ];
-  mongoose.models.BudgetModel.collection.insert(testData, err => {
+  db.models.Budget.collection.insert(testData, err => {
     if (err) {
       console.log('error in inserting testdata to mongodb');
       console.log(err);
@@ -62,3 +62,5 @@ mongoose.models.BudgetModel.find({}, (err, budget) => {
   });
 });
 /* FOR INSERTING TEST DATA END */
+
+module.exports = db.models;

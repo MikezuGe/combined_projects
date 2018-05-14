@@ -65,31 +65,31 @@ export default class Mat4 {
     );
   }
   static rotateX (angle) {
-    const cos = cos(angle);
-    const sin = sin(angle);
+    const cosi = cos(angle);
+    const sine = sin(angle);
     return new Mat4(
       1.0, 0.0, 0.0, 0.0,
-      0.0, cos, -sin, 0.0,
-      0.0, sin, cos, 0.0,
+      0.0, cosi, -sine, 0.0,
+      0.0, sine, cosi, 0.0,
       0.0, 0.0, 0.0, 1.0,
     );
   }
   static rotateY (angle) {
-    const cos = cos(angle);
-    const sin = sin(angle);
+    const cosi = cos(angle);
+    const sine = sin(angle);
     return new Mat4(
-      cos, 0.0, sin, 0.0,
+      cosi, 0.0, sine, 0.0,
       0.0, 1.0, 0.0, 0.0,
-      -sin, 0.0, cos, 0.0,
+      -sine, 0.0, cosi, 0.0,
       0.0, 0.0, 0.0, 1.0,
     );
   }
   static rotateZ (angle) {
-    const cos = cos(angle);
-    const sin = sin(angle);
+    const cosi = cos(angle);
+    const sine = sin(angle);
     return new Mat4(
-      cos, -sin, 0.0, 0.0,
-      sin, cos, 0.0, 0.0,
+      cosi, -sine, 0.0, 0.0,
+      sine, cosi, 0.0, 0.0,
       0.0, 0.0, 1.0, 0.0,
       0.0, 0.0, 0.0, 1.0,
     );
@@ -183,7 +183,7 @@ export default class Mat4 {
 
     let det = m00 * a00 + m01 * a10 + m02 * a20 + m03 * a30;
     if (det === 0) {
-      throw new Error(`Cannot invert matrix: ${m}`);
+      throw new Error(`Cannot invert matrix: ${this}`);
     }
     det = 1.0 / det;
 

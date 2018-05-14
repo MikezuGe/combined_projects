@@ -50,6 +50,7 @@ class ResourceLoader {
         }
       })
       .catch(err => {
+        this.resourcesLoading.delete(resource.url);
         console.error(`Unable to load resource ${resource.url} ${err}`);
       });
   }

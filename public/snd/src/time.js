@@ -7,10 +7,6 @@ class Time {
     this._lastFrame = performance.now();
   }
 
-  set deltaTime (deltaTime) {
-    this._deltaTime = deltaTime;
-  }
-
   get deltaTime () {
     return this._deltaTime;
   }
@@ -23,6 +19,8 @@ class Time {
 
 }
 
+
 const time = new Time();
+
 
 export default time;

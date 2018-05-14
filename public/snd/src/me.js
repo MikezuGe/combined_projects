@@ -1,4 +1,4 @@
-import { canvas, ctx, } from './canvas';
+import { canvas, ctx, } from './ctx';
 import time from './time';
 import input from './input';
 

@@ -8,58 +8,55 @@ export default class Event {
 
     this.subscribers = [];
     this.invoker = null;
-    this.enableInvoke = this.type === null;
+    this.disableInvoke = this.type !== null;
     this.createListener(preventDefault || false, stopPropagation || false);
   }
 
-  createListener (preventDefault, stopPropagation) {
-    if (this.enableInvoke) {
-      this.invoker = (...args) => this.subscribers.forEach(fn => { fn(...args) });
+  createListener = function (preventDefault, stopPropagation) {
+    if (!this.disableInvoke) {
+      this.invoker = (...args) => this.subscribers.forEach(fn => fn(...args));
       return;
     } else if (preventDefault && stopPropagation) {
       this.invoker = event => {
         event.preventDefault();
         event.stopPropagation();
-        this.subscribers.forEach(fn => { fn(event) });
+        this.subscribers.forEach(fn => fn(event));
       };
     } else if (preventDefault) {
       this.invoker = event => {
         event.preventDefault();
-        this.subscribers.forEach(fn => { fn(event) });
+        this.subscribers.forEach(fn => fn(event));
       };
     } else if (stopPropagation) {
       this.invoker = event => {
         event.stopPropagation();
-        this.subscribers.forEach(fn => { fn(event) });
+        this.subscribers.forEach(fn => fn(event));
       };
     } else {
-      this.invoker = (...args) => this.subscribers.forEach(fn => { fn(...args) });
+      this.invoker = (...args) => this.subscribers.forEach(fn => fn(...args));
     }
-    this.element.addEventListener(this.type, this.invoker, false);
+    this.listener = this.element.addEventListener(this.type, this.invoker, false);
   }
 
-  invoke () {
-    if (this.enableInvoke) {
-      this.invoker();
-    }
+  invoke = function () {
+    !this.disableInvoke && this.invoker();
   }
 
-  subscribe (...subscribers) {
-    subscribers.forEach(subscriber => {
-      this.subscribers.push(subscriber);
-    });
+  subscribe = function (...subscribers) {
+    this.subscribers.push(...subscribers);
   }
 
-  unsubscribe (...subscribers) {
-    subscribers.forEach(subscriber => {
+  unsubscribe = function (...subscribers) {
+    for (const subscriber of subscribers) {
       const subscriberIndex = this.subscribers.indexOf(subscriber);
       if (subscriberIndex !== -1) {
         this.subscribers.splice(subscriberIndex, 1);
       }
-    });
+    }
   }
 
 }
+
 
 const windowResizeEvent = new Event('resize', window, true, true);
 // Preventing default (second to last boolean) -> f5 key won't refresh

@@ -1,6 +1,11 @@
 import { windowKeyDownEvent, windowKeyUpEvent, windowMouseUpEvent, windowMouseDownEvent, windowMouseMoveEvent, windowWheelEvent, } from './event';
 
-const btns = [ 'Mouse0', 'Mouse1', 'Mouse2', ];
+
+const btns = [ 'mouse0', 'mouse1', 'mouse2', ];
+
+
+const { abs, } = Math;
+
 
 class Input {
 
@@ -21,26 +26,26 @@ class Input {
     this.mouseBtnPressed = false;
     this.mouseCurrentX = null;
     this.mouseCurrentY = null;
-    this.mouseScroll = 0;
     this.mouseDeltaX = 0;
     this.mouseDeltaY = 0;
+    this.mouseScroll = 0;
     this.keys = [];
   }
 
-  handleMouseDown = event => {
-    this[`Mouse${event.button}`].pressed = true;
+  handleMouseDown (event) {
+    this[`mouse${event.button}`].pressed = true;
     this.mouseBtnPressed = true;
   }
 
-  handleMouseUp = event => {
-    const btn = `Mouse${event.button}`;
+  handleMouseUp (event) {
+    const btn = `mouse${event.button}`;
     this[btn].pressed = false;
-    if (!this.Mouse0.pressed && !this.Mouse2.pressed && !this.Mouse1.pressed) {
+    if (!this.mouse0.pressed && !this.mouse1.pressed && !this.mouse2.pressed) {
       this.mouseBtnPressed = false;
     }
   }
 
-  handleMouseMove = event => {
+  handleMouseMove (event) {
     const { clientX, clientY, } = event;
     if (this.mouseDeltaX === null) {
       this.mouseDeltaX = clientX - this.mouseCurrentX;
@@ -65,7 +70,7 @@ class Input {
         this[btn].endX = clientX;
         this[btn].endY = clientY;
       }
-      if (this[btn].drag || Math.abs(this[btn].startX - clientX) > 20 || Math.abs(this[btn].startY - clientY) > 20) {
+      if (this[btn].drag || abs(this[btn].startX - clientX) > 20 || abs(this[btn].startY - clientY) > 20) {
         this[btn].minX = this[btn].startX < this[btn].endX ? (this[btn].maxX = this[btn].endX, this[btn].startX) : (this[btn].maxX = this[btn].startX, this[btn].endX);
         this[btn].minY = this[btn].startY < this[btn].endY ? (this[btn].maxY = this[btn].endY, this[btn].startY) : (this[btn].maxY = this[btn].startY, this[btn].endY);
         this[btn].drag = true;
@@ -73,17 +78,17 @@ class Input {
     });
   }
 
-  handleMouseWheel = event => {
+  handleMouseWheel (event) {
     this.mouseScroll = this.mouseScroll === null ? event.deltaY : this.mouseScroll + event.deltaY;
   }
 
-  handleKeyDown = event => {
+  handleKeyDown (event) {
     if (!this.keys.includes(event.key)) {
       this.keys.push(event.key);
     }
   }
 
-  handleKeyUp = event => {
+  handleKeyUp (event) {
     if (this.keys.includes(event.key)) {
       this.keys.splice(this.keys.indexOf(event.key), 1);
     }
@@ -110,7 +115,9 @@ class Input {
 
 }
 
+
 const input = new Input();
+
 
 windowMouseDownEvent.subscribe(input.handleMouseDown);
 windowMouseUpEvent.subscribe(input.handleMouseUp);
@@ -118,5 +125,6 @@ windowMouseMoveEvent.subscribe(input.handleMouseMove);
 windowWheelEvent.subscribe(input.handleMouseWheel);
 windowKeyDownEvent.subscribe(input.handleKeyDown);
 windowKeyUpEvent.subscribe(input.handleKeyUp);
+
 
 export default input;

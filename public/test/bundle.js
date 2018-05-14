@@ -7546,7 +7546,7 @@ var _socket = __webpack_require__(/*! socket.io-client */ "./node_modules/socket
 
 var _socket2 = _interopRequireDefault(_socket);
 
-var _canvas = __webpack_require__(/*! ./canvas */ "./public/test/src/canvas.js");
+var _ctx = __webpack_require__(/*! ./ctx */ "./public/test/src/ctx.js");
 
 var _time = __webpack_require__(/*! ./time */ "./public/test/src/time.js");
 
@@ -7586,7 +7586,7 @@ var Game = function () {
 
     this.playersCurrent[myId] = null;
     this.playersNext[myId] = null;
-    _canvas.canvas.resize();
+    _ctx.canvas.resize();
   }
 
   _createClass(Game, [{
@@ -7639,8 +7639,8 @@ var Game = function () {
         return player !== null;
       });
       if (nonNullPlayers.length > 0) {
-        _canvas.ctx.beginPath();
-        _canvas.ctx.fillStyle = 'black';
+        _ctx.ctx.beginPath();
+        _ctx.ctx.fillStyle = 'black';
         var _iteratorNormalCompletion = true;
         var _didIteratorError = false;
         var _iteratorError = undefined;
@@ -7649,8 +7649,8 @@ var Game = function () {
           for (var _iterator = nonNullPlayers[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
             var p = _step.value;
 
-            _canvas.ctx.moveTo(p.x + p.r, p.y);
-            _canvas.ctx.arc(p.x, p.y, p.r, 0, 2 * Math.PI);
+            _ctx.ctx.moveTo(p.x + p.r, p.y);
+            _ctx.ctx.arc(p.x, p.y, p.r, 0, 2 * Math.PI);
           }
         } catch (err) {
           _didIteratorError = true;
@@ -7667,7 +7667,7 @@ var Game = function () {
           }
         }
 
-        _canvas.ctx.fill();
+        _ctx.ctx.fill();
       }
     }
   }, {
@@ -7705,10 +7705,10 @@ socket.on('update', function (players) {
 
 /***/ }),
 
-/***/ "./public/test/src/canvas.js":
-/*!***********************************!*\
-  !*** ./public/test/src/canvas.js ***!
-  \***********************************/
+/***/ "./public/test/src/ctx.js":
+/*!********************************!*\
+  !*** ./public/test/src/ctx.js ***!
+  \********************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -7750,154 +7750,119 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-/**
- * Create DOM or custom event
- * @example <caption>Creating DOM event</caption>
- * const domEvent = new Event('resize', document.getElementById('canavs'), true, true);
- * @example <caption>Creating custom event</caption>
- * const customEvent = new Event();
- * @example <caption>Subscribing to any event</caption>
- * customEvent.subscribe(boundFunction);
- * @example <caption>Invoking custom event</caption>
- * customEvent.invoke();
- * @example <caption>Unsubscriping from event</caption>
- * customEvent.unsubscribe(subscribedBoundFunction);
- */
+var Event = function () {
+  function Event(type, element, preventDefault, stopPropagation) {
+    _classCallCheck(this, Event);
 
-var Event =
+    this.type = type || null;
+    this.element = type && (element || window) || null;
+    this.listener = null;
 
-/**
- * @param {string} type - String of DOM event type. If supplied, creates a DOM event listener, otherwise create custom event
- * @param {DOM element} element - DOM element to attach the event to. If not supplied, the event is attached to global window
- * @param {boolean} preventDefault - Boolean for if default action of DOM event listener should be prevented
- * @param {boolean} stopPropagation - Boolean for if propagation of DOM event listener should be prevented
- * @property {string} type Container for DOM event type
- * @property {DOM element} element Container for DOM element
- * @property {DOM event listener} listener Contains the event listener that is created if type is supplied
- * @property {array} subscribers Array of functions that are called when invoker is called
- * @property {function} invoker Is the function that is called when DOM event triggers or can be called manually if no DOM event exists
- * @property {boolean} disableInvoke Invoking manually disabled if type exists (DOM event exists)
- */
+    this.subscribers = [];
+    this.invoker = null;
+    this.enableInvoke = this.type === null;
+    this.createListener(preventDefault || false, stopPropagation || false);
+  }
 
-function Event(type, element, preventDefault, stopPropagation) {
-  _classCallCheck(this, Event);
+  _createClass(Event, [{
+    key: 'createListener',
+    value: function createListener(preventDefault, stopPropagation) {
+      var _this = this;
 
-  _initialiseProps.call(this);
+      if (this.enableInvoke) {
+        this.invoker = function () {
+          for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+            args[_key] = arguments[_key];
+          }
 
-  this.type = type || null;
-  this.element = type && (element || window) || null;
-  this.listener = null;
+          return _this.subscribers.forEach(function (fn) {
+            fn.apply(undefined, args);
+          });
+        };
+        return;
+      } else if (preventDefault && stopPropagation) {
+        this.invoker = function (event) {
+          event.preventDefault();
+          event.stopPropagation();
+          _this.subscribers.forEach(function (fn) {
+            fn(event);
+          });
+        };
+      } else if (preventDefault) {
+        this.invoker = function (event) {
+          event.preventDefault();
+          _this.subscribers.forEach(function (fn) {
+            fn(event);
+          });
+        };
+      } else if (stopPropagation) {
+        this.invoker = function (event) {
+          event.stopPropagation();
+          _this.subscribers.forEach(function (fn) {
+            fn(event);
+          });
+        };
+      } else {
+        this.invoker = function () {
+          for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+            args[_key2] = arguments[_key2];
+          }
 
-  this.subscribers = [];
-  this.invoker = null;
-  this.disableInvoke = this.type !== null;
-  this.createListener(preventDefault || false, stopPropagation || false);
-}
-
-/**
- * Creates DOM event listener if type is supplied
- * Creates invokeable event if no type is supplied
- * @returns No return value
- * @property {boolean} preventDefault Prevent default action of DOM event listener
- * @property {boolean} stopPropagation Prevent bubbling of DOM event listener
- */
-
-/**
- * Calls invoker when called
- * Disabled if type is supplied (DOM event listener exists)
- * @return No return value
- */
-
-/**
- * @return No return value
- */
-
-/**
- * @return No return value
- */
-
-;
-
-/**
- * Create and export some basic DOM event listeners
- * Import needed events and add a function with subscribe that should be called whenever the event triggers
- */
-
-var _initialiseProps = function _initialiseProps() {
-  var _this = this;
-
-  this.createListener = function (preventDefault, stopPropagation) {
-    if (!_this.disableInvoke) {
-      // Create custom event (Not a DOM event, that's why return)
-      _this.invoker = function () {
-        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-          args[_key] = arguments[_key];
-        }
-
-        return _this.subscribers.forEach(function (fn) {
-          return fn.apply(undefined, args);
-        });
-      };
-      return;
-    } else if (preventDefault && stopPropagation) {
-      // DOM event with both preventdefault and stoppropagation
-      _this.invoker = function (event) {
-        event.preventDefault();
-        event.stopPropagation();
-        _this.subscribers.forEach(function (fn) {
-          return fn(event);
-        });
-      };
-    } else if (preventDefault) {
-      // DOM event with only preventdefault
-      _this.invoker = function (event) {
-        event.preventDefault();
-        _this.subscribers.forEach(function (fn) {
-          return fn(event);
-        });
-      };
-    } else if (stopPropagation) {
-      // DOM event with only stoppropagation
-      _this.invoker = function (event) {
-        event.stopPropagation();
-        _this.subscribers.forEach(function (fn) {
-          return fn(event);
-        });
-      };
-    } else {
-      // DOM event without preventdefault and stoppropagation
-      _this.invoker = function () {
-        for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-          args[_key2] = arguments[_key2];
-        }
-
-        return _this.subscribers.forEach(function (fn) {
-          return fn.apply(undefined, args);
-        });
-      };
+          return _this.subscribers.forEach(function (fn) {
+            fn.apply(undefined, args);
+          });
+        };
+      }
+      this.element.addEventListener(this.type, this.invoker, false);
     }
-    _this.listener = _this.element.addEventListener(_this.type, _this.invoker, false);
-  };
-
-  this.invoke = function () {
-    return !_this.disableInvoke && _this.invoker();
-  };
-
-  this.subscribe = function (subscriber) {
-    return _this.subscribers.push(subscriber);
-  };
-
-  this.unsubscribe = function (subscriber) {
-    var subscriberIndex = _this.subscribers.indexOf(subscriber);
-    if (subscriberIndex !== -1) {
-      _this.subscribers.splice(subscriberIndex, 1);
+  }, {
+    key: 'invoke',
+    value: function invoke() {
+      if (this.enableInvoke) {
+        this.invoker();
+      }
     }
-  };
-};
+  }, {
+    key: 'subscribe',
+    value: function subscribe() {
+      var _this2 = this;
+
+      for (var _len3 = arguments.length, subscribers = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+        subscribers[_key3] = arguments[_key3];
+      }
+
+      subscribers.forEach(function (subscriber) {
+        _this2.subscribers.push(subscriber);
+      });
+    }
+  }, {
+    key: 'unsubscribe',
+    value: function unsubscribe() {
+      var _this3 = this;
+
+      for (var _len4 = arguments.length, subscribers = Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
+        subscribers[_key4] = arguments[_key4];
+      }
+
+      subscribers.forEach(function (subscriber) {
+        var subscriberIndex = _this3.subscribers.indexOf(subscriber);
+        if (subscriberIndex !== -1) {
+          _this3.subscribers.splice(subscriberIndex, 1);
+        }
+      });
+    }
+  }]);
+
+  return Event;
+}();
 
 exports.default = Event;
+
+
 var windowResizeEvent = new Event('resize', window, true, true);
 // Preventing default (second to last boolean) -> f5 key won't refresh
 var windowKeyDownEvent = new Event('keydown', window, false, true);
@@ -7941,77 +7906,13 @@ var _event = __webpack_require__(/*! ./event */ "./public/test/src/event.js");
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var btns = ['Mouse0', 'Mouse1', 'Mouse2'];
+var btns = ['mouse0', 'mouse1', 'mouse2'];
+
+var abs = Math.abs;
 
 var Input = function () {
   function Input() {
-    var _this = this;
-
     _classCallCheck(this, Input);
-
-    this.handleMouseDown = function (event) {
-      _this['Mouse' + event.button].pressed = true;
-      _this.mouseBtnPressed = true;
-    };
-
-    this.handleMouseUp = function (event) {
-      var btn = 'Mouse' + event.button;
-      _this[btn].pressed = false;
-      if (!_this.Mouse0.pressed && !_this.Mouse2.pressed && !_this.Mouse1.pressed) {
-        _this.mouseBtnPressed = false;
-      }
-    };
-
-    this.handleMouseMove = function (event) {
-      var clientX = event.clientX,
-          clientY = event.clientY;
-
-      if (_this.mouseDeltaX === null) {
-        _this.mouseDeltaX = clientX - _this.mouseCurrentX;
-        _this.mouseDeltaY = _this.mouseCurrentY - clientY;
-      } else {
-        _this.mouseDeltaX += clientX - _this.mouseCurrentX;
-        _this.mouseDeltaY += _this.mouseCurrentY - clientY;
-      }
-      _this.mouseCurrentX = clientX;
-      _this.mouseCurrentY = clientY;
-      if (!_this.mouseBtnPressed) {
-        return;
-      }
-      btns.forEach(function (btn) {
-        if (!_this[btn].pressed) {
-          return;
-        }
-        if (_this[btn].startX === null) {
-          _this[btn].startX = clientX;
-          _this[btn].startY = clientY;
-        } else {
-          _this[btn].endX = clientX;
-          _this[btn].endY = clientY;
-        }
-        if (_this[btn].drag || Math.abs(_this[btn].startX - clientX) > 20 || Math.abs(_this[btn].startY - clientY) > 20) {
-          _this[btn].minX = _this[btn].startX < _this[btn].endX ? (_this[btn].maxX = _this[btn].endX, _this[btn].startX) : (_this[btn].maxX = _this[btn].startX, _this[btn].endX);
-          _this[btn].minY = _this[btn].startY < _this[btn].endY ? (_this[btn].maxY = _this[btn].endY, _this[btn].startY) : (_this[btn].maxY = _this[btn].startY, _this[btn].endY);
-          _this[btn].drag = true;
-        }
-      });
-    };
-
-    this.handleMouseWheel = function (event) {
-      _this.mouseScroll = _this.mouseScroll === null ? event.deltaY : _this.mouseScroll + event.deltaY;
-    };
-
-    this.handleKeyDown = function (event) {
-      if (!_this.keys.includes(event.key)) {
-        _this.keys.push(event.key);
-      }
-    };
-
-    this.handleKeyUp = function (event) {
-      if (_this.keys.includes(event.key)) {
-        _this.keys.splice(_this.keys.indexOf(event.key), 1);
-      }
-    };
 
     var _iteratorNormalCompletion = true;
     var _didIteratorError = false;
@@ -8051,13 +7952,85 @@ var Input = function () {
     this.mouseBtnPressed = false;
     this.mouseCurrentX = null;
     this.mouseCurrentY = null;
-    this.mouseScroll = 0;
     this.mouseDeltaX = 0;
     this.mouseDeltaY = 0;
+    this.mouseScroll = 0;
     this.keys = [];
   }
 
   _createClass(Input, [{
+    key: 'handleMouseDown',
+    value: function handleMouseDown(event) {
+      this['mouse' + event.button].pressed = true;
+      this.mouseBtnPressed = true;
+    }
+  }, {
+    key: 'handleMouseUp',
+    value: function handleMouseUp(event) {
+      var btn = 'mouse' + event.button;
+      this[btn].pressed = false;
+      if (!this.mouse0.pressed && !this.mouse1.pressed && !this.mouse2.pressed) {
+        this.mouseBtnPressed = false;
+      }
+    }
+  }, {
+    key: 'handleMouseMove',
+    value: function handleMouseMove(event) {
+      var _this = this;
+
+      var clientX = event.clientX,
+          clientY = event.clientY;
+
+      if (this.mouseDeltaX === null) {
+        this.mouseDeltaX = clientX - this.mouseCurrentX;
+        this.mouseDeltaY = this.mouseCurrentY - clientY;
+      } else {
+        this.mouseDeltaX += clientX - this.mouseCurrentX;
+        this.mouseDeltaY += this.mouseCurrentY - clientY;
+      }
+      this.mouseCurrentX = clientX;
+      this.mouseCurrentY = clientY;
+      if (!this.mouseBtnPressed) {
+        return;
+      }
+      btns.forEach(function (btn) {
+        if (!_this[btn].pressed) {
+          return;
+        }
+        if (_this[btn].startX === null) {
+          _this[btn].startX = clientX;
+          _this[btn].startY = clientY;
+        } else {
+          _this[btn].endX = clientX;
+          _this[btn].endY = clientY;
+        }
+        if (_this[btn].drag || abs(_this[btn].startX - clientX) > 20 || abs(_this[btn].startY - clientY) > 20) {
+          _this[btn].minX = _this[btn].startX < _this[btn].endX ? (_this[btn].maxX = _this[btn].endX, _this[btn].startX) : (_this[btn].maxX = _this[btn].startX, _this[btn].endX);
+          _this[btn].minY = _this[btn].startY < _this[btn].endY ? (_this[btn].maxY = _this[btn].endY, _this[btn].startY) : (_this[btn].maxY = _this[btn].startY, _this[btn].endY);
+          _this[btn].drag = true;
+        }
+      });
+    }
+  }, {
+    key: 'handleMouseWheel',
+    value: function handleMouseWheel(event) {
+      this.mouseScroll = this.mouseScroll === null ? event.deltaY : this.mouseScroll + event.deltaY;
+    }
+  }, {
+    key: 'handleKeyDown',
+    value: function handleKeyDown(event) {
+      if (!this.keys.includes(event.key)) {
+        this.keys.push(event.key);
+      }
+    }
+  }, {
+    key: 'handleKeyUp',
+    value: function handleKeyUp(event) {
+      if (this.keys.includes(event.key)) {
+        this.keys.splice(this.keys.indexOf(event.key), 1);
+      }
+    }
+  }, {
     key: 'clear',
     value: function clear() {
       var _this2 = this;
@@ -8113,7 +8086,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _canvas = __webpack_require__(/*! ./canvas */ "./public/test/src/canvas.js");
+var _ctx = __webpack_require__(/*! ./ctx */ "./public/test/src/ctx.js");
 
 var _time = __webpack_require__(/*! ./time */ "./public/test/src/time.js");
 
@@ -8286,17 +8259,17 @@ var Me = function () {
   }, {
     key: 'render',
     value: function render() {
-      var width = _canvas.canvas.width,
-          height = _canvas.canvas.height;
+      var width = _ctx.canvas.width,
+          height = _ctx.canvas.height;
 
-      _canvas.ctx.clearRect(0, 0, width, height);
-      _canvas.ctx.beginPath();
-      _canvas.ctx.fillStyle = 'lime';
-      _canvas.ctx.moveTo(this.x + this.r, this.y);
-      _canvas.ctx.arc(this.x, this.y, this.r, 0, 2 * Math.PI);
-      _canvas.ctx.strokeStyle = 'black';
-      _canvas.ctx.moveTo(this.x, this.y);
-      _canvas.ctx.lineTo(this.x + this.r * Math.cos(this.direction), this.y + this.r * Math.sin(this.direction));
+      _ctx.ctx.clearRect(0, 0, width, height);
+      _ctx.ctx.beginPath();
+      _ctx.ctx.fillStyle = 'lime';
+      _ctx.ctx.moveTo(this.x + this.r, this.y);
+      _ctx.ctx.arc(this.x, this.y, this.r, 0, 2 * Math.PI);
+      _ctx.ctx.strokeStyle = 'black';
+      _ctx.ctx.moveTo(this.x, this.y);
+      _ctx.ctx.lineTo(this.x + this.r * Math.cos(this.direction), this.y + this.r * Math.sin(this.direction));
       if (this.outsideofScreen(width, height)) {
         var middleX = width / 2 | 0;
         var middleY = height / 2 | 0;
@@ -8305,11 +8278,11 @@ var Me = function () {
         var len = Math.sqrt(dirX * dirX + dirY * dirY);
         var normalizedX = dirX / len;
         var normalizedY = dirY / len;
-        _canvas.ctx.moveTo(middleX, middleY);
-        _canvas.ctx.lineTo(middleX + normalizedX * 50, middleY + normalizedY * 50);
+        _ctx.ctx.moveTo(middleX, middleY);
+        _ctx.ctx.lineTo(middleX + normalizedX * 50, middleY + normalizedY * 50);
       }
-      _canvas.ctx.fill();
-      _canvas.ctx.stroke();
+      _ctx.ctx.fill();
+      _ctx.ctx.stroke();
     }
   }]);
 

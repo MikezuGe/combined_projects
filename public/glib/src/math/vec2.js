@@ -16,6 +16,8 @@ export default class Vec2 {
     this.y = y || 0;
   }
 
+  get toArray () { return [ this.x, this.y, ]; }
+  get toFloat32Array () { return new Float32Array([ this.x, this.y, ]); }
   get clone () { return new Vec2(this.x, this.y); }
   get len () { return sqrt(this.x * this.x + this.y * this.y); }
   get lenSqrt () { return this.x * this.x + this.y * this.y; }

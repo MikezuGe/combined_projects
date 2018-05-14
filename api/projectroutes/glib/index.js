@@ -33,9 +33,14 @@ glibRouter.get('/api/glib/:url', (req, res) => {
   default:
     break;
   }
-  res.writeHead(200, head);
-  fs.createReadStream(resourcePath, options).pipe(res);
-  
+  fs.exists(resourcePath, exist => {
+    if (exist) {
+      res.writeHead(200, head);
+      fs.createReadStream(resourcePath, options).pipe(res);
+      return;
+    }
+    res.status(404).send('File not found');
+  });
 });
 
 

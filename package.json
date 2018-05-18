@@ -5,9 +5,13 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npx nodemon --watch index.js --watch api --watch utility index.js",
-    "develop": "npx webpack --watch",
-    "build": "npx webpack"
+    "start": "npm-run-all -p start:*",
+    "start:webpack": "npx webpack --watch",
+    "start:nodemon": "npx nodemon --watch index.js --watch api --watch utility index.js",
+    "deploybuild": "npm-run-all -s deploy:build deploy:add \"deploy:commit -- {1}\" --",
+    "deploy:build": "cross-env NODE_ENV=production npx webpack",
+    "deploy:add": "git add .",
+    "deploy:commit": "git commit -a -m "
   },
   "author": "",
   "license": "ISC",
@@ -31,12 +35,14 @@
     "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
+    "cross-env": "^5.1.5",
     "css-loader": "^0.28.11",
     "eslint": "^4.19.1",
     "eslint-loader": "^2.0.0",
     "eslint-plugin-react": "^7.8.1",
     "file-loader": "^1.1.11",
     "nodemon": "^1.17.4",
+    "npm-run-all": "^4.1.3",
     "style-loader": "^0.21.0",
     "webpack": "^4.8.2",
     "webpack-cli": "^2.1.3"

@@ -9,7 +9,21 @@
   </head>
   <body>
     <div id='root'>
-      <canvas id='canvas'></canvas>
+      <div class='modal'>
+        <form id='login_form' class='login_form'>
+          <span>
+            <label for='login_username'>Username:</label>
+            <input name='username' id='login_username' type='text'>
+          </span>
+          <span>
+            <label for='login_password'>Password:</label>
+            <input name='password' id='login_password' type='text'>
+          </span>
+          <span>
+            <input id='login_submit' type='submit' value='Submit'>
+          </span>
+        </form>
+      </div>
     </div>
     <script src='bundle.js'></script>
   </body>

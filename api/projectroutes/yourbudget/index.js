@@ -1,11 +1,13 @@
 const express = require('express');
-const router = express.Router();
+const yourbudgetRouter = express.Router();
 
-require('./models');
+
 const routes = require('./routes');
 
-router
-  .use(routes.budgetRoute);
+
+for (const route in routes) {
+  yourbudgetRouter.use(routes[route]);
+}
 
 
-module.exports = router;
+module.exports = yourbudgetRouter;

@@ -3,6 +3,10 @@ const path = require('path');
 const fs = require('fs');
 
 
+const mode = process.env.NODE_ENV || 'development';
+const isProduction = mode === 'production';
+
+
 const eslintLoader = {
   'enforce': 'pre',
   'test': /\.js$/,
@@ -11,10 +15,11 @@ const eslintLoader = {
     'loader': 'eslint-loader',
     'options': {
       'presets': [ 'env', 'stage-2', 'react' ],
+      'fix': false,
+      'emitWarning': true,
     },
   },
 }
-
 
 const babelLoader = {
   'test': /\.js$/,
@@ -63,10 +68,6 @@ const fileLoader = {
 };
 
 
-const mode = 'development';
-//const mode = 'production';
-
-
 const pluginEnvSetter = new webpack.DefinePlugin({
   'process.env.NODE_ENV': JSON.stringify(mode),
 });
@@ -81,7 +82,7 @@ module.exports = fs.readdirSync('./public')
       'filename': 'bundle.js',
       'path': path.resolve(__dirname, `public/${project}`),
     },
-    'devtool': 'source-map',
+    'devtool': isProduction ? 'hidden-source-map' : 'eval-source-map',
     'module': {
       'rules': [
         eslintLoader,
@@ -93,5 +94,5 @@ module.exports = fs.readdirSync('./public')
     },
     plugins: [
       pluginEnvSetter,
-    ]
+    ],
   }));

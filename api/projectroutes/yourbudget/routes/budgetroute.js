@@ -5,17 +5,20 @@ const budgetRoute = express.Router();
 const models = require('../models');
 
 
-budgetRoute.post('/api/yourbudget/budget', (req, res) => {
+const apiPath = '/api/yourbudget/budget'
+
+
+budgetRoute.post(apiPath, (req, res) => {
   console.log('post');
   res.send(['post']);
 });
 
-budgetRoute.delete('/api/yourbudget/budget', (req, res) => {
+budgetRoute.delete(apiPath, (req, res) => {
   console.log('delete');
   res.send(['delete']);
 });
 
-budgetRoute.get('/api/yourbudget/budget', (req, res) => {
+budgetRoute.get(apiPath, (req, res) => {
   models.Budget.find({})
     .then(data => {
       res.send(data);

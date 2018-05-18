@@ -8,51 +8,57 @@ export default class Event {
 
     this.subscribers = [];
     this.invoker = null;
-    this.disableInvoke = this.type !== null;
+    this.enableInvoke = this.type === null;
     this.createListener(preventDefault || false, stopPropagation || false);
   }
 
-  createListener = function (preventDefault, stopPropagation) {
-    if (!this.disableInvoke) {
-      this.invoker = (...args) => this.subscribers.forEach(fn => fn(...args));
+  createListener (preventDefault, stopPropagation) {
+    if (this.enableInvoke) {
+      this.invoker = (...args) => this.subscribers.forEach(fn => { fn(...args) });
       return;
     } else if (preventDefault && stopPropagation) {
       this.invoker = event => {
         event.preventDefault();
         event.stopPropagation();
-        this.subscribers.forEach(fn => fn(event));
+        this.subscribers.forEach(fn => { fn(event) });
       };
     } else if (preventDefault) {
       this.invoker = event => {
         event.preventDefault();
-        this.subscribers.forEach(fn => fn(event));
+        this.subscribers.forEach(fn => { fn(event) });
       };
     } else if (stopPropagation) {
       this.invoker = event => {
         event.stopPropagation();
-        this.subscribers.forEach(fn => fn(event));
+        this.subscribers.forEach(fn => { fn(event) });
       };
     } else {
-      this.invoker = (...args) => this.subscribers.forEach(fn => fn(...args));
+      this.invoker = event => {
+        this.subscribers.forEach(fn => { fn(event) });
+      }
     }
-    this.listener = this.element.addEventListener(this.type, this.invoker, false);
+    this.element.addEventListener(this.type, this.invoker, false);
   }
 
-  invoke = function () {
-    !this.disableInvoke && this.invoker();
+  invoke () {
+    if (this.enableInvoke) {
+      this.invoker();
+    }
   }
 
-  subscribe = function (...subscribers) {
-    this.subscribers.push(...subscribers);
+  subscribe (...subscribers) {
+    subscribers.forEach(subscriber => {
+      this.subscribers.push(subscriber);
+    });
   }
 
-  unsubscribe = function (...subscribers) {
-    for (const subscriber of subscribers) {
+  unsubscribe (...subscribers) {
+    subscribers.forEach(subscriber => {
       const subscriberIndex = this.subscribers.indexOf(subscriber);
       if (subscriberIndex !== -1) {
         this.subscribers.splice(subscriberIndex, 1);
       }
-    }
+    });
   }
 
 }

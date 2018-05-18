@@ -33,7 +33,9 @@ export default class Event {
         this.subscribers.forEach(fn => { fn(event) });
       };
     } else {
-      this.invoker = (...args) => this.subscribers.forEach(fn => { fn(...args) });
+      this.invoker = event => {
+        this.subscribers.forEach(fn => { fn(event) });
+      }
     }
     this.element.addEventListener(this.type, this.invoker, false);
   }
@@ -60,6 +62,7 @@ export default class Event {
   }
 
 }
+
 
 const windowResizeEvent = new Event('resize', window, true, true);
 // Preventing default (second to last boolean) -> f5 key won't refresh

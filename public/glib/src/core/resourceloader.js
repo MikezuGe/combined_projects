@@ -40,7 +40,7 @@ class ResourceLoader {
 
   loadResource (resource) {
     this.resourcesLoading.set(resource.url, resource);
-    axios.get(`${resource.url}`, { headers: { 'accept': 'image/png', }})
+    axios.get(resource.url, { headers: { 'accept': 'image/png', }})
       .then(res => {
         resource.constructor.parse(resource, res.data);
         this.resources.set(resource.url, resource);

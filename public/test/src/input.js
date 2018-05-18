@@ -32,12 +32,12 @@ class Input {
     this.keys = [];
   }
 
-  handleMouseDown (event) {
+  handleMouseDown = event => {
     this[`mouse${event.button}`].pressed = true;
     this.mouseBtnPressed = true;
   }
 
-  handleMouseUp (event) {
+  handleMouseUp = event => {
     const btn = `mouse${event.button}`;
     this[btn].pressed = false;
     if (!this.mouse0.pressed && !this.mouse1.pressed && !this.mouse2.pressed) {
@@ -45,7 +45,7 @@ class Input {
     }
   }
 
-  handleMouseMove (event) {
+  handleMouseMove = event => {
     const { clientX, clientY, } = event;
     if (this.mouseDeltaX === null) {
       this.mouseDeltaX = clientX - this.mouseCurrentX;
@@ -78,23 +78,23 @@ class Input {
     });
   }
 
-  handleMouseWheel (event) {
+  handleMouseWheel = event => {
     this.mouseScroll = this.mouseScroll === null ? event.deltaY : this.mouseScroll + event.deltaY;
   }
 
-  handleKeyDown (event) {
+  handleKeyDown = event => {
     if (!this.keys.includes(event.key)) {
       this.keys.push(event.key);
     }
   }
 
-  handleKeyUp (event) {
+  handleKeyUp = event => {
     if (this.keys.includes(event.key)) {
       this.keys.splice(this.keys.indexOf(event.key), 1);
     }
   }
 
-  clear () {
+  clear = () => {
     btns.forEach(btn => {
       if (!this[btn].pressed) {
         this[btn].drag = false;

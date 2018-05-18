@@ -55,10 +55,10 @@ db.models.Budget.find({}, (err, budget) => {
   ];
   db.models.Budget.collection.insert(testData, err => {
     if (err) {
-      console.log('error in inserting testdata to mongodb');
-      console.log(err);
+      console.error(`Error in inserting testdata to yourbudget ${err}`);
+      return;
     }
-    console.log('Succesfully inserted testdata');
+    console.log('Succesfully inserted testdata to yourbudget');
   });
 });
 /* FOR INSERTING TEST DATA END */

@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npm-run-all -p start:*",
+    "start": "cross-env NODE_ENV=development npm-run-all -p start:*",
     "start:webpack": "npx webpack --watch",
     "start:nodemon": "npx nodemon --watch index.js --watch api --watch utility index.js",
     "deploybuild": "npm-run-all -s deploy:build deploy:add \"deploy:commit -- {1}\" --",
@@ -17,6 +17,7 @@
   "license": "ISC",
   "dependencies": {
     "axios": "^0.18.0",
+    "body-parser": "^1.18.3",
     "express": "^4.16.3",
     "mongoose": "^5.1.0",
     "react": "^16.3.2",
@@ -25,7 +26,6 @@
     "react-router-dom": "^4.2.2",
     "redux": "^4.0.0",
     "redux-thunk": "^2.2.0",
-    "sharp": "^0.20.2",
     "socket.io": "^2.1.0"
   },
   "devDependencies": {

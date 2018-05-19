@@ -1,6 +1,6 @@
+/* eslint-disable */
 import { canvas, } from './ctx';
-import login from './login';
-
+import './login';
+/* eslint-enable */
 
 import './style.css';
-

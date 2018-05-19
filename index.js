@@ -1,27 +1,57 @@
 const express = require('express');
+const bodyParser = require('body-parser');
 const path = require('path');
 const fs = require('fs');
 const app = express();
-
-const server = require('http').Server(app);
-const io = require('socket.io')(server);
-
 // Custom router imports
 const apiRouter = require('./api');
-
-
+// Utility imports
 const createHTML = require('./utility/createhtml');
 
 
+const isProduction = process.env.NODE_ENV !== 'development';
+const PORT = isProduction ? 443 : 80;
+
+
+if (isProduction) {
+  // Redirect from 80 to 443
+  let redirectNumber = 0;
+  require('http').createServer((req, res) => {
+    redirectNumber += 1;
+    console.log(`Redirect http to https. Redirected ${redirectNumber} times`);
+    res.writeHead(301, { "Location": "https://" + req.headers['host'] + req.url });
+    res.end();
+  }).listen(80, () => {
+    console.log('Redirect listening to port 80');
+  });
+}
+
+
+const server = isProduction
+? require('https').createServer({
+  cert: fs.readFileSync('./sslcert/fullchain.pem'),
+  key: fs.readFileSync('./sslcert/privkey.pem')
+}, app)
+: require('http').createServer(app);
+const io = require('socket.io')(server);
+
+
+// Setup
+app.disable('x-powered-by');
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+
+// Log middleware
 app.use((req, res, next) => {
   console.log(req.url);
   next();
 });
 
 app.use(apiRouter);
-
 app.use(express.static(path.join(__dirname + '/public')));
 
+// Main page
 app.get('/', (req, res) => {
   fs.readdir('./public', (err, files) => {
     if (err) {
@@ -32,16 +62,19 @@ app.get('/', (req, res) => {
   });
 });
 
+// Anything else
 app.get('/*', (req, res) => {
+  // Favicon
   if (req.path.slice(0, req.path.indexOf('/', 1)) === '/favico') {
     res.sendFile(path.resolve('./public/shared_assets', `./${req.path}`));
     return;
   }
+  // Other
   res.sendFile(path.resolve('./public' + req.path.slice(0, req.path.indexOf('/', 1)), 'index.html'));
 });
 
-server.listen(80, () => {
-  console.log('Listening to port 80');
+server.listen(PORT, () => {
+  console.log(`Listening to port ${PORT}`);
 });
 
 

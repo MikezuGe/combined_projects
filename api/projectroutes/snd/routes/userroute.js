@@ -5,20 +5,20 @@ const userRoute = express.Router();
 const models = require('../models');
 
 
-const apiPath = '/api/snd/user/:id';
+const apiPath = '/api/snd/user';
 
 
 userRoute.post(apiPath, (req, res) => {
-  console.log('post');
-  res.send(['post']);
+  console.log(req.body);
+  res.send('post');
 });
 
-userRoute.delete(apiPath, (req, res) => {
+userRoute.delete(`${apiPath}/:id`, (req, res) => {
   console.log('delete');
   res.send(['delete']);
 });
 
-userRoute.get(apiPath, (req, res) => {
+userRoute.get(`${apiPath}/:id`, (req, res) => {
   models.User.find({})
     .then(data => {
       res.send(data);

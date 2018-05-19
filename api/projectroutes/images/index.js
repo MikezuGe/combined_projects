@@ -1,7 +1,7 @@
 const express = require('express');
 const fs = require('fs');
 const imageRouter = express.Router();
-const sharp = require('sharp');
+//const sharp = require('sharp');
 
 
 const createDataFolderStructure = require('../../../utility/createdatafolderstructure');
@@ -16,10 +16,12 @@ const dataPaths = createDataFolderStructure(rootFolder, {
 });
 
 
+/*
 const allowedImageExtensions = Object.keys(sharp.format).filter(key => sharp.format[key].input.file === true).map(key => `.${key}`);
 // Special cases for jpeg
 allowedImageExtensions.push('.jpg', '.jpe', '.jif', 'jfif', 'jfi');
 const imageExtensionRegex = /\.\w+/i;
+*/
 
 
 imageRouter.get('/api/images', (req, res) => {
@@ -31,9 +33,12 @@ imageRouter.get('/api/images', (req, res) => {
     }
 
     const bigImageFileNames = fileNames.filter(fileName => {
-      return fs.lstatSync(`${dataPaths.bigimages}${fileName}`).isFile() &&
-        allowedImageExtensions.includes(imageExtensionRegex.exec(fileName)[0]);
+      return fs.lstatSync(`${dataPaths.bigimages}${fileName}`).isFile()
+      /*&&
+    allowedImageExtensions.includes(imageExtensionRegex.exec(fileName)[0]);*/
     });
+    res.send(bigImageFileNames);
+    /*
     const thumbnailFileNames = bigImageFileNames.map(fileName => fileName.replace(imageExtensionRegex, '.jpeg'));
 
     Promise.all(bigImageFileNames.map((fileName, index) => new Promise((resolve, reject) => {
@@ -68,6 +73,7 @@ imageRouter.get('/api/images', (req, res) => {
         res.status(500).send('Handling images failed');
         return;
       });
+  */
   });
 });
 

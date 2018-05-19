@@ -3,6 +3,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-size: 16px;
 }
 
 body {
@@ -15,13 +16,48 @@ body {
   height: 100%;
 }
 
+#root {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 canvas {
   position: absolute;
   top: 0;
   left: 0;
-  display: none;
 }
 
 .modal {
-  position: absolute;
+  width: 320px;
+  padding: 15px;
+  border-radius: 15px 0 0 15px;
+  background-color: lime;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+.form_title {
+  text-align: center;
+  font-size: 1.5em;
+}
+
+form > input {
+  height: 30px;
+  padding: 0 5px;
+}
+
+.login_form {
+  margin-bottom: 20px;
+}
+
+.submit_button {
+  margin-top: 5px;
+}
+
+.hidden {
+  display: none;
 }

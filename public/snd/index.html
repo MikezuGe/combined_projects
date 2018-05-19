@@ -11,17 +11,28 @@
     <div id='root'>
       <div class='modal'>
         <form id='login_form' class='login_form'>
-          <span>
-            <label for='login_username'>Username:</label>
-            <input name='username' id='login_username' type='text'>
-          </span>
-          <span>
-            <label for='login_password'>Password:</label>
-            <input name='password' id='login_password' type='text'>
-          </span>
-          <span>
-            <input id='login_submit' type='submit' value='Submit'>
-          </span>
+          <div class='form_title'>Login</div>
+          <label for='login_username'>Username:</label>
+          <input name='username' id='login_username' type='text'>
+          <div class='form_error'></div>
+          <label for='login_password'>Password:</label>
+          <input name='password' id='login_password' type='text'>
+          <div class='form_error'></div>
+          <input class='submit_button' type='submit' value='Login'>
+        </form>
+
+        <form id='create_account_form' class='create_account_form'>
+          <div class='form_title'>Create account</div>
+          <label for='create_account_email'>Email:</label>
+          <input name='email' id='create_account_email' type='text'>
+          <div class='form_error'></div>
+          <label for='create_account_username'>Username:</label>
+          <input name='username' id='create_account_username' type='text'>
+          <div class='form_error'></div>
+          <label for='create_account_password'>Password:</label>
+          <input name='password' id='create_account_password' type='text'>
+          <div class='form_error'></div>
+          <input class='submit_button' type='submit' value='Create'>
         </form>
       </div>
     </div>

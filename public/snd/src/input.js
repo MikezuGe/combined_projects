@@ -1,4 +1,4 @@
-import { windowKeyDownEvent, windowKeyUpEvent, windowMouseUpEvent, windowMouseDownEvent, windowMouseMoveEvent, windowWheelEvent, } from './event';
+import events from './events';
 
 
 const btns = [ 'mouse0', 'mouse1', 'mouse2', ];
@@ -119,12 +119,12 @@ class Input {
 const input = new Input();
 
 
-windowMouseDownEvent.subscribe(input.handleMouseDown);
-windowMouseUpEvent.subscribe(input.handleMouseUp);
-windowMouseMoveEvent.subscribe(input.handleMouseMove);
-windowWheelEvent.subscribe(input.handleMouseWheel);
-windowKeyDownEvent.subscribe(input.handleKeyDown);
-windowKeyUpEvent.subscribe(input.handleKeyUp);
+events.subscribeTo('windowMouseDown', input.handleMouseDown);
+events.subscribeTo('windowMouseUp', input.handleMouseUp);
+events.subscribeTo('windowMouseMove', input.handleMouseMove);
+events.subscribeTo('windowWheel', input.handleMouseWheel);
+events.subscribeTo('windowKeyDown', input.handleKeyDown);
+events.subscribeTo('windowKeyUp', input.handleKeyUp);
 
 
 export default input;

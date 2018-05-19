@@ -1,4 +1,4 @@
-import { windowResizeEvent, } from './event';
+import events from './events';
 
 
 let canvas = document.getElementsByTagName('canvas')[0];
@@ -12,13 +12,13 @@ canvas.resize = function () {
   canvas.height = (window.innerHeight / 2) | 0;
 }
 canvas.insertToRoot = function () {
-  let root = document.getElementById('root')
+  let root = document.getElementById('root');
   root.insertBefore(canvas, root.firstChild || null);
 }
 const ctx = canvas.getContext('2d');
 
 
-windowResizeEvent.subscribe(canvas.resize);
+events.subscribeTo('windowResize', canvas.resize);
 
 
 export {

@@ -3,16 +3,16 @@ const router = express.Router();
 
 
 const glibRouter = require('./projectroutes/glib');
-const imageRouter = require('./projectroutes/images');
+const imagesRouter = require('./projectroutes/images');
 const sndRouter = require('./projectroutes/snd');
 const yourbudgetRouter = require('./projectroutes/yourbudget');
 
 
 router
-  .use(glibRouter)
-  .use(imageRouter)
-  .use(sndRouter)
-  .use(yourbudgetRouter);
+  .use('/glib', glibRouter)
+  .use('/images', imagesRouter)
+  .use('/snd', sndRouter)
+  .use('/yourbudget', yourbudgetRouter);
 
 
 module.exports = router;

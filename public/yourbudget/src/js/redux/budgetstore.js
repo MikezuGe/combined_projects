@@ -9,15 +9,17 @@ const BUDGET_ERROR = 'BUDGET_ERROR';
 
 axios.defaults.baseURL = `${window.location.origin}/api/yourbudget/`;
 
+
 export const addBudget = budget => dispatch => {
   dispatch({ type: BUDGET_LOADING, });
   return axios.post('/budget', budget)
     .then(res => dispatch({ type: BUDGET_ADD, data: res.data, }))
     .catch(err => {
       dispatch({ type: BUDGET_ERROR, error: err, });
-      throw new Error(`There was an error sending api budget add request\n${err}`);
+      throw new Error(`There was an error sending api budget add request ${err}`);
     });
 };
+
 
 export const removeBudget = id => dispatch => {
   dispatch({ type: BUDGET_LOADING, });
@@ -25,9 +27,10 @@ export const removeBudget = id => dispatch => {
     .then(() => dispatch({ type: BUDGET_REMOVE, data: id, }))
     .catch(err => {
       dispatch({ type: BUDGET_ERROR, error: err, });
-      throw new Error(`There was an error sending api budget remove request\n${err}`);
+      throw new Error(`There was an error sending api budget remove request ${err}`);
     });
 };
+
 
 export const getBudget = () => dispatch => {
   dispatch({ type: BUDGET_LOADING, });
@@ -35,7 +38,7 @@ export const getBudget = () => dispatch => {
     .then(res => dispatch({ type: BUDGET_GET, data: res.data, }))
     .catch(err => {
       dispatch({ type: BUDGET_ERROR, error: err, });
-      throw new Error(`There was an error sending api budget get request\n${err}`);
+      throw new Error(`There was an error sending api budget get request ${err}`);
     });
 };
 
@@ -85,5 +88,6 @@ const budgetStore = (state = initialState, action) => {
     return state;
   }
 };
+
 
 export default budgetStore;

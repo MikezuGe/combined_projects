@@ -1,5 +1,6 @@
+const { yourbudgetConnectionString, } = require('../../../../config');
 const mongoose = require('mongoose');
-const db = mongoose.createConnection('mongodb://mngryb:dbmng3ryb!@kontioweb.fi/yourbudget');
+const db = mongoose.createConnection(yourbudgetConnectionString);
 
 
 db.model('Budget', mongoose.Schema({
@@ -62,5 +63,6 @@ db.models.Budget.find({}, (err, budget) => {
   });
 });
 /* FOR INSERTING TEST DATA END */
+
 
 module.exports = db.models;

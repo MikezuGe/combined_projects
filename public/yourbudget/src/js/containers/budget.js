@@ -1,7 +1,7 @@
 import React, { Component, } from 'react';
 import PropTypes from 'prop-types';
 import { connect, } from 'react-redux';
-import { getBudget, } from '../redux/';
+import store, { getBudget, } from '../redux/';
 
 import '../../css/containers/common.css';
 import '../../css/containers/budget.css';
@@ -18,16 +18,15 @@ const getTitles = data => Object.keys(data)
 const parseBudgetData = data => {
   const titles = getTitles(data[0]);
   const keys = Object.keys(data[0])
-    .filter(key => ![ '_id', 'dateAdded', 'isIncome', ]
-      .includes(key));
+    .filter(key => ![ '_id', 'dateAdded', 'isIncome', ].includes(key));
   return [
     // Titlerow
     <div key={'fr'} className={'budgetrow budgetrowtitle'}>
-      { titles.map((title, index) => <div key={`fr${index}`} className={'budgetcell budgetcelltitle'}>{title}</div>) }
+      { titles.map((title, i) => <div key={`fr${i}`} className={'budgetcell budgetcelltitle'}>{title}</div>) }
     </div>,
     // Datarows
     data.map(d => <div key={d._id} className={'budgetrow'}>
-      { keys.map((k, index) => <div key={`${d._id}${index}`} className={'budgetcell'}>{d[k]}</div>) }
+      { keys.map((k, i) => <div key={`${d._id}${i}`} className={'budgetcell'}>{d[k]}</div>) }
     </div>),
   ];
 };

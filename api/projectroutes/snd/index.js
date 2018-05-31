@@ -5,8 +5,8 @@ const sndRouter = express.Router();
 const routes = require('./routes');
 
 
-for (const route in routes) {
-  sndRouter.use(routes[route]);
+for (const route of routes) {
+  sndRouter.use(route);
 }
 
 

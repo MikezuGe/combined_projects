@@ -3,7 +3,7 @@ const fs = require('fs');
 const glibRouter = express.Router();
 
 
-const createDataFolderStructure = require('../../../utility/createdatafolderstructure');
+const { createDataFolderStructure, } = require('../../../utility');
 
 
 const rootFolder = './public/glib/';
@@ -15,7 +15,7 @@ const dataPaths = createDataFolderStructure(rootFolder, {
 });
 
 
-glibRouter.get('/api/glib/:url', (req, res) => {
+glibRouter.get('/:url', (req, res) => {
   const { url, } = req.params;
   let resourcePath = '';
   const head = {};

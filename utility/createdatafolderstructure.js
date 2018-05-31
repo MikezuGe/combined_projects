@@ -1,22 +1,28 @@
 const fs = require('fs');
+const logger = require('./logger');
 
 
 const createDataFolderStructure = (parentFolderPath, folderStructure, allFolders = {}) => {
-  Object.keys(folderStructure).forEach(folderName => {
-    const folderPath = `${parentFolderPath}${folderName}/`;
-    allFolders[folderName] = folderPath;
-    if (!fs.existsSync(folderPath)) {
-      fs.mkdir(folderPath, err => {
-        if (err) {
-          console.error(`Unable to create directory: ${folderPath}`);
-        } else {
-          console.log(`Created directory: ${folderPath}`)
+  for (const folder in folderStructure) {
+    const folderPath = `${parentFolderPath}${folder}/`;
+    allFolders[folder] = folderPath;
+    fs.mkdir(folderPath, err => {
+      if (err) {
+        if (err.code === 'EEXIST') {
+          if (folderStructure[folder]) {
+            return createDataFolderStructure(folderPath, folderStructure[folder], allFolders);
+          }
+          return allFolders;
         }
-      });
-    }
-    createDataFolderStructure(folderPath, folderStructure[folderName], allFolders);
-  });
-  return allFolders;
+        logger.err(`Unable to create folder ${folderPath} ${err}`);
+      }
+      logger.log(`Created folder ${folderPath}`);
+      if (folderStructure[folder]) {
+        return createDataFolderStructure(folderPath, folderStructure[folder], allFolders);
+      }
+      return allFolders;
+    });
+  }
 };
 
 

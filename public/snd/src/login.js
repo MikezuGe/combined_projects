@@ -1,6 +1,9 @@
 import axios from 'axios';
 
 
+import addNotice from './notice';
+
+
 axios.defaults.baseURL = `${window.location.origin}/api/snd`;
 
 
@@ -22,10 +25,11 @@ function login (e) {
   axios.post('/login', inputValues)
     .then(response => {
       const result = response.data;
+      addNotice(result.status);
       console.log(result);
     })
     .catch(err => {
-      console.error('Login failed');
+      addNotice('Login failed');
     });
 
 }
@@ -50,9 +54,14 @@ function createAccount (e) {
   axios.post('/user', inputValues)
     .then(response => {
       const result = response.data;
-      console.log(result);
+      for (const input of form) {
+        const inputResult = result[input.name];
+        if (inputResult.result < 1) {
+          input.nextSibling.textContent = inputResult.status;
+        }
+      }
     })
     .catch(err => {
-      console.error('Login failed');
+      addNotice('Creating account failed');
     });
 }

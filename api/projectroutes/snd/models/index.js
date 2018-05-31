@@ -1,10 +1,15 @@
 const mongoose = require('mongoose');
 
 
-const db = mongoose.createConnection('mongodb://mngrsnd:dbmng3rsnd!@kontioweb.fi/searchanddestroy');
+const { sndConnectionString, } = require('../../../../config');
+const { logger, } = require('../../../../utility');
+
+
+const db = mongoose.createConnection(sndConnectionString);
 
 
 db.model('User', mongoose.Schema({
+  email: String,
   username: String,
   password: String,
   dateAdded: { type: Date, default: Date.now },
@@ -13,7 +18,7 @@ db.model('User', mongoose.Schema({
 
 db.models.User.find({}, (err, users) => {
   if (err) {
-    console.error('Error occurred while trying to find budget data');
+    logger.err('Error occurred while trying to find budget data');
     return;
   }
   if (users.length > 0) {
@@ -21,24 +26,27 @@ db.models.User.find({}, (err, users) => {
   }
   const testData = [
     new db.models.User({
+      email: 'yolo@asd.com',
       username: 'MikezuGe',
       password: 'asd',
     }),
     new db.models.User({
+      email: 'molo@asd.com',
       username: 'Jukka',
       password: 'asd',
     }),
     new db.models.User({
+      email: 'pomo@asd.com',
       username: 'Pasi',
       password: 'asd',
     }),
   ];
   db.models.User.collection.insert(testData, err => {
     if (err) {
-      console.error(`Error in inserting testdata to searchanddestroy ${err}`);
+      logger.err(`Error in inserting testdata to snd ${err}`);
       return;
     }
-    console.log('Succesfully inserted testdata to snd');
+    logger.log('Succesfully inserted users testdata to snd');
   });
 });
 

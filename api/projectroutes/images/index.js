@@ -1,10 +1,10 @@
 const express = require('express');
 const fs = require('fs');
-const imageRouter = express.Router();
+const imagesRouter = express.Router();
 //const sharp = require('sharp');
 
 
-const createDataFolderStructure = require('../../../utility/createdatafolderstructure');
+const { createDataFolderStructure, logger, } = require('../../../utility');
 
 
 const rootFolder = './public/images/';
@@ -24,10 +24,10 @@ const imageExtensionRegex = /\.\w+/i;
 */
 
 
-imageRouter.get('/api/images', (req, res) => {
+imagesRouter.get('/', (req, res) => {
   fs.readdir(dataPaths.bigimages, (err, fileNames) => {
     if (fileNames.length === 0) {
-      console.error('No images found');
+      logger.warn('No images found');
       res.status(204).send('No images found');
       return;
     }
@@ -50,12 +50,12 @@ imageRouter.get('/api/images', (req, res) => {
             .toFile(`${dataPaths.thumbnails}${thumbnailFileNames[index]}`)
               .then(data => { resolve(); })
               .catch(err => {
-                console.error(err);
+                logger.warn(err);
                 reject(`Thumbnail was not created for file: ${fileName}`);
               });
         })
         .catch(err => {
-          console.error(`Could not read metadata of file ${fileName}`)
+          logger.warn(`Could not read metadata of file ${fileName}`)
           reject(`${err}`);
         });
       })
@@ -69,7 +69,7 @@ imageRouter.get('/api/images', (req, res) => {
         });
       })
       .catch(err => {
-        console.error(err);
+        logger.warn(err);
         res.status(500).send('Handling images failed');
         return;
       });
@@ -78,4 +78,4 @@ imageRouter.get('/api/images', (req, res) => {
 });
 
 
-module.exports = imageRouter;
+module.exports = imagesRouter;

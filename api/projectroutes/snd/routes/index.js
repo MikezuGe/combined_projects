@@ -2,7 +2,7 @@ const userRoute = require('./userroute');
 const loginRoute = require('./loginroute');
 
 
-module.exports = {
+module.exports = [
   userRoute,
   loginRoute,
-};
+];

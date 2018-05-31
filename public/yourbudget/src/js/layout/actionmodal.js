@@ -13,7 +13,7 @@ class ActionModal extends Component {
   }
 
   close = e => {
-    if (this.state.animate || !e.target.classList.contains('actionmodal') && !e.target.classList.contains('grayout')) {
+    if (e !== 'force' && (this.state.animate || (!e.target.classList.contains('actionmodal') && !e.target.classList.contains('grayout')))) {
       return;
     }
     this.toggleAnimation();
@@ -26,29 +26,22 @@ class ActionModal extends Component {
     this.setState({ animate: !this.state.animate, });
   }
 
-  renderItems = () => {
-    const { actionModalFormType, } = this.props;
+  renderItem = () => {
+    const { close, props: { actionModalFormType, }, } = this;
     switch (actionModalFormType) {
     case modalFormTypes.budgetAddModalForm:
-      return <BudgetAdd close={this.close} />;
+      return <BudgetAdd close={close} />;
     default:
       throw new Error(`Unknown modal form type: ${actionModalFormType}`);
     }
   }
 
   render () {
+    const { close, toggleAnimation, renderItem, state: { animate, }, } = this;
     return (
-      <div className={this.state.animate
-        ? 'grayout'
-        : 'grayout actionmodalanimationpaused'}
-      onClick={this.close}>
-        <div className={this.state.animate
-          ? 'actionmodal'
-          : 'actionmodal actionmodalanimationpaused'}
-        onAnimationIteration={this.toggleAnimation}>
-          <div className={'actionmodalcontent'}>
-            { this.renderItems() }
-          </div>
+      <div className={`grayout ${animate ? '' : 'animationpaused'}`} onClick={close}>
+        <div className={`actionmodal ${animate ? '' : 'animationpaused'}`} onAnimationIteration={toggleAnimation}>
+          <div className={'actionmodalcontent'}>{ renderItem() }</div>
         </div>
       </div>
     );

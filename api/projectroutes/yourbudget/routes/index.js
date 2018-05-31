@@ -1,6 +1,6 @@
 const budgetRoute = require('./budgetroute');
 
 
-module.exports = {
+module.exports = [
   budgetRoute,
-};
+];

@@ -6,98 +6,174 @@ import '../../css/modalforms/common.css';
 import '../../css/modalforms/budgetadd.css';
 
 import { addBudget, } from '../redux';
+import { TextField, DateField, ToggleSwitchField, } from '../components/forms';
+import parseDate from '../utility/parsedate';
 
 
 export const budgetAddModalForm = 'BUDGET_ADD_MODAL_FORM';
 
-/*
-const firstLetterToUpperCase = word => word.charAt(0).toUpperCase() + word.slice(1);
-*/
-/*
-const validate = ({ name, amount, date, }) => {
-  const errors = {};
 
-  if (!name) {
-    errors.name = 'Required';
-  } else if (name.length < 3) {
-    errors.name = 'Must be at least 3 characters';
-  } else if (/[^a-zåäö.,\-_']/i.test(name)) {
-    errors.name = 'Allowed characters: a-zåäöA-ZÅÄÖ.,-_\'';
-  }
+const SUBMIT_ADD = 'SUBMIT_ADD';
+const SUBMIT_CLOSE = 'SUBMIT_CLOSE';
+const CANCEL = 'CANCEL';
 
-  if (!amount) {
-    errors.amount = 'Required';
-  } else if (/[^0-9.,]/i.test(amount)) {
-    errors.amount = 'Must be a number';
+
+const validateName = field => {
+  const value = field.value;
+  if (value === '') {
+    field.error = 'Not specified';
+  } else if (/[^a-zåäö\-.,_ ]+/gi.test(value)) {
+    field.error = 'Allowed characters: A-Z a-z å ä ö - . , _ and spaces';
   } else {
-    const dotIndex = amount.indexOf('.');
-    if (dotIndex < 0 || amount.length - 1 - dotIndex !== 2) {
-      errors.amount = 'Must be in form -xx.xx';
+    field.error = '';
+  }
+};
+
+
+const validateAmount = field => {
+  const value = field.value;
+  if (value === '') {
+    field.error = 'Not specified';
+  } else if (Number.isNaN(Number(value))) {
+    field.error = 'Not a number';
+  } else if (!/^\d*(?:[.,]\d?\d?)?$/.test(value)) {
+    field.error = 'Must be of form: ...xxx.xx';
+  } else {
+    field.error = '';
+  }
+};
+
+
+const validateDate = field => {
+  const value = field.value;
+  if (value === '') {
+    field.error = 'Not specified';
+  } else {
+    field.error = '';
+  }
+};
+
+
+const isValid = fields => {
+  let valid = true;
+  for (const field of fields) {
+    if (field.meta) {
+      field.meta.submitted = true;
+      field.meta.changed = false;
+    }
+    if (field.validate) {
+      field.validate(field);
+      if (field.error !== '') {
+        valid = false;
+      }
     }
   }
-
-  if (!date) {
-    errors.date = 'Required';
-  }
-
-  return errors;
+  return valid;
 };
-*/
-const getNameValuePair = input => {
-  const nameValuePair = {};
-  const { name, value, checked, } = input;
-  nameValuePair.name = name;
-  nameValuePair.value = value || checked;
-  return nameValuePair;
-}
+
+
+const meta = { pristine: true, touched: false, changed: false, submitted: false, };
 
 
 class BudgetAdd extends Component {
 
-  onChangeHandler = e => {
-    // eslint-disable-next-line
-    console.log(e);
+  state = {
+    fields: [
+      { type: 'text', name: 'name', value: '', placeholder: 'example-name', error: '', validate: validateName, meta: { ...meta }, },
+      { type: 'text', name: 'amount', value: '', placeholder: 'xxx.xx', error: '', validate: validateAmount, meta: { ...meta }, },
+      { type: 'date', name: 'date', value: parseDate(new Date(), 'YYYY-MM-DD'), error: '', validate: validateDate, meta: { ...meta }, },
+      { type: 'toggle', name: 'isIncome', value: true, onValue: 'Income', offValue: 'Expense', },
+    ],
   }
 
-  formSubmit = e => {
+  onChangeHandler = (e, i) => {
+    const { value, checked, } = e.target;
+    this.setState(prevState => {
+      const field = prevState.fields[i];
+      field.value = field.type === 'toggle' ? checked : value;
+      if (field.meta) {
+        field.meta.changed = true;
+        field.meta.touched = true;
+        field.meta.pristine = false;
+      }
+      return prevState;
+    });
+  }
+
+  submit = (e, btn) => {
     e.preventDefault();
-    const form = e.target;
-    const nameValuePairs = [];
-    for (const input of form) {
-      nameValuePairs.push(getNameValuePair(input));
+    switch (btn) {
+      case SUBMIT_ADD:
+        this.formSubmit(false);
+        break;
+      case SUBMIT_CLOSE:
+        this.formSubmit(true)
+        break;
+      case CANCEL:
+        this.props.close('force');
+        break;
+      default: break;
     }
-    // eslint-disable-next-line
-    console.log(nameValuePairs);
   }
 
-  render = () => <form className='form' onSubmit={this.formSubmit}>
-      <div className='form_field'>
-        <label htmlFor='name_input' className='form_label'>{'Name:'}</label>
-        <input name='name' className='form_input' type='text' placeholder='example-name' value='test' onChange={this.onChangeHandler}></input>
-        <label id='name_error' htmlFor='name_input' className='form_error'></label>
-      </div>
-      <div className='form_field'>
-        <label htmlFor='amount_input' className='form_label'>{'Amount:'}</label>
-        <input name='amount' className='form_input' type='text' placeholder='xxx,xx' value='14,55' onChange={this.onChangeHandler}></input>
-        <label id='amount_error' htmlFor='amount_input' className='form_error'></label>
-      </div>
-      <div className='form_field'>
-        <label htmlFor='date_input' className='form_label'>{'Date:'}</label>
-        <input name='date' className='form_input' type='date' value='2018-05-05' onChange={this.onChangeHandler}></input>
-        <label id='date_error' htmlFor='date_input' className='form_error'></label>
-      </div>
-      <div className='form_field switch'>
-        <label htmlFor='isincome_input' className='form_label switch_label'>{'Expense'}</label>
-        <input name='isincome' className='form_input hidden' type='checkbox'></input>
-        <label htmlFor='isincome_input' className='switch_toggle'></label>
-        <label htmlFor='isincome_input' className='form_label switch_label'>{'Income'}</label>
-      </div>
+  formSubmit = shouldClose => {
+    const fields = this.state.fields;
+    if (isValid(fields)) {
+      const values = fields
+        .map(input => ({ name: input.name, value: input.value, }))
+        .reduce((total, current) => {
+          total[current.name] = current.value;
+          return total;
+        }, {});
+      this.props.addBudget(values)
+        .then(res => {
+          if (shouldClose) {
+            this.props.close('force');
+          } else {
+            this.clearForm();
+          }
+        })
+        .catch(err => {
+          console.log(err);
+          // Display error
+        });
+    } else {
+      this.setState({ fields: [ ...fields ], });
+    }
+  }
+
+  clearForm = () => {
+    this.setState(prevState => {
+      return {
+        fields: [ ...prevState.fields.map(field => {
+          if (field.name === 'isIncome') {
+            return field;
+          }
+          field.value = '';
+          return field;
+        }) ],
+      };
+    });
+  }
+
+  render = () => {
+    const { onChangeHandler, submit, state: { fields, }, } = this;
+    return <form className='form'>
+      {fields.map((field, i) => {
+        switch (field.type) {
+          case 'text': return <TextField key={field.name} name={field.name} value={field.value} error={field.error} meta={field.meta} onChange={e => { onChangeHandler(e, i) }} placeholder={field.placeholder} />;
+          case 'date': return <DateField key={field.name} name={field.name} value={field.value} error={field.error} meta={field.meta} onChange={e => { onChangeHandler(e, i) }} />;
+          case 'toggle': return <ToggleSwitchField key={field.name} name={field.name} value={field.value} onChange={e => { onChangeHandler(e, i) }} onValue={field.onValue} offValue={field.offValue} />;
+          default: throw new Error(`No such form field type: ${field.type}`);
+        }
+      })}
       <div className='form_field submit'>
-        <button type='submit' className='form_submit_button'>{'Submit and add'}</button>
-        <button type='submit' className='form_submit_button'>{'Submit and close'}</button>
+        <button type='submit' className='form_submit_button' onClick={(e) => { submit(e, SUBMIT_ADD); }}>{'Submit and add'}</button>
+        <button type='submit' className='form_submit_button' onClick={(e) => { submit(e, SUBMIT_CLOSE); }}>{'Submit and close'}</button>
+        <button type='submit' className='form_submit_button' onClick={(e) => { submit(e, CANCEL); }}>{'Cancel'}</button>
       </div>
     </form>;
-
+  }
 }
 
 

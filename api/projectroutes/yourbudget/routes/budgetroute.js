@@ -5,20 +5,19 @@ const budgetRoute = express.Router();
 const models = require('../models');
 
 
-const apiPath = '/api/yourbudget/budget'
-
-
-budgetRoute.post(apiPath, (req, res) => {
-  console.log('post');
-  res.send(['post']);
+budgetRoute.post('/budget', (req, res) => {
+  models.Budget.create(req.body)
+    .then(data => { res.send(data); })
+    .catch(err => { res.status(500).send('Failed to save budget data'); });
+  
 });
 
-budgetRoute.delete(apiPath, (req, res) => {
+budgetRoute.delete('/budget', (req, res) => {
   console.log('delete');
   res.send(['delete']);
 });
 
-budgetRoute.get(apiPath, (req, res) => {
+budgetRoute.get('/budget', (req, res) => {
   models.Budget.find({})
     .then(data => {
       res.send(data);

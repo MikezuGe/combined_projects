@@ -1,0 +1,42 @@
+
+.switch {
+  flex-direction: initial;
+  align-items: center;
+}
+
+.switch_toggle {
+  position: relative;
+  display: block;
+  width: 50px;
+  height: 22px;
+  padding: 1px;
+  border-radius: 11px;
+  background: white;
+}
+
+.switch_toggle:before {
+  content: '';
+  position: absolute;
+  background: red;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  transition: 0.4s;
+}
+
+#isIncome:checked + .switch_toggle:before {
+  transform: translateX(28px);
+  background: royalblue;
+}
+
+#isIncome:checked + .form_field {
+  background: lime;
+}
+
+.switch_label {
+  flex: 1 0 25%;
+}
+
+.switch_label:nth-child(even) {
+  text-align: right;
+}

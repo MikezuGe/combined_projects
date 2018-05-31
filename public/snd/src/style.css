@@ -11,15 +11,15 @@ body {
   height: 100vh;
 }
 
-#root, canvas {
+#root, canvas, .flex_container {
   width: 100%;
   height: 100%;
 }
 
-#root {
+.flex_container {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
 }
 
 canvas {
@@ -28,7 +28,54 @@ canvas {
   left: 0;
 }
 
+.notice_container {
+  position: fixed;
+  right: -230px;
+  bottom: 0;
+  height: 150px;
+  width: 0;
+  background-color: aquamarine;
+
+  display: flex;
+  justify-content: center;
+}
+
+.notice_added {
+  right: 0;
+  transition: right 1s;
+}
+
+.notice {
+  position: relative;
+  top: 0;
+  height: 120px;
+  flex: 1 0 200px;
+  background-color: blueviolet;
+  margin: 15px;
+  padding: 15px;
+  border-radius: 15px;
+  display: flex;
+}
+
+.remove_notice {
+  top: 100%;
+  transition: 1s;
+}
+
+.notice_message {
+  flex: 1 1 100%;
+}
+
+.notice_success {
+  background-color: lime;
+}
+
+.notice_error {
+  background-color: red;
+}
+
 .modal {
+  position: absolute;
   width: 320px;
   padding: 15px;
   border-radius: 15px 0 0 15px;
@@ -48,6 +95,7 @@ form {
 form > input {
   height: 30px;
   padding: 0 5px;
+  margin-top: 10px;
 }
 
 .login_form {
@@ -55,7 +103,6 @@ form > input {
 }
 
 .submit_button {
-  margin-top: 5px;
 }
 
 .hidden {

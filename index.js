@@ -25,7 +25,7 @@ if (isProduction) {
 
 
 const server = isProduction
-? require('https').createServer({ httpsCert, httpsKey, }, app)
+? require('https').createServer({ cert: httpsCert, key: httpsKey, }, app)
 : require('http').createServer(app);
 const io = require('socket.io')(server);
 
@@ -36,7 +36,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 
 app.use((req, res, next) => {
-  logger.log(`Request: ${req.url} Host: ${req.hostname}`);
+  logger.log(`Request: ${req.method} ${req.url} Host: ${req.hostname}`);
   next();
 });
 app.use('/api', apiRouter);

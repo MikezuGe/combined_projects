@@ -1,5 +1,6 @@
 import axios from 'axios';
 
+
 const BUDGET_ADD = 'BUDGET_ADD';
 const BUDGET_REMOVE = 'BUDGET_REMOVE';
 const BUDGET_GET = 'BUDGET_GET';
@@ -10,9 +11,9 @@ const BUDGET_ERROR = 'BUDGET_ERROR';
 axios.defaults.baseURL = `${window.location.origin}/api/yourbudget/`;
 
 
-export const addBudget = budget => dispatch => {
+export const addBudget = data => dispatch => {
   dispatch({ type: BUDGET_LOADING, });
-  return axios.post('/budget', budget)
+  return axios.post('/budget', data)
     .then(res => dispatch({ type: BUDGET_ADD, data: res.data, }))
     .catch(err => {
       dispatch({ type: BUDGET_ERROR, error: err, });
@@ -21,10 +22,10 @@ export const addBudget = budget => dispatch => {
 };
 
 
-export const removeBudget = id => dispatch => {
+export const removeBudget = data => dispatch => {
   dispatch({ type: BUDGET_LOADING, });
-  return axios.delete('/budget', { params: { id, }, })
-    .then(() => dispatch({ type: BUDGET_REMOVE, data: id, }))
+  return axios.delete('/budget', { data: { ...data, }, })
+    .then(res => dispatch({ type: BUDGET_REMOVE, data: res.data, }))
     .catch(err => {
       dispatch({ type: BUDGET_ERROR, error: err, });
       throw new Error(`There was an error sending api budget remove request ${err}`);
@@ -60,10 +61,11 @@ const budgetStore = (state = initialState, action) => {
       loading: false,
     };
   case BUDGET_REMOVE:
-    state.data.splice(state.data.findIndex(d => d.id === action.data), 1);
+    state.data.splice(state.data.findIndex(d => d._id === action.data._id), 1);
     return {
       ...state,
       type: action.type,
+      data: [ ...state.data, ],
       loading: false,
     };
   case BUDGET_GET:

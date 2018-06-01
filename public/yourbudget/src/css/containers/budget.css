@@ -2,27 +2,37 @@
 .budget {
   display: flex;
   flex-direction: column;
+  background-color: white;
 }
 
 .budgetrow {
   display: flex;
-  height: 30px;
+  height: 35px;
+  margin-bottom: 5px;
 }
 
 .budgetrowtitle {
-  background: lime;
   font-size: 1.5em;
-  border-radius: 25px 25px 0 0;
 }
 
 .budgetcell {
   display: flex;
   align-items: center;
+  justify-content: center;
+  border-radius: 15px;
+  background-color: lime;
   flex-grow: 1;
   flex-shrink: 0;
   flex-basis: 0;
 }
 
 .budgetcelltitle {
-  justify-content: center;
+}
+
+.budgetcellremove {
+
+}
+
+.budgetcellremove:hover {
+  background-color: aqua;
 }

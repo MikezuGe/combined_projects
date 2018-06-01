@@ -126,7 +126,7 @@ class BudgetAdd extends Component {
           return total;
         }, {});
       this.props.addBudget(values)
-        .then(res => {
+        .then(() => {
           if (shouldClose) {
             this.props.close('force');
           } else {
@@ -134,8 +134,9 @@ class BudgetAdd extends Component {
           }
         })
         .catch(err => {
+          // eslint-disable-next-line
           console.log(err);
-          // Display error
+          // DISPLAY ERROR
         });
     } else {
       this.setState({ fields: [ ...fields ], });

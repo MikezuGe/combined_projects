@@ -5,21 +5,18 @@ import { connect, } from 'react-redux';
 
 import '../../css/layout/sidemenu.css';
 
-import { addBudget, removeBudget, } from '../redux/';
 import { modalFormTypes, } from '../modalforms';
+import { containerActionTypes, } from '../containers';
 
-
-const firstLetterToUpperCase = word => word.charAt(0).toUpperCase() + word.slice(1);
+import firstLetterToUpperCase from '../utility/firstlettertouppercase';
 
 
 class SideMenu extends Component {
 
   getSideMenuItemList = () => {
-    const { pathname, openActionModal, } = this.props;
+    const { pathname, openActionModal, toggleContainerAction, } = this.props;
     const secondSlashIndex = pathname.indexOf('/', 1);
-    const path = pathname.slice(1, secondSlashIndex < 0
-      ? pathname.length
-      : secondSlashIndex);
+    const path = pathname.slice(1, secondSlashIndex < 0 ? pathname.length : secondSlashIndex);
     const items = [];
     switch (path) {
     case 'home':
@@ -28,6 +25,7 @@ class SideMenu extends Component {
     case 'budget':
       items.push(<div key={items.length} className={'sidemenutitle'}>{firstLetterToUpperCase(path)}</div>);
       items.push(<div key={items.length} className={'sidemenuitem'} onClick={() => openActionModal(modalFormTypes.budgetAddModalForm)}>{'Add'}</div>);
+      items.push(<div key={items.length} className={'sidemenuitem'} onClick={() => toggleContainerAction(containerActionTypes.CONTAINER_ACTION_REMOVE_BUDGET_DATA)}>{'Remove'}</div>);
       break;
     case 'options':
       items.push(<div key={items.length} className={'sidemenutitle'}>{firstLetterToUpperCase(path)}</div>);
@@ -56,8 +54,7 @@ class SideMenu extends Component {
 SideMenu.propTypes = {
   pathname: PropTypes.string.isRequired,
   openActionModal: PropTypes.func.isRequired,
-  addBudget: PropTypes.func.isRequired,
-  removeBudget: PropTypes.func.isRequired,
+  toggleContainerAction: PropTypes.func.isRequired,
   loading: PropTypes.bool.isRequired,
 };
 
@@ -66,10 +63,8 @@ const mapStateToProps = state => ({
   loading: state.budgetStore.loading,
 });
 
-const mapDispatchToProps = dispatch => ({
-  addBudget: budget => dispatch(addBudget(budget)),
-  removeBudget: id => dispatch(removeBudget(id)),
-});
+//const mapDispatchToProps = dispatch => ({
+//});
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(SideMenu);
+export default connect(mapStateToProps, /*mapDispatchToProps*/ null)(SideMenu);

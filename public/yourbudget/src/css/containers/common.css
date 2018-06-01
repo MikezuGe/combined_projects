@@ -2,5 +2,5 @@
 .commoncontainer {
   background: #D7E1EB;
   grid-area: main;
-  padding: 25px;
+  margin: 25px;
 }

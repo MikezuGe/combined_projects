@@ -19,14 +19,26 @@ const base = pathname.slice(0, pathname.indexOf('/', 1));
 class MainContent extends Component {
 
   state = {
-    actionModalOpen: true,
-    actionModalFormType: 'BUDGET_ADD_MODAL_FORM',
+    actionModalOpen: false,
+    actionModalFormType: '',
+    containerActionType: '',
   }
 
   openActionModal = actionModalFormType => {
     this.setState({
       actionModalOpen: true,
       actionModalFormType: actionModalFormType || '',
+    });
+  }
+
+  toggleContainerAction = containerActionType => {
+    this.setState(prevState => {
+      if (prevState.containerActionType === containerActionType) {
+        prevState.containerActionType = '';
+      } else {
+        prevState.containerActionType = containerActionType;
+      }
+      return prevState;
     });
   }
 
@@ -41,12 +53,12 @@ class MainContent extends Component {
         { this.state.actionModalOpen &&
           <ActionModal actionModalFormType={this.state.actionModalFormType} closeActionModal={this.closeActionModal} /> }
         <Header />
-        <SideMenu pathname={pathname} openActionModal={this.openActionModal}/>
+        <SideMenu pathname={pathname} openActionModal={this.openActionModal} toggleContainerAction={this.toggleContainerAction} />
         <Switch>
-          <Route path='/home' component={Home} />
-          <Route path='/budget' component={Budget} />
-          <Route path='/options' component={Options} />
-          <Route path='/profile' component={Profile} />
+          <Route path='/home' render={() => <Home />} />
+          <Route path='/budget' render={() => <Budget containerActionType={this.state.containerActionType} />} />
+          <Route path='/options' render={() => <Options />} />
+          <Route path='/profile' render={() => <Profile />} />
           <Redirect to='/' />
         </Switch>
       </div>

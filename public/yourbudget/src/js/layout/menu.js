@@ -4,8 +4,7 @@ import { Link, } from 'react-router-dom';
 
 import '../../css/layout/menu.css';
 
-
-const firstLetterToUpperCase = word => word.charAt(0).toUpperCase() + word.slice(1);
+import firstLetterToUpperCase from '../utility/firstlettertouppercase';
 
 
 const createMenuItem = (link, index) => [

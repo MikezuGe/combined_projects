@@ -2,9 +2,9 @@ import React, { Component, } from 'react';
 import PropTypes from 'prop-types';
 import { Link, } from 'react-router-dom';
 
-import '../../css/layout/menu.css';
+import 'css/layout/menu.css';
 
-import firstLetterToUpperCase from '../utility/firstlettertouppercase';
+import firstLetterToUpperCase from 'js/utility/firstlettertouppercase';
 
 
 const createMenuItem = (link, index) => [

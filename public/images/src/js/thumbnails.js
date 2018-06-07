@@ -1,7 +1,7 @@
 import React, { Component, } from 'react';
 import PropTypes from 'prop-types';
 
-import '../css/thumbnails.css';
+import 'css/thumbnails.css';
 
 
 const imageElements = ({ openImage, thumbnailUrls, bigImageUrls, }) => {

@@ -1,8 +1,8 @@
 import axios from 'axios';
 
 
-import Mesh from '../model/mesh';
-import Texture from '../model/texture';
+import Mesh from 'model/mesh';
+import Texture from 'model/texture';
 
 
 axios.defaults.baseURL = `${window.location.origin}/api/glib`;

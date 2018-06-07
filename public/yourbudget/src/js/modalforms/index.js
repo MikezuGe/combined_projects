@@ -1,8 +1,8 @@
-import BudgetAdd, { budgetAddModalForm, } from './budgetadd';
+import BudgetAdd, { BUDGET_ADD_MODAL_FORM, } from './budgetadd';
 
 
 const modalFormTypes = {
-  budgetAddModalForm,
+  BUDGET_ADD_MODAL_FORM,
 };
 
 

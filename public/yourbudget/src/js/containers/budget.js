@@ -1,12 +1,12 @@
 import React, { Component, } from 'react';
 import PropTypes from 'prop-types';
 import { connect, } from 'react-redux';
-import { removeBudget, getBudget, } from '../redux/';
+import { removeBudget, getBudget, } from 'redux/';
 
-import '../../css/containers/common.css';
-import '../../css/containers/budget.css';
+import 'css/containers/common.css';
+import 'css/containers/budget.css';
 
-import firstLetterToUpperCase from '../utility/firstlettertouppercase';
+import firstLetterToUpperCase from 'js/utility/firstlettertouppercase';
 
 
 export const CONTAINER_ACTION_REMOVE_BUDGET_DATA = 'CONTAINER_ACTION_REMOVE_BUDGET_DATA';

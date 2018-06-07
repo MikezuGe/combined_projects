@@ -1,9 +1,9 @@
 import React, { Component, } from 'react';
 import PropTypes from 'prop-types';
 
-import '../../css/layout/actionmodal.css';
+import 'css/layout/actionmodal.css';
 
-import { modalFormTypes, BudgetAdd, } from '../modalforms';
+import { modalFormTypes, BudgetAdd, } from 'js/modalforms';
 
 
 class ActionModal extends Component {
@@ -29,7 +29,7 @@ class ActionModal extends Component {
   renderItem = () => {
     const { close, props: { actionModalFormType, }, } = this;
     switch (actionModalFormType) {
-    case modalFormTypes.budgetAddModalForm:
+    case modalFormTypes.BUDGET_ADD_MODAL_FORM:
       return <BudgetAdd close={close} />;
     default:
       throw new Error(`Unknown modal form type: ${actionModalFormType}`);

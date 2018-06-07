@@ -1,7 +1,7 @@
 import React, { Component, } from 'react';
 
-import '../../css/containers/common.css';
-import '../../css/containers/profile.css';
+import 'css/containers/common.css';
+import 'css/containers/profile.css';
 
 
 class Profile extends Component {

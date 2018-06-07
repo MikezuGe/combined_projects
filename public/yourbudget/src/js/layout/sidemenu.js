@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 import { Link, } from 'react-router-dom';
 import { connect, } from 'react-redux';
 
-import '../../css/layout/sidemenu.css';
+import 'css/layout/sidemenu.css';
 
-import { modalFormTypes, } from '../modalforms';
-import { containerActionTypes, } from '../containers';
+import { modalFormTypes, } from 'js/modalforms';
+import { containerActionTypes, } from 'js/containers';
 
-import firstLetterToUpperCase from '../utility/firstlettertouppercase';
+import firstLetterToUpperCase from 'js/utility/firstlettertouppercase';
 
 
 class SideMenu extends Component {
@@ -24,7 +24,7 @@ class SideMenu extends Component {
       break;
     case 'budget':
       items.push(<div key={items.length} className={'sidemenutitle'}>{firstLetterToUpperCase(path)}</div>);
-      items.push(<div key={items.length} className={'sidemenuitem'} onClick={() => openActionModal(modalFormTypes.budgetAddModalForm)}>{'Add'}</div>);
+      items.push(<div key={items.length} className={'sidemenuitem'} onClick={() => openActionModal(modalFormTypes.BUDGET_ADD_MODAL_FORM)}>{'Add'}</div>);
       items.push(<div key={items.length} className={'sidemenuitem'} onClick={() => toggleContainerAction(containerActionTypes.CONTAINER_ACTION_REMOVE_BUDGET_DATA)}>{'Remove'}</div>);
       break;
     case 'options':

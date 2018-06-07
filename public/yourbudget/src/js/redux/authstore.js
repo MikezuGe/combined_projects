@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 
+const AUTH_CREATE_USER = 'AUTH_LOADING';
 const AUTH_LOGIN = 'AUTH_LOGIN';
 const AUTH_LOGOUT = 'AUTH_LOGOUT';
 const AUTH_LOADING = 'AUTH_LOADING';
@@ -8,6 +9,17 @@ const AUTH_ERROR = 'AUTH_ERROR';
 
 
 axios.defaults.baseURL = `${window.location.origin}/api/yourbudget/`;
+
+
+export const createUser = data => dispatch => {
+  dispatch({ type: AUTH_LOADING, });
+  return axios.post('/user', data)
+    .then(res => dispatch({ type: AUTH_CREATE_USER, data: res.data, }))
+    .catch(err => {
+      dispatch({ type: AUTH_ERROR, error: err, });
+      throw new Error(`There was an error sending api create user request ${err}`);
+    });
+};
 
 
 export const login = data => dispatch => {
@@ -23,7 +35,7 @@ export const login = data => dispatch => {
 
 export const logout = data => dispatch => {
   dispatch({ type: AUTH_LOADING, });
-  return axios.post('/logout')
+  return axios.post('/logout', data)
     .then(res => dispatch({ type: AUTH_LOGOUT, data: res.data, }))
     .catch(err => {
       dispatch({ type: AUTH_ERROR, error: err, });
@@ -35,13 +47,19 @@ export const logout = data => dispatch => {
 const initialState = {
   type: '',
   loading: false,
-  sessionId: false,
+  sessionId: '',
   error: null,
 };
 
 
-const budgetStore = (state = initialState, action) => {
+const authStore = (state = initialState, action) => {
   switch (action.type) {
+  case AUTH_CREATE_USER:
+    return {
+      ...state,
+      type: action.type,
+      loading: false,
+    }
   case AUTH_LOGIN:
     return {
       ...state,
@@ -73,4 +91,4 @@ const budgetStore = (state = initialState, action) => {
 };
 
 
-export default budgetStore;
+export default authStore;

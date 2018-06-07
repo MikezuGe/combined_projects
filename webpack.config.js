@@ -77,12 +77,18 @@ module.exports = fs.readdirSync('./public')
   .filter(file => fs.readdirSync(`./public/${file}`).includes('index.html'))
   .map(project => ({
     mode,
-    'entry': `./public/${project}/src/app.js`,
+    'entry': path.resolve(`./public/${project}/src/app.js`),
     'output': {
       'filename': 'bundle.js',
-      'path': path.resolve(__dirname, `public/${project}`),
+      'path': path.resolve(`./public/${project}`),
     },
-    'devtool': isProduction ? 'hidden-source-map' : 'eval-source-map',
+    'devtool': isProduction ? 'hidden-source-map' : 'source-map',
+    'resolve': {
+      'modules': [
+        path.resolve(`./public/${project}/src`),
+        path.resolve(`./node_modules`),
+      ],
+    },
     'module': {
       'rules': [
         eslintLoader,

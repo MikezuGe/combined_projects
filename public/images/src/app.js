@@ -2,11 +2,11 @@ import axios from 'axios';
 import ReactDOM from 'react-dom';
 import React, { Component } from 'react';
 
-import './css/style.css';
+import 'css/style.css';
 
-import Thumbnails from './js/thumbnails';
-import BigImage from './js/bigimage';
-import Modal from './js/modal';
+import Thumbnails from 'js/thumbnails';
+import BigImage from 'js/bigimage';
+import Modal from 'js/modal';
 
 
 axios.defaults.baseURL = `${window.location.origin}/api/images`;

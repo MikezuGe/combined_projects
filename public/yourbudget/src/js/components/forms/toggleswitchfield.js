@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 
-import '../../../css/components/forms/toggleswitchfield.css';
-import '../../../css/components/forms/common.css';
+import 'css/components/forms/toggleswitchfield.css';
+import 'css/components/forms/common.css';
 
 
 const ToggleSwitchField = ({ name, value, onValue, offValue, onChange, }) => <div className='form_field switch'>
@@ -16,7 +16,7 @@ const ToggleSwitchField = ({ name, value, onValue, offValue, onChange, }) => <di
 
 ToggleSwitchField.propTypes = {
   name: PropTypes.string.isRequired,
-  value: PropTypes.bool.isRequired,
+  value: PropTypes.bool,
   onValue: PropTypes.string.isRequired,
   offValue: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,

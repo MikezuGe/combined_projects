@@ -1,7 +1,7 @@
-import { gl, } from '../core/gl'
-import Resource from '../core/resource';
+import { gl, } from 'core/gl'
+import Resource from 'core/resource';
 import Geometry from './geometry';
-import { Vec3, Vec2, } from '../math';
+import { Vec3, Vec2, } from 'math';
 
 
 const getAttributeInfo = attributes => {

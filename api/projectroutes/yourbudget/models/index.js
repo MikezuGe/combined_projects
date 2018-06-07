@@ -2,6 +2,8 @@ const { yourbudgetConnectionString, } = require('../../../../config');
 const mongoose = require('mongoose');
 const db = mongoose.createConnection(yourbudgetConnectionString);
 
+const { logger, } = require('../../../../utility');
+
 
 db.model('Budget', mongoose.Schema({
   dateAdded: { type: Date, default: Date.now, },
@@ -12,16 +14,32 @@ db.model('Budget', mongoose.Schema({
 }));
 
 
+db.model('Auth', mongoose.Schema({
+  sessionIp: String,
+  userId: mongoose.Schema.Types.ObjectId,
+  loggedIn: { type: Date, default: Date.now, },
+  sessionTimeout: { type: Date, default: () => Date.now + 3600000 }, // 1 hour
+}));
+
+
+db.model('User', mongoose.Schema({
+  email: String,
+  username: String,
+  password: String,
+  dateAdded: { type: Date, default: Date.now },
+}));
+
+
 /* FOR INSERTING TEST DATA */
 db.models.Budget.find({}, (err, budget) => {
   if (err) {
-    console.error('Error occurred while trying to find budget data');
+    logger.error('Error occurred while trying to find budget data');
     return;
   }
   if (budget.length > 0) {
     return;
   }
-  console.log('Adding test data');
+  logger.log('Adding test data');
   const formatDateToString = date => `${date.getDay()}.${date.getMonth()}.${date.getFullYear()}`;
   const timeNow = Date.now();
   const testData = [
@@ -56,10 +74,10 @@ db.models.Budget.find({}, (err, budget) => {
   ];
   db.models.Budget.collection.insert(testData, err => {
     if (err) {
-      console.error(`Error in inserting testdata to yourbudget ${err}`);
+      logger.error(`Error in inserting testdata to yourbudget ${err}`);
       return;
     }
-    console.log('Succesfully inserted testdata to yourbudget');
+    logger.log('Succesfully inserted testdata to yourbudget');
   });
 });
 /* FOR INSERTING TEST DATA END */

@@ -1,12 +1,4 @@
-import Menu from './menu';
-import Header from './header';
-import SideMenu from './sidemenu';
-import ActionModal from './actionmodal';
-
-
-export {
-  Menu,
-  Header,
-  SideMenu,
-  ActionModal,
-};
+export { default as Menu, } from './menu';
+export { default as Header, } from './header';
+export { default as SideMenu, } from './sidemenu';
+export { default as ActionModal, } from './actionmodal';

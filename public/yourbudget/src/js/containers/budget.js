@@ -1,7 +1,7 @@
 import React, { Component, } from 'react';
 import PropTypes from 'prop-types';
 import { connect, } from 'react-redux';
-import { removeBudget, getBudget, } from 'redux/';
+import { removeBudget, getBudget, } from 'js/redux/';
 
 import 'css/containers/common.css';
 import 'css/containers/budget.css';

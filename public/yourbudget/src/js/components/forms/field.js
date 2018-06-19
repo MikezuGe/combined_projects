@@ -1,48 +1,22 @@
-import TextField from './textfield';
-import PasswordField from './passwordfield';
-import DateField from './datefield';
-import ToggleSwitchField from './toggleswitchfield';
+import React, { Component, } from 'react';
+import PropTypes from 'prop-types';
+
+import { firstLetterToUppercase, } from 'js/utility';
+import * as fieldTypes from './fields';
 
 
-const meta = { pristine: true, touched: false, changed: false, submitted: false, error: '', };
+class Field extends Component {
 
-
-const Field = ({ name, initialValue, type, placeholder, onValue, offValue, }) => {
-  const commonProps = {
-    type,
-    name,
-    initialValue,
-  };
-  switch (type) {
-    case 'text':
-      return { Element: TextField, props: {
-          ...commonProps,
-          placeholder,
-          meta,
-        }
-      }
-    case 'password':
-      return { Element: PasswordField, props: {
-          ...commonProps,
-          placeholder,
-          meta,
-        }
-      }
-    case 'date':
-      return { Element: DateField, props: {
-          ...commonProps,
-          meta,
-        }
-      }
-    case 'toggle':
-      return { Element: ToggleSwitchField, props: {
-          ...commonProps,
-          onValue,
-          offValue,
-        }
-      }
-    default: throw new Error(`No such form field type: ${type}`);
+  render() {
+    const Element = fieldTypes[firstLetterToUppercase(this.props.type) + 'Field'];
+    return <Element {...this.props} />
   }
+
+}
+
+
+Field.propTypes = {
+  type: PropTypes.string.isRequired,
 }
 
 

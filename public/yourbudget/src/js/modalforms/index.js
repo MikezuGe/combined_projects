@@ -1,4 +1,7 @@
-import BudgetAdd, { BUDGET_ADD_MODAL_FORM, } from './budgetadd';
+export { default as BudgetAdd, } from './budgetadd';
+
+
+import { BUDGET_ADD_MODAL_FORM, } from './budgetadd';
 
 
 const modalFormTypes = {
@@ -6,7 +9,4 @@ const modalFormTypes = {
 };
 
 
-export {
-  modalFormTypes,
-  BudgetAdd,
-};
+export { modalFormTypes, };

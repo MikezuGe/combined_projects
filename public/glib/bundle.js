@@ -1,8 +1,4780 @@
-!function(t){var e={};function n(r){if(e[r])return e[r].exports;var i=e[r]={i:r,l:!1,exports:{}};return t[r].call(i.exports,i,i.exports,n),i.l=!0,i.exports}n.m=t,n.c=e,n.d=function(t,e,r){n.o(t,e)||Object.defineProperty(t,e,{configurable:!1,enumerable:!0,get:r})},n.r=function(t){Object.defineProperty(t,"__esModule",{value:!0})},n.n=function(t){var e=t&&t.__esModule?function(){return t.default}:function(){return t};return n.d(e,"a",e),e},n.o=function(t,e){return Object.prototype.hasOwnProperty.call(t,e)},n.p="",n(n.s=49)}([function(t,e,n){"use strict";var r=n(8),i=n(43),o=Object.prototype.toString;function s(t){return"[object Array]"===o.call(t)}function u(t){return null!==t&&"object"==typeof t}function a(t){return"[object Function]"===o.call(t)}function c(t,e){if(null!==t&&void 0!==t)if("object"!=typeof t&&(t=[t]),s(t))for(var n=0,r=t.length;n<r;n++)e.call(null,t[n],n,t);else for(var i in t)Object.prototype.hasOwnProperty.call(t,i)&&e.call(null,t[i],i,t)}t.exports={isArray:s,isArrayBuffer:function(t){return"[object ArrayBuffer]"===o.call(t)},isBuffer:i,isFormData:function(t){return"undefined"!=typeof FormData&&t instanceof FormData},isArrayBufferView:function(t){return"undefined"!=typeof ArrayBuffer&&ArrayBuffer.isView?ArrayBuffer.isView(t):t&&t.buffer&&t.buffer instanceof ArrayBuffer},isString:function(t){return"string"==typeof t},isNumber:function(t){return"number"==typeof t},isObject:u,isUndefined:function(t){return void 0===t},isDate:function(t){return"[object Date]"===o.call(t)},isFile:function(t){return"[object File]"===o.call(t)},isBlob:function(t){return"[object Blob]"===o.call(t)},isFunction:a,isStream:function(t){return u(t)&&a(t.pipe)},isURLSearchParams:function(t){return"undefined"!=typeof URLSearchParams&&t instanceof URLSearchParams},isStandardBrowserEnv:function(){return("undefined"==typeof navigator||"ReactNative"!==navigator.product)&&"undefined"!=typeof window&&"undefined"!=typeof document},forEach:c,merge:function t(){var e={};function n(n,r){"object"==typeof e[r]&&"object"==typeof n?e[r]=t(e[r],n):e[r]=n}for(var r=0,i=arguments.length;r<i;r++)c(arguments[r],n);return e},extend:function(t,e,n){return c(e,function(e,i){t[i]=n&&"function"==typeof e?r(e,n):e}),t},trim:function(t){return t.replace(/^\s*/,"").replace(/\s*$/,"")}}},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0}),e.Easing=e.Quat=e.Mat4=e.Mat3=e.Vec3=e.Vec2=e.Color=void 0;var r=f(n(21)),i=f(n(20)),o=f(n(19)),s=f(n(18)),u=f(n(17)),a=f(n(16)),c=f(n(15));function f(t){return t&&t.__esModule?t:{default:t}}e.Color=r.default,e.Vec2=i.default,e.Vec3=o.default,e.Mat3=s.default,e.Mat4=u.default,e.Quat=a.default,e.Easing=c.default},function(t,e,n){"use strict";(function(e){var r=n(0),i=n(40),o={"Content-Type":"application/x-www-form-urlencoded"};function s(t,e){!r.isUndefined(t)&&r.isUndefined(t["Content-Type"])&&(t["Content-Type"]=e)}var u,a={adapter:("undefined"!=typeof XMLHttpRequest?u=n(7):void 0!==e&&(u=n(7)),u),transformRequest:[function(t,e){return i(e,"Content-Type"),r.isFormData(t)||r.isArrayBuffer(t)||r.isBuffer(t)||r.isStream(t)||r.isFile(t)||r.isBlob(t)?t:r.isArrayBufferView(t)?t.buffer:r.isURLSearchParams(t)?(s(e,"application/x-www-form-urlencoded;charset=utf-8"),t.toString()):r.isObject(t)?(s(e,"application/json;charset=utf-8"),JSON.stringify(t)):t}],transformResponse:[function(t){if("string"==typeof t)try{t=JSON.parse(t)}catch(t){}return t}],timeout:0,xsrfCookieName:"XSRF-TOKEN",xsrfHeaderName:"X-XSRF-TOKEN",maxContentLength:-1,validateStatus:function(t){return t>=200&&t<300}};a.headers={common:{Accept:"application/json, text/plain, */*"}},r.forEach(["delete","get","head"],function(t){a.headers[t]={}}),r.forEach(["post","put","patch"],function(t){a.headers[t]=r.merge(o)}),t.exports=a}).call(this,n(41))},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});e.default=function t(e){!function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}(this,t),this.url=e}},function(t,e,n){"use strict";function r(t){this.message=t}r.prototype.toString=function(){return"Cancel"+(this.message?": "+this.message:"")},r.prototype.__CANCEL__=!0,t.exports=r},function(t,e,n){"use strict";t.exports=function(t){return!(!t||!t.__CANCEL__)}},function(t,e,n){"use strict";var r=n(38);t.exports=function(t,e,n,i,o){var s=new Error(t);return r(s,e,n,i,o)}},function(t,e,n){"use strict";var r=n(0),i=n(39),o=n(37),s=n(36),u=n(35),a=n(6),c="undefined"!=typeof window&&window.btoa&&window.btoa.bind(window)||n(34);t.exports=function(t){return new Promise(function(e,f){var h=t.data,l=t.headers;r.isFormData(h)&&delete l["Content-Type"];var m=new XMLHttpRequest,p="onreadystatechange",y=!1;if("undefined"==typeof window||!window.XDomainRequest||"withCredentials"in m||u(t.url)||(m=new window.XDomainRequest,p="onload",y=!0,m.onprogress=function(){},m.ontimeout=function(){}),t.auth){var d=t.auth.username||"",v=t.auth.password||"";l.Authorization="Basic "+c(d+":"+v)}if(m.open(t.method.toUpperCase(),o(t.url,t.params,t.paramsSerializer),!0),m.timeout=t.timeout,m[p]=function(){if(m&&(4===m.readyState||y)&&(0!==m.status||m.responseURL&&0===m.responseURL.indexOf("file:"))){var n="getAllResponseHeaders"in m?s(m.getAllResponseHeaders()):null,r={data:t.responseType&&"text"!==t.responseType?m.response:m.responseText,status:1223===m.status?204:m.status,statusText:1223===m.status?"No Content":m.statusText,headers:n,config:t,request:m};i(e,f,r),m=null}},m.onerror=function(){f(a("Network Error",t,null,m)),m=null},m.ontimeout=function(){f(a("timeout of "+t.timeout+"ms exceeded",t,"ECONNABORTED",m)),m=null},r.isStandardBrowserEnv()){var w=n(33),g=(t.withCredentials||u(t.url))&&t.xsrfCookieName?w.read(t.xsrfCookieName):void 0;g&&(l[t.xsrfHeaderName]=g)}if("setRequestHeader"in m&&r.forEach(l,function(t,e){void 0===h&&"content-type"===e.toLowerCase()?delete l[e]:m.setRequestHeader(e,t)}),t.withCredentials&&(m.withCredentials=!0),t.responseType)try{m.responseType=t.responseType}catch(e){if("json"!==t.responseType)throw e}"function"==typeof t.onDownloadProgress&&m.addEventListener("progress",t.onDownloadProgress),"function"==typeof t.onUploadProgress&&m.upload&&m.upload.addEventListener("progress",t.onUploadProgress),t.cancelToken&&t.cancelToken.promise.then(function(t){m&&(m.abort(),f(t),m=null)}),void 0===h&&(h=null),m.send(h)})}},function(t,e,n){"use strict";t.exports=function(t,e){return function(){for(var n=new Array(arguments.length),r=0;r<n.length;r++)n[r]=arguments[r];return t.apply(e,n)}}},function(t,e){t.exports=function(t){var e="undefined"!=typeof window&&window.location;if(!e)throw new Error("fixUrls requires window.location");if(!t||"string"!=typeof t)return t;var n=e.protocol+"//"+e.host,r=n+e.pathname.replace(/\/[^\/]*$/,"/");return t.replace(/url\s*\(((?:[^)(]|\((?:[^)(]+|\([^)(]*\))*\))*)\)/gi,function(t,e){var i,o=e.trim().replace(/^"(.*)"$/,function(t,e){return e}).replace(/^'(.*)'$/,function(t,e){return e});return/^(#|data:|http:\/\/|https:\/\/|file:\/\/\/|\s*$)/i.test(o)?t:(i=0===o.indexOf("//")?o:0===o.indexOf("/")?n+o:r+o.replace(/^\.\//,""),"url("+JSON.stringify(i)+")")})}},function(t,e,n){var r,i,o={},s=(r=function(){return window&&document&&document.all&&!window.atob},function(){return void 0===i&&(i=r.apply(this,arguments)),i}),u=function(t){var e={};return function(t){if("function"==typeof t)return t();if(void 0===e[t]){var n=function(t){return document.querySelector(t)}.call(this,t);if(window.HTMLIFrameElement&&n instanceof window.HTMLIFrameElement)try{n=n.contentDocument.head}catch(t){n=null}e[t]=n}return e[t]}}(),a=null,c=0,f=[],h=n(9);function l(t,e){for(var n=0;n<t.length;n++){var r=t[n],i=o[r.id];if(i){i.refs++;for(var s=0;s<i.parts.length;s++)i.parts[s](r.parts[s]);for(;s<r.parts.length;s++)i.parts.push(w(r.parts[s],e))}else{var u=[];for(s=0;s<r.parts.length;s++)u.push(w(r.parts[s],e));o[r.id]={id:r.id,refs:1,parts:u}}}}function m(t,e){for(var n=[],r={},i=0;i<t.length;i++){var o=t[i],s=e.base?o[0]+e.base:o[0],u={css:o[1],media:o[2],sourceMap:o[3]};r[s]?r[s].parts.push(u):n.push(r[s]={id:s,parts:[u]})}return n}function p(t,e){var n=u(t.insertInto);if(!n)throw new Error("Couldn't find a style target. This probably means that the value for the 'insertInto' parameter is invalid.");var r=f[f.length-1];if("top"===t.insertAt)r?r.nextSibling?n.insertBefore(e,r.nextSibling):n.appendChild(e):n.insertBefore(e,n.firstChild),f.push(e);else if("bottom"===t.insertAt)n.appendChild(e);else{if("object"!=typeof t.insertAt||!t.insertAt.before)throw new Error("[Style Loader]\n\n Invalid value for parameter 'insertAt' ('options.insertAt') found.\n Must be 'top', 'bottom', or Object.\n (https://github.com/webpack-contrib/style-loader#insertat)\n");var i=u(t.insertInto+" "+t.insertAt.before);n.insertBefore(e,i)}}function y(t){if(null===t.parentNode)return!1;t.parentNode.removeChild(t);var e=f.indexOf(t);e>=0&&f.splice(e,1)}function d(t){var e=document.createElement("style");return void 0===t.attrs.type&&(t.attrs.type="text/css"),v(e,t.attrs),p(t,e),e}function v(t,e){Object.keys(e).forEach(function(n){t.setAttribute(n,e[n])})}function w(t,e){var n,r,i,o;if(e.transform&&t.css){if(!(o=e.transform(t.css)))return function(){};t.css=o}if(e.singleton){var s=c++;n=a||(a=d(e)),r=k.bind(null,n,s,!1),i=k.bind(null,n,s,!0)}else t.sourceMap&&"function"==typeof URL&&"function"==typeof URL.createObjectURL&&"function"==typeof URL.revokeObjectURL&&"function"==typeof Blob&&"function"==typeof btoa?(n=function(t){var e=document.createElement("link");return void 0===t.attrs.type&&(t.attrs.type="text/css"),t.attrs.rel="stylesheet",v(e,t.attrs),p(t,e),e}(e),r=function(t,e,n){var r=n.css,i=n.sourceMap,o=void 0===e.convertToAbsoluteUrls&&i;(e.convertToAbsoluteUrls||o)&&(r=h(r));i&&(r+="\n/*# sourceMappingURL=data:application/json;base64,"+btoa(unescape(encodeURIComponent(JSON.stringify(i))))+" */");var s=new Blob([r],{type:"text/css"}),u=t.href;t.href=URL.createObjectURL(s),u&&URL.revokeObjectURL(u)}.bind(null,n,e),i=function(){y(n),n.href&&URL.revokeObjectURL(n.href)}):(n=d(e),r=function(t,e){var n=e.css,r=e.media;r&&t.setAttribute("media",r);if(t.styleSheet)t.styleSheet.cssText=n;else{for(;t.firstChild;)t.removeChild(t.firstChild);t.appendChild(document.createTextNode(n))}}.bind(null,n),i=function(){y(n)});return r(t),function(e){if(e){if(e.css===t.css&&e.media===t.media&&e.sourceMap===t.sourceMap)return;r(t=e)}else i()}}t.exports=function(t,e){if("undefined"!=typeof DEBUG&&DEBUG&&"object"!=typeof document)throw new Error("The style-loader cannot be used in a non-browser environment");(e=e||{}).attrs="object"==typeof e.attrs?e.attrs:{},e.singleton||"boolean"==typeof e.singleton||(e.singleton=s()),e.insertInto||(e.insertInto="head"),e.insertAt||(e.insertAt="bottom");var n=m(t,e);return l(n,e),function(t){for(var r=[],i=0;i<n.length;i++){var s=n[i];(u=o[s.id]).refs--,r.push(u)}t&&l(m(t,e),e);for(i=0;i<r.length;i++){var u;if(0===(u=r[i]).refs){for(var a=0;a<u.parts.length;a++)u.parts[a]();delete o[u.id]}}}};var g,b=(g=[],function(t,e){return g[t]=e,g.filter(Boolean).join("\n")});function k(t,e,n,r){var i=n?"":r.css;if(t.styleSheet)t.styleSheet.cssText=b(e,i);else{var o=document.createTextNode(i),s=t.childNodes;s[e]&&t.removeChild(s[e]),s.length?t.insertBefore(o,s[e]):t.appendChild(o)}}},function(t,e){t.exports=function(t){var e=[];return e.toString=function(){return this.map(function(e){var n=function(t,e){var n=t[1]||"",r=t[3];if(!r)return n;if(e&&"function"==typeof btoa){var i=(s=r,"/*# sourceMappingURL=data:application/json;charset=utf-8;base64,"+btoa(unescape(encodeURIComponent(JSON.stringify(s))))+" */"),o=r.sources.map(function(t){return"/*# sourceURL="+r.sourceRoot+t+" */"});return[n].concat(o).concat([i]).join("\n")}var s;return[n].join("\n")}(e,t);return e[2]?"@media "+e[2]+"{"+n+"}":n}).join("")},e.i=function(t,n){"string"==typeof t&&(t=[[null,t,""]]);for(var r={},i=0;i<this.length;i++){var o=this[i][0];"number"==typeof o&&(r[o]=!0)}for(i=0;i<t.length;i++){var s=t[i];"number"==typeof s[0]&&r[s[0]]||(n&&!s[2]?s[2]=n:n&&(s[2]="("+s[2]+") and ("+n+")"),e.push(s))}},e}},function(t,e,n){(t.exports=n(11)(!1)).push([t.i,"* {\r\n  margin: 0;\r\n  padding: 0;\r\n  box-sizing: border-box;\r\n}\r\n\r\nbody {\r\n  width: 100vw;\r\n  height: 100vh;\r\n}\r\n\r\n#root, #canvas {\r\n  width: 100%;\r\n  height: 100%;\r\n}\r\n\r\n#canvas {\r\n  position: absolute;\r\n  top: 0;\r\n  left: 0;\r\n}\r\n",""])},function(t,e,n){var r=n(12);"string"==typeof r&&(r=[[t.i,r,""]]);var i={singleton:!0,sourceMap:!1,convertToAbsoluteUrls:!0,hmr:!0,transform:void 0,insertInto:void 0};n(10)(r,i);r.locals&&(t.exports=r.locals)},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var r,i=function(){function t(t,e){for(var n=0;n<e.length;n++){var r=e[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(t,r.key,r)}}return function(e,n,r){return n&&t(e.prototype,n),r&&t(e,r),e}}(),o=n(3),s=(r=o)&&r.__esModule?r:{default:r};var u=function(t){function e(t){!function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}(this,e);var n=function(t,e){if(!t)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return!e||"object"!=typeof e&&"function"!=typeof e?t:e}(this,(e.__proto__||Object.getPrototypeOf(e)).call(this,t));return n.img=new Image,n}return function(t,e){if("function"!=typeof e&&null!==e)throw new TypeError("Super expression must either be null or a function, not "+typeof e);t.prototype=Object.create(e&&e.prototype,{constructor:{value:t,enumerable:!1,writable:!0,configurable:!0}}),e&&(Object.setPrototypeOf?Object.setPrototypeOf(t,e):t.__proto__=e)}(e,s.default),i(e,null,[{key:"parse",value:function(t,e){t.img.src="data:image/png;base64,"+e}}]),e}();e.default=u},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var r=function(){function t(t,e){for(var n=0;n<e.length;n++){var r=e[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(t,r.key,r)}}return function(e,n,r){return n&&t(e.prototype,n),r&&t(e,r),e}}();var i=function(){function t(){throw function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}(this,t),new Error("You should not use Easing contructor...")}return r(t,null,[{key:"linear",value:function(t){return t}},{key:"easeInQuad",value:function(t){return t*t}},{key:"easeOutQuad",value:function(t){return t*(2-t)}},{key:"easeInOutQuad",value:function(t){return t<.5?2*t*t:(4-2*t)*t-1}},{key:"easeInCubic",value:function(t){return t*t*t}},{key:"easeOutCubic",value:function(t){return(t-=1)*t*t+1}},{key:"easeInOutCubic",value:function(t){return t<.5?4*t*t*t:(t-1)*(2*t-2)*(2*t-2)+1}},{key:"easeInQuart",value:function(t){return t*t*t*t}},{key:"easeOutQuart",value:function(t){return 1-(t-=1)*t*t*t}},{key:"easeInOutQuart",value:function(t){return t<.5?8*t*t*t*t:1-8*(t-=1)*t*t*t}},{key:"easeInQuint",value:function(t){return t*t*t*t*t}},{key:"easeOutQuint",value:function(t){return 1+(t-=1)*t*t*t*t}},{key:"easeInOutQuint",value:function(t){return t<.5?16*t*t*t*t*t:1+16*(t-=1)*t*t*t*t}}]),t}();e.default=i},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var r=function(){function t(t,e){for(var n=0;n<e.length;n++){var r=e[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(t,r.key,r)}}return function(e,n,r){return n&&t(e.prototype,n),r&&t(e,r),e}}(),i=n(1);var o=Math.sin,s=Math.cos,u=Math.acos,a=Math.abs,c=Math.sqrt,f=function(){function t(e,n,r,i){!function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}(this,t),this.w=e||0,this.x=n||0,this.y=r||0,this.z=i||0}return r(t,null,[{key:"fromArray",value:function(e){return new(Function.prototype.bind.apply(t,[null].concat(function(t){if(Array.isArray(t)){for(var e=0,n=Array(t.length);e<t.length;e++)n[e]=t[e];return n}return Array.from(t)}(e))))}},{key:"fromEulers",value:function(e,n,r){var i=s(.5*n),u=s(.5*r),a=s(.5*e),c=o(.5*n),f=o(.5*r),h=o(.5*e);return new t(i*u*a-c*f*h,i*u*h+c*f*a,c*u*a+i*f*h,i*f*a-c*u*h).normalize}},{key:"fromAxisAngle",value:function(e,n){var r=1/e.len,i=o(n/2);return new t(s(n/2),i*e.x*r,i*e.y*r,i*e.z*r).normalize}},{key:"fromRotation",value:function(e,n){var r=e.add(n),i=e.cross(r);return new t(e.dot(r),i.x,i.y,i.z).normalize}},{key:"identity",get:function(){return new t(1,0,0,0)}},{key:"up",get:function(){return new t(.707,.707,0,0)}},{key:"down",get:function(){return new t(.707,-.707,0,0)}},{key:"left",get:function(){return new t(.707,0,.707,0)}},{key:"right",get:function(){return new t(.707,0,-.707,0)}},{key:"backward",get:function(){return new t(0,0,1,0)}},{key:"upsideDown",get:function(){return new t(0,0,0,1)}},{key:"tiltLeft",get:function(){return new t(.707,0,0,.707)}},{key:"tiltRight",get:function(){return new t(.707,0,0,-.707)}}]),r(t,[{key:"mul",value:function(e){var n=this.w,r=this.x,i=this.y,o=this.z,s=e.w,u=e.x,a=e.y,c=e.z;return new t(n*s-r*u-i*a-o*c,r*s+n*u+i*c-o*a,i*s+n*a+o*u-r*c,o*s+n*c+r*a-i*u).normalize}},{key:"dot",value:function(t){return this.w*t.w+this.x*t.x+this.y*t.y+this.z*t.z}},{key:"cross",value:function(t){throw new Error("Quaternion cross not implemented "+t)}},{key:"scaleRotation",value:function(e){var n=u(this.w)*e,r=new i.Vec3(this.x,this.y,this.z).scale(o(n));return new t(s(n),r.x,r.y,r.z)}},{key:"lerp",value:function(t,e){return e>=1?t:this.scaleRotation(1-e).multiply(t.scaleRotation(e))}},{key:"nlerp",value:function(t,e){return this.lerp(t,e).normalize}},{key:"slerp",value:function(e,n){if(n<=0)return this;if(n>=1)return e;var r=this.dot(e);if(a(r)>=1)return this;r<0&&(e.w=-e.w,e.x=-e.x,e.y=-e.y,e.z=-e.z,r=-r);var i=c(1-r*r);if(a(i)<.001)return new t(.5*(this.w+e.w),.5*(this.x+e.x),.5*(this.y+e.y),.5*(this.z+e.z)).normalize;var s=u(r),f=o((1-n)*s)/i,h=o(n*s)/i;return new t(this.w*f+e.w*h,this.x*f+e.x*h,this.y*f+e.y*h,this.z*f+e.z*h).normalize}},{key:"copy",get:function(){return new t(this.w,this.x,this.y,this.z)}},{key:"toArray",get:function(){return[this.w,this.x,this.y,this.z]}},{key:"toMat3",get:function(){var t=this.w,e=this.x,n=this.y,r=this.z,o=e*t,s=e*e,u=e*n,a=e*r,c=n*t,f=n*n,h=n*r,l=r*t,m=r*r;return new i.Mat3(1-2*(f+m),2*(u-l),2*(a+c),2*(u+l),1-2*(s+m),2*(h-o),2*(a-c),2*(h+o),1-2*(s+f))}},{key:"toMat4",get:function(){return this.toMat3.toMat4}},{key:"toEulers",get:function(){throw new Error("Quaternion toEuler not implemented")}},{key:"len",get:function(){return c(this.w*this.w+this.x*this.x+this.y*this.y+this.z*this.z)}},{key:"lenSqrt",get:function(){return this.w*this.w+this.x*this.x+this.y*this.y+this.z*this.z}},{key:"conjugate",get:function(){return new t(this.w,-this.x,-this.y,-this.z)}},{key:"normalize",get:function(){var e=c(this.w*this.w+this.x*this.x+this.y*this.y+this.z*this.z);return e>0?(e=1/e,new t(this.w*e,this.x*e,this.y*e,this.z*e)):new t(1,0,0,0)}},{key:"invert",get:function(){var e=1/this.len;return new t(this.w*e,-this.x*e,-this.y*e,-this.z*e)}}]),t}();e.default=f},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var r=function(){function t(t,e){for(var n=0;n<e.length;n++){var r=e[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(t,r.key,r)}}return function(e,n,r){return n&&t(e.prototype,n),r&&t(e,r),e}}(),i=n(1);var o=Math.sin,s=Math.cos,u=Math.tan,a=function(){function t(e,n,r,i,o,s,u,a,c,f,h,l,m,p,y,d){!function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}(this,t),this.m00=e||0,this.m01=n||0,this.m02=r||0,this.m03=i||0,this.m10=o||0,this.m11=s||0,this.m12=u||0,this.m13=a||0,this.m20=c||0,this.m21=f||0,this.m22=h||0,this.m23=l||0,this.m30=m||0,this.m31=p||0,this.m32=y||0,this.m33=d||0}return r(t,null,[{key:"fromArray",value:function(e){return new(Function.prototype.bind.apply(t,[null].concat(function(t){if(Array.isArray(t)){for(var e=0,n=Array(t.length);e<t.length;e++)n[e]=t[e];return n}return Array.from(t)}(e))))}},{key:"perspective",value:function(e,n,r,i){var o=1/u(e/2),s=1/(r-i);return new t(o/n,0,0,0,0,o,0,0,0,0,(r+i)*s,-1,0,0,r*i*s*2,0)}},{key:"orthographic",value:function(e,n,r,i,o,s){var u=1/(e-n),a=1/(r-i),c=1/(o-s);return new t(2*u,0,0,0,0,2*a,0,0,0,0,2*c,0,(e+n)*u,(i+r)*a,(s+o)*c,1)}},{key:"lookAt",value:function(e,n,r){var i=e.sub(n).normalize,o=r.cross(i),s=i.cross(o);return new t(o.x,o.y,o.z,0,s.x,s.y,s.z,0,i.x,i.y,i.z,0,e.x,e.y,e.z,1)}},{key:"translate",value:function(e,n,r){return new t(1,0,0,0,0,1,0,0,0,0,1,0,e,n,r,1)}},{key:"scale",value:function(e,n,r){return new t(e,0,0,0,0,n,0,0,0,0,r,0,0,0,0,1)}},{key:"rotateX",value:function(e){var n=s(e),r=o(e);return new t(1,0,0,0,0,n,-r,0,0,r,n,0,0,0,0,1)}},{key:"rotateY",value:function(e){var n=s(e),r=o(e);return new t(n,0,r,0,0,1,0,0,-r,0,n,0,0,0,0,1)}},{key:"rotateZ",value:function(e){var n=s(e),r=o(e);return new t(n,-r,0,0,r,n,0,0,0,0,1,0,0,0,0,1)}},{key:"identity",get:function(){return new t(1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1)}}]),r(t,[{key:"add",value:function(e){return new t(this.m00+e.m00,this.m01+e.m01,this.m02+e.m02,this.m03+e.m03,this.m10+e.m10,this.m11+e.m11,this.m12+e.m12,this.m13+e.m13,this.m20+e.m20,this.m21+e.m21,this.m22+e.m22,this.m23+e.m23,this.m30+e.m30,this.m31+e.m31,this.m32+e.m32,this.m33+e.m33)}},{key:"sub",value:function(e){return new t(this.m00-e.m00,this.m01-e.m01,this.m02-e.m02,this.m03-e.m03,this.m10-e.m10,this.m11-e.m11,this.m12-e.m12,this.m13-e.m13,this.m20-e.m20,this.m21-e.m21,this.m22-e.m22,this.m23-e.m23,this.m30-e.m30,this.m31-e.m31,this.m32-e.m32,this.m33-e.m33)}},{key:"mul",value:function(e){return new t(e.m00*this.m00+e.m01*this.m10+e.m02*this.m20+e.m03*this.m30,e.m00*this.m01+e.m01*this.m11+e.m02*this.m21+e.m03*this.m31,e.m00*this.m02+e.m01*this.m12+e.m02*this.m22+e.m03*this.m32,e.m00*this.m03+e.m01*this.m13+e.m02*this.m23+e.m03*this.m33,e.m10*this.m00+e.m11*this.m10+e.m12*this.m20+e.m13*this.m30,e.m10*this.m01+e.m11*this.m11+e.m12*this.m21+e.m13*this.m31,e.m10*this.m02+e.m11*this.m12+e.m12*this.m22+e.m13*this.m32,e.m10*this.m03+e.m11*this.m13+e.m12*this.m23+e.m13*this.m33,e.m20*this.m00+e.m21*this.m10+e.m22*this.m20+e.m23*this.m30,e.m20*this.m01+e.m21*this.m11+e.m22*this.m21+e.m23*this.m31,e.m20*this.m02+e.m21*this.m12+e.m22*this.m22+e.m23*this.m32,e.m20*this.m03+e.m21*this.m13+e.m22*this.m23+e.m23*this.m33,e.m30*this.m00+e.m31*this.m10+e.m32*this.m20+e.m33*this.m30,e.m30*this.m01+e.m31*this.m11+e.m32*this.m21+e.m33*this.m31,e.m30*this.m02+e.m31*this.m12+e.m32*this.m22+e.m33*this.m32,e.m30*this.m03+e.m31*this.m13+e.m32*this.m23+e.m33*this.m33)}},{key:"clone",get:function(){return new t(this.m00,this.m01,this.m02,this.m03,this.m10,this.m11,this.m12,this.m13,this.m20,this.m21,this.m22,this.m23,this.m30,this.m31,this.m32,this.m33)}},{key:"toArray",get:function(){return[this.m00,this.m01,this.m02,this.m03,this.m10,this.m11,this.m12,this.m13,this.m20,this.m21,this.m22,this.m23,this.m30,this.m31,this.m32,this.m33]}},{key:"toFloat32Array",get:function(){return new Float32Array([this.m00,this.m01,this.m02,this.m03,this.m10,this.m11,this.m12,this.m13,this.m20,this.m21,this.m22,this.m23,this.m30,this.m31,this.m32,this.m33])}},{key:"toMat3",get:function(){return new i.Mat3(this.m00,this.m01,this.m02,this.m10,this.m11,this.m12,this.m20,this.m21,this.m22)}},{key:"toQuat",get:function(){return this.toMat3.toQuat}},{key:"invert",get:function(){var e=this.m00,n=this.m01,r=this.m02,i=this.m03,o=this.m10,s=this.m11,u=this.m12,a=this.m13,c=this.m20,f=this.m21,h=this.m22,l=this.m23,m=this.m30,p=this.m31,y=this.m32,d=this.m33,v=s*h*d-s*l*y-f*u*d+f*a*y+p*u*l-p*a*h,w=-o*h*d+o*l*y+c*u*d-c*a*y-m*u*l+m*a*h,g=o*f*d-o*l*p-c*s*d+c*a*p+m*s*l-m*a*f,b=-o*f*y+o*h*p+c*s*y-c*u*p-m*s*h+m*u*f,k=e*v+n*w+r*g+i*b;if(0===k)throw new Error("Cannot invert matrix: "+this);return new t((k=1/k)*v,k*-n*h*d+n*l*y+f*r*d-f*i*y-p*r*l+p*i*h,k*n*u*d-n*a*y-s*r*d+s*i*y+p*r*a-p*i*u,k*-n*u*l+n*a*h+s*r*l-s*i*h-f*r*a+f*i*u,k*w,k*e*h*d-e*l*y-c*r*d+c*i*y+m*r*l-m*i*h,k*-e*u*d+e*a*y+o*r*d-o*i*y-m*r*a+m*i*u,k*e*u*l-e*a*h-o*r*l+o*i*h+c*r*a-c*i*u,k*g,k*-e*f*d+e*l*p+c*n*d-c*i*p-m*n*l+m*i*f,k*e*s*d-e*a*p-o*n*d+o*i*p+m*n*a-m*i*s,k*-e*s*l+e*a*f+o*n*l-o*i*f-c*n*a+c*i*s,k*b,k*e*f*y-e*h*p-c*n*y+c*r*p+m*n*h-m*r*f,k*-e*s*y+e*u*p+o*n*y-o*r*p-m*n*u+m*r*s,k*e*s*h-e*u*f-o*n*h+o*r*f+c*n*u-c*r*s)}},{key:"transpose",get:function(){return new t(this.m00,this.m10,this.m20,this.m30,this.m01,this.m11,this.m21,this.m31,this.m02,this.m12,this.m22,this.m32,this.m03,this.m13,this.m23,this.m33)}},{key:"translation",get:function(){return new i.Vec3(this.m30,this.m31,this.m32)}},{key:"scale",get:function(){return new i.Vec3(new i.Vec3(this.m00,this.m10,this.m20).len,new i.Vec3(this.m01,this.m11,this.m21).len,new i.Vec3(this.m02,this.m12,this.m22).len)}},{key:"rotation",get:function(){return new i.Mat3(this.m00,this.m01,this.m02,this.m10,this.m11,this.m12,this.m20,this.m21,this.m22)}}]),t}();e.default=a},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var r=function(){function t(t,e){for(var n=0;n<e.length;n++){var r=e[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(t,r.key,r)}}return function(e,n,r){return n&&t(e.prototype,n),r&&t(e,r),e}}(),i=n(1);var o=Math.sqrt,s=function(){function t(e,n,r,i,o,s,u,a,c){!function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}(this,t),this.m00=e,this.m01=n,this.m02=r,this.m10=i,this.m11=o,this.m12=s,this.m20=u,this.m21=a,this.m22=c}return r(t,null,[{key:"identity",get:function(){return new t(1,0,0,0,1,0,0,0,1)}}]),r(t,[{key:"multiplyVector",value:function(e){return new t(this.m00*e.x+this.m01*e.y+this.m02*e.z,this.m10*e.x+this.m11*e.y+this.m12*e.z,this.m20*e.x+this.m21*e.y+this.m22*e.z)}},{key:"add",value:function(e){return new t(this.m00+e.m00,this.m01+e.m01,this.m02+e.m02,this.m10+e.m10,this.m11+e.m11,this.m12+e.m12,this.m20+e.m20,this.m21+e.m21,this.m22+e.m22)}},{key:"sub",value:function(e){return new t(this.m00-e.m00,this.m01-e.m01,this.m02-e.m02,this.m10-e.m10,this.m11-e.m11,this.m12-e.m12,this.m20-e.m20,this.m21-e.m21,this.m22-e.m22)}},{key:"mul",value:function(e){var n=this.m01,r=this.m02,i=this.m03,o=this.m11,s=this.m12,u=this.m13,a=this.m21,c=this.m22,f=this.m23,h=e.m01,l=e.m02,m=e.m03,p=e.m11,y=e.m12,d=e.m13,v=e.m21,w=e.m22,g=e.m23;return new t(n*h+r*p+i*v,n*l+r*y+i*w,n*m+r*d+i*g,o*h+s*p+u*v,o*l+s*y+u*w,o*m+s*d+u*g,a*h+c*p+f*v,a*l+c*y+f*w,a*m+c*d+f*g)}},{key:"clone",get:function(){return new t(this.m00,this.m01,this.m02,this.m10,this.m11,this.m12,this.m20,this.m21,this.m22)}},{key:"toArray",get:function(){return[this.m00,this.m01,this.m02,this.m10,this.m11,this.m12,this.m20,this.m21,this.m22]}},{key:"toFloat32Array",get:function(){return new Float32Array([this.m00,this.m01,this.m02,this.m10,this.m11,this.m12,this.m20,this.m21,this.m22])}},{key:"toMat4",get:function(){return new i.Mat4(this.m00,this.m01,this.m02,0,this.m10,this.m11,this.m12,0,this.m20,this.m21,this.m22,0,0,0,0,1)}},{key:"toQuat",get:function(){var t=this.m00+this.m11+this.m22,e=void 0;return t>0?(e=.5/o(t+1),new i.Quat(.25/e,(this.m21-this.m12)*e,(this.m02-this.m20)*e)):this.m00>this.m11&&this.m00>this.m22?(e=2*o(1+this.m00-this.m11-this.m22),new i.Quat((this.m21-this.m12)/e,.25*e,(this.m01+this.m10)/e,(this.m02+this.m20)/e)):this.m11>this.m22?(e=2*o(1+this.m11-this.m00-this.m22),new i.Quat((this.m02-this.m20)/e,(this.m01+this.m10)/e,.25*e,(this.m12+this.m21)/e)):(e=2*o(1+this.m22-this.m00-this.m11),new i.Quat((this.m10-this.m01)/e,(this.m02+this.m20)/e,(this.m12+this.m21)/e))}}]),t}();s.fromArray=function(t){return new(Function.prototype.bind.apply(s,[null].concat(function(t){if(Array.isArray(t)){for(var e=0,n=Array(t.length);e<t.length;e++)n[e]=t[e];return n}return Array.from(t)}(t))))},e.default=s},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var r=function(){function t(t,e){for(var n=0;n<e.length;n++){var r=e[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(t,r.key,r)}}return function(e,n,r){return n&&t(e.prototype,n),r&&t(e,r),e}}();var i=Math.sqrt,o=function(){function t(e,n,r){!function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}(this,t),this.x=e||0,this.y=n||0,this.z=r||0}return r(t,null,[{key:"fromArray",value:function(e){return new(Function.prototype.bind.apply(t,[null].concat(function(t){if(Array.isArray(t)){for(var e=0,n=Array(t.length);e<t.length;e++)n[e]=t[e];return n}return Array.from(t)}(e))))}},{key:"fromQuat",value:function(e){var n=this.x,r=this.y,i=this.z,o=e.x,s=e.y,u=e.z,a=e.w,c=a*n+s*i-u*r,f=a*r+u*n-o*i,h=a*i+o*r-s*n,l=-o*n-s*r-u*i;return new t(c*a+l*-o+f*-u-h*-s,f*a+l*-s+h*-o-c*-u,h*a+l*-u+c*-s-f*-o)}},{key:"fromMat4",value:function(e){return new t(e.a14+e.a11*this.x+e.a12*this.y+e.a13*this.z,e.a24+e.a21*this.x+e.a22*this.y+e.a23*this.z,e.a34+e.a31*this.x+e.a32*this.y+e.a33*this.z)}},{key:"zero",get:function(){return new t(0,0,0)}},{key:"up",get:function(){return new t(0,1,0)}},{key:"down",get:function(){return new t(0,-1,0)}},{key:"left",get:function(){return new t(-1,0,0)}},{key:"right",get:function(){return new t(1,0,0)}},{key:"forward",get:function(){return new t(0,0,1)}},{key:"backward",get:function(){return new t(0,0,-1)}}]),r(t,[{key:"add",value:function(e){return new t(this.x+e.x,this.y+e.y,this.z+e.z)}},{key:"sub",value:function(e){return new t(this.x-e.x,this.y-e.y,this.z-e.z)}},{key:"scale",value:function(e){return new t(this.x*e,this.y*e,this.z*e)}},{key:"dot",value:function(t){return this.x*t.x+this.y*t.y+this.z*t.z}},{key:"cross",value:function(e){return new t(this.y*e.z-this.z*e.y,this.z*e.x-this.x*e.z,this.x*e.y-this.y*e.x)}},{key:"lerp",value:function(e,n){return new t(this.x+(e.x-this.x)*n,this.y+(e.y-this.y)*n,this.z+(e.z-this.z)*n)}},{key:"getNormal",value:function(t,e){return this.sub(t).cross(this.sub(e)).normalize}},{key:"getAngle",value:function(t){return this.normalize.dot(t.normalize)}},{key:"forward",get:function(){return this.normalize}},{key:"backward",get:function(){return this.normalize.invert}},{key:"left",get:function(){return this.forward.cross(t.up).normalize}},{key:"right",get:function(){return this.forward.cross(t.up).normalize.invert}},{key:"down",get:function(){return this.forward.cross(this.left).normalize}},{key:"up",get:function(){return this.forward.cross(this.left).normalize.invert}},{key:"toArray",get:function(){return[this.x,this.y,this.z]}},{key:"toFloat32Array",get:function(){return new Float32Array([this.x,this.y,this.z])}},{key:"clone",get:function(){return new t(this.x,this.y,this.z)}},{key:"len",get:function(){return i(this.x*this.x+this.y*this.y+this.z*this.z)}},{key:"lenSqrt",get:function(){return this.x*this.x+this.y*this.y+this.z*this.z}},{key:"normalize",get:function(){var e=i(this.x*this.x+this.y*this.y+this.z*this.z);return e>0?(e=1/e,new t(this.x*e,this.y*e,this.z*e)):new t(0,0,0)}},{key:"invert",get:function(){return new t(-this.x,-this.y,-this.z)}}]),t}();e.default=o},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var r=function(){function t(t,e){for(var n=0;n<e.length;n++){var r=e[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(t,r.key,r)}}return function(e,n,r){return n&&t(e.prototype,n),r&&t(e,r),e}}();var i=Math.sqrt,o=function(){function t(e,n){!function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}(this,t),this.x=e||0,this.y=n||0}return r(t,null,[{key:"fromArray",value:function(e){return new(Function.prototype.bind.apply(t,[null].concat(function(t){if(Array.isArray(t)){for(var e=0,n=Array(t.length);e<t.length;e++)n[e]=t[e];return n}return Array.from(t)}(e))))}},{key:"zero",get:function(){return new t(0,0)}},{key:"up",get:function(){return new t(0,1)}},{key:"down",get:function(){return new t(0,-1)}},{key:"left",get:function(){return new t(-1,0)}},{key:"right",get:function(){return new t(1,0)}}]),r(t,[{key:"add",value:function(e){return new t(this.x+e.x,this.y+e.y)}},{key:"sub",value:function(e){return new t(this.x-e.x,this.y-e.y)}},{key:"scale",value:function(e){return new t(this.x*e,this.y*e)}},{key:"dot",value:function(t){return this.x*t.x+this.y*t.y}},{key:"getAngle",value:function(t){return this.normalize.dot(t.normalize)}},{key:"invert",value:function(){return new t(-this.x,-this.y)}},{key:"toArray",get:function(){return[this.x,this.y]}},{key:"toFloat32Array",get:function(){return new Float32Array([this.x,this.y])}},{key:"clone",get:function(){return new t(this.x,this.y)}},{key:"len",get:function(){return i(this.x*this.x+this.y*this.y)}},{key:"lenSqrt",get:function(){return this.x*this.x+this.y*this.y}},{key:"normalize",get:function(){var e=i(this.x*this.x+this.y*this.y);return e>0?(e=1/e,new t(this.x*e,this.y*e)):new t(0,0)}}]),t}();e.default=o},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var r=function(){function t(t,e){for(var n=0;n<e.length;n++){var r=e[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(t,r.key,r)}}return function(e,n,r){return n&&t(e.prototype,n),r&&t(e,r),e}}();function i(t){if(Array.isArray(t)){for(var e=0,n=Array(t.length);e<t.length;e++)n[e]=t[e];return n}return Array.from(t)}var o=function(){function t(e,n,r){!function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}(this,t),this.r=e||0,this.g=n||0,this.b=r||0}return r(t,null,[{key:"fromArray",value:function(e){return new(Function.prototype.bind.apply(t,[null].concat(i(e))))}},{key:"fromHex",value:function(e){return new(Function.prototype.bind.apply(t,[null].concat(i([e.slice(2,4),e.slice(4,6),e.slice(6,8)].map(function(t){return parseInt(t,16)/255})))))}},{key:"white",get:function(){return new t(1,1,1)}},{key:"red",get:function(){return new t(1,0,0)}},{key:"green",get:function(){return new t(0,1,0)}},{key:"blue",get:function(){return new t(0,0,1)}},{key:"black",get:function(){return new t(0,0,0)}}]),r(t,[{key:"copy",get:function(){return new t(this.r,this.g,this.b)}},{key:"toArray",get:function(){return[this.r,this.g,this.b]}},{key:"toHex",get:function(){return"0x"+[(255*this.r).toString(16),(255*this.g).toString(16),(255*this.b).toString(16)].map(function(t){return t.length<2?"'0'"+t:t}).join("")}}]),t}();e.default=o},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});e.default=function t(e,n){!function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}(this,t),this.vertexOffset=e,this.vertexCount=n,this.mesh=null}},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var r=function(){function t(t,e){for(var n=0;n<e.length;n++){var r=e[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(t,r.key,r)}}return function(e,n,r){return n&&t(e.prototype,n),r&&t(e,r),e}}();var i=function(){function t(e,n,r,i){!function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}(this,t),this.type=e||null,this.element=e&&(n||window)||null,this.listener=null,this.subscribers=[],this.invoker=null,this.enableInvoke=null===this.type,this.createListener(r||!1,i||!1)}return r(t,[{key:"createListener",value:function(t,e){var n=this;this.enableInvoke?this.invoker=function(){for(var t=arguments.length,e=Array(t),r=0;r<t;r++)e[r]=arguments[r];return n.subscribers.forEach(function(t){t.apply(void 0,e)})}:(this.invoker=t&&e?function(t){t.preventDefault(),t.stopPropagation(),n.subscribers.forEach(function(e){e(t)})}:t?function(t){t.preventDefault(),n.subscribers.forEach(function(e){e(t)})}:e?function(t){t.stopPropagation(),n.subscribers.forEach(function(e){e(t)})}:function(t){n.subscribers.forEach(function(e){e(t)})},this.element.addEventListener(this.type,this.invoker,!1))}},{key:"invoke",value:function(){this.enableInvoke&&this.invoker()}},{key:"subscribe",value:function(){for(var t=this,e=arguments.length,n=Array(e),r=0;r<e;r++)n[r]=arguments[r];n.forEach(function(e){t.subscribers.push(e)})}},{key:"unsubscribe",value:function(){for(var t=this,e=arguments.length,n=Array(e),r=0;r<e;r++)n[r]=arguments[r];n.forEach(function(e){var n=t.subscribers.indexOf(e);-1!==n&&t.subscribers.splice(n,1)})}}]),t}();e.default=i;var o=new i("resize",window,!0,!0),s=new i("keydown",window,!1,!0),u=new i("keyup",window,!0,!0),a=new i("mousedown",window,!0,!0),c=new i("mouseup",window,!0,!0),f=new i("mousemove",window,!0,!0),h=new i("wheel",window,!1,!0),l=new i("contextmenu",window,!1,!0);e.windowResizeEvent=o,e.windowKeyDownEvent=s,e.windowKeyUpEvent=u,e.windowMouseDownEvent=a,e.windowMouseUpEvent=c,e.windowMouseMoveEvent=f,e.windowWheelEvent=h,e.windowContextMenuEvent=l},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0}),e.gl=e.canvas=void 0;var r=n(23),i=document.getElementById("canvas");i||(e.canvas=i=document.createElement("canvas"),document.getElementById("root").appendChild(i));var o=i.getContext("webgl2");(i.resize=function(){i.width=window.innerWidth,i.height=window.innerHeight})(),(o.resize=function(){o.viewport(0,0,window.innerWidth,window.innerHeight)})(),r.windowResizeEvent.subscribe(i.resize,o.resize),e.canvas=i,e.gl=o},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var r=function(){function t(t,e){for(var n=0;n<e.length;n++){var r=e[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(t,r.key,r)}}return function(e,n,r){return n&&t(e.prototype,n),r&&t(e,r),e}}(),i=n(24),o=a(n(3)),s=a(n(22)),u=n(1);function a(t){return t&&t.__esModule?t:{default:t}}function c(t){if(Array.isArray(t)){for(var e=0,n=Array(t.length);e<t.length;e++)n[e]=t[e];return n}return Array.from(t)}var f=function(t){function e(t){!function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}(this,e);var n=function(t,e){if(!t)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return!e||"object"!=typeof e&&"function"!=typeof e?t:e}(this,(e.__proto__||Object.getPrototypeOf(e)).call(this,t));return n.geometries=[],n.attributes=[],n.vertexSize=null,n.vertexBuffer=null,n.indexBuffer=null,n}return function(t,e){if("function"!=typeof e&&null!==e)throw new TypeError("Super expression must either be null or a function, not "+typeof e);t.prototype=Object.create(e&&e.prototype,{constructor:{value:t,enumerable:!1,writable:!0,configurable:!0}}),e&&(Object.setPrototypeOf?Object.setPrototypeOf(t,e):t.__proto__=e)}(e,o.default),r(e,null,[{key:"parse",value:function(t,e){for(var n=this,r=[],o=[],a=[],f=[],h=[],l=[],m=[],p=[],y=[],d=/^(\w+) (.+)$/gm,v=/-?\d+\.\d+/g,w=/\d+/g,g="";g=d.exec(e);)switch(g[1]){case"v":r.push(new(Function.prototype.bind.apply(u.Vec3,[null].concat(c(g[2].match(v).map(parseFloat))))));break;case"vt":o.push(new(Function.prototype.bind.apply(u.Vec2,[null].concat(c(g[2].match(v).map(parseFloat))))));break;case"vn":a.push(new(Function.prototype.bind.apply(u.Vec3,[null].concat(c(g[2].match(v).map(parseFloat))))));break;case"f":l.push.apply(l,c(g[2].match(w).map(function(t){return parseInt(t,10)-1})));break;case"g":l.push(g[2]);break;case"#":case"o":case"usemtl":case"s":case"mtllib":break;default:throw new Error(g[2])}r.length>0&&p.push("a_position");var b=o.length>0;if(b&&p.push("a_texcoord"),0===a.length&&function(t,e,n,r){if(e&&e.length>0)if(r)for(var i=e.length/2*3,o=0;o<i;o+=9){var s=o/9;t.push(n[e[o+0]].getNormal(n[e[o+2]],n[e[o+4]])),e.splice(o+2,0,s),e.splice(o+5,0,s),e.splice(o+8,0,s)}else for(var u=2*e.length,a=0;a<u;a+=6){var c=a/6;t.push(n[e[a+0]].getNormal(n[e[a+1]],n[e[a+2]])),e.splice(a+1,0,c),e.splice(a+3,0,c),e.splice(a+5,0,c)}else for(var f=n.length,h=0;h<f;h+=3){var l=n[h+0].getNormal(n[h+1],n[h+2]);t.push(l,l,l)}}(a,l,r,b),p.push("a_normal"),function(t,e,n){var r=0,i=n?9:6,o=/[a-z_]+(?:\.\w+)?/i;t.push(new s.default(0,null)),o.test(e[0])&&e.splice(0,1);for(var u=0;u<e.length;u+=i)o.test(e[u])?(e.splice(u,1),t[t.length-1].vertexCount=3*r,t.push(new s.default(3*u,null)),r=0,u-=1):r+=1;t[t.length-1].vertexCount=3*r}(m,l,b),m.map(function(t){t.mesh=n}),b&&(!function(t,e,n,r,i){for(var o=i.length/3*5,s=0;s<o;s+=15){var a=n[i[s+0]],c=n[i[s+3]],f=n[i[s+6]],h=r[i[s+1]],l=r[i[s+4]],m=r[i[s+7]],p=c.x-a.x,y=f.x-a.x,d=c.y-a.y,v=f.y-a.y,w=c.z-a.z,g=f.z-a.z,b=l.x-h.x,k=m.x-h.x,x=l.y-h.y,A=m.y-h.y,E=1/(b*A-k*x),z=new u.Vec3((A*p-x*y)*E,(A*d-x*v)*E,(A*w-x*g)*E).normalize,O=new u.Vec3((b*y-k*p)*E,(b*v-k*d)*E,(b*g-k*w)*E).normalize;t.push(z),e.push(O);var R=s/15;i.splice(s+3,0,R,R),i.splice(s+8,0,R,R),i.splice(s+13,0,R,R)}}(f,h,r,o,l),p.push("a_tangent","a_bitangent")),o)for(var k=l.length,x=0;x<k;x+=5)y.push.apply(y,c(r[l[x+0]].toArray)),y.push.apply(y,c(o[l[x+1]].toArray)),y.push.apply(y,c(a[l[x+2]].toArray)),y.push.apply(y,c(f[l[x+3]].toArray)),y.push.apply(y,c(h[l[x+4]].toArray));else for(var A=l.length,E=0;E<A;E+=2)y.push.apply(y,c(r[l[E+0]].toArray)),y.push.apply(y,c(a[l[E+2]].toArray));!function(t,e){var n=i.gl.createBuffer();i.gl.bindBuffer(i.gl.ARRAY_BUFFER,n),i.gl.bufferData(i.gl.ARRAY_BUFFER,t,i.gl.STATIC_DRAW);var r=i.gl.createBuffer();i.gl.bindBuffer(i.gl.ELEMENT_ARRAY_BUFFER,r),i.gl.bufferData(i.gl.ELEMENT_ARRAY_BUFFER,e,i.gl.STATIC_DRAW)}(new Float32Array(y),new Int16Array(l));console.log(r),console.log(o),console.log(a),console.log(f),console.log(h),console.log(l),console.log(m)}}]),e}();e.default=f},function(t,e,n){"use strict";t.exports=function(t){return function(e){return t.apply(null,e)}}},function(t,e,n){"use strict";var r=n(4);function i(t){if("function"!=typeof t)throw new TypeError("executor must be a function.");var e;this.promise=new Promise(function(t){e=t});var n=this;t(function(t){n.reason||(n.reason=new r(t),e(n.reason))})}i.prototype.throwIfRequested=function(){if(this.reason)throw this.reason},i.source=function(){var t;return{token:new i(function(e){t=e}),cancel:t}},t.exports=i},function(t,e,n){"use strict";t.exports=function(t,e){return e?t.replace(/\/+$/,"")+"/"+e.replace(/^\/+/,""):t}},function(t,e,n){"use strict";t.exports=function(t){return/^([a-z][a-z\d\+\-\.]*:)?\/\//i.test(t)}},function(t,e,n){"use strict";var r=n(0);t.exports=function(t,e,n){return r.forEach(n,function(n){t=n(t,e)}),t}},function(t,e,n){"use strict";var r=n(0),i=n(30),o=n(5),s=n(2),u=n(29),a=n(28);function c(t){t.cancelToken&&t.cancelToken.throwIfRequested()}t.exports=function(t){return c(t),t.baseURL&&!u(t.url)&&(t.url=a(t.baseURL,t.url)),t.headers=t.headers||{},t.data=i(t.data,t.headers,t.transformRequest),t.headers=r.merge(t.headers.common||{},t.headers[t.method]||{},t.headers||{}),r.forEach(["delete","get","head","post","put","patch","common"],function(e){delete t.headers[e]}),(t.adapter||s.adapter)(t).then(function(e){return c(t),e.data=i(e.data,e.headers,t.transformResponse),e},function(e){return o(e)||(c(t),e&&e.response&&(e.response.data=i(e.response.data,e.response.headers,t.transformResponse))),Promise.reject(e)})}},function(t,e,n){"use strict";var r=n(0);function i(){this.handlers=[]}i.prototype.use=function(t,e){return this.handlers.push({fulfilled:t,rejected:e}),this.handlers.length-1},i.prototype.eject=function(t){this.handlers[t]&&(this.handlers[t]=null)},i.prototype.forEach=function(t){r.forEach(this.handlers,function(e){null!==e&&t(e)})},t.exports=i},function(t,e,n){"use strict";var r=n(0);t.exports=r.isStandardBrowserEnv()?{write:function(t,e,n,i,o,s){var u=[];u.push(t+"="+encodeURIComponent(e)),r.isNumber(n)&&u.push("expires="+new Date(n).toGMTString()),r.isString(i)&&u.push("path="+i),r.isString(o)&&u.push("domain="+o),!0===s&&u.push("secure"),document.cookie=u.join("; ")},read:function(t){var e=document.cookie.match(new RegExp("(^|;\\s*)("+t+")=([^;]*)"));return e?decodeURIComponent(e[3]):null},remove:function(t){this.write(t,"",Date.now()-864e5)}}:{write:function(){},read:function(){return null},remove:function(){}}},function(t,e,n){"use strict";var r="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";function i(){this.message="String contains an invalid character"}i.prototype=new Error,i.prototype.code=5,i.prototype.name="InvalidCharacterError",t.exports=function(t){for(var e,n,o=String(t),s="",u=0,a=r;o.charAt(0|u)||(a="=",u%1);s+=a.charAt(63&e>>8-u%1*8)){if((n=o.charCodeAt(u+=.75))>255)throw new i;e=e<<8|n}return s}},function(t,e,n){"use strict";var r=n(0);t.exports=r.isStandardBrowserEnv()?function(){var t,e=/(msie|trident)/i.test(navigator.userAgent),n=document.createElement("a");function i(t){var r=t;return e&&(n.setAttribute("href",r),r=n.href),n.setAttribute("href",r),{href:n.href,protocol:n.protocol?n.protocol.replace(/:$/,""):"",host:n.host,search:n.search?n.search.replace(/^\?/,""):"",hash:n.hash?n.hash.replace(/^#/,""):"",hostname:n.hostname,port:n.port,pathname:"/"===n.pathname.charAt(0)?n.pathname:"/"+n.pathname}}return t=i(window.location.href),function(e){var n=r.isString(e)?i(e):e;return n.protocol===t.protocol&&n.host===t.host}}():function(){return!0}},function(t,e,n){"use strict";var r=n(0),i=["age","authorization","content-length","content-type","etag","expires","from","host","if-modified-since","if-unmodified-since","last-modified","location","max-forwards","proxy-authorization","referer","retry-after","user-agent"];t.exports=function(t){var e,n,o,s={};return t?(r.forEach(t.split("\n"),function(t){if(o=t.indexOf(":"),e=r.trim(t.substr(0,o)).toLowerCase(),n=r.trim(t.substr(o+1)),e){if(s[e]&&i.indexOf(e)>=0)return;s[e]="set-cookie"===e?(s[e]?s[e]:[]).concat([n]):s[e]?s[e]+", "+n:n}}),s):s}},function(t,e,n){"use strict";var r=n(0);function i(t){return encodeURIComponent(t).replace(/%40/gi,"@").replace(/%3A/gi,":").replace(/%24/g,"$").replace(/%2C/gi,",").replace(/%20/g,"+").replace(/%5B/gi,"[").replace(/%5D/gi,"]")}t.exports=function(t,e,n){if(!e)return t;var o;if(n)o=n(e);else if(r.isURLSearchParams(e))o=e.toString();else{var s=[];r.forEach(e,function(t,e){null!==t&&void 0!==t&&(r.isArray(t)?e+="[]":t=[t],r.forEach(t,function(t){r.isDate(t)?t=t.toISOString():r.isObject(t)&&(t=JSON.stringify(t)),s.push(i(e)+"="+i(t))}))}),o=s.join("&")}return o&&(t+=(-1===t.indexOf("?")?"?":"&")+o),t}},function(t,e,n){"use strict";t.exports=function(t,e,n,r,i){return t.config=e,n&&(t.code=n),t.request=r,t.response=i,t}},function(t,e,n){"use strict";var r=n(6);t.exports=function(t,e,n){var i=n.config.validateStatus;n.status&&i&&!i(n.status)?e(r("Request failed with status code "+n.status,n.config,null,n.request,n)):t(n)}},function(t,e,n){"use strict";var r=n(0);t.exports=function(t,e){r.forEach(t,function(n,r){r!==e&&r.toUpperCase()===e.toUpperCase()&&(t[e]=n,delete t[r])})}},function(t,e){var n,r,i=t.exports={};function o(){throw new Error("setTimeout has not been defined")}function s(){throw new Error("clearTimeout has not been defined")}function u(t){if(n===setTimeout)return setTimeout(t,0);if((n===o||!n)&&setTimeout)return n=setTimeout,setTimeout(t,0);try{return n(t,0)}catch(e){try{return n.call(null,t,0)}catch(e){return n.call(this,t,0)}}}!function(){try{n="function"==typeof setTimeout?setTimeout:o}catch(t){n=o}try{r="function"==typeof clearTimeout?clearTimeout:s}catch(t){r=s}}();var a,c=[],f=!1,h=-1;function l(){f&&a&&(f=!1,a.length?c=a.concat(c):h=-1,c.length&&m())}function m(){if(!f){var t=u(l);f=!0;for(var e=c.length;e;){for(a=c,c=[];++h<e;)a&&a[h].run();h=-1,e=c.length}a=null,f=!1,function(t){if(r===clearTimeout)return clearTimeout(t);if((r===s||!r)&&clearTimeout)return r=clearTimeout,clearTimeout(t);try{r(t)}catch(e){try{return r.call(null,t)}catch(e){return r.call(this,t)}}}(t)}}function p(t,e){this.fun=t,this.array=e}function y(){}i.nextTick=function(t){var e=new Array(arguments.length-1);if(arguments.length>1)for(var n=1;n<arguments.length;n++)e[n-1]=arguments[n];c.push(new p(t,e)),1!==c.length||f||u(m)},p.prototype.run=function(){this.fun.apply(null,this.array)},i.title="browser",i.browser=!0,i.env={},i.argv=[],i.version="",i.versions={},i.on=y,i.addListener=y,i.once=y,i.off=y,i.removeListener=y,i.removeAllListeners=y,i.emit=y,i.prependListener=y,i.prependOnceListener=y,i.listeners=function(t){return[]},i.binding=function(t){throw new Error("process.binding is not supported")},i.cwd=function(){return"/"},i.chdir=function(t){throw new Error("process.chdir is not supported")},i.umask=function(){return 0}},function(t,e,n){"use strict";var r=n(2),i=n(0),o=n(32),s=n(31);function u(t){this.defaults=t,this.interceptors={request:new o,response:new o}}u.prototype.request=function(t){"string"==typeof t&&(t=i.merge({url:arguments[0]},arguments[1])),(t=i.merge(r,{method:"get"},this.defaults,t)).method=t.method.toLowerCase();var e=[s,void 0],n=Promise.resolve(t);for(this.interceptors.request.forEach(function(t){e.unshift(t.fulfilled,t.rejected)}),this.interceptors.response.forEach(function(t){e.push(t.fulfilled,t.rejected)});e.length;)n=n.then(e.shift(),e.shift());return n},i.forEach(["delete","get","head","options"],function(t){u.prototype[t]=function(e,n){return this.request(i.merge(n||{},{method:t,url:e}))}}),i.forEach(["post","put","patch"],function(t){u.prototype[t]=function(e,n,r){return this.request(i.merge(r||{},{method:t,url:e,data:n}))}}),t.exports=u},function(t,e){function n(t){return!!t.constructor&&"function"==typeof t.constructor.isBuffer&&t.constructor.isBuffer(t)}
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId]) {
+/******/ 			return installedModules[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, {
+/******/ 				configurable: false,
+/******/ 				enumerable: true,
+/******/ 				get: getter
+/******/ 			});
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// define __esModule on exports
+/******/ 	__webpack_require__.r = function(exports) {
+/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+/******/
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = "./public/glib/src/app.js");
+/******/ })
+/************************************************************************/
+/******/ ({
+
+/***/ "./node_modules/axios/index.js":
+/*!*************************************!*\
+  !*** ./node_modules/axios/index.js ***!
+  \*************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(/*! ./lib/axios */ "./node_modules/axios/lib/axios.js");
+
+/***/ }),
+
+/***/ "./node_modules/axios/lib/adapters/xhr.js":
+/*!************************************************!*\
+  !*** ./node_modules/axios/lib/adapters/xhr.js ***!
+  \************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var utils = __webpack_require__(/*! ./../utils */ "./node_modules/axios/lib/utils.js");
+var settle = __webpack_require__(/*! ./../core/settle */ "./node_modules/axios/lib/core/settle.js");
+var buildURL = __webpack_require__(/*! ./../helpers/buildURL */ "./node_modules/axios/lib/helpers/buildURL.js");
+var parseHeaders = __webpack_require__(/*! ./../helpers/parseHeaders */ "./node_modules/axios/lib/helpers/parseHeaders.js");
+var isURLSameOrigin = __webpack_require__(/*! ./../helpers/isURLSameOrigin */ "./node_modules/axios/lib/helpers/isURLSameOrigin.js");
+var createError = __webpack_require__(/*! ../core/createError */ "./node_modules/axios/lib/core/createError.js");
+var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(/*! ./../helpers/btoa */ "./node_modules/axios/lib/helpers/btoa.js");
+
+module.exports = function xhrAdapter(config) {
+  return new Promise(function dispatchXhrRequest(resolve, reject) {
+    var requestData = config.data;
+    var requestHeaders = config.headers;
+
+    if (utils.isFormData(requestData)) {
+      delete requestHeaders['Content-Type']; // Let the browser set it
+    }
+
+    var request = new XMLHttpRequest();
+    var loadEvent = 'onreadystatechange';
+    var xDomain = false;
+
+    // For IE 8/9 CORS support
+    // Only supports POST and GET calls and doesn't returns the response headers.
+    // DON'T do this for testing b/c XMLHttpRequest is mocked, not XDomainRequest.
+    if ("development" !== 'test' &&
+        typeof window !== 'undefined' &&
+        window.XDomainRequest && !('withCredentials' in request) &&
+        !isURLSameOrigin(config.url)) {
+      request = new window.XDomainRequest();
+      loadEvent = 'onload';
+      xDomain = true;
+      request.onprogress = function handleProgress() {};
+      request.ontimeout = function handleTimeout() {};
+    }
+
+    // HTTP basic authentication
+    if (config.auth) {
+      var username = config.auth.username || '';
+      var password = config.auth.password || '';
+      requestHeaders.Authorization = 'Basic ' + btoa(username + ':' + password);
+    }
+
+    request.open(config.method.toUpperCase(), buildURL(config.url, config.params, config.paramsSerializer), true);
+
+    // Set the request timeout in MS
+    request.timeout = config.timeout;
+
+    // Listen for ready state
+    request[loadEvent] = function handleLoad() {
+      if (!request || (request.readyState !== 4 && !xDomain)) {
+        return;
+      }
+
+      // The request errored out and we didn't get a response, this will be
+      // handled by onerror instead
+      // With one exception: request that using file: protocol, most browsers
+      // will return status as 0 even though it's a successful request
+      if (request.status === 0 && !(request.responseURL && request.responseURL.indexOf('file:') === 0)) {
+        return;
+      }
+
+      // Prepare the response
+      var responseHeaders = 'getAllResponseHeaders' in request ? parseHeaders(request.getAllResponseHeaders()) : null;
+      var responseData = !config.responseType || config.responseType === 'text' ? request.responseText : request.response;
+      var response = {
+        data: responseData,
+        // IE sends 1223 instead of 204 (https://github.com/axios/axios/issues/201)
+        status: request.status === 1223 ? 204 : request.status,
+        statusText: request.status === 1223 ? 'No Content' : request.statusText,
+        headers: responseHeaders,
+        config: config,
+        request: request
+      };
+
+      settle(resolve, reject, response);
+
+      // Clean up request
+      request = null;
+    };
+
+    // Handle low level network errors
+    request.onerror = function handleError() {
+      // Real errors are hidden from us by the browser
+      // onerror should only fire if it's a network error
+      reject(createError('Network Error', config, null, request));
+
+      // Clean up request
+      request = null;
+    };
+
+    // Handle timeout
+    request.ontimeout = function handleTimeout() {
+      reject(createError('timeout of ' + config.timeout + 'ms exceeded', config, 'ECONNABORTED',
+        request));
+
+      // Clean up request
+      request = null;
+    };
+
+    // Add xsrf header
+    // This is only done if running in a standard browser environment.
+    // Specifically not if we're in a web worker, or react-native.
+    if (utils.isStandardBrowserEnv()) {
+      var cookies = __webpack_require__(/*! ./../helpers/cookies */ "./node_modules/axios/lib/helpers/cookies.js");
+
+      // Add xsrf header
+      var xsrfValue = (config.withCredentials || isURLSameOrigin(config.url)) && config.xsrfCookieName ?
+          cookies.read(config.xsrfCookieName) :
+          undefined;
+
+      if (xsrfValue) {
+        requestHeaders[config.xsrfHeaderName] = xsrfValue;
+      }
+    }
+
+    // Add headers to the request
+    if ('setRequestHeader' in request) {
+      utils.forEach(requestHeaders, function setRequestHeader(val, key) {
+        if (typeof requestData === 'undefined' && key.toLowerCase() === 'content-type') {
+          // Remove Content-Type if data is undefined
+          delete requestHeaders[key];
+        } else {
+          // Otherwise add header to the request
+          request.setRequestHeader(key, val);
+        }
+      });
+    }
+
+    // Add withCredentials to request if needed
+    if (config.withCredentials) {
+      request.withCredentials = true;
+    }
+
+    // Add responseType to request if needed
+    if (config.responseType) {
+      try {
+        request.responseType = config.responseType;
+      } catch (e) {
+        // Expected DOMException thrown by browsers not compatible XMLHttpRequest Level 2.
+        // But, this can be suppressed for 'json' type as it can be parsed by default 'transformResponse' function.
+        if (config.responseType !== 'json') {
+          throw e;
+        }
+      }
+    }
+
+    // Handle progress if needed
+    if (typeof config.onDownloadProgress === 'function') {
+      request.addEventListener('progress', config.onDownloadProgress);
+    }
+
+    // Not all browsers support upload events
+    if (typeof config.onUploadProgress === 'function' && request.upload) {
+      request.upload.addEventListener('progress', config.onUploadProgress);
+    }
+
+    if (config.cancelToken) {
+      // Handle cancellation
+      config.cancelToken.promise.then(function onCanceled(cancel) {
+        if (!request) {
+          return;
+        }
+
+        request.abort();
+        reject(cancel);
+        // Clean up request
+        request = null;
+      });
+    }
+
+    if (requestData === undefined) {
+      requestData = null;
+    }
+
+    // Send the request
+    request.send(requestData);
+  });
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/axios/lib/axios.js":
+/*!*****************************************!*\
+  !*** ./node_modules/axios/lib/axios.js ***!
+  \*****************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var utils = __webpack_require__(/*! ./utils */ "./node_modules/axios/lib/utils.js");
+var bind = __webpack_require__(/*! ./helpers/bind */ "./node_modules/axios/lib/helpers/bind.js");
+var Axios = __webpack_require__(/*! ./core/Axios */ "./node_modules/axios/lib/core/Axios.js");
+var defaults = __webpack_require__(/*! ./defaults */ "./node_modules/axios/lib/defaults.js");
+
+/**
+ * Create an instance of Axios
+ *
+ * @param {Object} defaultConfig The default config for the instance
+ * @return {Axios} A new instance of Axios
+ */
+function createInstance(defaultConfig) {
+  var context = new Axios(defaultConfig);
+  var instance = bind(Axios.prototype.request, context);
+
+  // Copy axios.prototype to instance
+  utils.extend(instance, Axios.prototype, context);
+
+  // Copy context to instance
+  utils.extend(instance, context);
+
+  return instance;
+}
+
+// Create the default instance to be exported
+var axios = createInstance(defaults);
+
+// Expose Axios class to allow class inheritance
+axios.Axios = Axios;
+
+// Factory for creating new instances
+axios.create = function create(instanceConfig) {
+  return createInstance(utils.merge(defaults, instanceConfig));
+};
+
+// Expose Cancel & CancelToken
+axios.Cancel = __webpack_require__(/*! ./cancel/Cancel */ "./node_modules/axios/lib/cancel/Cancel.js");
+axios.CancelToken = __webpack_require__(/*! ./cancel/CancelToken */ "./node_modules/axios/lib/cancel/CancelToken.js");
+axios.isCancel = __webpack_require__(/*! ./cancel/isCancel */ "./node_modules/axios/lib/cancel/isCancel.js");
+
+// Expose all/spread
+axios.all = function all(promises) {
+  return Promise.all(promises);
+};
+axios.spread = __webpack_require__(/*! ./helpers/spread */ "./node_modules/axios/lib/helpers/spread.js");
+
+module.exports = axios;
+
+// Allow use of default import syntax in TypeScript
+module.exports.default = axios;
+
+
+/***/ }),
+
+/***/ "./node_modules/axios/lib/cancel/Cancel.js":
+/*!*************************************************!*\
+  !*** ./node_modules/axios/lib/cancel/Cancel.js ***!
+  \*************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+ * A `Cancel` is an object that is thrown when an operation is canceled.
+ *
+ * @class
+ * @param {string=} message The message.
+ */
+function Cancel(message) {
+  this.message = message;
+}
+
+Cancel.prototype.toString = function toString() {
+  return 'Cancel' + (this.message ? ': ' + this.message : '');
+};
+
+Cancel.prototype.__CANCEL__ = true;
+
+module.exports = Cancel;
+
+
+/***/ }),
+
+/***/ "./node_modules/axios/lib/cancel/CancelToken.js":
+/*!******************************************************!*\
+  !*** ./node_modules/axios/lib/cancel/CancelToken.js ***!
+  \******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var Cancel = __webpack_require__(/*! ./Cancel */ "./node_modules/axios/lib/cancel/Cancel.js");
+
+/**
+ * A `CancelToken` is an object that can be used to request cancellation of an operation.
+ *
+ * @class
+ * @param {Function} executor The executor function.
+ */
+function CancelToken(executor) {
+  if (typeof executor !== 'function') {
+    throw new TypeError('executor must be a function.');
+  }
+
+  var resolvePromise;
+  this.promise = new Promise(function promiseExecutor(resolve) {
+    resolvePromise = resolve;
+  });
+
+  var token = this;
+  executor(function cancel(message) {
+    if (token.reason) {
+      // Cancellation has already been requested
+      return;
+    }
+
+    token.reason = new Cancel(message);
+    resolvePromise(token.reason);
+  });
+}
+
+/**
+ * Throws a `Cancel` if cancellation has been requested.
+ */
+CancelToken.prototype.throwIfRequested = function throwIfRequested() {
+  if (this.reason) {
+    throw this.reason;
+  }
+};
+
+/**
+ * Returns an object that contains a new `CancelToken` and a function that, when called,
+ * cancels the `CancelToken`.
+ */
+CancelToken.source = function source() {
+  var cancel;
+  var token = new CancelToken(function executor(c) {
+    cancel = c;
+  });
+  return {
+    token: token,
+    cancel: cancel
+  };
+};
+
+module.exports = CancelToken;
+
+
+/***/ }),
+
+/***/ "./node_modules/axios/lib/cancel/isCancel.js":
+/*!***************************************************!*\
+  !*** ./node_modules/axios/lib/cancel/isCancel.js ***!
+  \***************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+module.exports = function isCancel(value) {
+  return !!(value && value.__CANCEL__);
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/axios/lib/core/Axios.js":
+/*!**********************************************!*\
+  !*** ./node_modules/axios/lib/core/Axios.js ***!
+  \**********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var defaults = __webpack_require__(/*! ./../defaults */ "./node_modules/axios/lib/defaults.js");
+var utils = __webpack_require__(/*! ./../utils */ "./node_modules/axios/lib/utils.js");
+var InterceptorManager = __webpack_require__(/*! ./InterceptorManager */ "./node_modules/axios/lib/core/InterceptorManager.js");
+var dispatchRequest = __webpack_require__(/*! ./dispatchRequest */ "./node_modules/axios/lib/core/dispatchRequest.js");
+
+/**
+ * Create a new instance of Axios
+ *
+ * @param {Object} instanceConfig The default config for the instance
+ */
+function Axios(instanceConfig) {
+  this.defaults = instanceConfig;
+  this.interceptors = {
+    request: new InterceptorManager(),
+    response: new InterceptorManager()
+  };
+}
+
+/**
+ * Dispatch a request
+ *
+ * @param {Object} config The config specific for this request (merged with this.defaults)
+ */
+Axios.prototype.request = function request(config) {
+  /*eslint no-param-reassign:0*/
+  // Allow for axios('example/url'[, config]) a la fetch API
+  if (typeof config === 'string') {
+    config = utils.merge({
+      url: arguments[0]
+    }, arguments[1]);
+  }
+
+  config = utils.merge(defaults, {method: 'get'}, this.defaults, config);
+  config.method = config.method.toLowerCase();
+
+  // Hook up interceptors middleware
+  var chain = [dispatchRequest, undefined];
+  var promise = Promise.resolve(config);
+
+  this.interceptors.request.forEach(function unshiftRequestInterceptors(interceptor) {
+    chain.unshift(interceptor.fulfilled, interceptor.rejected);
+  });
+
+  this.interceptors.response.forEach(function pushResponseInterceptors(interceptor) {
+    chain.push(interceptor.fulfilled, interceptor.rejected);
+  });
+
+  while (chain.length) {
+    promise = promise.then(chain.shift(), chain.shift());
+  }
+
+  return promise;
+};
+
+// Provide aliases for supported request methods
+utils.forEach(['delete', 'get', 'head', 'options'], function forEachMethodNoData(method) {
+  /*eslint func-names:0*/
+  Axios.prototype[method] = function(url, config) {
+    return this.request(utils.merge(config || {}, {
+      method: method,
+      url: url
+    }));
+  };
+});
+
+utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
+  /*eslint func-names:0*/
+  Axios.prototype[method] = function(url, data, config) {
+    return this.request(utils.merge(config || {}, {
+      method: method,
+      url: url,
+      data: data
+    }));
+  };
+});
+
+module.exports = Axios;
+
+
+/***/ }),
+
+/***/ "./node_modules/axios/lib/core/InterceptorManager.js":
+/*!***********************************************************!*\
+  !*** ./node_modules/axios/lib/core/InterceptorManager.js ***!
+  \***********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var utils = __webpack_require__(/*! ./../utils */ "./node_modules/axios/lib/utils.js");
+
+function InterceptorManager() {
+  this.handlers = [];
+}
+
+/**
+ * Add a new interceptor to the stack
+ *
+ * @param {Function} fulfilled The function to handle `then` for a `Promise`
+ * @param {Function} rejected The function to handle `reject` for a `Promise`
+ *
+ * @return {Number} An ID used to remove interceptor later
+ */
+InterceptorManager.prototype.use = function use(fulfilled, rejected) {
+  this.handlers.push({
+    fulfilled: fulfilled,
+    rejected: rejected
+  });
+  return this.handlers.length - 1;
+};
+
+/**
+ * Remove an interceptor from the stack
+ *
+ * @param {Number} id The ID that was returned by `use`
+ */
+InterceptorManager.prototype.eject = function eject(id) {
+  if (this.handlers[id]) {
+    this.handlers[id] = null;
+  }
+};
+
+/**
+ * Iterate over all the registered interceptors
+ *
+ * This method is particularly useful for skipping over any
+ * interceptors that may have become `null` calling `eject`.
+ *
+ * @param {Function} fn The function to call for each interceptor
+ */
+InterceptorManager.prototype.forEach = function forEach(fn) {
+  utils.forEach(this.handlers, function forEachHandler(h) {
+    if (h !== null) {
+      fn(h);
+    }
+  });
+};
+
+module.exports = InterceptorManager;
+
+
+/***/ }),
+
+/***/ "./node_modules/axios/lib/core/createError.js":
+/*!****************************************************!*\
+  !*** ./node_modules/axios/lib/core/createError.js ***!
+  \****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var enhanceError = __webpack_require__(/*! ./enhanceError */ "./node_modules/axios/lib/core/enhanceError.js");
+
+/**
+ * Create an Error with the specified message, config, error code, request and response.
+ *
+ * @param {string} message The error message.
+ * @param {Object} config The config.
+ * @param {string} [code] The error code (for example, 'ECONNABORTED').
+ * @param {Object} [request] The request.
+ * @param {Object} [response] The response.
+ * @returns {Error} The created error.
+ */
+module.exports = function createError(message, config, code, request, response) {
+  var error = new Error(message);
+  return enhanceError(error, config, code, request, response);
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/axios/lib/core/dispatchRequest.js":
+/*!********************************************************!*\
+  !*** ./node_modules/axios/lib/core/dispatchRequest.js ***!
+  \********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var utils = __webpack_require__(/*! ./../utils */ "./node_modules/axios/lib/utils.js");
+var transformData = __webpack_require__(/*! ./transformData */ "./node_modules/axios/lib/core/transformData.js");
+var isCancel = __webpack_require__(/*! ../cancel/isCancel */ "./node_modules/axios/lib/cancel/isCancel.js");
+var defaults = __webpack_require__(/*! ../defaults */ "./node_modules/axios/lib/defaults.js");
+var isAbsoluteURL = __webpack_require__(/*! ./../helpers/isAbsoluteURL */ "./node_modules/axios/lib/helpers/isAbsoluteURL.js");
+var combineURLs = __webpack_require__(/*! ./../helpers/combineURLs */ "./node_modules/axios/lib/helpers/combineURLs.js");
+
+/**
+ * Throws a `Cancel` if cancellation has been requested.
+ */
+function throwIfCancellationRequested(config) {
+  if (config.cancelToken) {
+    config.cancelToken.throwIfRequested();
+  }
+}
+
+/**
+ * Dispatch a request to the server using the configured adapter.
+ *
+ * @param {object} config The config that is to be used for the request
+ * @returns {Promise} The Promise to be fulfilled
+ */
+module.exports = function dispatchRequest(config) {
+  throwIfCancellationRequested(config);
+
+  // Support baseURL config
+  if (config.baseURL && !isAbsoluteURL(config.url)) {
+    config.url = combineURLs(config.baseURL, config.url);
+  }
+
+  // Ensure headers exist
+  config.headers = config.headers || {};
+
+  // Transform request data
+  config.data = transformData(
+    config.data,
+    config.headers,
+    config.transformRequest
+  );
+
+  // Flatten headers
+  config.headers = utils.merge(
+    config.headers.common || {},
+    config.headers[config.method] || {},
+    config.headers || {}
+  );
+
+  utils.forEach(
+    ['delete', 'get', 'head', 'post', 'put', 'patch', 'common'],
+    function cleanHeaderConfig(method) {
+      delete config.headers[method];
+    }
+  );
+
+  var adapter = config.adapter || defaults.adapter;
+
+  return adapter(config).then(function onAdapterResolution(response) {
+    throwIfCancellationRequested(config);
+
+    // Transform response data
+    response.data = transformData(
+      response.data,
+      response.headers,
+      config.transformResponse
+    );
+
+    return response;
+  }, function onAdapterRejection(reason) {
+    if (!isCancel(reason)) {
+      throwIfCancellationRequested(config);
+
+      // Transform response data
+      if (reason && reason.response) {
+        reason.response.data = transformData(
+          reason.response.data,
+          reason.response.headers,
+          config.transformResponse
+        );
+      }
+    }
+
+    return Promise.reject(reason);
+  });
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/axios/lib/core/enhanceError.js":
+/*!*****************************************************!*\
+  !*** ./node_modules/axios/lib/core/enhanceError.js ***!
+  \*****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+ * Update an Error with the specified config, error code, and response.
+ *
+ * @param {Error} error The error to update.
+ * @param {Object} config The config.
+ * @param {string} [code] The error code (for example, 'ECONNABORTED').
+ * @param {Object} [request] The request.
+ * @param {Object} [response] The response.
+ * @returns {Error} The error.
+ */
+module.exports = function enhanceError(error, config, code, request, response) {
+  error.config = config;
+  if (code) {
+    error.code = code;
+  }
+  error.request = request;
+  error.response = response;
+  return error;
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/axios/lib/core/settle.js":
+/*!***********************************************!*\
+  !*** ./node_modules/axios/lib/core/settle.js ***!
+  \***********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var createError = __webpack_require__(/*! ./createError */ "./node_modules/axios/lib/core/createError.js");
+
+/**
+ * Resolve or reject a Promise based on response status.
+ *
+ * @param {Function} resolve A function that resolves the promise.
+ * @param {Function} reject A function that rejects the promise.
+ * @param {object} response The response.
+ */
+module.exports = function settle(resolve, reject, response) {
+  var validateStatus = response.config.validateStatus;
+  // Note: status is not exposed by XDomainRequest
+  if (!response.status || !validateStatus || validateStatus(response.status)) {
+    resolve(response);
+  } else {
+    reject(createError(
+      'Request failed with status code ' + response.status,
+      response.config,
+      null,
+      response.request,
+      response
+    ));
+  }
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/axios/lib/core/transformData.js":
+/*!******************************************************!*\
+  !*** ./node_modules/axios/lib/core/transformData.js ***!
+  \******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var utils = __webpack_require__(/*! ./../utils */ "./node_modules/axios/lib/utils.js");
+
+/**
+ * Transform the data for a request or a response
+ *
+ * @param {Object|String} data The data to be transformed
+ * @param {Array} headers The headers for the request or response
+ * @param {Array|Function} fns A single function or Array of functions
+ * @returns {*} The resulting transformed data
+ */
+module.exports = function transformData(data, headers, fns) {
+  /*eslint no-param-reassign:0*/
+  utils.forEach(fns, function transform(fn) {
+    data = fn(data, headers);
+  });
+
+  return data;
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/axios/lib/defaults.js":
+/*!********************************************!*\
+  !*** ./node_modules/axios/lib/defaults.js ***!
+  \********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {
+
+var utils = __webpack_require__(/*! ./utils */ "./node_modules/axios/lib/utils.js");
+var normalizeHeaderName = __webpack_require__(/*! ./helpers/normalizeHeaderName */ "./node_modules/axios/lib/helpers/normalizeHeaderName.js");
+
+var DEFAULT_CONTENT_TYPE = {
+  'Content-Type': 'application/x-www-form-urlencoded'
+};
+
+function setContentTypeIfUnset(headers, value) {
+  if (!utils.isUndefined(headers) && utils.isUndefined(headers['Content-Type'])) {
+    headers['Content-Type'] = value;
+  }
+}
+
+function getDefaultAdapter() {
+  var adapter;
+  if (typeof XMLHttpRequest !== 'undefined') {
+    // For browsers use XHR adapter
+    adapter = __webpack_require__(/*! ./adapters/xhr */ "./node_modules/axios/lib/adapters/xhr.js");
+  } else if (typeof process !== 'undefined') {
+    // For node use HTTP adapter
+    adapter = __webpack_require__(/*! ./adapters/http */ "./node_modules/axios/lib/adapters/xhr.js");
+  }
+  return adapter;
+}
+
+var defaults = {
+  adapter: getDefaultAdapter(),
+
+  transformRequest: [function transformRequest(data, headers) {
+    normalizeHeaderName(headers, 'Content-Type');
+    if (utils.isFormData(data) ||
+      utils.isArrayBuffer(data) ||
+      utils.isBuffer(data) ||
+      utils.isStream(data) ||
+      utils.isFile(data) ||
+      utils.isBlob(data)
+    ) {
+      return data;
+    }
+    if (utils.isArrayBufferView(data)) {
+      return data.buffer;
+    }
+    if (utils.isURLSearchParams(data)) {
+      setContentTypeIfUnset(headers, 'application/x-www-form-urlencoded;charset=utf-8');
+      return data.toString();
+    }
+    if (utils.isObject(data)) {
+      setContentTypeIfUnset(headers, 'application/json;charset=utf-8');
+      return JSON.stringify(data);
+    }
+    return data;
+  }],
+
+  transformResponse: [function transformResponse(data) {
+    /*eslint no-param-reassign:0*/
+    if (typeof data === 'string') {
+      try {
+        data = JSON.parse(data);
+      } catch (e) { /* Ignore */ }
+    }
+    return data;
+  }],
+
+  /**
+   * A timeout in milliseconds to abort a request. If set to 0 (default) a
+   * timeout is not created.
+   */
+  timeout: 0,
+
+  xsrfCookieName: 'XSRF-TOKEN',
+  xsrfHeaderName: 'X-XSRF-TOKEN',
+
+  maxContentLength: -1,
+
+  validateStatus: function validateStatus(status) {
+    return status >= 200 && status < 300;
+  }
+};
+
+defaults.headers = {
+  common: {
+    'Accept': 'application/json, text/plain, */*'
+  }
+};
+
+utils.forEach(['delete', 'get', 'head'], function forEachMethodNoData(method) {
+  defaults.headers[method] = {};
+});
+
+utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
+  defaults.headers[method] = utils.merge(DEFAULT_CONTENT_TYPE);
+});
+
+module.exports = defaults;
+
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../process/browser.js */ "./node_modules/process/browser.js")))
+
+/***/ }),
+
+/***/ "./node_modules/axios/lib/helpers/bind.js":
+/*!************************************************!*\
+  !*** ./node_modules/axios/lib/helpers/bind.js ***!
+  \************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+module.exports = function bind(fn, thisArg) {
+  return function wrap() {
+    var args = new Array(arguments.length);
+    for (var i = 0; i < args.length; i++) {
+      args[i] = arguments[i];
+    }
+    return fn.apply(thisArg, args);
+  };
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/axios/lib/helpers/btoa.js":
+/*!************************************************!*\
+  !*** ./node_modules/axios/lib/helpers/btoa.js ***!
+  \************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+// btoa polyfill for IE<10 courtesy https://github.com/davidchambers/Base64.js
+
+var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
+
+function E() {
+  this.message = 'String contains an invalid character';
+}
+E.prototype = new Error;
+E.prototype.code = 5;
+E.prototype.name = 'InvalidCharacterError';
+
+function btoa(input) {
+  var str = String(input);
+  var output = '';
+  for (
+    // initialize result and counter
+    var block, charCode, idx = 0, map = chars;
+    // if the next str index does not exist:
+    //   change the mapping table to "="
+    //   check if d has no fractional digits
+    str.charAt(idx | 0) || (map = '=', idx % 1);
+    // "8 - idx % 1 * 8" generates the sequence 2, 4, 6, 8
+    output += map.charAt(63 & block >> 8 - idx % 1 * 8)
+  ) {
+    charCode = str.charCodeAt(idx += 3 / 4);
+    if (charCode > 0xFF) {
+      throw new E();
+    }
+    block = block << 8 | charCode;
+  }
+  return output;
+}
+
+module.exports = btoa;
+
+
+/***/ }),
+
+/***/ "./node_modules/axios/lib/helpers/buildURL.js":
+/*!****************************************************!*\
+  !*** ./node_modules/axios/lib/helpers/buildURL.js ***!
+  \****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var utils = __webpack_require__(/*! ./../utils */ "./node_modules/axios/lib/utils.js");
+
+function encode(val) {
+  return encodeURIComponent(val).
+    replace(/%40/gi, '@').
+    replace(/%3A/gi, ':').
+    replace(/%24/g, '$').
+    replace(/%2C/gi, ',').
+    replace(/%20/g, '+').
+    replace(/%5B/gi, '[').
+    replace(/%5D/gi, ']');
+}
+
+/**
+ * Build a URL by appending params to the end
+ *
+ * @param {string} url The base of the url (e.g., http://www.google.com)
+ * @param {object} [params] The params to be appended
+ * @returns {string} The formatted url
+ */
+module.exports = function buildURL(url, params, paramsSerializer) {
+  /*eslint no-param-reassign:0*/
+  if (!params) {
+    return url;
+  }
+
+  var serializedParams;
+  if (paramsSerializer) {
+    serializedParams = paramsSerializer(params);
+  } else if (utils.isURLSearchParams(params)) {
+    serializedParams = params.toString();
+  } else {
+    var parts = [];
+
+    utils.forEach(params, function serialize(val, key) {
+      if (val === null || typeof val === 'undefined') {
+        return;
+      }
+
+      if (utils.isArray(val)) {
+        key = key + '[]';
+      } else {
+        val = [val];
+      }
+
+      utils.forEach(val, function parseValue(v) {
+        if (utils.isDate(v)) {
+          v = v.toISOString();
+        } else if (utils.isObject(v)) {
+          v = JSON.stringify(v);
+        }
+        parts.push(encode(key) + '=' + encode(v));
+      });
+    });
+
+    serializedParams = parts.join('&');
+  }
+
+  if (serializedParams) {
+    url += (url.indexOf('?') === -1 ? '?' : '&') + serializedParams;
+  }
+
+  return url;
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/axios/lib/helpers/combineURLs.js":
+/*!*******************************************************!*\
+  !*** ./node_modules/axios/lib/helpers/combineURLs.js ***!
+  \*******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+ * Creates a new URL by combining the specified URLs
+ *
+ * @param {string} baseURL The base URL
+ * @param {string} relativeURL The relative URL
+ * @returns {string} The combined URL
+ */
+module.exports = function combineURLs(baseURL, relativeURL) {
+  return relativeURL
+    ? baseURL.replace(/\/+$/, '') + '/' + relativeURL.replace(/^\/+/, '')
+    : baseURL;
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/axios/lib/helpers/cookies.js":
+/*!***************************************************!*\
+  !*** ./node_modules/axios/lib/helpers/cookies.js ***!
+  \***************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var utils = __webpack_require__(/*! ./../utils */ "./node_modules/axios/lib/utils.js");
+
+module.exports = (
+  utils.isStandardBrowserEnv() ?
+
+  // Standard browser envs support document.cookie
+  (function standardBrowserEnv() {
+    return {
+      write: function write(name, value, expires, path, domain, secure) {
+        var cookie = [];
+        cookie.push(name + '=' + encodeURIComponent(value));
+
+        if (utils.isNumber(expires)) {
+          cookie.push('expires=' + new Date(expires).toGMTString());
+        }
+
+        if (utils.isString(path)) {
+          cookie.push('path=' + path);
+        }
+
+        if (utils.isString(domain)) {
+          cookie.push('domain=' + domain);
+        }
+
+        if (secure === true) {
+          cookie.push('secure');
+        }
+
+        document.cookie = cookie.join('; ');
+      },
+
+      read: function read(name) {
+        var match = document.cookie.match(new RegExp('(^|;\\s*)(' + name + ')=([^;]*)'));
+        return (match ? decodeURIComponent(match[3]) : null);
+      },
+
+      remove: function remove(name) {
+        this.write(name, '', Date.now() - 86400000);
+      }
+    };
+  })() :
+
+  // Non standard browser env (web workers, react-native) lack needed support.
+  (function nonStandardBrowserEnv() {
+    return {
+      write: function write() {},
+      read: function read() { return null; },
+      remove: function remove() {}
+    };
+  })()
+);
+
+
+/***/ }),
+
+/***/ "./node_modules/axios/lib/helpers/isAbsoluteURL.js":
+/*!*********************************************************!*\
+  !*** ./node_modules/axios/lib/helpers/isAbsoluteURL.js ***!
+  \*********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+ * Determines whether the specified URL is absolute
+ *
+ * @param {string} url The URL to test
+ * @returns {boolean} True if the specified URL is absolute, otherwise false
+ */
+module.exports = function isAbsoluteURL(url) {
+  // A URL is considered absolute if it begins with "<scheme>://" or "//" (protocol-relative URL).
+  // RFC 3986 defines scheme name as a sequence of characters beginning with a letter and followed
+  // by any combination of letters, digits, plus, period, or hyphen.
+  return /^([a-z][a-z\d\+\-\.]*:)?\/\//i.test(url);
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/axios/lib/helpers/isURLSameOrigin.js":
+/*!***********************************************************!*\
+  !*** ./node_modules/axios/lib/helpers/isURLSameOrigin.js ***!
+  \***********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var utils = __webpack_require__(/*! ./../utils */ "./node_modules/axios/lib/utils.js");
+
+module.exports = (
+  utils.isStandardBrowserEnv() ?
+
+  // Standard browser envs have full support of the APIs needed to test
+  // whether the request URL is of the same origin as current location.
+  (function standardBrowserEnv() {
+    var msie = /(msie|trident)/i.test(navigator.userAgent);
+    var urlParsingNode = document.createElement('a');
+    var originURL;
+
+    /**
+    * Parse a URL to discover it's components
+    *
+    * @param {String} url The URL to be parsed
+    * @returns {Object}
+    */
+    function resolveURL(url) {
+      var href = url;
+
+      if (msie) {
+        // IE needs attribute set twice to normalize properties
+        urlParsingNode.setAttribute('href', href);
+        href = urlParsingNode.href;
+      }
+
+      urlParsingNode.setAttribute('href', href);
+
+      // urlParsingNode provides the UrlUtils interface - http://url.spec.whatwg.org/#urlutils
+      return {
+        href: urlParsingNode.href,
+        protocol: urlParsingNode.protocol ? urlParsingNode.protocol.replace(/:$/, '') : '',
+        host: urlParsingNode.host,
+        search: urlParsingNode.search ? urlParsingNode.search.replace(/^\?/, '') : '',
+        hash: urlParsingNode.hash ? urlParsingNode.hash.replace(/^#/, '') : '',
+        hostname: urlParsingNode.hostname,
+        port: urlParsingNode.port,
+        pathname: (urlParsingNode.pathname.charAt(0) === '/') ?
+                  urlParsingNode.pathname :
+                  '/' + urlParsingNode.pathname
+      };
+    }
+
+    originURL = resolveURL(window.location.href);
+
+    /**
+    * Determine if a URL shares the same origin as the current location
+    *
+    * @param {String} requestURL The URL to test
+    * @returns {boolean} True if URL shares the same origin, otherwise false
+    */
+    return function isURLSameOrigin(requestURL) {
+      var parsed = (utils.isString(requestURL)) ? resolveURL(requestURL) : requestURL;
+      return (parsed.protocol === originURL.protocol &&
+            parsed.host === originURL.host);
+    };
+  })() :
+
+  // Non standard browser envs (web workers, react-native) lack needed support.
+  (function nonStandardBrowserEnv() {
+    return function isURLSameOrigin() {
+      return true;
+    };
+  })()
+);
+
+
+/***/ }),
+
+/***/ "./node_modules/axios/lib/helpers/normalizeHeaderName.js":
+/*!***************************************************************!*\
+  !*** ./node_modules/axios/lib/helpers/normalizeHeaderName.js ***!
+  \***************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var utils = __webpack_require__(/*! ../utils */ "./node_modules/axios/lib/utils.js");
+
+module.exports = function normalizeHeaderName(headers, normalizedName) {
+  utils.forEach(headers, function processHeader(value, name) {
+    if (name !== normalizedName && name.toUpperCase() === normalizedName.toUpperCase()) {
+      headers[normalizedName] = value;
+      delete headers[name];
+    }
+  });
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/axios/lib/helpers/parseHeaders.js":
+/*!********************************************************!*\
+  !*** ./node_modules/axios/lib/helpers/parseHeaders.js ***!
+  \********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var utils = __webpack_require__(/*! ./../utils */ "./node_modules/axios/lib/utils.js");
+
+// Headers whose duplicates are ignored by node
+// c.f. https://nodejs.org/api/http.html#http_message_headers
+var ignoreDuplicateOf = [
+  'age', 'authorization', 'content-length', 'content-type', 'etag',
+  'expires', 'from', 'host', 'if-modified-since', 'if-unmodified-since',
+  'last-modified', 'location', 'max-forwards', 'proxy-authorization',
+  'referer', 'retry-after', 'user-agent'
+];
+
+/**
+ * Parse headers into an object
+ *
+ * ```
+ * Date: Wed, 27 Aug 2014 08:58:49 GMT
+ * Content-Type: application/json
+ * Connection: keep-alive
+ * Transfer-Encoding: chunked
+ * ```
+ *
+ * @param {String} headers Headers needing to be parsed
+ * @returns {Object} Headers parsed into an object
+ */
+module.exports = function parseHeaders(headers) {
+  var parsed = {};
+  var key;
+  var val;
+  var i;
+
+  if (!headers) { return parsed; }
+
+  utils.forEach(headers.split('\n'), function parser(line) {
+    i = line.indexOf(':');
+    key = utils.trim(line.substr(0, i)).toLowerCase();
+    val = utils.trim(line.substr(i + 1));
+
+    if (key) {
+      if (parsed[key] && ignoreDuplicateOf.indexOf(key) >= 0) {
+        return;
+      }
+      if (key === 'set-cookie') {
+        parsed[key] = (parsed[key] ? parsed[key] : []).concat([val]);
+      } else {
+        parsed[key] = parsed[key] ? parsed[key] + ', ' + val : val;
+      }
+    }
+  });
+
+  return parsed;
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/axios/lib/helpers/spread.js":
+/*!**************************************************!*\
+  !*** ./node_modules/axios/lib/helpers/spread.js ***!
+  \**************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+ * Syntactic sugar for invoking a function and expanding an array for arguments.
+ *
+ * Common use case would be to use `Function.prototype.apply`.
+ *
+ *  ```js
+ *  function f(x, y, z) {}
+ *  var args = [1, 2, 3];
+ *  f.apply(null, args);
+ *  ```
+ *
+ * With `spread` this example can be re-written.
+ *
+ *  ```js
+ *  spread(function(x, y, z) {})([1, 2, 3]);
+ *  ```
+ *
+ * @param {Function} callback
+ * @returns {Function}
+ */
+module.exports = function spread(callback) {
+  return function wrap(arr) {
+    return callback.apply(null, arr);
+  };
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/axios/lib/utils.js":
+/*!*****************************************!*\
+  !*** ./node_modules/axios/lib/utils.js ***!
+  \*****************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var bind = __webpack_require__(/*! ./helpers/bind */ "./node_modules/axios/lib/helpers/bind.js");
+var isBuffer = __webpack_require__(/*! is-buffer */ "./node_modules/is-buffer/index.js");
+
+/*global toString:true*/
+
+// utils is a library of generic helper functions non-specific to axios
+
+var toString = Object.prototype.toString;
+
+/**
+ * Determine if a value is an Array
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is an Array, otherwise false
+ */
+function isArray(val) {
+  return toString.call(val) === '[object Array]';
+}
+
+/**
+ * Determine if a value is an ArrayBuffer
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is an ArrayBuffer, otherwise false
+ */
+function isArrayBuffer(val) {
+  return toString.call(val) === '[object ArrayBuffer]';
+}
+
+/**
+ * Determine if a value is a FormData
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is an FormData, otherwise false
+ */
+function isFormData(val) {
+  return (typeof FormData !== 'undefined') && (val instanceof FormData);
+}
+
+/**
+ * Determine if a value is a view on an ArrayBuffer
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is a view on an ArrayBuffer, otherwise false
+ */
+function isArrayBufferView(val) {
+  var result;
+  if ((typeof ArrayBuffer !== 'undefined') && (ArrayBuffer.isView)) {
+    result = ArrayBuffer.isView(val);
+  } else {
+    result = (val) && (val.buffer) && (val.buffer instanceof ArrayBuffer);
+  }
+  return result;
+}
+
+/**
+ * Determine if a value is a String
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is a String, otherwise false
+ */
+function isString(val) {
+  return typeof val === 'string';
+}
+
+/**
+ * Determine if a value is a Number
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is a Number, otherwise false
+ */
+function isNumber(val) {
+  return typeof val === 'number';
+}
+
+/**
+ * Determine if a value is undefined
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if the value is undefined, otherwise false
+ */
+function isUndefined(val) {
+  return typeof val === 'undefined';
+}
+
+/**
+ * Determine if a value is an Object
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is an Object, otherwise false
+ */
+function isObject(val) {
+  return val !== null && typeof val === 'object';
+}
+
+/**
+ * Determine if a value is a Date
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is a Date, otherwise false
+ */
+function isDate(val) {
+  return toString.call(val) === '[object Date]';
+}
+
+/**
+ * Determine if a value is a File
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is a File, otherwise false
+ */
+function isFile(val) {
+  return toString.call(val) === '[object File]';
+}
+
+/**
+ * Determine if a value is a Blob
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is a Blob, otherwise false
+ */
+function isBlob(val) {
+  return toString.call(val) === '[object Blob]';
+}
+
+/**
+ * Determine if a value is a Function
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is a Function, otherwise false
+ */
+function isFunction(val) {
+  return toString.call(val) === '[object Function]';
+}
+
+/**
+ * Determine if a value is a Stream
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is a Stream, otherwise false
+ */
+function isStream(val) {
+  return isObject(val) && isFunction(val.pipe);
+}
+
+/**
+ * Determine if a value is a URLSearchParams object
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is a URLSearchParams object, otherwise false
+ */
+function isURLSearchParams(val) {
+  return typeof URLSearchParams !== 'undefined' && val instanceof URLSearchParams;
+}
+
+/**
+ * Trim excess whitespace off the beginning and end of a string
+ *
+ * @param {String} str The String to trim
+ * @returns {String} The String freed of excess whitespace
+ */
+function trim(str) {
+  return str.replace(/^\s*/, '').replace(/\s*$/, '');
+}
+
+/**
+ * Determine if we're running in a standard browser environment
+ *
+ * This allows axios to run in a web worker, and react-native.
+ * Both environments support XMLHttpRequest, but not fully standard globals.
+ *
+ * web workers:
+ *  typeof window -> undefined
+ *  typeof document -> undefined
+ *
+ * react-native:
+ *  navigator.product -> 'ReactNative'
+ */
+function isStandardBrowserEnv() {
+  if (typeof navigator !== 'undefined' && navigator.product === 'ReactNative') {
+    return false;
+  }
+  return (
+    typeof window !== 'undefined' &&
+    typeof document !== 'undefined'
+  );
+}
+
+/**
+ * Iterate over an Array or an Object invoking a function for each item.
+ *
+ * If `obj` is an Array callback will be called passing
+ * the value, index, and complete array for each item.
+ *
+ * If 'obj' is an Object callback will be called passing
+ * the value, key, and complete object for each property.
+ *
+ * @param {Object|Array} obj The object to iterate
+ * @param {Function} fn The callback to invoke for each item
+ */
+function forEach(obj, fn) {
+  // Don't bother if no value provided
+  if (obj === null || typeof obj === 'undefined') {
+    return;
+  }
+
+  // Force an array if not already something iterable
+  if (typeof obj !== 'object') {
+    /*eslint no-param-reassign:0*/
+    obj = [obj];
+  }
+
+  if (isArray(obj)) {
+    // Iterate over array values
+    for (var i = 0, l = obj.length; i < l; i++) {
+      fn.call(null, obj[i], i, obj);
+    }
+  } else {
+    // Iterate over object keys
+    for (var key in obj) {
+      if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        fn.call(null, obj[key], key, obj);
+      }
+    }
+  }
+}
+
+/**
+ * Accepts varargs expecting each argument to be an object, then
+ * immutably merges the properties of each object and returns result.
+ *
+ * When multiple objects contain the same key the later object in
+ * the arguments list will take precedence.
+ *
+ * Example:
+ *
+ * ```js
+ * var result = merge({foo: 123}, {foo: 456});
+ * console.log(result.foo); // outputs 456
+ * ```
+ *
+ * @param {Object} obj1 Object to merge
+ * @returns {Object} Result of all merge properties
+ */
+function merge(/* obj1, obj2, obj3, ... */) {
+  var result = {};
+  function assignValue(val, key) {
+    if (typeof result[key] === 'object' && typeof val === 'object') {
+      result[key] = merge(result[key], val);
+    } else {
+      result[key] = val;
+    }
+  }
+
+  for (var i = 0, l = arguments.length; i < l; i++) {
+    forEach(arguments[i], assignValue);
+  }
+  return result;
+}
+
+/**
+ * Extends object a by mutably adding to it the properties of object b.
+ *
+ * @param {Object} a The object to be extended
+ * @param {Object} b The object to copy properties from
+ * @param {Object} thisArg The object to bind function to
+ * @return {Object} The resulting value of object a
+ */
+function extend(a, b, thisArg) {
+  forEach(b, function assignValue(val, key) {
+    if (thisArg && typeof val === 'function') {
+      a[key] = bind(val, thisArg);
+    } else {
+      a[key] = val;
+    }
+  });
+  return a;
+}
+
+module.exports = {
+  isArray: isArray,
+  isArrayBuffer: isArrayBuffer,
+  isBuffer: isBuffer,
+  isFormData: isFormData,
+  isArrayBufferView: isArrayBufferView,
+  isString: isString,
+  isNumber: isNumber,
+  isObject: isObject,
+  isUndefined: isUndefined,
+  isDate: isDate,
+  isFile: isFile,
+  isBlob: isBlob,
+  isFunction: isFunction,
+  isStream: isStream,
+  isURLSearchParams: isURLSearchParams,
+  isStandardBrowserEnv: isStandardBrowserEnv,
+  forEach: forEach,
+  merge: merge,
+  extend: extend,
+  trim: trim
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/index.js??ref--7!./public/glib/src/style.css":
+/*!*********************************************************************!*\
+  !*** ./node_modules/css-loader??ref--7!./public/glib/src/style.css ***!
+  \*********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "* {\r\n  margin: 0;\r\n  padding: 0;\r\n  box-sizing: border-box;\r\n}\r\n\r\nbody {\r\n  width: 100vw;\r\n  height: 100vh;\r\n}\r\n\r\n#root, #canvas {\r\n  width: 100%;\r\n  height: 100%;\r\n}\r\n\r\n#canvas {\r\n  position: absolute;\r\n  top: 0;\r\n  left: 0;\r\n}\r\n", ""]);
+
+// exports
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/lib/css-base.js":
+/*!*************************************************!*\
+  !*** ./node_modules/css-loader/lib/css-base.js ***!
+  \*************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+/*
+	MIT License http://www.opensource.org/licenses/mit-license.php
+	Author Tobias Koppers @sokra
+*/
+// css base code, injected by the css-loader
+module.exports = function(useSourceMap) {
+	var list = [];
+
+	// return the list of modules as css string
+	list.toString = function toString() {
+		return this.map(function (item) {
+			var content = cssWithMappingToString(item, useSourceMap);
+			if(item[2]) {
+				return "@media " + item[2] + "{" + content + "}";
+			} else {
+				return content;
+			}
+		}).join("");
+	};
+
+	// import a list of modules into the list
+	list.i = function(modules, mediaQuery) {
+		if(typeof modules === "string")
+			modules = [[null, modules, ""]];
+		var alreadyImportedModules = {};
+		for(var i = 0; i < this.length; i++) {
+			var id = this[i][0];
+			if(typeof id === "number")
+				alreadyImportedModules[id] = true;
+		}
+		for(i = 0; i < modules.length; i++) {
+			var item = modules[i];
+			// skip already imported module
+			// this implementation is not 100% perfect for weird media query combinations
+			//  when a module is imported multiple times with different media queries.
+			//  I hope this will never occur (Hey this way we have smaller bundles)
+			if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
+				if(mediaQuery && !item[2]) {
+					item[2] = mediaQuery;
+				} else if(mediaQuery) {
+					item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
+				}
+				list.push(item);
+			}
+		}
+	};
+	return list;
+};
+
+function cssWithMappingToString(item, useSourceMap) {
+	var content = item[1] || '';
+	var cssMapping = item[3];
+	if (!cssMapping) {
+		return content;
+	}
+
+	if (useSourceMap && typeof btoa === 'function') {
+		var sourceMapping = toComment(cssMapping);
+		var sourceURLs = cssMapping.sources.map(function (source) {
+			return '/*# sourceURL=' + cssMapping.sourceRoot + source + ' */'
+		});
+
+		return [content].concat(sourceURLs).concat([sourceMapping]).join('\n');
+	}
+
+	return [content].join('\n');
+}
+
+// Adapted from convert-source-map (MIT)
+function toComment(sourceMap) {
+	// eslint-disable-next-line no-undef
+	var base64 = btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap))));
+	var data = 'sourceMappingURL=data:application/json;charset=utf-8;base64,' + base64;
+
+	return '/*# ' + data + ' */';
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/is-buffer/index.js":
+/*!*****************************************!*\
+  !*** ./node_modules/is-buffer/index.js ***!
+  \*****************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
 /*!
  * Determine if an object is a Buffer
  *
  * @author   Feross Aboukhadijeh <https://feross.org>
  * @license  MIT
  */
-t.exports=function(t){return null!=t&&(n(t)||function(t){return"function"==typeof t.readFloatLE&&"function"==typeof t.slice&&n(t.slice(0,0))}(t)||!!t._isBuffer)}},function(t,e,n){"use strict";var r=n(0),i=n(8),o=n(42),s=n(2);function u(t){var e=new o(t),n=i(o.prototype.request,e);return r.extend(n,o.prototype,e),r.extend(n,e),n}var a=u(s);a.Axios=o,a.create=function(t){return u(r.merge(s,t))},a.Cancel=n(4),a.CancelToken=n(27),a.isCancel=n(5),a.all=function(t){return Promise.all(t)},a.spread=n(26),t.exports=a,t.exports.default=a},function(t,e,n){t.exports=n(44)},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var r=function(){function t(t,e){for(var n=0;n<e.length;n++){var r=e[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(t,r.key,r)}}return function(e,n,r){return n&&t(e.prototype,n),r&&t(e,r),e}}(),i=u(n(45)),o=u(n(25)),s=u(n(14));function u(t){return t&&t.__esModule?t:{default:t}}i.default.defaults.baseURL=window.location.origin+"/api/glib";var a=function(){function t(){!function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}(this,t),this.resources=new Map,this.resourcesLoading=new Map,this.loading=!1}return r(t,[{key:"getResource",value:function(t){if(this.resources.has(t))return this.resources.get(t);this.resourcesLoading.has(t)||this.loadResource(this.createResource(t))}},{key:"createResource",value:function(t){switch(t.slice(t.indexOf("."),t.length)){case".obj":return new o.default(t);case".png":return new s.default(t);default:console.error("No resource for file width extension "+t)}}},{key:"loadResource",value:function(t){var e=this;this.resourcesLoading.set(t.url,t),i.default.get(t.url,{headers:{accept:"image/png"}}).then(function(n){t.constructor.parse(t,n.data),e.resources.set(t.url,t),e.resourcesLoading.delete(t.url),t.img&&document.getElementById("root").appendChild(t.img)}).catch(function(n){e.resourcesLoading.delete(t.url),console.error("Unable to load resource "+t.url+" "+n)})}}]),t}();e.default=a},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var r=function(){function t(t,e){for(var n=0;n<e.length;n++){var r=e[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(t,r.key,r)}}return function(e,n,r){return n&&t(e.prototype,n),r&&t(e,r),e}}();var i=function(){function t(e,n){!function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}(this,t),this.children=[],this.components=[],this.scene=e,this.parent=n}return r(t,[{key:"addChild",value:function(){var e=new t(this.scene,this);return this.scene.addToNodeRegister(e),this.children.push(e),e}},{key:"removeChild",value:function(t){t.scene=null,t.parent=null,this.scene.removeFromNodeRegister(t),this.children.splice(this.children.indexOf(t),1)}},{key:"addComponent",value:function(t){var e=new[t];return this.scene.addToComponentRegister(e),this.components.push(e),e}},{key:"removeComponent",value:function(t){this.scene.removeFromComponentRegister(t),this.components.splice(this.components.indexOf(t),1)}},{key:"remove",value:function(){var t=!0,e=!1,n=void 0;try{for(var r,i=this.children[Symbol.iterator]();!(t=(r=i.next()).done);t=!0){r.value.remove()}}catch(t){e=!0,n=t}finally{try{!t&&i.return&&i.return()}finally{if(e)throw n}}for(;this.components.length>0;)this.components[this.components.length-1].remove();this.parent.removeChild(this)}},{key:"walkEnabled",value:function(t){var e=!0,n=!1,r=void 0;try{for(var i,o=this.children[Symbol.iterator]();!(e=(i=o.next()).done);e=!0){i.value.walkEnabled(t),t(this)}}catch(t){n=!0,r=t}finally{try{!e&&o.return&&o.return()}finally{if(n)throw r}}}}]),t}();e.default=i},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var r=function(){function t(t,e){for(var n=0;n<e.length;n++){var r=e[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(t,r.key,r)}}return function(e,n,r){return n&&t(e.prototype,n),r&&t(e,r),e}}(),i=s(n(47)),o=s(n(46));function s(t){return t&&t.__esModule?t:{default:t}}var u=function(t){function e(){!function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}(this,e);var t=function(t,e){if(!t)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return!e||"object"!=typeof e&&"function"!=typeof e?t:e}(this,(e.__proto__||Object.getPrototypeOf(e)).call(this));return t.resourceLoader=new o.default,t.scene=t,t.nodeRegister=[],t.componentRegister=[],t}return function(t,e){if("function"!=typeof e&&null!==e)throw new TypeError("Super expression must either be null or a function, not "+typeof e);t.prototype=Object.create(e&&e.prototype,{constructor:{value:t,enumerable:!1,writable:!0,configurable:!0}}),e&&(Object.setPrototypeOf?Object.setPrototypeOf(t,e):t.__proto__=e)}(e,i.default),r(e,[{key:"getResource",value:function(t){return this.resourceLoader.getResource(t)}},{key:"addToNodeRegister",value:function(t){this.nodeRegister.push(t)}},{key:"removeFromNodeRegister",value:function(t){this.nodeRegister.splice(this.nodeRegister.indexOf(t),1)}},{key:"addToComponentRegister",value:function(t){this.componentRegister.push(t)}},{key:"removeFromComponentRegister",value:function(t){this.componentRegister.splice(this.componentRegister.indexOf(t),1)}},{key:"remove",value:function(){var t=!0,e=!1,n=void 0;try{for(var r,i=this.children[Symbol.iterator]();!(t=(r=i.next()).done);t=!0){r.value.remove()}}catch(t){e=!0,n=t}finally{try{!t&&i.return&&i.return()}finally{if(e)throw n}}for(;this.components.length>0;)this.components[this.components.length-1].remove()}}]),e}();e.default=u},function(t,e,n){"use strict";var r,i=n(48),o=(r=i)&&r.__esModule?r:{default:r};n(13);var s=new o.default;s.addChild();s.getResource("monkey.obj"),s.getResource("puppy.png")}]);
+
+// The _isBuffer check is for Safari 5-7 support, because it's missing
+// Object.prototype.constructor. Remove this eventually
+module.exports = function (obj) {
+  return obj != null && (isBuffer(obj) || isSlowBuffer(obj) || !!obj._isBuffer)
+}
+
+function isBuffer (obj) {
+  return !!obj.constructor && typeof obj.constructor.isBuffer === 'function' && obj.constructor.isBuffer(obj)
+}
+
+// For Node v0.10 support. Remove this eventually.
+function isSlowBuffer (obj) {
+  return typeof obj.readFloatLE === 'function' && typeof obj.slice === 'function' && isBuffer(obj.slice(0, 0))
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/process/browser.js":
+/*!*****************************************!*\
+  !*** ./node_modules/process/browser.js ***!
+  \*****************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+// shim for using process in browser
+var process = module.exports = {};
+
+// cached from whatever global is present so that test runners that stub it
+// don't break things.  But we need to wrap it in a try catch in case it is
+// wrapped in strict mode code which doesn't define any globals.  It's inside a
+// function because try/catches deoptimize in certain engines.
+
+var cachedSetTimeout;
+var cachedClearTimeout;
+
+function defaultSetTimout() {
+    throw new Error('setTimeout has not been defined');
+}
+function defaultClearTimeout () {
+    throw new Error('clearTimeout has not been defined');
+}
+(function () {
+    try {
+        if (typeof setTimeout === 'function') {
+            cachedSetTimeout = setTimeout;
+        } else {
+            cachedSetTimeout = defaultSetTimout;
+        }
+    } catch (e) {
+        cachedSetTimeout = defaultSetTimout;
+    }
+    try {
+        if (typeof clearTimeout === 'function') {
+            cachedClearTimeout = clearTimeout;
+        } else {
+            cachedClearTimeout = defaultClearTimeout;
+        }
+    } catch (e) {
+        cachedClearTimeout = defaultClearTimeout;
+    }
+} ())
+function runTimeout(fun) {
+    if (cachedSetTimeout === setTimeout) {
+        //normal enviroments in sane situations
+        return setTimeout(fun, 0);
+    }
+    // if setTimeout wasn't available but was latter defined
+    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
+        cachedSetTimeout = setTimeout;
+        return setTimeout(fun, 0);
+    }
+    try {
+        // when when somebody has screwed with setTimeout but no I.E. maddness
+        return cachedSetTimeout(fun, 0);
+    } catch(e){
+        try {
+            // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
+            return cachedSetTimeout.call(null, fun, 0);
+        } catch(e){
+            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
+            return cachedSetTimeout.call(this, fun, 0);
+        }
+    }
+
+
+}
+function runClearTimeout(marker) {
+    if (cachedClearTimeout === clearTimeout) {
+        //normal enviroments in sane situations
+        return clearTimeout(marker);
+    }
+    // if clearTimeout wasn't available but was latter defined
+    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
+        cachedClearTimeout = clearTimeout;
+        return clearTimeout(marker);
+    }
+    try {
+        // when when somebody has screwed with setTimeout but no I.E. maddness
+        return cachedClearTimeout(marker);
+    } catch (e){
+        try {
+            // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
+            return cachedClearTimeout.call(null, marker);
+        } catch (e){
+            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
+            // Some versions of I.E. have different rules for clearTimeout vs setTimeout
+            return cachedClearTimeout.call(this, marker);
+        }
+    }
+
+
+
+}
+var queue = [];
+var draining = false;
+var currentQueue;
+var queueIndex = -1;
+
+function cleanUpNextTick() {
+    if (!draining || !currentQueue) {
+        return;
+    }
+    draining = false;
+    if (currentQueue.length) {
+        queue = currentQueue.concat(queue);
+    } else {
+        queueIndex = -1;
+    }
+    if (queue.length) {
+        drainQueue();
+    }
+}
+
+function drainQueue() {
+    if (draining) {
+        return;
+    }
+    var timeout = runTimeout(cleanUpNextTick);
+    draining = true;
+
+    var len = queue.length;
+    while(len) {
+        currentQueue = queue;
+        queue = [];
+        while (++queueIndex < len) {
+            if (currentQueue) {
+                currentQueue[queueIndex].run();
+            }
+        }
+        queueIndex = -1;
+        len = queue.length;
+    }
+    currentQueue = null;
+    draining = false;
+    runClearTimeout(timeout);
+}
+
+process.nextTick = function (fun) {
+    var args = new Array(arguments.length - 1);
+    if (arguments.length > 1) {
+        for (var i = 1; i < arguments.length; i++) {
+            args[i - 1] = arguments[i];
+        }
+    }
+    queue.push(new Item(fun, args));
+    if (queue.length === 1 && !draining) {
+        runTimeout(drainQueue);
+    }
+};
+
+// v8 likes predictible objects
+function Item(fun, array) {
+    this.fun = fun;
+    this.array = array;
+}
+Item.prototype.run = function () {
+    this.fun.apply(null, this.array);
+};
+process.title = 'browser';
+process.browser = true;
+process.env = {};
+process.argv = [];
+process.version = ''; // empty string to avoid regexp issues
+process.versions = {};
+
+function noop() {}
+
+process.on = noop;
+process.addListener = noop;
+process.once = noop;
+process.off = noop;
+process.removeListener = noop;
+process.removeAllListeners = noop;
+process.emit = noop;
+process.prependListener = noop;
+process.prependOnceListener = noop;
+
+process.listeners = function (name) { return [] }
+
+process.binding = function (name) {
+    throw new Error('process.binding is not supported');
+};
+
+process.cwd = function () { return '/' };
+process.chdir = function (dir) {
+    throw new Error('process.chdir is not supported');
+};
+process.umask = function() { return 0; };
+
+
+/***/ }),
+
+/***/ "./node_modules/style-loader/lib/addStyles.js":
+/*!****************************************************!*\
+  !*** ./node_modules/style-loader/lib/addStyles.js ***!
+  \****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+	MIT License http://www.opensource.org/licenses/mit-license.php
+	Author Tobias Koppers @sokra
+*/
+
+var stylesInDom = {};
+
+var	memoize = function (fn) {
+	var memo;
+
+	return function () {
+		if (typeof memo === "undefined") memo = fn.apply(this, arguments);
+		return memo;
+	};
+};
+
+var isOldIE = memoize(function () {
+	// Test for IE <= 9 as proposed by Browserhacks
+	// @see http://browserhacks.com/#hack-e71d8692f65334173fee715c222cb805
+	// Tests for existence of standard globals is to allow style-loader
+	// to operate correctly into non-standard environments
+	// @see https://github.com/webpack-contrib/style-loader/issues/177
+	return window && document && document.all && !window.atob;
+});
+
+var getTarget = function (target) {
+  return document.querySelector(target);
+};
+
+var getElement = (function (fn) {
+	var memo = {};
+
+	return function(target) {
+                // If passing function in options, then use it for resolve "head" element.
+                // Useful for Shadow Root style i.e
+                // {
+                //   insertInto: function () { return document.querySelector("#foo").shadowRoot }
+                // }
+                if (typeof target === 'function') {
+                        return target();
+                }
+                if (typeof memo[target] === "undefined") {
+			var styleTarget = getTarget.call(this, target);
+			// Special case to return head of iframe instead of iframe itself
+			if (window.HTMLIFrameElement && styleTarget instanceof window.HTMLIFrameElement) {
+				try {
+					// This will throw an exception if access to iframe is blocked
+					// due to cross-origin restrictions
+					styleTarget = styleTarget.contentDocument.head;
+				} catch(e) {
+					styleTarget = null;
+				}
+			}
+			memo[target] = styleTarget;
+		}
+		return memo[target]
+	};
+})();
+
+var singleton = null;
+var	singletonCounter = 0;
+var	stylesInsertedAtTop = [];
+
+var	fixUrls = __webpack_require__(/*! ./urls */ "./node_modules/style-loader/lib/urls.js");
+
+module.exports = function(list, options) {
+	if (typeof DEBUG !== "undefined" && DEBUG) {
+		if (typeof document !== "object") throw new Error("The style-loader cannot be used in a non-browser environment");
+	}
+
+	options = options || {};
+
+	options.attrs = typeof options.attrs === "object" ? options.attrs : {};
+
+	// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
+	// tags it will allow on a page
+	if (!options.singleton && typeof options.singleton !== "boolean") options.singleton = isOldIE();
+
+	// By default, add <style> tags to the <head> element
+        if (!options.insertInto) options.insertInto = "head";
+
+	// By default, add <style> tags to the bottom of the target
+	if (!options.insertAt) options.insertAt = "bottom";
+
+	var styles = listToStyles(list, options);
+
+	addStylesToDom(styles, options);
+
+	return function update (newList) {
+		var mayRemove = [];
+
+		for (var i = 0; i < styles.length; i++) {
+			var item = styles[i];
+			var domStyle = stylesInDom[item.id];
+
+			domStyle.refs--;
+			mayRemove.push(domStyle);
+		}
+
+		if(newList) {
+			var newStyles = listToStyles(newList, options);
+			addStylesToDom(newStyles, options);
+		}
+
+		for (var i = 0; i < mayRemove.length; i++) {
+			var domStyle = mayRemove[i];
+
+			if(domStyle.refs === 0) {
+				for (var j = 0; j < domStyle.parts.length; j++) domStyle.parts[j]();
+
+				delete stylesInDom[domStyle.id];
+			}
+		}
+	};
+};
+
+function addStylesToDom (styles, options) {
+	for (var i = 0; i < styles.length; i++) {
+		var item = styles[i];
+		var domStyle = stylesInDom[item.id];
+
+		if(domStyle) {
+			domStyle.refs++;
+
+			for(var j = 0; j < domStyle.parts.length; j++) {
+				domStyle.parts[j](item.parts[j]);
+			}
+
+			for(; j < item.parts.length; j++) {
+				domStyle.parts.push(addStyle(item.parts[j], options));
+			}
+		} else {
+			var parts = [];
+
+			for(var j = 0; j < item.parts.length; j++) {
+				parts.push(addStyle(item.parts[j], options));
+			}
+
+			stylesInDom[item.id] = {id: item.id, refs: 1, parts: parts};
+		}
+	}
+}
+
+function listToStyles (list, options) {
+	var styles = [];
+	var newStyles = {};
+
+	for (var i = 0; i < list.length; i++) {
+		var item = list[i];
+		var id = options.base ? item[0] + options.base : item[0];
+		var css = item[1];
+		var media = item[2];
+		var sourceMap = item[3];
+		var part = {css: css, media: media, sourceMap: sourceMap};
+
+		if(!newStyles[id]) styles.push(newStyles[id] = {id: id, parts: [part]});
+		else newStyles[id].parts.push(part);
+	}
+
+	return styles;
+}
+
+function insertStyleElement (options, style) {
+	var target = getElement(options.insertInto)
+
+	if (!target) {
+		throw new Error("Couldn't find a style target. This probably means that the value for the 'insertInto' parameter is invalid.");
+	}
+
+	var lastStyleElementInsertedAtTop = stylesInsertedAtTop[stylesInsertedAtTop.length - 1];
+
+	if (options.insertAt === "top") {
+		if (!lastStyleElementInsertedAtTop) {
+			target.insertBefore(style, target.firstChild);
+		} else if (lastStyleElementInsertedAtTop.nextSibling) {
+			target.insertBefore(style, lastStyleElementInsertedAtTop.nextSibling);
+		} else {
+			target.appendChild(style);
+		}
+		stylesInsertedAtTop.push(style);
+	} else if (options.insertAt === "bottom") {
+		target.appendChild(style);
+	} else if (typeof options.insertAt === "object" && options.insertAt.before) {
+		var nextSibling = getElement(options.insertInto + " " + options.insertAt.before);
+		target.insertBefore(style, nextSibling);
+	} else {
+		throw new Error("[Style Loader]\n\n Invalid value for parameter 'insertAt' ('options.insertAt') found.\n Must be 'top', 'bottom', or Object.\n (https://github.com/webpack-contrib/style-loader#insertat)\n");
+	}
+}
+
+function removeStyleElement (style) {
+	if (style.parentNode === null) return false;
+	style.parentNode.removeChild(style);
+
+	var idx = stylesInsertedAtTop.indexOf(style);
+	if(idx >= 0) {
+		stylesInsertedAtTop.splice(idx, 1);
+	}
+}
+
+function createStyleElement (options) {
+	var style = document.createElement("style");
+
+	if(options.attrs.type === undefined) {
+		options.attrs.type = "text/css";
+	}
+
+	addAttrs(style, options.attrs);
+	insertStyleElement(options, style);
+
+	return style;
+}
+
+function createLinkElement (options) {
+	var link = document.createElement("link");
+
+	if(options.attrs.type === undefined) {
+		options.attrs.type = "text/css";
+	}
+	options.attrs.rel = "stylesheet";
+
+	addAttrs(link, options.attrs);
+	insertStyleElement(options, link);
+
+	return link;
+}
+
+function addAttrs (el, attrs) {
+	Object.keys(attrs).forEach(function (key) {
+		el.setAttribute(key, attrs[key]);
+	});
+}
+
+function addStyle (obj, options) {
+	var style, update, remove, result;
+
+	// If a transform function was defined, run it on the css
+	if (options.transform && obj.css) {
+	    result = options.transform(obj.css);
+
+	    if (result) {
+	    	// If transform returns a value, use that instead of the original css.
+	    	// This allows running runtime transformations on the css.
+	    	obj.css = result;
+	    } else {
+	    	// If the transform function returns a falsy value, don't add this css.
+	    	// This allows conditional loading of css
+	    	return function() {
+	    		// noop
+	    	};
+	    }
+	}
+
+	if (options.singleton) {
+		var styleIndex = singletonCounter++;
+
+		style = singleton || (singleton = createStyleElement(options));
+
+		update = applyToSingletonTag.bind(null, style, styleIndex, false);
+		remove = applyToSingletonTag.bind(null, style, styleIndex, true);
+
+	} else if (
+		obj.sourceMap &&
+		typeof URL === "function" &&
+		typeof URL.createObjectURL === "function" &&
+		typeof URL.revokeObjectURL === "function" &&
+		typeof Blob === "function" &&
+		typeof btoa === "function"
+	) {
+		style = createLinkElement(options);
+		update = updateLink.bind(null, style, options);
+		remove = function () {
+			removeStyleElement(style);
+
+			if(style.href) URL.revokeObjectURL(style.href);
+		};
+	} else {
+		style = createStyleElement(options);
+		update = applyToTag.bind(null, style);
+		remove = function () {
+			removeStyleElement(style);
+		};
+	}
+
+	update(obj);
+
+	return function updateStyle (newObj) {
+		if (newObj) {
+			if (
+				newObj.css === obj.css &&
+				newObj.media === obj.media &&
+				newObj.sourceMap === obj.sourceMap
+			) {
+				return;
+			}
+
+			update(obj = newObj);
+		} else {
+			remove();
+		}
+	};
+}
+
+var replaceText = (function () {
+	var textStore = [];
+
+	return function (index, replacement) {
+		textStore[index] = replacement;
+
+		return textStore.filter(Boolean).join('\n');
+	};
+})();
+
+function applyToSingletonTag (style, index, remove, obj) {
+	var css = remove ? "" : obj.css;
+
+	if (style.styleSheet) {
+		style.styleSheet.cssText = replaceText(index, css);
+	} else {
+		var cssNode = document.createTextNode(css);
+		var childNodes = style.childNodes;
+
+		if (childNodes[index]) style.removeChild(childNodes[index]);
+
+		if (childNodes.length) {
+			style.insertBefore(cssNode, childNodes[index]);
+		} else {
+			style.appendChild(cssNode);
+		}
+	}
+}
+
+function applyToTag (style, obj) {
+	var css = obj.css;
+	var media = obj.media;
+
+	if(media) {
+		style.setAttribute("media", media)
+	}
+
+	if(style.styleSheet) {
+		style.styleSheet.cssText = css;
+	} else {
+		while(style.firstChild) {
+			style.removeChild(style.firstChild);
+		}
+
+		style.appendChild(document.createTextNode(css));
+	}
+}
+
+function updateLink (link, options, obj) {
+	var css = obj.css;
+	var sourceMap = obj.sourceMap;
+
+	/*
+		If convertToAbsoluteUrls isn't defined, but sourcemaps are enabled
+		and there is no publicPath defined then lets turn convertToAbsoluteUrls
+		on by default.  Otherwise default to the convertToAbsoluteUrls option
+		directly
+	*/
+	var autoFixUrls = options.convertToAbsoluteUrls === undefined && sourceMap;
+
+	if (options.convertToAbsoluteUrls || autoFixUrls) {
+		css = fixUrls(css);
+	}
+
+	if (sourceMap) {
+		// http://stackoverflow.com/a/26603875
+		css += "\n/*# sourceMappingURL=data:application/json;base64," + btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))) + " */";
+	}
+
+	var blob = new Blob([css], { type: "text/css" });
+
+	var oldSrc = link.href;
+
+	link.href = URL.createObjectURL(blob);
+
+	if(oldSrc) URL.revokeObjectURL(oldSrc);
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/style-loader/lib/urls.js":
+/*!***********************************************!*\
+  !*** ./node_modules/style-loader/lib/urls.js ***!
+  \***********************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+
+/**
+ * When source maps are enabled, `style-loader` uses a link element with a data-uri to
+ * embed the css on the page. This breaks all relative urls because now they are relative to a
+ * bundle instead of the current page.
+ *
+ * One solution is to only use full urls, but that may be impossible.
+ *
+ * Instead, this function "fixes" the relative urls to be absolute according to the current page location.
+ *
+ * A rudimentary test suite is located at `test/fixUrls.js` and can be run via the `npm test` command.
+ *
+ */
+
+module.exports = function (css) {
+  // get current location
+  var location = typeof window !== "undefined" && window.location;
+
+  if (!location) {
+    throw new Error("fixUrls requires window.location");
+  }
+
+	// blank or null?
+	if (!css || typeof css !== "string") {
+	  return css;
+  }
+
+  var baseUrl = location.protocol + "//" + location.host;
+  var currentDir = baseUrl + location.pathname.replace(/\/[^\/]*$/, "/");
+
+	// convert each url(...)
+	/*
+	This regular expression is just a way to recursively match brackets within
+	a string.
+
+	 /url\s*\(  = Match on the word "url" with any whitespace after it and then a parens
+	   (  = Start a capturing group
+	     (?:  = Start a non-capturing group
+	         [^)(]  = Match anything that isn't a parentheses
+	         |  = OR
+	         \(  = Match a start parentheses
+	             (?:  = Start another non-capturing groups
+	                 [^)(]+  = Match anything that isn't a parentheses
+	                 |  = OR
+	                 \(  = Match a start parentheses
+	                     [^)(]*  = Match anything that isn't a parentheses
+	                 \)  = Match a end parentheses
+	             )  = End Group
+              *\) = Match anything and then a close parens
+          )  = Close non-capturing group
+          *  = Match anything
+       )  = Close capturing group
+	 \)  = Match a close parens
+
+	 /gi  = Get all matches, not the first.  Be case insensitive.
+	 */
+	var fixedCss = css.replace(/url\s*\(((?:[^)(]|\((?:[^)(]+|\([^)(]*\))*\))*)\)/gi, function(fullMatch, origUrl) {
+		// strip quotes (if they exist)
+		var unquotedOrigUrl = origUrl
+			.trim()
+			.replace(/^"(.*)"$/, function(o, $1){ return $1; })
+			.replace(/^'(.*)'$/, function(o, $1){ return $1; });
+
+		// already a full url? no change
+		if (/^(#|data:|http:\/\/|https:\/\/|file:\/\/\/|\s*$)/i.test(unquotedOrigUrl)) {
+		  return fullMatch;
+		}
+
+		// convert the url to a full url
+		var newUrl;
+
+		if (unquotedOrigUrl.indexOf("//") === 0) {
+		  	//TODO: should we add protocol?
+			newUrl = unquotedOrigUrl;
+		} else if (unquotedOrigUrl.indexOf("/") === 0) {
+			// path should be relative to the base url
+			newUrl = baseUrl + unquotedOrigUrl; // already starts with '/'
+		} else {
+			// path should be relative to current directory
+			newUrl = currentDir + unquotedOrigUrl.replace(/^\.\//, ""); // Strip leading './'
+		}
+
+		// send back the fixed url(...)
+		return "url(" + JSON.stringify(newUrl) + ")";
+	});
+
+	// send back the fixed css
+	return fixedCss;
+};
+
+
+/***/ }),
+
+/***/ "./public/glib/src/app.js":
+/*!********************************!*\
+  !*** ./public/glib/src/app.js ***!
+  \********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _scene = __webpack_require__(/*! ./core/scene */ "./public/glib/src/core/scene.js");
+
+var _scene2 = _interopRequireDefault(_scene);
+
+__webpack_require__(/*! ./style.css */ "./public/glib/src/style.css");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var scene = new _scene2.default();
+var node = scene.addChild();
+scene.getResource('monkey.obj');
+scene.getResource('puppy.png');
+
+/***/ }),
+
+/***/ "./public/glib/src/core/event.js":
+/*!***************************************!*\
+  !*** ./public/glib/src/core/event.js ***!
+  \***************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Event = function () {
+  function Event(type, element, preventDefault, stopPropagation) {
+    _classCallCheck(this, Event);
+
+    this.type = type || null;
+    this.element = type && (element || window) || null;
+    this.listener = null;
+
+    this.subscribers = [];
+    this.invoker = null;
+    this.enableInvoke = this.type === null;
+    this.createListener(preventDefault || false, stopPropagation || false);
+  }
+
+  _createClass(Event, [{
+    key: 'createListener',
+    value: function createListener(preventDefault, stopPropagation) {
+      var _this = this;
+
+      if (this.enableInvoke) {
+        this.invoker = function () {
+          for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+            args[_key] = arguments[_key];
+          }
+
+          return _this.subscribers.forEach(function (fn) {
+            fn.apply(undefined, args);
+          });
+        };
+        return;
+      } else if (preventDefault && stopPropagation) {
+        this.invoker = function (event) {
+          event.preventDefault();
+          event.stopPropagation();
+          _this.subscribers.forEach(function (fn) {
+            fn(event);
+          });
+        };
+      } else if (preventDefault) {
+        this.invoker = function (event) {
+          event.preventDefault();
+          _this.subscribers.forEach(function (fn) {
+            fn(event);
+          });
+        };
+      } else if (stopPropagation) {
+        this.invoker = function (event) {
+          event.stopPropagation();
+          _this.subscribers.forEach(function (fn) {
+            fn(event);
+          });
+        };
+      } else {
+        this.invoker = function (event) {
+          _this.subscribers.forEach(function (fn) {
+            fn(event);
+          });
+        };
+      }
+      this.element.addEventListener(this.type, this.invoker, false);
+    }
+  }, {
+    key: 'invoke',
+    value: function invoke() {
+      if (this.enableInvoke) {
+        this.invoker();
+      }
+    }
+  }, {
+    key: 'subscribe',
+    value: function subscribe() {
+      var _this2 = this;
+
+      for (var _len2 = arguments.length, subscribers = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+        subscribers[_key2] = arguments[_key2];
+      }
+
+      subscribers.forEach(function (subscriber) {
+        _this2.subscribers.push(subscriber);
+      });
+    }
+  }, {
+    key: 'unsubscribe',
+    value: function unsubscribe() {
+      var _this3 = this;
+
+      for (var _len3 = arguments.length, subscribers = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+        subscribers[_key3] = arguments[_key3];
+      }
+
+      subscribers.forEach(function (subscriber) {
+        var subscriberIndex = _this3.subscribers.indexOf(subscriber);
+        if (subscriberIndex !== -1) {
+          _this3.subscribers.splice(subscriberIndex, 1);
+        }
+      });
+    }
+  }]);
+
+  return Event;
+}();
+
+exports.default = Event;
+
+
+var windowResizeEvent = new Event('resize', window, true, true);
+// Preventing default (second to last boolean) -> f5 key won't refresh
+var windowKeyDownEvent = new Event('keydown', window, false, true);
+var windowKeyUpEvent = new Event('keyup', window, true, true);
+var windowMouseDownEvent = new Event('mousedown', window, true, true);
+var windowMouseUpEvent = new Event('mouseup', window, true, true);
+var windowMouseMoveEvent = new Event('mousemove', window, true, true);
+// Preventing default (second to last boolean) -> Mouse wheel stops working
+var windowWheelEvent = new Event('wheel', window, false, true);
+// Preventing default (second to last boolean) -> right click won't display context menu
+var windowContextMenuEvent = new Event('contextmenu', window, false, true);
+
+exports.windowResizeEvent = windowResizeEvent;
+exports.windowKeyDownEvent = windowKeyDownEvent;
+exports.windowKeyUpEvent = windowKeyUpEvent;
+exports.windowMouseDownEvent = windowMouseDownEvent;
+exports.windowMouseUpEvent = windowMouseUpEvent;
+exports.windowMouseMoveEvent = windowMouseMoveEvent;
+exports.windowWheelEvent = windowWheelEvent;
+exports.windowContextMenuEvent = windowContextMenuEvent;
+
+/***/ }),
+
+/***/ "./public/glib/src/core/gl.js":
+/*!************************************!*\
+  !*** ./public/glib/src/core/gl.js ***!
+  \************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.gl = exports.canvas = undefined;
+
+var _event = __webpack_require__(/*! ./event */ "./public/glib/src/core/event.js");
+
+var canvas = document.getElementById('canvas');
+if (!canvas) {
+  exports.canvas = canvas = document.createElement('canvas');
+  document.getElementById('root').appendChild(canvas);
+}
+var gl = canvas.getContext('webgl2');
+(canvas.resize = function () {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+})();
+(gl.resize = function () {
+  gl.viewport(0, 0, window.innerWidth, window.innerHeight);
+})();
+_event.windowResizeEvent.subscribe(canvas.resize, gl.resize);
+
+exports.canvas = canvas;
+exports.gl = gl;
+
+/***/ }),
+
+/***/ "./public/glib/src/core/resource.js":
+/*!******************************************!*\
+  !*** ./public/glib/src/core/resource.js ***!
+  \******************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Resource = function Resource(url) {
+  _classCallCheck(this, Resource);
+
+  this.url = url;
+};
+
+exports.default = Resource;
+
+/***/ }),
+
+/***/ "./public/glib/src/core/resourceloader.js":
+/*!************************************************!*\
+  !*** ./public/glib/src/core/resourceloader.js ***!
+  \************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+
+var _axios2 = _interopRequireDefault(_axios);
+
+var _mesh = __webpack_require__(/*! model/mesh */ "./public/glib/src/model/mesh.js");
+
+var _mesh2 = _interopRequireDefault(_mesh);
+
+var _texture = __webpack_require__(/*! model/texture */ "./public/glib/src/model/texture.js");
+
+var _texture2 = _interopRequireDefault(_texture);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+_axios2.default.defaults.baseURL = window.location.origin + '/api/glib';
+
+var ResourceLoader = function () {
+  function ResourceLoader() {
+    _classCallCheck(this, ResourceLoader);
+
+    this.resources = new Map();
+    this.resourcesLoading = new Map();
+    this.loading = false;
+  }
+
+  _createClass(ResourceLoader, [{
+    key: 'getResource',
+    value: function getResource(url) {
+      if (this.resources.has(url)) {
+        return this.resources.get(url);
+      }
+      if (this.resourcesLoading.has(url)) {
+        return;
+      }
+      this.loadResource(this.createResource(url));
+    }
+  }, {
+    key: 'createResource',
+    value: function createResource(url) {
+      switch (url.slice(url.indexOf('.'), url.length)) {
+        case '.obj':
+          return new _mesh2.default(url);
+        case '.png':
+          return new _texture2.default(url);
+        default:
+          console.error('No resource for file width extension ' + url);
+          break;
+      }
+    }
+  }, {
+    key: 'loadResource',
+    value: function loadResource(resource) {
+      var _this = this;
+
+      this.resourcesLoading.set(resource.url, resource);
+      _axios2.default.get(resource.url, { headers: { 'accept': 'image/png' } }).then(function (res) {
+        resource.constructor.parse(resource, res.data);
+        _this.resources.set(resource.url, resource);
+        _this.resourcesLoading.delete(resource.url);
+        if (resource.img) {
+          document.getElementById('root').appendChild(resource.img);
+        }
+      }).catch(function (err) {
+        _this.resourcesLoading.delete(resource.url);
+        console.error('Unable to load resource ' + resource.url + ' ' + err);
+      });
+    }
+  }]);
+
+  return ResourceLoader;
+}();
+
+exports.default = ResourceLoader;
+
+/***/ }),
+
+/***/ "./public/glib/src/core/scene.js":
+/*!***************************************!*\
+  !*** ./public/glib/src/core/scene.js ***!
+  \***************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _scenenode = __webpack_require__(/*! ./scenenode */ "./public/glib/src/core/scenenode.js");
+
+var _scenenode2 = _interopRequireDefault(_scenenode);
+
+var _resourceloader = __webpack_require__(/*! ./resourceloader */ "./public/glib/src/core/resourceloader.js");
+
+var _resourceloader2 = _interopRequireDefault(_resourceloader);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Scene = function (_SceneNode) {
+  _inherits(Scene, _SceneNode);
+
+  function Scene() {
+    _classCallCheck(this, Scene);
+
+    var _this = _possibleConstructorReturn(this, (Scene.__proto__ || Object.getPrototypeOf(Scene)).call(this));
+
+    _this.resourceLoader = new _resourceloader2.default();
+    _this.scene = _this;
+    _this.nodeRegister = [];
+    _this.componentRegister = [];
+    return _this;
+  }
+
+  _createClass(Scene, [{
+    key: 'getResource',
+    value: function getResource(url) {
+      return this.resourceLoader.getResource(url);
+    }
+  }, {
+    key: 'addToNodeRegister',
+    value: function addToNodeRegister(node) {
+      this.nodeRegister.push(node);
+    }
+  }, {
+    key: 'removeFromNodeRegister',
+    value: function removeFromNodeRegister(node) {
+      this.nodeRegister.splice(this.nodeRegister.indexOf(node), 1);
+    }
+  }, {
+    key: 'addToComponentRegister',
+    value: function addToComponentRegister(component) {
+      this.componentRegister.push(component);
+    }
+  }, {
+    key: 'removeFromComponentRegister',
+    value: function removeFromComponentRegister(component) {
+      this.componentRegister.splice(this.componentRegister.indexOf(component), 1);
+    }
+  }, {
+    key: 'remove',
+    value: function remove() {
+      var _iteratorNormalCompletion = true;
+      var _didIteratorError = false;
+      var _iteratorError = undefined;
+
+      try {
+        for (var _iterator = this.children[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          var child = _step.value;
+
+          child.remove();
+        }
+      } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion && _iterator.return) {
+            _iterator.return();
+          }
+        } finally {
+          if (_didIteratorError) {
+            throw _iteratorError;
+          }
+        }
+      }
+
+      while (this.components.length > 0) {
+        this.components[this.components.length - 1].remove();
+      }
+    }
+  }]);
+
+  return Scene;
+}(_scenenode2.default);
+
+exports.default = Scene;
+
+/***/ }),
+
+/***/ "./public/glib/src/core/scenenode.js":
+/*!*******************************************!*\
+  !*** ./public/glib/src/core/scenenode.js ***!
+  \*******************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var SceneNode = function () {
+  function SceneNode(scene, parent) {
+    _classCallCheck(this, SceneNode);
+
+    this.children = [];
+    this.components = [];
+    this.scene = scene;
+    this.parent = parent;
+  }
+
+  _createClass(SceneNode, [{
+    key: "addChild",
+    value: function addChild() {
+      var node = new SceneNode(this.scene, this);
+      this.scene.addToNodeRegister(node);
+      this.children.push(node);
+      return node;
+    }
+  }, {
+    key: "removeChild",
+    value: function removeChild(node) {
+      node.scene = null;
+      node.parent = null;
+      this.scene.removeFromNodeRegister(node);
+      this.children.splice(this.children.indexOf(node), 1);
+    }
+  }, {
+    key: "addComponent",
+    value: function addComponent(type) {
+      var component = new [type]();
+      this.scene.addToComponentRegister(component);
+      this.components.push(component);
+      return component;
+    }
+  }, {
+    key: "removeComponent",
+    value: function removeComponent(component) {
+      this.scene.removeFromComponentRegister(component);
+      this.components.splice(this.components.indexOf(component), 1);
+    }
+  }, {
+    key: "remove",
+    value: function remove() {
+      var _iteratorNormalCompletion = true;
+      var _didIteratorError = false;
+      var _iteratorError = undefined;
+
+      try {
+        for (var _iterator = this.children[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          var child = _step.value;
+
+          child.remove();
+        }
+      } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion && _iterator.return) {
+            _iterator.return();
+          }
+        } finally {
+          if (_didIteratorError) {
+            throw _iteratorError;
+          }
+        }
+      }
+
+      while (this.components.length > 0) {
+        this.components[this.components.length - 1].remove();
+      }
+      this.parent.removeChild(this);
+    }
+  }, {
+    key: "walkEnabled",
+    value: function walkEnabled(fn) {
+      var _iteratorNormalCompletion2 = true;
+      var _didIteratorError2 = false;
+      var _iteratorError2 = undefined;
+
+      try {
+        for (var _iterator2 = this.children[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+          var child = _step2.value;
+
+          child.walkEnabled(fn);
+          fn(this);
+        }
+      } catch (err) {
+        _didIteratorError2 = true;
+        _iteratorError2 = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion2 && _iterator2.return) {
+            _iterator2.return();
+          }
+        } finally {
+          if (_didIteratorError2) {
+            throw _iteratorError2;
+          }
+        }
+      }
+    }
+  }]);
+
+  return SceneNode;
+}();
+
+exports.default = SceneNode;
+
+/***/ }),
+
+/***/ "./public/glib/src/math/color.js":
+/*!***************************************!*\
+  !*** ./public/glib/src/math/color.js ***!
+  \***************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Color = function () {
+  _createClass(Color, null, [{
+    key: 'fromArray',
+    value: function fromArray(a) {
+      return new (Function.prototype.bind.apply(Color, [null].concat(_toConsumableArray(a))))();
+    }
+  }, {
+    key: 'fromHex',
+    value: function fromHex(h) {
+      return new (Function.prototype.bind.apply(Color, [null].concat(_toConsumableArray([h.slice(2, 4), h.slice(4, 6), h.slice(6, 8)].map(function (he) {
+        return parseInt(he, 16) / 255;
+      })))))();
+    }
+  }, {
+    key: 'white',
+    get: function get() {
+      return new Color(1.0, 1.0, 1.0);
+    }
+  }, {
+    key: 'red',
+    get: function get() {
+      return new Color(1.0, 0.0, 0.0);
+    }
+  }, {
+    key: 'green',
+    get: function get() {
+      return new Color(0.0, 1.0, 0.0);
+    }
+  }, {
+    key: 'blue',
+    get: function get() {
+      return new Color(0.0, 0.0, 1.0);
+    }
+  }, {
+    key: 'black',
+    get: function get() {
+      return new Color(0.0, 0.0, 0.0);
+    }
+  }]);
+
+  function Color(r, g, b) {
+    _classCallCheck(this, Color);
+
+    this.r = r || 0.0;
+    this.g = g || 0.0;
+    this.b = b || 0.0;
+  }
+
+  _createClass(Color, [{
+    key: 'copy',
+    get: function get() {
+      return new Color(this.r, this.g, this.b);
+    }
+  }, {
+    key: 'toArray',
+    get: function get() {
+      return [this.r, this.g, this.b];
+    }
+  }, {
+    key: 'toHex',
+    get: function get() {
+      return '0x' + [(this.r * 255).toString(16), (this.g * 255).toString(16), (this.b * 255).toString(16)].map(function (cl) {
+        return cl.length < 2 ? '\'0\'' + cl : cl;
+      }).join('');
+    }
+  }]);
+
+  return Color;
+}();
+
+exports.default = Color;
+
+/***/ }),
+
+/***/ "./public/glib/src/math/easing.js":
+/*!****************************************!*\
+  !*** ./public/glib/src/math/easing.js ***!
+  \****************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Easing = function () {
+    _createClass(Easing, null, [{
+        key: 'linear',
+
+
+        // no easing, no acceleration
+        value: function linear(t) {
+            return t;
+        }
+        // accelerating from zero velocity
+
+    }, {
+        key: 'easeInQuad',
+        value: function easeInQuad(t) {
+            return t * t;
+        }
+        // decelerating to zero velocity
+
+    }, {
+        key: 'easeOutQuad',
+        value: function easeOutQuad(t) {
+            return t * (2 - t);
+        }
+        // acceleration until halfway, then deceleration
+
+    }, {
+        key: 'easeInOutQuad',
+        value: function easeInOutQuad(t) {
+            return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+        }
+        // accelerating from zero velocity
+
+    }, {
+        key: 'easeInCubic',
+        value: function easeInCubic(t) {
+            return t * t * t;
+        }
+        // decelerating to zero velocity
+
+    }, {
+        key: 'easeOutCubic',
+        value: function easeOutCubic(t) {
+            return (t -= 1) * t * t + 1;
+        }
+        // acceleration until halfway, then deceleration
+
+    }, {
+        key: 'easeInOutCubic',
+        value: function easeInOutCubic(t) {
+            return t < 0.5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1;
+        }
+        // accelerating from zero velocity
+
+    }, {
+        key: 'easeInQuart',
+        value: function easeInQuart(t) {
+            return t * t * t * t;
+        }
+        // decelerating to zero velocity
+
+    }, {
+        key: 'easeOutQuart',
+        value: function easeOutQuart(t) {
+            return 1 - (t -= 1) * t * t * t;
+        }
+        // acceleration until halfway, then deceleration
+
+    }, {
+        key: 'easeInOutQuart',
+        value: function easeInOutQuart(t) {
+            return t < 0.5 ? 8 * t * t * t * t : 1 - 8 * (t -= 1) * t * t * t;
+        }
+        // accelerating from zero velocity
+
+    }, {
+        key: 'easeInQuint',
+        value: function easeInQuint(t) {
+            return t * t * t * t * t;
+        }
+        // decelerating to zero velocity
+
+    }, {
+        key: 'easeOutQuint',
+        value: function easeOutQuint(t) {
+            return 1 + (t -= 1) * t * t * t * t;
+        }
+        // acceleration until halfway, then deceleration
+
+    }, {
+        key: 'easeInOutQuint',
+        value: function easeInOutQuint(t) {
+            return t < 0.5 ? 16 * t * t * t * t * t : 1 + 16 * (t -= 1) * t * t * t * t;
+        }
+    }]);
+
+    function Easing() {
+        _classCallCheck(this, Easing);
+
+        throw new Error('You should not use Easing contructor...');
+    }
+
+    return Easing;
+}();
+
+exports.default = Easing;
+
+/***/ }),
+
+/***/ "./public/glib/src/math/index.js":
+/*!***************************************!*\
+  !*** ./public/glib/src/math/index.js ***!
+  \***************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Easing = exports.Quat = exports.Mat4 = exports.Mat3 = exports.Vec3 = exports.Vec2 = exports.Color = undefined;
+
+var _color = __webpack_require__(/*! ./color */ "./public/glib/src/math/color.js");
+
+var _color2 = _interopRequireDefault(_color);
+
+var _vec = __webpack_require__(/*! ./vec2 */ "./public/glib/src/math/vec2.js");
+
+var _vec2 = _interopRequireDefault(_vec);
+
+var _vec3 = __webpack_require__(/*! ./vec3 */ "./public/glib/src/math/vec3.js");
+
+var _vec4 = _interopRequireDefault(_vec3);
+
+var _mat = __webpack_require__(/*! ./mat3 */ "./public/glib/src/math/mat3.js");
+
+var _mat2 = _interopRequireDefault(_mat);
+
+var _mat3 = __webpack_require__(/*! ./mat4 */ "./public/glib/src/math/mat4.js");
+
+var _mat4 = _interopRequireDefault(_mat3);
+
+var _quat = __webpack_require__(/*! ./quat */ "./public/glib/src/math/quat.js");
+
+var _quat2 = _interopRequireDefault(_quat);
+
+var _easing = __webpack_require__(/*! ./easing */ "./public/glib/src/math/easing.js");
+
+var _easing2 = _interopRequireDefault(_easing);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.Color = _color2.default;
+exports.Vec2 = _vec2.default;
+exports.Vec3 = _vec4.default;
+exports.Mat3 = _mat2.default;
+exports.Mat4 = _mat4.default;
+exports.Quat = _quat2.default;
+exports.Easing = _easing2.default;
+
+/***/ }),
+
+/***/ "./public/glib/src/math/mat3.js":
+/*!**************************************!*\
+  !*** ./public/glib/src/math/mat3.js ***!
+  \**************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _ = __webpack_require__(/*! ./ */ "./public/glib/src/math/index.js");
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var sqrt = Math.sqrt;
+
+var Mat3 = function () {
+  _createClass(Mat3, null, [{
+    key: 'identity',
+    get: function get() {
+      return new Mat3(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0);
+    }
+  }]);
+
+  function Mat3(m00, m01, m02, m10, m11, m12, m20, m21, m22) {
+    _classCallCheck(this, Mat3);
+
+    this.m00 = m00;this.m01 = m01;this.m02 = m02;
+    this.m10 = m10;this.m11 = m11;this.m12 = m12;
+    this.m20 = m20;this.m21 = m21;this.m22 = m22;
+  }
+
+  _createClass(Mat3, [{
+    key: 'multiplyVector',
+    value: function multiplyVector(v) {
+      return new Mat3(this.m00 * v.x + this.m01 * v.y + this.m02 * v.z, this.m10 * v.x + this.m11 * v.y + this.m12 * v.z, this.m20 * v.x + this.m21 * v.y + this.m22 * v.z);
+    }
+  }, {
+    key: 'add',
+    value: function add(m) {
+      return new Mat3(this.m00 + m.m00, this.m01 + m.m01, this.m02 + m.m02, this.m10 + m.m10, this.m11 + m.m11, this.m12 + m.m12, this.m20 + m.m20, this.m21 + m.m21, this.m22 + m.m22);
+    }
+  }, {
+    key: 'sub',
+    value: function sub(m) {
+      return new Mat3(this.m00 - m.m00, this.m01 - m.m01, this.m02 - m.m02, this.m10 - m.m10, this.m11 - m.m11, this.m12 - m.m12, this.m20 - m.m20, this.m21 - m.m21, this.m22 - m.m22);
+    }
+  }, {
+    key: 'mul',
+    value: function mul(m) {
+      var a00 = this.m01;var a01 = this.m02;var a02 = this.m03;
+      var a10 = this.m11;var a11 = this.m12;var a12 = this.m13;
+      var a20 = this.m21;var a21 = this.m22;var a22 = this.m23;
+      var b00 = m.m01;var b01 = m.m02;var b02 = m.m03;
+      var b10 = m.m11;var b11 = m.m12;var b12 = m.m13;
+      var b20 = m.m21;var b21 = m.m22;var b22 = m.m23;
+      return new Mat3(a00 * b00 + a01 * b10 + a02 * b20, a00 * b01 + a01 * b11 + a02 * b21, a00 * b02 + a01 * b12 + a02 * b22, a10 * b00 + a11 * b10 + a12 * b20, a10 * b01 + a11 * b11 + a12 * b21, a10 * b02 + a11 * b12 + a12 * b22, a20 * b00 + a21 * b10 + a22 * b20, a20 * b01 + a21 * b11 + a22 * b21, a20 * b02 + a21 * b12 + a22 * b22);
+    }
+  }, {
+    key: 'clone',
+    get: function get() {
+      return new Mat3(this.m00, this.m01, this.m02, this.m10, this.m11, this.m12, this.m20, this.m21, this.m22);
+    }
+  }, {
+    key: 'toArray',
+    get: function get() {
+      return [this.m00, this.m01, this.m02, this.m10, this.m11, this.m12, this.m20, this.m21, this.m22];
+    }
+  }, {
+    key: 'toFloat32Array',
+    get: function get() {
+      return new Float32Array([this.m00, this.m01, this.m02, this.m10, this.m11, this.m12, this.m20, this.m21, this.m22]);
+    }
+  }, {
+    key: 'toMat4',
+    get: function get() {
+      return new _.Mat4(this.m00, this.m01, this.m02, 0.0, this.m10, this.m11, this.m12, 0.0, this.m20, this.m21, this.m22, 0.0, 0.0, 0.0, 0.0, 1.0);
+    }
+  }, {
+    key: 'toQuat',
+    get: function get() {
+      var trace = this.m00 + this.m11 + this.m22;
+      var s = void 0;
+      if (trace > 0) {
+        s = 0.5 / sqrt(trace + 1.0);
+        return new _.Quat(0.25 / s, (this.m21 - this.m12) * s, (this.m02 - this.m20) * s);
+      }
+      if (this.m00 > this.m11 && this.m00 > this.m22) {
+        s = 2.0 * sqrt(1.0 + this.m00 - this.m11 - this.m22);
+        return new _.Quat((this.m21 - this.m12) / s, 0.25 * s, (this.m01 + this.m10) / s, (this.m02 + this.m20) / s);
+      } else if (this.m11 > this.m22) {
+        s = 2.0 * sqrt(1.0 + this.m11 - this.m00 - this.m22);
+        return new _.Quat((this.m02 - this.m20) / s, (this.m01 + this.m10) / s, 0.25 * s, (this.m12 + this.m21) / s);
+      }
+      s = 2.0 * sqrt(1.0 + this.m22 - this.m00 - this.m11);
+      return new _.Quat((this.m10 - this.m01) / s, (this.m02 + this.m20) / s, (this.m12 + this.m21) / s);
+    }
+  }]);
+
+  return Mat3;
+}();
+
+Mat3.fromArray = function (m) {
+  return new (Function.prototype.bind.apply(Mat3, [null].concat(_toConsumableArray(m))))();
+};
+
+exports.default = Mat3;
+
+/***/ }),
+
+/***/ "./public/glib/src/math/mat4.js":
+/*!**************************************!*\
+  !*** ./public/glib/src/math/mat4.js ***!
+  \**************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _ = __webpack_require__(/*! ./ */ "./public/glib/src/math/index.js");
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var sin = Math.sin,
+    cos = Math.cos,
+    tan = Math.tan;
+
+var Mat4 = function () {
+  _createClass(Mat4, null, [{
+    key: 'fromArray',
+    value: function fromArray(a) {
+      return new (Function.prototype.bind.apply(Mat4, [null].concat(_toConsumableArray(a))))();
+    }
+  }, {
+    key: 'perspective',
+    value: function perspective(fovrad, aspectRatio, near, far) {
+      var f = 1.0 / tan(fovrad / 2);
+      var rangeInv = 1 / (near - far);
+      return new Mat4(f / aspectRatio, 0.0, 0.0, 0.0, 0.0, f, 0.0, 0.0, 0.0, 0.0, (near + far) * rangeInv, -1.0, 0.0, 0.0, near * far * rangeInv * 2, 0.0);
+    }
+  }, {
+    key: 'orthographic',
+    value: function orthographic(left, right, bottom, top, near, far) {
+      var lr = 1 / (left - right);
+      var bt = 1 / (bottom - top);
+      var nf = 1 / (near - far);
+      return new Mat4(2 * lr, 0, 0, 0, 0, 2 * bt, 0, 0, 0, 0, 2 * nf, 0, (left + right) * lr, (top + bottom) * bt, (far + near) * nf, 1);
+    }
+  }, {
+    key: 'lookAt',
+    value: function lookAt(camPos, target, up) {
+      var zAxis = camPos.sub(target).normalize;
+      var xAxis = up.cross(zAxis);
+      var yAxis = zAxis.cross(xAxis);
+      return new Mat4(xAxis.x, xAxis.y, xAxis.z, 0.0, yAxis.x, yAxis.y, yAxis.z, 0.0, zAxis.x, zAxis.y, zAxis.z, 0.0, camPos.x, camPos.y, camPos.z, 1.0);
+    }
+  }, {
+    key: 'translate',
+    value: function translate(x, y, z) {
+      return new Mat4(1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, x, y, z, 1.0);
+    }
+  }, {
+    key: 'scale',
+    value: function scale(w, h, d) {
+      return new Mat4(w, 0.0, 0.0, 0.0, 0.0, h, 0.0, 0.0, 0.0, 0.0, d, 0.0, 0.0, 0.0, 0.0, 1.0);
+    }
+  }, {
+    key: 'rotateX',
+    value: function rotateX(angle) {
+      var cosi = cos(angle);
+      var sine = sin(angle);
+      return new Mat4(1.0, 0.0, 0.0, 0.0, 0.0, cosi, -sine, 0.0, 0.0, sine, cosi, 0.0, 0.0, 0.0, 0.0, 1.0);
+    }
+  }, {
+    key: 'rotateY',
+    value: function rotateY(angle) {
+      var cosi = cos(angle);
+      var sine = sin(angle);
+      return new Mat4(cosi, 0.0, sine, 0.0, 0.0, 1.0, 0.0, 0.0, -sine, 0.0, cosi, 0.0, 0.0, 0.0, 0.0, 1.0);
+    }
+  }, {
+    key: 'rotateZ',
+    value: function rotateZ(angle) {
+      var cosi = cos(angle);
+      var sine = sin(angle);
+      return new Mat4(cosi, -sine, 0.0, 0.0, sine, cosi, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+    }
+  }, {
+    key: 'identity',
+    get: function get() {
+      return new Mat4(1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+    }
+  }]);
+
+  function Mat4(m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, m22, m23, m30, m31, m32, m33) {
+    _classCallCheck(this, Mat4);
+
+    this.m00 = m00 || 0;this.m01 = m01 || 0;this.m02 = m02 || 0;this.m03 = m03 || 0;
+    this.m10 = m10 || 0;this.m11 = m11 || 0;this.m12 = m12 || 0;this.m13 = m13 || 0;
+    this.m20 = m20 || 0;this.m21 = m21 || 0;this.m22 = m22 || 0;this.m23 = m23 || 0;
+    this.m30 = m30 || 0;this.m31 = m31 || 0;this.m32 = m32 || 0;this.m33 = m33 || 0;
+  }
+
+  _createClass(Mat4, [{
+    key: 'add',
+    value: function add(v) {
+      return new Mat4(this.m00 + v.m00, this.m01 + v.m01, this.m02 + v.m02, this.m03 + v.m03, this.m10 + v.m10, this.m11 + v.m11, this.m12 + v.m12, this.m13 + v.m13, this.m20 + v.m20, this.m21 + v.m21, this.m22 + v.m22, this.m23 + v.m23, this.m30 + v.m30, this.m31 + v.m31, this.m32 + v.m32, this.m33 + v.m33);
+    }
+  }, {
+    key: 'sub',
+    value: function sub(v) {
+      return new Mat4(this.m00 - v.m00, this.m01 - v.m01, this.m02 - v.m02, this.m03 - v.m03, this.m10 - v.m10, this.m11 - v.m11, this.m12 - v.m12, this.m13 - v.m13, this.m20 - v.m20, this.m21 - v.m21, this.m22 - v.m22, this.m23 - v.m23, this.m30 - v.m30, this.m31 - v.m31, this.m32 - v.m32, this.m33 - v.m33);
+    }
+  }, {
+    key: 'mul',
+    value: function mul(v) {
+      return new Mat4(v.m00 * this.m00 + v.m01 * this.m10 + v.m02 * this.m20 + v.m03 * this.m30, v.m00 * this.m01 + v.m01 * this.m11 + v.m02 * this.m21 + v.m03 * this.m31, v.m00 * this.m02 + v.m01 * this.m12 + v.m02 * this.m22 + v.m03 * this.m32, v.m00 * this.m03 + v.m01 * this.m13 + v.m02 * this.m23 + v.m03 * this.m33, v.m10 * this.m00 + v.m11 * this.m10 + v.m12 * this.m20 + v.m13 * this.m30, v.m10 * this.m01 + v.m11 * this.m11 + v.m12 * this.m21 + v.m13 * this.m31, v.m10 * this.m02 + v.m11 * this.m12 + v.m12 * this.m22 + v.m13 * this.m32, v.m10 * this.m03 + v.m11 * this.m13 + v.m12 * this.m23 + v.m13 * this.m33, v.m20 * this.m00 + v.m21 * this.m10 + v.m22 * this.m20 + v.m23 * this.m30, v.m20 * this.m01 + v.m21 * this.m11 + v.m22 * this.m21 + v.m23 * this.m31, v.m20 * this.m02 + v.m21 * this.m12 + v.m22 * this.m22 + v.m23 * this.m32, v.m20 * this.m03 + v.m21 * this.m13 + v.m22 * this.m23 + v.m23 * this.m33, v.m30 * this.m00 + v.m31 * this.m10 + v.m32 * this.m20 + v.m33 * this.m30, v.m30 * this.m01 + v.m31 * this.m11 + v.m32 * this.m21 + v.m33 * this.m31, v.m30 * this.m02 + v.m31 * this.m12 + v.m32 * this.m22 + v.m33 * this.m32, v.m30 * this.m03 + v.m31 * this.m13 + v.m32 * this.m23 + v.m33 * this.m33);
+    }
+  }, {
+    key: 'clone',
+    get: function get() {
+      return new Mat4(this.m00, this.m01, this.m02, this.m03, this.m10, this.m11, this.m12, this.m13, this.m20, this.m21, this.m22, this.m23, this.m30, this.m31, this.m32, this.m33);
+    }
+  }, {
+    key: 'toArray',
+    get: function get() {
+      return [this.m00, this.m01, this.m02, this.m03, this.m10, this.m11, this.m12, this.m13, this.m20, this.m21, this.m22, this.m23, this.m30, this.m31, this.m32, this.m33];
+    }
+  }, {
+    key: 'toFloat32Array',
+    get: function get() {
+      return new Float32Array([this.m00, this.m01, this.m02, this.m03, this.m10, this.m11, this.m12, this.m13, this.m20, this.m21, this.m22, this.m23, this.m30, this.m31, this.m32, this.m33]);
+    }
+  }, {
+    key: 'toMat3',
+    get: function get() {
+      return new _.Mat3(this.m00, this.m01, this.m02, this.m10, this.m11, this.m12, this.m20, this.m21, this.m22);
+    }
+  }, {
+    key: 'toQuat',
+    get: function get() {
+      return this.toMat3.toQuat;
+    }
+  }, {
+    key: 'invert',
+    get: function get() {
+      var m00 = this.m00,
+          m01 = this.m01,
+          m02 = this.m02,
+          m03 = this.m03,
+          m10 = this.m10,
+          m11 = this.m11,
+          m12 = this.m12,
+          m13 = this.m13,
+          m20 = this.m20,
+          m21 = this.m21,
+          m22 = this.m22,
+          m23 = this.m23,
+          m30 = this.m30,
+          m31 = this.m31,
+          m32 = this.m32,
+          m33 = this.m33;
+
+      var a00 = m11 * m22 * m33 - m11 * m23 * m32 - m21 * m12 * m33 + m21 * m13 * m32 + m31 * m12 * m23 - m31 * m13 * m22;
+      var a10 = -m10 * m22 * m33 + m10 * m23 * m32 + m20 * m12 * m33 - m20 * m13 * m32 - m30 * m12 * m23 + m30 * m13 * m22;
+      var a20 = m10 * m21 * m33 - m10 * m23 * m31 - m20 * m11 * m33 + m20 * m13 * m31 + m30 * m11 * m23 - m30 * m13 * m21;
+      var a30 = -m10 * m21 * m32 + m10 * m22 * m31 + m20 * m11 * m32 - m20 * m12 * m31 - m30 * m11 * m22 + m30 * m12 * m21;
+
+      var det = m00 * a00 + m01 * a10 + m02 * a20 + m03 * a30;
+      if (det === 0) {
+        throw new Error('Cannot invert matrix: ' + this);
+      }
+      det = 1.0 / det;
+
+      return new Mat4(det * a00, det * -m01 * m22 * m33 + m01 * m23 * m32 + m21 * m02 * m33 - m21 * m03 * m32 - m31 * m02 * m23 + m31 * m03 * m22, det * m01 * m12 * m33 - m01 * m13 * m32 - m11 * m02 * m33 + m11 * m03 * m32 + m31 * m02 * m13 - m31 * m03 * m12, det * -m01 * m12 * m23 + m01 * m13 * m22 + m11 * m02 * m23 - m11 * m03 * m22 - m21 * m02 * m13 + m21 * m03 * m12, det * a10, det * m00 * m22 * m33 - m00 * m23 * m32 - m20 * m02 * m33 + m20 * m03 * m32 + m30 * m02 * m23 - m30 * m03 * m22, det * -m00 * m12 * m33 + m00 * m13 * m32 + m10 * m02 * m33 - m10 * m03 * m32 - m30 * m02 * m13 + m30 * m03 * m12, det * m00 * m12 * m23 - m00 * m13 * m22 - m10 * m02 * m23 + m10 * m03 * m22 + m20 * m02 * m13 - m20 * m03 * m12, det * a20, det * -m00 * m21 * m33 + m00 * m23 * m31 + m20 * m01 * m33 - m20 * m03 * m31 - m30 * m01 * m23 + m30 * m03 * m21, det * m00 * m11 * m33 - m00 * m13 * m31 - m10 * m01 * m33 + m10 * m03 * m31 + m30 * m01 * m13 - m30 * m03 * m11, det * -m00 * m11 * m23 + m00 * m13 * m21 + m10 * m01 * m23 - m10 * m03 * m21 - m20 * m01 * m13 + m20 * m03 * m11, det * a30, det * m00 * m21 * m32 - m00 * m22 * m31 - m20 * m01 * m32 + m20 * m02 * m31 + m30 * m01 * m22 - m30 * m02 * m21, det * -m00 * m11 * m32 + m00 * m12 * m31 + m10 * m01 * m32 - m10 * m02 * m31 - m30 * m01 * m12 + m30 * m02 * m11, det * m00 * m11 * m22 - m00 * m12 * m21 - m10 * m01 * m22 + m10 * m02 * m21 + m20 * m01 * m12 - m20 * m02 * m11);
+    }
+  }, {
+    key: 'transpose',
+    get: function get() {
+      return new Mat4(this.m00, this.m10, this.m20, this.m30, this.m01, this.m11, this.m21, this.m31, this.m02, this.m12, this.m22, this.m32, this.m03, this.m13, this.m23, this.m33);
+    }
+  }, {
+    key: 'translation',
+    get: function get() {
+      return new _.Vec3(this.m30, this.m31, this.m32);
+    }
+  }, {
+    key: 'scale',
+    get: function get() {
+      return new _.Vec3(new _.Vec3(this.m00, this.m10, this.m20).len, new _.Vec3(this.m01, this.m11, this.m21).len, new _.Vec3(this.m02, this.m12, this.m22).len);
+    }
+  }, {
+    key: 'rotation',
+    get: function get() {
+      return new _.Mat3(this.m00, this.m01, this.m02, this.m10, this.m11, this.m12, this.m20, this.m21, this.m22);
+    }
+  }]);
+
+  return Mat4;
+}();
+
+exports.default = Mat4;
+
+/***/ }),
+
+/***/ "./public/glib/src/math/quat.js":
+/*!**************************************!*\
+  !*** ./public/glib/src/math/quat.js ***!
+  \**************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _ = __webpack_require__(/*! ./ */ "./public/glib/src/math/index.js");
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var sin = Math.sin,
+    cos = Math.cos,
+    acos = Math.acos,
+    abs = Math.abs,
+    sqrt = Math.sqrt;
+
+var Quat = function () {
+  _createClass(Quat, null, [{
+    key: 'fromArray',
+    value: function fromArray(a) {
+      return new (Function.prototype.bind.apply(Quat, [null].concat(_toConsumableArray(a))))();
+    }
+  }, {
+    key: 'fromEulers',
+    value: function fromEulers(x, y, z) {
+      var c1 = cos(y * 0.5);
+      var c2 = cos(z * 0.5);
+      var c3 = cos(x * 0.5);
+      var s1 = sin(y * 0.5);
+      var s2 = sin(z * 0.5);
+      var s3 = sin(x * 0.5);
+      return new Quat(c1 * c2 * c3 - s1 * s2 * s3, c1 * c2 * s3 + s1 * s2 * c3, s1 * c2 * c3 + c1 * s2 * s3, c1 * s2 * c3 - s1 * c2 * s3).normalize;
+    }
+  }, {
+    key: 'fromAxisAngle',
+    value: function fromAxisAngle(axis, angle) {
+      var r = 1 / axis.len;
+      var s = sin(angle / 2);
+      return new Quat(cos(angle / 2), s * axis.x * r, s * axis.y * r, s * axis.z * r).normalize;
+    }
+  }, {
+    key: 'fromRotation',
+    value: function fromRotation(v1, v2) {
+      // https://stackoverflow.com/a/1171995
+      var half = v1.add(v2);
+      var axis = v1.cross(half);
+      var angle = v1.dot(half);
+      return new Quat(angle, axis.x, axis.y, axis.z).normalize;
+    }
+  }, {
+    key: 'identity',
+    get: function get() {
+      return new Quat(1.000, 0.000, 0.000, 0.000);
+    }
+  }, {
+    key: 'up',
+    get: function get() {
+      return new Quat(0.707, 0.707, 0.000, 0.000);
+    }
+  }, {
+    key: 'down',
+    get: function get() {
+      return new Quat(0.707, -0.707, 0.000, 0.000);
+    }
+  }, {
+    key: 'left',
+    get: function get() {
+      return new Quat(0.707, 0.000, 0.707, 0.000);
+    }
+  }, {
+    key: 'right',
+    get: function get() {
+      return new Quat(0.707, 0.000, -0.707, 0.000);
+    }
+  }, {
+    key: 'backward',
+    get: function get() {
+      return new Quat(0.000, 0.000, 1.000, 0.000);
+    }
+  }, {
+    key: 'upsideDown',
+    get: function get() {
+      return new Quat(0.000, 0.000, 0.000, 1.000);
+    }
+  }, {
+    key: 'tiltLeft',
+    get: function get() {
+      return new Quat(0.707, 0.000, 0.000, 0.707);
+    }
+  }, {
+    key: 'tiltRight',
+    get: function get() {
+      return new Quat(0.707, 0.000, 0.000, -0.707);
+    }
+  }]);
+
+  function Quat(w, x, y, z) {
+    _classCallCheck(this, Quat);
+
+    this.w = w || 0.0;
+    this.x = x || 0.0;
+    this.y = y || 0.0;
+    this.z = z || 0.0;
+  }
+
+  _createClass(Quat, [{
+    key: 'mul',
+    value: function mul(q) {
+      var aw = this.w;
+      var ax = this.x;
+      var ay = this.y;
+      var az = this.z;
+      var bw = q.w;
+      var bx = q.x;
+      var by = q.y;
+      var bz = q.z;
+      return new Quat(aw * bw - ax * bx - ay * by - az * bz, ax * bw + aw * bx + ay * bz - az * by, ay * bw + aw * by + az * bx - ax * bz, az * bw + aw * bz + ax * by - ay * bx).normalize;
+    }
+  }, {
+    key: 'dot',
+    value: function dot(q) {
+      return this.w * q.w + this.x * q.x + this.y * q.y + this.z * q.z;
+    }
+  }, {
+    key: 'cross',
+    value: function cross(q) {
+      throw new Error('Quaternion cross not implemented ' + q);
+    }
+  }, {
+    key: 'scaleRotation',
+    value: function scaleRotation(t) {
+      // Redundant multiplication
+      var angle = acos(this.w) * t;
+      var axis = new _.Vec3(this.x, this.y, this.z).scale(sin(angle));
+      return new Quat(cos(angle), axis.x, axis.y, axis.z);
+    }
+  }, {
+    key: 'lerp',
+    value: function lerp(q, t) {
+      return t >= 1.0 ? q : this.scaleRotation(1 - t).multiply(q.scaleRotation(t));
+    }
+  }, {
+    key: 'nlerp',
+    value: function nlerp(q, t) {
+      return this.lerp(q, t).normalize;
+    }
+  }, {
+    key: 'slerp',
+    value: function slerp(q, t) {
+      // http://www.euclideanspace.com/maths/algebra/realNormedAlgebra/quaternions/slerp/
+      if (t <= 0.0) {
+        return this;
+      } else if (t >= 1.0) {
+        return q;
+      }
+      // Calculate angle between a and b
+      var cosHalfTheta = this.dot(q);
+      // if a=b or a=-b then theta = 0 and we can return a
+      if (abs(cosHalfTheta) >= 1.0) {
+        return this;
+      }
+
+      if (cosHalfTheta < 0.0) {
+        q.w = -q.w;q.x = -q.x;q.y = -q.y;q.z = -q.z;
+        cosHalfTheta = -cosHalfTheta;
+      }
+
+      // Calculate temporary values
+      var sinHalfTheta = sqrt(1.0 - cosHalfTheta * cosHalfTheta);
+
+      // if theta = 180 degrees then result is not fully defined, we could rotate around any axis normal to a or b
+      if (abs(sinHalfTheta) < 0.001) {
+        return new Quat((this.w + q.w) * 0.5, (this.x + q.x) * 0.5, (this.y + q.y) * 0.5, (this.z + q.z) * 0.5).normalize;
+      }
+
+      var halfTheta = acos(cosHalfTheta);
+      var ratioA = sin((1 - t) * halfTheta) / sinHalfTheta;
+      var ratioB = sin(t * halfTheta) / sinHalfTheta;
+      return new Quat(this.w * ratioA + q.w * ratioB, this.x * ratioA + q.x * ratioB, this.y * ratioA + q.y * ratioB, this.z * ratioA + q.z * ratioB).normalize;
+    }
+  }, {
+    key: 'copy',
+    get: function get() {
+      return new Quat(this.w, this.x, this.y, this.z);
+    }
+  }, {
+    key: 'toArray',
+    get: function get() {
+      return [this.w, this.x, this.y, this.z];
+    }
+  }, {
+    key: 'toMat3',
+    get: function get() {
+      var w = this.w,
+          x = this.x,
+          y = this.y,
+          z = this.z;
+
+      var xw = x * w;
+      var xx = x * x;
+      var xy = x * y;
+      var xz = x * z;
+      var yw = y * w;
+      var yy = y * y;
+      var yz = y * z;
+      var zw = z * w;
+      var zz = z * z;
+      return new _.Mat3(1 - 2 * (yy + zz), 2 * (xy - zw), 2 * (xz + yw), 2 * (xy + zw), 1 - 2 * (xx + zz), 2 * (yz - xw), 2 * (xz - yw), 2 * (yz + xw), 1 - 2 * (xx + yy));
+    }
+  }, {
+    key: 'toMat4',
+    get: function get() {
+      return this.toMat3.toMat4;
+    }
+  }, {
+    key: 'toEulers',
+    get: function get() {
+      throw new Error('Quaternion toEuler not implemented');
+    }
+  }, {
+    key: 'len',
+    get: function get() {
+      return sqrt(this.w * this.w + this.x * this.x + this.y * this.y + this.z * this.z);
+    }
+  }, {
+    key: 'lenSqrt',
+    get: function get() {
+      return this.w * this.w + this.x * this.x + this.y * this.y + this.z * this.z;
+    }
+  }, {
+    key: 'conjugate',
+    get: function get() {
+      return new Quat(this.w, -this.x, -this.y, -this.z);
+    }
+  }, {
+    key: 'normalize',
+    get: function get() {
+      var r = sqrt(this.w * this.w + this.x * this.x + this.y * this.y + this.z * this.z);
+      if (r > 0) {
+        r = 1 / r;
+        return new Quat(this.w * r, this.x * r, this.y * r, this.z * r);
+      }
+      return new Quat(1.0, 0.0, 0.0, 0.0);
+    }
+  }, {
+    key: 'invert',
+    get: function get() {
+      var r = 1 / this.len;
+      return new Quat(this.w * r, -this.x * r, -this.y * r, -this.z * r);
+    }
+  }]);
+
+  return Quat;
+}();
+
+exports.default = Quat;
+
+/***/ }),
+
+/***/ "./public/glib/src/math/vec2.js":
+/*!**************************************!*\
+  !*** ./public/glib/src/math/vec2.js ***!
+  \**************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var sqrt = Math.sqrt;
+
+var Vec2 = function () {
+  _createClass(Vec2, null, [{
+    key: "fromArray",
+    value: function fromArray(a) {
+      return new (Function.prototype.bind.apply(Vec2, [null].concat(_toConsumableArray(a))))();
+    }
+  }, {
+    key: "zero",
+    get: function get() {
+      return new Vec2(0, 0);
+    }
+  }, {
+    key: "up",
+    get: function get() {
+      return new Vec2(0, 1);
+    }
+  }, {
+    key: "down",
+    get: function get() {
+      return new Vec2(0, -1);
+    }
+  }, {
+    key: "left",
+    get: function get() {
+      return new Vec2(-1, 0);
+    }
+  }, {
+    key: "right",
+    get: function get() {
+      return new Vec2(1, 0);
+    }
+  }]);
+
+  function Vec2(x, y) {
+    _classCallCheck(this, Vec2);
+
+    this.x = x || 0;
+    this.y = y || 0;
+  }
+
+  _createClass(Vec2, [{
+    key: "add",
+    value: function add(v) {
+      return new Vec2(this.x + v.x, this.y + v.y);
+    }
+  }, {
+    key: "sub",
+    value: function sub(v) {
+      return new Vec2(this.x - v.x, this.y - v.y);
+    }
+  }, {
+    key: "scale",
+    value: function scale(f) {
+      return new Vec2(this.x * f, this.y * f);
+    }
+  }, {
+    key: "dot",
+    value: function dot(v) {
+      return this.x * v.x + this.y * v.y;
+    }
+  }, {
+    key: "getAngle",
+    value: function getAngle(v) {
+      return this.normalize.dot(v.normalize);
+    }
+  }, {
+    key: "invert",
+    value: function invert() {
+      return new Vec2(-this.x, -this.y);
+    }
+  }, {
+    key: "toArray",
+    get: function get() {
+      return [this.x, this.y];
+    }
+  }, {
+    key: "toFloat32Array",
+    get: function get() {
+      return new Float32Array([this.x, this.y]);
+    }
+  }, {
+    key: "clone",
+    get: function get() {
+      return new Vec2(this.x, this.y);
+    }
+  }, {
+    key: "len",
+    get: function get() {
+      return sqrt(this.x * this.x + this.y * this.y);
+    }
+  }, {
+    key: "lenSqrt",
+    get: function get() {
+      return this.x * this.x + this.y * this.y;
+    }
+  }, {
+    key: "normalize",
+    get: function get() {
+      var r = sqrt(this.x * this.x + this.y * this.y);
+      if (r > 0) {
+        r = 1 / r;
+        return new Vec2(this.x * r, this.y * r);
+      }
+      return new Vec2(0, 0);
+    }
+  }]);
+
+  return Vec2;
+}();
+
+exports.default = Vec2;
+
+/***/ }),
+
+/***/ "./public/glib/src/math/vec3.js":
+/*!**************************************!*\
+  !*** ./public/glib/src/math/vec3.js ***!
+  \**************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var sqrt = Math.sqrt;
+
+var Vec3 = function () {
+  _createClass(Vec3, null, [{
+    key: "fromArray",
+    value: function fromArray(a) {
+      return new (Function.prototype.bind.apply(Vec3, [null].concat(_toConsumableArray(a))))();
+    }
+  }, {
+    key: "fromQuat",
+    value: function fromQuat(q) {
+      var x = this.x;
+      var y = this.y;
+      var z = this.z;
+      var qx = q.x;
+      var qy = q.y;
+      var qz = q.z;
+      var qw = q.w;
+      var ix = qw * x + qy * z - qz * y;
+      var iy = qw * y + qz * x - qx * z;
+      var iz = qw * z + qx * y - qy * x;
+      var iw = -qx * x - qy * y - qz * z;
+      return new Vec3(ix * qw + iw * -qx + iy * -qz - iz * -qy, iy * qw + iw * -qy + iz * -qx - ix * -qz, iz * qw + iw * -qz + ix * -qy - iy * -qx);
+    }
+  }, {
+    key: "fromMat4",
+    value: function fromMat4(m) {
+      return new Vec3(m.a14 + m.a11 * this.x + m.a12 * this.y + m.a13 * this.z, m.a24 + m.a21 * this.x + m.a22 * this.y + m.a23 * this.z, m.a34 + m.a31 * this.x + m.a32 * this.y + m.a33 * this.z);
+    }
+  }, {
+    key: "zero",
+    get: function get() {
+      return new Vec3(0, 0, 0);
+    }
+  }, {
+    key: "up",
+    get: function get() {
+      return new Vec3(0, 1, 0);
+    }
+  }, {
+    key: "down",
+    get: function get() {
+      return new Vec3(0, -1, 0);
+    }
+  }, {
+    key: "left",
+    get: function get() {
+      return new Vec3(-1, 0, 0);
+    }
+  }, {
+    key: "right",
+    get: function get() {
+      return new Vec3(1, 0, 0);
+    }
+  }, {
+    key: "forward",
+    get: function get() {
+      return new Vec3(0, 0, 1);
+    }
+  }, {
+    key: "backward",
+    get: function get() {
+      return new Vec3(0, 0, -1);
+    }
+  }]);
+
+  function Vec3(x, y, z) {
+    _classCallCheck(this, Vec3);
+
+    this.x = x || 0;
+    this.y = y || 0;
+    this.z = z || 0;
+  }
+
+  _createClass(Vec3, [{
+    key: "add",
+    value: function add(v) {
+      return new Vec3(this.x + v.x, this.y + v.y, this.z + v.z);
+    }
+  }, {
+    key: "sub",
+    value: function sub(v) {
+      return new Vec3(this.x - v.x, this.y - v.y, this.z - v.z);
+    }
+  }, {
+    key: "scale",
+    value: function scale(f) {
+      return new Vec3(this.x * f, this.y * f, this.z * f);
+    }
+  }, {
+    key: "dot",
+    value: function dot(v) {
+      return this.x * v.x + this.y * v.y + this.z * v.z;
+    }
+  }, {
+    key: "cross",
+    value: function cross(v) {
+      return new Vec3(this.y * v.z - this.z * v.y, this.z * v.x - this.x * v.z, this.x * v.y - this.y * v.x);
+    }
+  }, {
+    key: "lerp",
+    value: function lerp(v, t) {
+      return new Vec3(this.x + (v.x - this.x) * t, this.y + (v.y - this.y) * t, this.z + (v.z - this.z) * t);
+    }
+  }, {
+    key: "getNormal",
+    value: function getNormal(b, c) {
+      return this.sub(b).cross(this.sub(c)).normalize;
+    }
+  }, {
+    key: "getAngle",
+    value: function getAngle(v) {
+      return this.normalize.dot(v.normalize);
+    }
+  }, {
+    key: "forward",
+    get: function get() {
+      return this.normalize;
+    }
+  }, {
+    key: "backward",
+    get: function get() {
+      return this.normalize.invert;
+    }
+  }, {
+    key: "left",
+    get: function get() {
+      return this.forward.cross(Vec3.up).normalize;
+    }
+  }, {
+    key: "right",
+    get: function get() {
+      return this.forward.cross(Vec3.up).normalize.invert;
+    }
+  }, {
+    key: "down",
+    get: function get() {
+      return this.forward.cross(this.left).normalize;
+    }
+  }, {
+    key: "up",
+    get: function get() {
+      return this.forward.cross(this.left).normalize.invert;
+    }
+  }, {
+    key: "toArray",
+    get: function get() {
+      return [this.x, this.y, this.z];
+    }
+  }, {
+    key: "toFloat32Array",
+    get: function get() {
+      return new Float32Array([this.x, this.y, this.z]);
+    }
+  }, {
+    key: "clone",
+    get: function get() {
+      return new Vec3(this.x, this.y, this.z);
+    }
+  }, {
+    key: "len",
+    get: function get() {
+      return sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
+    }
+  }, {
+    key: "lenSqrt",
+    get: function get() {
+      return this.x * this.x + this.y * this.y + this.z * this.z;
+    }
+  }, {
+    key: "normalize",
+    get: function get() {
+      var r = sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
+      if (r > 0) {
+        r = 1 / r;
+        return new Vec3(this.x * r, this.y * r, this.z * r);
+      }
+      return new Vec3(0, 0, 0);
+    }
+  }, {
+    key: "invert",
+    get: function get() {
+      return new Vec3(-this.x, -this.y, -this.z);
+    }
+  }]);
+
+  return Vec3;
+}();
+
+exports.default = Vec3;
+
+/***/ }),
+
+/***/ "./public/glib/src/model/geometry.js":
+/*!*******************************************!*\
+  !*** ./public/glib/src/model/geometry.js ***!
+  \*******************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Geometry = function Geometry(vertexOffset, vertexCount) {
+  _classCallCheck(this, Geometry);
+
+  this.vertexOffset = vertexOffset;
+  this.vertexCount = vertexCount;
+  this.mesh = null;
+};
+
+exports.default = Geometry;
+
+/***/ }),
+
+/***/ "./public/glib/src/model/mesh.js":
+/*!***************************************!*\
+  !*** ./public/glib/src/model/mesh.js ***!
+  \***************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _gl = __webpack_require__(/*! core/gl */ "./public/glib/src/core/gl.js");
+
+var _resource = __webpack_require__(/*! core/resource */ "./public/glib/src/core/resource.js");
+
+var _resource2 = _interopRequireDefault(_resource);
+
+var _geometry = __webpack_require__(/*! ./geometry */ "./public/glib/src/model/geometry.js");
+
+var _geometry2 = _interopRequireDefault(_geometry);
+
+var _math = __webpack_require__(/*! math */ "./public/glib/src/math/index.js");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var getAttributeInfo = function getAttributeInfo(attributes) {
+  var attr = [];
+  var offset = 0;
+  attributes.forEach(function (attribute) {
+    switch (attribute) {
+      case 'a_position':
+        attr.push({ name: 'a_position', vertices: 3, offset: offset });offset += 3;break;
+      case 'a_texcoord':
+        attr.push({ name: 'a_texcoord', vertices: 2, offset: offset });offset += 2;break;
+      case 'a_normal':
+        attr.push({ name: 'a_normal', vertices: 3, offset: offset });offset += 3;break;
+      case 'a_tangent':
+        attr.push({ name: 'a_tangent', vertices: 3, offset: offset });offset += 3;break;
+      case 'a_bitangent':
+        attr.push({ name: 'a_bitangent', vertices: 3, offset: offset });offset += 3;break;
+      default:
+        throw new Error('Unknown mesh attribute name: ' + attribute);
+    }
+  });
+  return attr;
+};
+
+var calculateVertexSize = function calculateVertexSize(attributes) {
+  var size = 0;
+  attributes.forEach(function (attribute) {
+    switch (attribute) {
+      case 'a_position':
+        size += 3;break;
+      case 'a_texcoord':
+        size += 2;break;
+      case 'a_normal':
+        size += 3;break;
+      case 'a_tangent':
+        size += 3;break;
+      case 'a_bitangent':
+        size += 3;break;
+      default:
+        throw new Error('Unknown mesh attribute: ' + attribute);
+    }
+  });
+  return size;
+};
+
+var generateGeometries = function generateGeometries(geometries, indices, hasTexCoords) {
+  // Expects indices to contain indices for position and normals, optionally for texturecoordinates
+  // Geometries are expected to be split at vertice that can be divided by 3
+  var count = 0;
+  var increment = hasTexCoords ? 9 : 6;
+  var isWordRegEx = /[a-z_]+(?:\.\w+)?/i;
+  geometries.push(new _geometry2.default(0, null));
+  if (isWordRegEx.test(indices[0])) {
+    indices.splice(0, 1);
+  }
+  for (var i = 0; i < indices.length; i += increment) {
+    if (isWordRegEx.test(indices[i])) {
+      indices.splice(i, 1);
+      geometries[geometries.length - 1].vertexCount = count * 3;
+      geometries.push(new _geometry2.default(i * 3, null));
+      count = 0;
+      i -= 1;
+      continue;
+    }
+    count += 1;
+  }
+  geometries[geometries.length - 1].vertexCount = count * 3;
+};
+
+var generateNormals = function generateNormals(normals, indices, vertices, hasTexCoords) {
+  if (indices && indices.length > 0) {
+    if (hasTexCoords) {
+      var newil = indices.length / 2 * 3;
+      for (var i = 0; i < newil; i += 9) {
+        var normalIndice = i / 9;
+        normals.push(vertices[indices[i + 0]].getNormal(vertices[indices[i + 2]], vertices[indices[i + 4]]));
+        indices.splice(i + 2, 0, normalIndice);
+        indices.splice(i + 5, 0, normalIndice);
+        indices.splice(i + 8, 0, normalIndice);
+      }
+    } else {
+      var _newil = indices.length * 2;
+      for (var _i = 0; _i < _newil; _i += 6) {
+        var _normalIndice = _i / 6;
+        normals.push(vertices[indices[_i + 0]].getNormal(vertices[indices[_i + 1]], vertices[indices[_i + 2]]));
+        indices.splice(_i + 1, 0, _normalIndice);
+        indices.splice(_i + 3, 0, _normalIndice);
+        indices.splice(_i + 5, 0, _normalIndice);
+      }
+    }
+  } else {
+    var vl = vertices.length;
+    for (var _i2 = 0; _i2 < vl; _i2 += 3) {
+      var normal = vertices[_i2 + 0].getNormal(vertices[_i2 + 1], vertices[_i2 + 2]);
+      normals.push(normal, normal, normal);
+    }
+  }
+};
+
+var generateTanAndBitan = function generateTanAndBitan(tangents, bitangents, vertices, texCoords, indices) {
+  // Expects indices to contain indices for position, texturecoordinates and normals
+  var newil = indices.length / 3 * 5;
+  for (var i = 0; i < newil; i += 15) {
+    var v1 = vertices[indices[i + 0]];
+    var v2 = vertices[indices[i + 3]];
+    var v3 = vertices[indices[i + 6]];
+    var w1 = texCoords[indices[i + 1]];
+    var w2 = texCoords[indices[i + 4]];
+    var w3 = texCoords[indices[i + 7]];
+
+    var x1 = v2.x - v1.x;
+    var x2 = v3.x - v1.x;
+    var y1 = v2.y - v1.y;
+    var y2 = v3.y - v1.y;
+    var z1 = v2.z - v1.z;
+    var z2 = v3.z - v1.z;
+
+    var s1 = w2.x - w1.x;
+    var s2 = w3.x - w1.x;
+    var t1 = w2.y - w1.y;
+    var t2 = w3.y - w1.y;
+
+    var r = 1.0 / (s1 * t2 - s2 * t1);
+    var tan = new _math.Vec3((t2 * x1 - t1 * x2) * r, (t2 * y1 - t1 * y2) * r, (t2 * z1 - t1 * z2) * r).normalize;
+    var bitan = new _math.Vec3((s1 * x2 - s2 * x1) * r, (s1 * y2 - s2 * y1) * r, (s1 * z2 - s2 * z1) * r).normalize;
+
+    tangents.push(tan);
+    bitangents.push(bitan);
+    var newIndice = i / 15;
+    indices.splice(i + 3, 0, newIndice, newIndice);
+    indices.splice(i + 8, 0, newIndice, newIndice);
+    indices.splice(i + 13, 0, newIndice, newIndice);
+  }
+};
+
+var uploadToGPU = function uploadToGPU(vertexData, indices) {
+  var vertexBuffer = _gl.gl.createBuffer();
+  _gl.gl.bindBuffer(_gl.gl.ARRAY_BUFFER, vertexBuffer);
+  _gl.gl.bufferData(_gl.gl.ARRAY_BUFFER, vertexData, _gl.gl.STATIC_DRAW);
+  var indiceBuffer = _gl.gl.createBuffer();
+  _gl.gl.bindBuffer(_gl.gl.ELEMENT_ARRAY_BUFFER, indiceBuffer);
+  _gl.gl.bufferData(_gl.gl.ELEMENT_ARRAY_BUFFER, indices, _gl.gl.STATIC_DRAW);
+  return { vertexBuffer: vertexBuffer, indiceBuffer: indiceBuffer };
+};
+
+var Mesh = function (_Resource) {
+  _inherits(Mesh, _Resource);
+
+  _createClass(Mesh, null, [{
+    key: 'parse',
+    value: function parse(resource, data) {
+      var _this2 = this;
+
+      var vertices = [];
+      var texCoords = [];
+      var normals = [];
+      var tangents = [];
+      var bitangents = [];
+      var indices = [];
+
+      var geometries = [];
+      var attributes = [];
+      var vertexData = [];
+
+      var nextLine = /^(\w+) (.+)$/gm;
+      var allFloats = /-?\d+\.\d+/g;
+      var allInts = /\d+/g;
+      var line = '';
+      while (line = nextLine.exec(data)) {
+        switch (line[1]) {
+          // Vertice
+          case 'v':
+            vertices.push(new (Function.prototype.bind.apply(_math.Vec3, [null].concat(_toConsumableArray(line[2].match(allFloats).map(parseFloat)))))());break;
+          // Texturecoordinate
+          case 'vt':
+            texCoords.push(new (Function.prototype.bind.apply(_math.Vec2, [null].concat(_toConsumableArray(line[2].match(allFloats).map(parseFloat)))))());break;
+          // Normal
+          case 'vn':
+            normals.push(new (Function.prototype.bind.apply(_math.Vec3, [null].concat(_toConsumableArray(line[2].match(allFloats).map(parseFloat)))))());break;
+          // Indices for next 3 vertices
+          case 'f':
+            indices.push.apply(indices, _toConsumableArray(line[2].match(allInts).map(function (num) {
+              return parseInt(num, 10) - 1;
+            })));break;
+          // Point where material usage starts
+          case 'g':
+            indices.push(line[2]);break;
+          // Comment
+          case '#':
+            break;
+          // Object name
+          case 'o':
+            break;
+          // Name to switch to at this point of indices
+          case 'usemtl':
+            break;
+          // Smooth shading 1 (on) or off (off)
+          case 's':
+            break;
+          // Materials library and filename
+          case 'mtllib':
+            break;
+          // For now log if there is unknown line start
+          default:
+            throw new Error(line[2]);
+        }
+      }
+      if (vertices.length > 0) {
+        attributes.push('a_position');
+      }
+      var hasTexCoords = texCoords.length > 0;
+      if (hasTexCoords) {
+        attributes.push('a_texcoord');
+      }
+      if (normals.length === 0) {
+        generateNormals(normals, indices, vertices, hasTexCoords);
+      }
+      attributes.push('a_normal');
+
+      generateGeometries(geometries, indices, hasTexCoords);
+      geometries.map(function (g) {
+        g.mesh = _this2;
+      });
+
+      if (hasTexCoords) {
+        generateTanAndBitan(tangents, bitangents, vertices, texCoords, indices);
+        attributes.push('a_tangent', 'a_bitangent');
+      }
+
+      if (texCoords) {
+        var il = indices.length;
+        for (var i = 0; i < il; i += 5) {
+          vertexData.push.apply(vertexData, _toConsumableArray(vertices[indices[i + 0]].toArray));
+          vertexData.push.apply(vertexData, _toConsumableArray(texCoords[indices[i + 1]].toArray));
+          vertexData.push.apply(vertexData, _toConsumableArray(normals[indices[i + 2]].toArray));
+          vertexData.push.apply(vertexData, _toConsumableArray(tangents[indices[i + 3]].toArray));
+          vertexData.push.apply(vertexData, _toConsumableArray(bitangents[indices[i + 4]].toArray));
+        }
+      } else {
+        var _il = indices.length;
+        for (var _i3 = 0; _i3 < _il; _i3 += 2) {
+          vertexData.push.apply(vertexData, _toConsumableArray(vertices[indices[_i3 + 0]].toArray));
+          vertexData.push.apply(vertexData, _toConsumableArray(normals[indices[_i3 + 2]].toArray));
+        }
+      }
+
+      var buffers = uploadToGPU(new Float32Array(vertexData), new Int16Array(indices));
+
+      console.log(vertices);
+      console.log(texCoords);
+      console.log(normals);
+      console.log(tangents);
+      console.log(bitangents);
+      console.log(indices);
+      console.log(geometries);
+    }
+  }]);
+
+  function Mesh(url) {
+    _classCallCheck(this, Mesh);
+
+    var _this = _possibleConstructorReturn(this, (Mesh.__proto__ || Object.getPrototypeOf(Mesh)).call(this, url));
+
+    _this.geometries = [];
+    _this.attributes = [];
+    _this.vertexSize = null;
+    _this.vertexBuffer = null;
+    _this.indexBuffer = null;
+    return _this;
+  }
+
+  return Mesh;
+}(_resource2.default);
+
+exports.default = Mesh;
+
+/***/ }),
+
+/***/ "./public/glib/src/model/texture.js":
+/*!******************************************!*\
+  !*** ./public/glib/src/model/texture.js ***!
+  \******************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _resource = __webpack_require__(/*! core/resource */ "./public/glib/src/core/resource.js");
+
+var _resource2 = _interopRequireDefault(_resource);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Texture = function (_Resource) {
+  _inherits(Texture, _Resource);
+
+  _createClass(Texture, null, [{
+    key: 'parse',
+    value: function parse(resource, data) {
+      resource.img.src = 'data:image/png;base64,' + data;
+    }
+  }]);
+
+  function Texture(url) {
+    _classCallCheck(this, Texture);
+
+    var _this = _possibleConstructorReturn(this, (Texture.__proto__ || Object.getPrototypeOf(Texture)).call(this, url));
+
+    _this.img = new Image();
+    return _this;
+  }
+
+  return Texture;
+}(_resource2.default);
+
+exports.default = Texture;
+
+/***/ }),
+
+/***/ "./public/glib/src/style.css":
+/*!***********************************!*\
+  !*** ./public/glib/src/style.css ***!
+  \***********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+var content = __webpack_require__(/*! !../../../node_modules/css-loader??ref--7!./style.css */ "./node_modules/css-loader/index.js??ref--7!./public/glib/src/style.css");
+
+if(typeof content === 'string') content = [[module.i, content, '']];
+
+var transform;
+var insertInto;
+
+
+
+var options = {"singleton":true,"sourceMap":false,"convertToAbsoluteUrls":true,"hmr":true}
+
+options.transform = transform
+options.insertInto = undefined;
+
+var update = __webpack_require__(/*! ../../../node_modules/style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
+
+if(content.locals) module.exports = content.locals;
+
+if(false) {}
+
+/***/ })
+
+/******/ });
+//# sourceMappingURL=bundle.js.map

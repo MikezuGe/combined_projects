@@ -1,8 +1,11 @@
-import Login from './login';
-import Home from './home';
-import Budget, { CONTAINER_ACTION_REMOVE_BUDGET_DATA, } from './budget';
-import Options from './options';
-import Profile from './profile';
+export { default as Login, } from './login';
+export { default as Home, } from './home';
+export { default as Budget, } from './budget';
+export { default as Options, } from './options';
+export { default as Profile, } from './profile';
+
+
+import { CONTAINER_ACTION_REMOVE_BUDGET_DATA, } from './budget';
 
 
 const containerActionTypes = {
@@ -10,11 +13,4 @@ const containerActionTypes = {
 }
 
 
-export {
-  containerActionTypes,
-  Login,
-  Home,
-  Budget,
-  Options,
-  Profile,
-};
+export { containerActionTypes, };

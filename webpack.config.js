@@ -1,10 +1,12 @@
 const webpack = require('webpack');
 const path = require('path');
 const fs = require('fs');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 
 const mode = process.env.NODE_ENV || 'development';
 const isProduction = mode === 'production';
+const bundleName = isProduction ? 'bundle.js' : 'devBundle.js';
 
 
 const eslintLoader = {
@@ -72,14 +74,22 @@ const pluginEnvSetter = new webpack.DefinePlugin({
   'process.env.NODE_ENV': JSON.stringify(mode),
 });
 
+const pluginHtmlWebpackPlugin = project => new HtmlWebpackPlugin({
+  'filename': path.resolve(`./public/${project}/index.html`),
+  'title': project,
+  'template': 'utility/template.html',
+  'jsSource': `/${project}/${bundleName}`,
+  'inject': false,
+});
+
 
 module.exports = fs.readdirSync('./public')
-  .filter(file => fs.readdirSync(`./public/${file}`).includes('index.html'))
+  .filter(file => fs.lstatSync(`./public/${file}`).isDirectory() && fs.readdirSync(`./public/${file}`).includes('index.html'))
   .map(project => ({
     mode,
     'entry': path.resolve(`./public/${project}/src/app.js`),
     'output': {
-      'filename': 'bundle.js',
+      'filename': bundleName,
       'path': path.resolve(`./public/${project}`),
     },
     'devtool': isProduction ? 'hidden-source-map' : 'source-map',
@@ -100,5 +110,6 @@ module.exports = fs.readdirSync('./public')
     },
     plugins: [
       pluginEnvSetter,
+      pluginHtmlWebpackPlugin(project),
     ],
   }));

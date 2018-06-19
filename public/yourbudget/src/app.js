@@ -11,7 +11,7 @@ import { Login, Home, Budget, Options, Profile, } from 'js/containers';
 import store from 'js/redux';
 
 
-class MainContent extends Component {
+let MainContent = class MainContent extends Component {
 
   state = {
     actionModalOpen: false,
@@ -38,58 +38,46 @@ class MainContent extends Component {
   }
 
   render () {
-    const { pathname, } = this.props.location;
-    return (
-      <div className={'maincontent'}>
-        { this.state.actionModalOpen &&
-          <ActionModal actionModalFormType={this.state.actionModalFormType} closeActionModal={this.closeActionModal} /> }
-        <Header />
-        <SideMenu pathname={pathname} openActionModal={this.openActionModal} toggleContainerAction={this.toggleContainerAction} />
-        <Switch>
-          <Route path='/home' render={() => <Home />} />
-          <Route path='/budget' render={() => <Budget containerActionType={this.state.containerActionType} />} />
-          <Route path='/options' render={() => <Options />} />
-          <Route path='/profile' render={() => <Profile />} />
-          <Redirect to='/' />
-        </Switch>
-      </div>
-    );
+    const {
+      closeActionModal, openActionModal, toggleContainerAction,
+      props: { loading, sessionId, location: { pathname, }, },
+      state: { actionModalOpen, actionModalFormType, containerActionType, },
+    } = this;
+    if (loading) { return; }
+    return sessionId === '' && pathname !== '/login'
+      ? <Redirect to='/login' />
+      : <Switch>
+        { actionModalOpen &&
+          <ActionModal actionModalFormType={actionModalFormType} closeActionModal={closeActionModal} /> }
+        { sessionId === '' &&
+          <Route exact path='/login' component={Login} /> }
+        <Route exact path='/' component={Menu} />
+        <Route path='/'>
+          <div className={'maincontent'}>
+            <Header />
+            <SideMenu pathname={pathname} openActionModal={openActionModal} toggleContainerAction={toggleContainerAction} />
+            <Switch>
+              <Route path='/home' render={() => <Home />} />
+              <Route path='/budget' render={() => <Budget containerActionType={containerActionType} />} />
+              <Route path='/options' render={() => <Options />} />
+              <Route path='/profile' render={() => <Profile />} />
+              <Redirect from='*' to='/' />
+            </Switch>
+          </div>
+        </Route>
+        <Redirect from='*' to='/' />
+      </Switch>;
   }
 
 }
 
 
 MainContent.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  sessionId: PropTypes.string.isRequired,
   history: PropTypes.object.isRequired,
   location: PropTypes.object.isRequired,
 };
-
-
-let App = class App extends Component {
-
-  render () {
-    const { loading, sessionId, } = this.props;
-    if (loading) {
-      return;
-    }
-    if (sessionId === '' && pathname !== '/yourbudget/') {
-      window.location = base;
-    }
-    return (
-      <Switch>
-        <Route exact path='/' component={sessionId === '' ? Login : Menu} />
-        <Route path='/' component={MainContent} />
-      </Switch>
-    );
-  }
-
-}
-
-
-App.propTypes = {
-  loading: PropTypes.bool.isRequired,
-  sessionId: PropTypes.string.isRequired,
-}
 
 
 const mapStateToProps = state => ({
@@ -98,11 +86,21 @@ const mapStateToProps = state => ({
 });
 
 
-App = connect(mapStateToProps, null)(App);
+MainContent = connect(mapStateToProps, null)(MainContent);
+
+
+class App extends Component {
+
+  render () {
+    return <Route path='/' component={MainContent} />;
+  }
+
+}
 
 
 const { pathname, } = window.location;
-const base = pathname.slice(0, pathname.indexOf('/', 1));
+const slashPos = pathname.indexOf('/', 1);
+const base = (() => slashPos < 0 ? pathname : pathname.slice(0, slashPos))();
 
 
 ReactDOM.render(

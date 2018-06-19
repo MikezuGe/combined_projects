@@ -20,7 +20,7 @@ glibRouter.get('/:url', (req, res) => {
   let resourcePath = '';
   const head = {};
   const options = {};
-  switch (url.slice(url.indexOf('.'), url.length)) {
+  switch (url.slice(url.indexOf('.'))) {
   case '.obj':
     resourcePath = `${dataPaths.meshes}${url}`;
     head['Content-Type'] = 'text/plain';

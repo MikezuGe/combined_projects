@@ -24,12 +24,12 @@
   transition: 0.4s;
 }
 
-#isIncome:checked + .switch_toggle:before {
+.switch_toggle_checkbox:checked + .switch_toggle:before {
   transform: translateX(28px);
   background: royalblue;
 }
 
-#isIncome:checked + .form_field {
+.switch_toggle_checkbox:checked + .form_field {
   background: lime;
 }
 

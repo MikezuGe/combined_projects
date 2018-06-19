@@ -1,5 +1,6 @@
 import React, { Component, } from 'react';
 import { connect, } from 'react-redux';
+
 import Form, { Field, } from 'js/components/forms';
 import { login, } from 'js/redux';
 
@@ -7,7 +8,9 @@ import { login, } from 'js/redux';
 class Login extends Component {
 
   validateUsername (username) {
-    if (username.length < 4) {
+    if (!username) {
+      return 'Username unspecified.';
+    } else if (username.length < 4) {
       return 'Username must be at least 4 characters long.';
     } else if (/[^a-zåäö0-9]/gi.test(username)) {
       return 'Username can contain a-zå ä ö 0-9';
@@ -15,21 +18,27 @@ class Login extends Component {
   }
 
   validatePassword (password) {
-    if (username.length < 6) {
-      return 'Password must be at least 4 characters long.';
+    if (!password) {
+      return 'Password unspecified.';
+    } else if (password.length < 6) {
+      return 'Password must be at least 6 characters long.';
     }
   }
 
-  submit (data) {
-    login(data);
+  onSubmit = data => {
+    // eslint-disable-next-line
+    console.log('submitted', data);
   }
 
   render () {
     return (
-      <Form submit={this.submit}>
-        { Field({ type: 'text', name: 'username', initialValue: '', placeholder: 'Username', validate: this.validateUsername, }) }
-        { Field({ type: 'password', name: 'password', initialValue: '', placeholder: 'Password', validate: this.validatePassword, }) }
-      </Form>
+      <div>
+        <Form onSubmit={this.onSubmit} >
+          <Field name='text' type='text' validate={this.validateUsername} />
+          <Field name='password' type='password' validate={this.validatePassword} />
+          <Field name='submit' type='submit' value='Login' />
+        </Form>
+      </div>
     );
   }
 

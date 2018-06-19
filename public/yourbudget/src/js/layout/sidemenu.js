@@ -34,7 +34,7 @@ class SideMenu extends Component {
       items.push(<div key={items.length} className={'sidemenutitle'}>{firstLetterToUpperCase(path)}</div>);
       break;
     default:
-      throw new Error(`Sidemenuitems rendering failed, unknown location: ${path}`);
+      break;//throw new Error(`Sidemenuitems rendering failed, unknown location: ${path}`);
     }
     items.push(<Link key={items.length} className={'sidemenuitem'} to={'/'}>{'Back to menu!'}</Link>);
     return items;

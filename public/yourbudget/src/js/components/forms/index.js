@@ -1,10 +1,2 @@
-import Form from './form';
-import Field from './field';
-
-
-export default Form;
-
-
-export {
-  Field,
-};
+export { default } from './form';
+export { default as Field, } from './field';

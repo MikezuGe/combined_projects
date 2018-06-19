@@ -6,3 +6,5 @@ node_modules
 restart.sh
 **/log.txt
 connectionstrings.json
+**/devBundle*
+sslcert/*

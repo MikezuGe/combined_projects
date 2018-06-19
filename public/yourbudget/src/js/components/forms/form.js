@@ -2,74 +2,84 @@ import React, { Component, } from 'react';
 import PropTypes from 'prop-types';
 
 
-const isValid = fields => {
-  let valid = true;
-  for (const field of fields) {
-    if (field.meta) {
-      field.meta.submitted = true;
-      field.meta.changed = false;
-    }
-    if (field.validate) {
-      field.validate(field);
-      if (field.error !== '') {
-        valid = false;
-      }
-    }
-  }
-  return valid;
-};
+const meta = { submitted: false, changed: false, pristine: true, valid: false, error: undefined, };
 
 
 class Form extends Component {
 
-  static getDerivedStateFromProps = props => ({ ...props.children.reduce((total, child) => {
-      total[child.props.name] = { name: child.props.name, type: child.props.type, value: child.props.initialValue, };
+  state = {};
+
+  static getDerivedStateFromProps = props => props.children.reduce((total, field) => {
+    const { name, type, value, } = field.props;
+    if (!name) {
+      throw new Error(`Form field doesn't have a name prop: ${field.props}`);
+    }
+    if (type === 'submit') {
       return total;
-    }, {})
-  })
-  
-  state = {}
+    }
+    total[name] = {
+      value: value || (type === 'toggleswitch' ? false : ''),
+      meta: { ...meta, },
+    }
+    return total;
+  }, {});
 
-  onChangeHandler = e => {
-    const { name, type, value, checked, } = e.target;
-    this.setState(prevState => {
-      const field = prevState[name];
-      field.value = type === 'checkbox' ? checked : value;
-      if (field.meta) {
-        field.meta.changed = true;
-        field.meta.touched = true;
-        field.meta.pristine = false;
+  isValid () {
+    for (let field of Object.values(this.state)) {
+      if (!field.meta.valid) {
+        return false;
       }
+    }
+    return true;
+  }
+
+  onChange = (name, value, meta) => {
+    this.setState({ [name]: { value, meta, }, });
+  }
+
+  onSubmit = () => {
+    this.setState(prevState => {
+      Object.values(prevState).forEach(field => {
+        field.meta.submitted = true;
+        field.meta.changed = false;
+      });
       return prevState;
     });
+
+    if (this.isValid()) {
+      this.props.onSubmit(Object.entries(this.state).reduce((total, [key, content]) => {
+        total[key] = content.value;
+        return total;
+      }, {}));
+    }
   }
 
-  submit = () => {
-    isValid();
+  render() {
+    return (
+      <div>
+        { this.props.children.map((field, i) => field.props.type === 'submit'
+          ? <field.type 
+            key={i}
+            {...field.props}
+            value={field.props.value}
+            onSubmit={this.onSubmit}
+          />
+          : <field.type
+            key={i}
+            {...field.props}
+            {...this.state[field.props.name]}
+            onChange={this.onChange}
+          />) }
+      </div>
+    );
   }
 
-  formSubmit = () => {
-  }
-
-  clearForm = () => {
-    this.setState(prevState => {
-      for (const key in prevState) {
-        prevState[key].value = '';
-      }
-      return prevState;
-    });
-  }
-
-  render = () => {
-    return <form className='form'>
-      { this.props.children.map((field, i) => <field.Element key={field.props.name} {...field.props} value={this.state.value} onChange={e => { this.onChangeHandler(e, i); }} />) }
-    </form>;
-  }
 }
 
 
 Form.propTypes = {
   children: PropTypes.array.isRequired,
+  onSubmit: PropTypes.func.isRequired,
 }
 
 

@@ -3,38 +3,13 @@
 <html>
   <head>
     <meta charset='utf-8'>
-    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, shrink-to-fit=no'>
     <link rel='icon' type='image/gif' href='/favico/favicogifslow.gif'>
-    <title>Search and Destroy</title>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'> 
+    <title>snd</title>
   </head>
   <body>
-    <div id='root'>
-      <div id='notice_container' class='notice_container notice_added'>
-      </div>
-      <div class='flex_container'>
-        <div class='modal'>
-          <form id='login_form' class='login_form'>
-            <div class='form_title'>Login</div>
-            <input name='username' id='login_username' type='text' placeholder='username'>
-            <div class='form_error'></div>
-            <input name='password' id='login_password' type='text' placeholder='password'>
-            <div class='form_error'></div>
-            <input class='submit_button' type='submit' value='Login'>
-          </form>
-
-          <form id='create_account_form' class='create_account_form'>
-            <div class='form_title'>Create account</div>
-            <input name='email' id='create_account_email' type='text' placeholder='email'>
-            <div class='form_error'></div>
-            <input name='username' id='create_account_username' type='text' placeholder='username'>
-            <div class='form_error'></div>
-            <input name='password' id='create_account_password' type='text' placeholder='password'>
-            <div class='form_error'></div>
-            <input class='submit_button' type='submit' value='Create'>
-          </form>
-        </div>
-      </div>
-    </div>
-    <script src='bundle.js'></script>
+    <div id='root'></div>
+    <script type='text/javascript' src='/snd/devBundle.js'></script>
   </body>
 </html>

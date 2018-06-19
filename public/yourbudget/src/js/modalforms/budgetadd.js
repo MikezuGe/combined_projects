@@ -55,12 +55,12 @@ class BudgetAdd extends Component {
 
   }
 
-  render = () => {
+  render ()  {
     return <Form submit={this.submit}>
-      { Field({ type: 'text', name: 'name', initialValue: '', placeholder: 'example-name', validate: validateName, }) }
-      { Field({ type: 'text', name: 'amount', initialValue: '', placeholder: 'xxx.xx', validate: validateAmount, }) }
-      { Field({ type: 'date', name: 'date', initialValue: parseDate(new Date(), 'YYYY-MM-DD'), validate: validateDate, }) }
-      { Field({ type: 'toggle', name: 'isIncome', initialValue: true, onValue: 'Income', offValue: 'Expense', }) }
+      <Field type='text' name='name' value='' placeholder='example-name' validate={validateName} />
+      <Field type='text' name='amount' value='' placeholder='xxx.xx' validate={validateAmount} />
+      <Field type='date' name='date' value={parseDate(new Date(), 'YYYY-MM-DD')} validate={validateDate} />
+      <Field type='toggle' name='isIncome' value={true} onValue='Income' offValue='Expense' />
       <div className='form_field submit'>
         { /*<button type='submit' className='form_submit_button' onClick={(e) => { submit(e, SUBMIT_ADD); }}>{'Submit and add'}</button>
         <button type='submit' className='form_submit_button' onClick={(e) => { submit(e, SUBMIT_CLOSE); }}>{'Submit and close'}</button>

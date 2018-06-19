@@ -15,11 +15,11 @@ if (isProduction) {
   let redirectNumber = 0;
   require('http').createServer((req, res) => {
     redirectNumber += 1;
-    logger.log(`Redirect http to https. Redirected ${redirectNumber} times`);
+    logger.log(`Redirect request: ${req.method} ${req.url}, Host: ${req.hostname}. Total redirects: ${redirectNumber}.`);
     res.writeHead(301, { "Location": "https://" + req.headers.host + req.url });
     res.end();
   }).listen(80, () => {
-    logger.log('Redirect listening to port 80');
+    logger.log('Redirecting connections to https. Listening to port 80');
   });
 }
 
@@ -36,29 +36,38 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 
 app.use((req, res, next) => {
-  logger.log(`Request: ${req.method} ${req.url} Host: ${req.hostname}`);
+  if (!req.hostname) {
+    logger.warn(`Undefined host: Request: ${req.method} ${req.url}, Host: ${req.hostname}`);
+    res.send('Client cannot be identified');
+    return;
+  }
+  logger.log(`Request: ${req.method} ${req.url}, Host: ${req.hostname}`);
   next();
 });
+
+
 app.use('/api', apiRouter);
-app.use(express.static(path.join(__dirname + '/public')));
 app.get('/', (req, res) => {
-  fs.readdir('./public', (err, files) => {
-    if (err) {
-      logger.warn(err);
-      res.send('Unable to read public');
-      return;
-    }
-    res.send(createHTML(files.filter(file => fs.readdirSync(`./public/${file}`).includes('index.html'))));
-  });
+  const files = fs.readdirSync('./public').filter(file => fs.lstatSync(`./public/${file}`).isDirectory() && fs.readdirSync(`./public/${file}`).includes('index.html'));
+  res.send(createHTML(files));
 });
+app.use((express.static(path.resolve(__dirname, 'public'))))
 app.get('/*', (req, res) => {
   // Favicon
   if (req.path.slice(0, req.path.indexOf('/', 1)) === '/favico') {
-    res.sendFile(path.resolve('./public/shared_assets', `./${req.path}`));
+    res.sendFile(path.resolve('./public/shared_assets', req.path.slice(1)));
     return;
   }
   // Everything else
-  res.sendFile(path.resolve('./public' + req.path.slice(0, req.path.indexOf('/', 1)), 'index.html'));
+  const slashPos = req.path.indexOf('/', 1);
+  const reqUrl = path.resolve('./public', (slashPos < 0 ? req.path : req.path.slice(0, slashPos)).slice(1), 'index.html');
+  fs.access(reqUrl, fs.constants.F_OK, err => {
+    if (!err) {
+      res.sendFile(reqUrl);
+    } else {
+      res.redirect('/');
+    }
+  });
 });
 
 server.listen(PORT, () => {

@@ -9,10 +9,9 @@ const createDataFolderStructure = (parentFolderPath, folderStructure, allFolders
     fs.mkdir(folderPath, err => {
       if (err) {
         if (err.code === 'EEXIST') {
-          if (folderStructure[folder]) {
-            return createDataFolderStructure(folderPath, folderStructure[folder], allFolders);
-          }
-          return allFolders;
+          return folderStructure[folder]
+            ? createDataFolderStructure(folderPath, folderStructure[folder], allFolders)
+            : allFolders;
         }
         logger.err(`Unable to create folder ${folderPath} ${err}`);
       }
@@ -20,9 +19,9 @@ const createDataFolderStructure = (parentFolderPath, folderStructure, allFolders
       if (folderStructure[folder]) {
         return createDataFolderStructure(folderPath, folderStructure[folder], allFolders);
       }
-      return allFolders;
     });
   }
+  return allFolders;
 };
 
 

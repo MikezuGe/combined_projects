@@ -4,11 +4,11 @@ import PropTypes from 'prop-types';
 import { BrowserRouter as Router, history, Switch, Route, Redirect, } from 'react-router-dom';
 import { Provider, connect, } from 'react-redux';
 
-import 'css/style.css';
+import './style.css';
 
-import { Menu, Header, SideMenu, ActionModal, } from 'js/layout';
-import { Login, Home, Budget, Options, Profile, } from 'js/containers';
-import store from 'js/redux';
+import { Menu, Header, SideMenu, ActionModal, } from './layout';
+import { Login, Home, Budget, Options, Profile, } from './containers';
+import store from './stores';
 
 
 let MainContent = class MainContent extends Component {

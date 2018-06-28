@@ -51,14 +51,16 @@ class App extends Component {
   render ()  {
     const { thumbnailUrls, bigImageUrls, bigImageUrl, error, } = this.state;
     const { openImage, closeImage, } = this;
-    return <div className={'container'}>
-      { error.length > 0 &&
-        <Modal message={error} /> }
-      { thumbnailUrls.length > 0 && bigImageUrls.length > 0 &&
-        <Thumbnails openImage={openImage} thumbnailUrls={thumbnailUrls} bigImageUrls={bigImageUrls} /> }
-      { bigImageUrl.length > 0 &&
-        <BigImage closeImage={closeImage} bigImageUrl={bigImageUrl} /> }
-    </div>
+    return (
+      <div className={'container'}>
+        { error.length > 0 &&
+          <Modal message={error} /> }
+        { thumbnailUrls.length > 0 && bigImageUrls.length > 0 &&
+          <Thumbnails openImage={openImage} thumbnailUrls={thumbnailUrls} bigImageUrls={bigImageUrls} /> }
+        { bigImageUrl.length > 0 &&
+          <BigImage closeImage={closeImage} bigImageUrl={bigImageUrl} /> }
+      </div>
+    );
   }
 
 }

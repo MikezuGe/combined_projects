@@ -29,8 +29,10 @@ class Logger {
         }
         return str;
       }) + '/' + logfileName;
-    fs.appendFile(this.logfile, `\nProgram initiated at ${parseDate(new Date(), 'hh:mm:ss')}\n`, err => {
+    const toConsole = `\nProgram initiated at ${parseDate(new Date(), 'hh:mm:ss')}\n`;
+    fs.appendFile(this.logfile, toConsole, err => {
       if (err) throw new Error(`Failed to write to logfile' ${err}`);
+      console.log(toConsole)
     });
   }
 

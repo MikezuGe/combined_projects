@@ -3,15 +3,17 @@ module.exports = createHTML = files => `
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Kontioweb</title>
     <meta charset='utf-8'>
     <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-    <link rel='icon' type='image/gif' href='/favico/favicogifslow.gif'>
+    <link rel='icon' type='image/gif' href='shared_assets/favico/favicogifslow.gif'>
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+    <title>Kontioweb</title>
     <style>
       * {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
+        font-family: 'Ubuntu', sans-serif;
       }
 
       body {

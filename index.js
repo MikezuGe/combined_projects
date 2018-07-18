@@ -6,6 +6,7 @@ const fs = require('fs');
 const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 
 const app = express();
 
@@ -33,6 +34,7 @@ const io = require('socket.io')(server);
 app.disable('x-powered-by');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true, }));
+app.use(cookieParser());
 
 
 app.all('*', (req, res, next) => {

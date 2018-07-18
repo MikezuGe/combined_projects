@@ -1,8 +1,6 @@
 import axios from 'axios';
 
-
-import Mesh from 'model/mesh';
-import Texture from 'model/texture';
+import { Mesh, Texture, } from 'resources';
 
 
 axios.defaults.baseURL = `${window.location.origin}/api/glib`;
@@ -12,7 +10,7 @@ class ResourceLoader {
 
   constructor () {
     this.resources = new Map();
-    this.resourcesLoading = new Map();
+    this.resourceQueue = [];
     this.loading = false;
   }
 
@@ -20,10 +18,12 @@ class ResourceLoader {
     if (this.resources.has(url)) {
       return this.resources.get(url);
     }
-    if (this.resourcesLoading.has(url)) {
+    if (this.resourceQueue.indexOf(url) > -1) {
       return;
     }
-    this.loadResource(this.createResource(url));
+    const resource = this.createResource(url);
+    this.resourceQueue.push(resource);
+    this.loadNextResource();
   }
 
   createResource (url) {
@@ -38,20 +38,33 @@ class ResourceLoader {
     }
   }
 
-  loadResource (resource) {
-    this.resourcesLoading.set(resource.url, resource);
+  loadNextResource () {
+    if (this.loading) {
+      return;
+    }
+    const resource = this.resourceQueue.shift();
+    if (!resource) {
+      return;
+    }
+    this.loading = true;
     axios.get(resource.url, { headers: { 'accept': 'image/png', }})
       .then(res => {
         resource.constructor.parse(resource, res.data);
         this.resources.set(resource.url, resource);
-        this.resourcesLoading.delete(resource.url);
+        this.loading = false;
+        this.loadNextResource();
+        /*
         if (resource.img) {
           document.getElementById('root').appendChild(resource.img);
         }
+        */
       })
       .catch(err => {
-        this.resourcesLoading.delete(resource.url);
-        console.error(`Unable to load resource ${resource.url} ${err}`);
+        const error = `Unable to load resource ${resource.url}`;
+        console.error(error, err);
+        this.resource.set(resource.url, { error, });
+        this.loading = false;
+        this.loadNextResource();
       });
   }
 

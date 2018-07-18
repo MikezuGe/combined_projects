@@ -1,5 +1,5 @@
 
-class Component {
+export default class Component {
 
   constructor (node) {
     this.node = node;
@@ -10,6 +10,3 @@ class Component {
   }
 
 }
-
-
-export default Component;

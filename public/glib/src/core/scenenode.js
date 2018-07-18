@@ -4,8 +4,8 @@ class SceneNode {
   constructor (scene, parent) {
     this.children = [];
     this.components = [];
-    this.scene = scene;
-    this.parent = parent;
+    this.scene = scene || null;
+    this.parent = parent || null;
   }
 
   addChild () {
@@ -22,26 +22,28 @@ class SceneNode {
     this.children.splice(this.children.indexOf(node), 1);
   }
 
-  addComponent (type) {
-    const component = new [type]();
+  addComponent (Component, src) {
+    const component = new Component(this, src);
     this.scene.addToComponentRegister(component);
     this.components.push(component);
     return component;
   }
 
   removeComponent (component) {
+    component.node = null;
     this.scene.removeFromComponentRegister(component);
     this.components.splice(this.components.indexOf(component), 1);
   }
 
   remove () {
-    for (const child of this.children) {
-      child.remove();
+    const { children, components, parent, } = this;
+    while (children.length) {
+      children[children.length - 1].remove();
     }
-    while (this.components.length > 0) {
-      this.components[this.components.length - 1].remove();
+    while (components.length) {
+      components[components.length - 1].remove();
     }
-    this.parent.removeChild(this);
+    parent.removeChild(this);
   }
 
   walkEnabled (fn) {

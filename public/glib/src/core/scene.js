@@ -1,19 +1,22 @@
 import SceneNode from './scenenode';
-import ResourceLoader from './resourceloader';
 
 
 class Scene extends SceneNode {
 
+  static createScene (configFileUrl) {
+    const scene = new Scene();
+    if (!configFileUrl) {
+      throw new Error('No configuration file defined!');
+    }
+    /* Load configuration from server and configure scene with it */
+    return scene;
+  }
+
   constructor () {
     super();
-    this.resourceLoader = new ResourceLoader();
     this.scene = this;
     this.nodeRegister = [];
     this.componentRegister = [];
-  }
-
-  getResource (url) {
-    return this.resourceLoader.getResource(url);
   }
 
   addToNodeRegister (node) {

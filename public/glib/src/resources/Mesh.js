@@ -1,7 +1,7 @@
-import { gl, } from 'core/gl'
-import Resource from 'core/resource';
-import Geometry from './geometry';
+import gl from 'core/gl'
 import { Vec3, Vec2, } from 'math';
+import Resource from './Resource';
+import Geometry from 'renderer/Geometry';
 
 
 const getAttributeInfo = attributes => {
@@ -181,24 +181,24 @@ class Mesh extends Resource {
         case 's': break;
         // Materials library and filename
         case 'mtllib': break;
-        // For now log if there is unknown line start
+        // For now throw if there is an unknown line start
         default: throw new Error(line[2]);
       }
     }
-    if (vertices.length > 0) {
+    if (vertices.length) {
       attributes.push('a_position');
     }
-    const hasTexCoords = texCoords.length > 0;
+    const hasTexCoords = !!texCoords.length;
     if (hasTexCoords) {
       attributes.push('a_texcoord');
     }
-    if (normals.length === 0) {
+    if (!normals.length) {
       generateNormals(normals, indices, vertices, hasTexCoords);
     }
     attributes.push('a_normal');
 
     generateGeometries(geometries, indices, hasTexCoords);
-    geometries.map(g => { g.mesh = this; });
+    geometries.forEach(g => { g.mesh = resource; });
 
     if (hasTexCoords) {
       generateTanAndBitan(tangents, bitangents, vertices, texCoords, indices);
@@ -224,13 +224,11 @@ class Mesh extends Resource {
 
     const buffers = uploadToGPU(new Float32Array(vertexData), new Int16Array(indices));
 
-    console.log(vertices);
-    console.log(texCoords);
-    console.log(normals);
-    console.log(tangents);
-    console.log(bitangents);
-    console.log(indices);
-    console.log(geometries);
+    resource.geometries = geometries;
+    resource.attributes = getAttributeInfo(attributes);
+    resource.vertexSize = calculateVertexSize(attributes);
+    resource.vertexBuffer = buffers.vertexBuffer;
+    resource.indiceBuffer = buffers.indiceBuffer;
   }
 
   constructor(url) {
@@ -239,7 +237,7 @@ class Mesh extends Resource {
     this.attributes = [];
     this.vertexSize = null;
     this.vertexBuffer = null;
-    this.indexBuffer = null;
+    this.indiceBuffer = null;
   }
 
 }

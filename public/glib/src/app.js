@@ -1,8 +1,15 @@
-import Scene from './core/scene';
-import './style.css';
+import 'style.css';
+
+import Scene from 'core/Scene';
+import ResourceLoader from 'core/ResourceLoader';
+//import Renderer from 'renderer';
+import * as components from 'components';
 
 
-const scene = new Scene();
+const scene = Scene.createScene('configFileNameHere.txt');
 let node = scene.addChild();
-scene.getResource('monkey.obj');
-scene.getResource('puppy.png');
+let component = node.addComponent(components.Model, 'monkey.png');
+//const renderer = new Renderer(new ResourceLoader());
+const resourceLoader = new ResourceLoader();
+resourceLoader.getResource('puppy.png');
+resourceLoader.getResource('monkey.obj');

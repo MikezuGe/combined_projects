@@ -1,4 +1,4 @@
-import { Vec3, Mat3, } from './';
+import { Vec3, Mat3, } from '.';
 
 
 const { sin, cos, acos, abs, sqrt, } = Math;

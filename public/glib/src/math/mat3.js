@@ -1,4 +1,4 @@
-import { Mat4, Quat, } from './';
+import { Mat4, Quat, } from '.';
 
 
 const { sqrt, } = Math

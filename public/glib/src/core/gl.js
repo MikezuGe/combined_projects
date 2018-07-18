@@ -17,7 +17,6 @@ const gl = canvas.getContext('webgl2');
 windowResizeEvent.subscribe(canvas.resize, gl.resize);
 
 
-export {
-  canvas,
-  gl,
-};
+export { canvas, };
+
+export default gl;

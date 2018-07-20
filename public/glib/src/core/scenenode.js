@@ -1,9 +1,12 @@
+import Transform from './Transform';
+
 
 class SceneNode {
 
   constructor (scene, parent) {
     this.children = [];
     this.components = [];
+    this.transform = new Transform(this);
     this.scene = scene || null;
     this.parent = parent || null;
   }
@@ -18,12 +21,14 @@ class SceneNode {
   removeChild (node) {
     node.scene = null;
     node.parent = null;
+    node.transfrom.node = null;
+    node.transfrom = null;
     this.scene.removeFromNodeRegister(node);
     this.children.splice(this.children.indexOf(node), 1);
   }
 
-  addComponent (Component, src) {
-    const component = new Component(this, src);
+  addComponent (Component) {
+    const component = new Component(this);
     this.scene.addToComponentRegister(component);
     this.components.push(component);
     return component;

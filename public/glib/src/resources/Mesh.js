@@ -158,33 +158,40 @@ class Mesh extends Resource {
     const nextLine = /^(\w+) (.+)$/gm;
     const allFloats = /-?\d+\.\d+/g;
     const allInts = /\d+/g;
-    let line = '';
-    while ((line = nextLine.exec(data))) {
-      switch (line[1]) {
-        // Vertice
-        case 'v': vertices.push(new Vec3(...line[2].match(allFloats).map(parseFloat))); break;
-        // Texturecoordinate
-        case 'vt': texCoords.push(new Vec2(...line[2].match(allFloats).map(parseFloat))); break;
-        // Normal
-        case 'vn': normals.push(new Vec3(...line[2].match(allFloats).map(parseFloat))); break;
-        // Indices for next 3 vertices
-        case 'f': indices.push(...line[2].match(allInts).map(num => parseInt(num, 10) - 1)); break;
-        // Point where material usage starts
-        case 'g': indices.push(line[2]); break;
-        // Comment
-        case '#': break;
-        // Object name
-        case 'o': break;
-        // Name to switch to at this point of indices
-        case 'usemtl': break;
-        // Smooth shading 1 (on) or off (off)
-        case 's': break;
-        // Materials library and filename
-        case 'mtllib': break;
-        // For now throw if there is an unknown line start
-        default: throw new Error(line[2]);
+    let row = '';
+
+    if (typeof data === 'object') {
+      // Generated vertexdata, must have texturecoordinates
+      const vertexDataLength = data.vertexData.length;
+      for (let i = 0; i < vertexDataLength; i += 2) {
+        vertices.push(data.vertexData[i + 0]);
+        texCoords.push(data.vertexData[i + 1]);
+      }
+      indices.push(...data.indices);
+    } else {
+      // From file
+      const parseRow = {
+        'v': aRow => { vertices.push(new Vec3(...aRow[2].match(allFloats).map(parseFloat))); }, // Vertice
+        'vt': aRow => { texCoords.push(new Vec2(...aRow[2].match(allFloats).map(parseFloat))); }, // Texturecoordinate
+        'vn': aRow => { normals.push(new Vec3(...aRow[2].match(allFloats).map(parseFloat))); }, // Normal
+        'f': aRow => { indices.push(...aRow[2].match(allInts).map(num => parseInt(num, 10) - 1)); }, // Indices for next 3 vertices
+        'g': aRow => { indices.push(aRow[2]); }, // Point where material usage starts
+        '#': aRow => { aRow }, // Comment
+        'o': aRow => { aRow }, // Object name
+        'usemtl': aRow => { aRow }, // Material to switch to at this point of indices
+        's': aRow => { aRow }, // Smooth shading 1 (on) or off (off)
+        'mtllib': aRow => { aRow }, // Materials library and filename
+      }
+      while ((row = nextLine.exec(data))) {
+        try {
+          parseRow[row[1]](row);
+        } catch (err) {
+          // For now throw if there is an unknown row start
+          throw new Error('Failed at parsing mesh file row.', row, err);
+        }
       }
     }
+
     if (vertices.length) {
       attributes.push('a_position');
     }
@@ -192,13 +199,14 @@ class Mesh extends Resource {
     if (hasTexCoords) {
       attributes.push('a_texcoord');
     }
+
+    generateGeometries(geometries, indices, hasTexCoords);
+    geometries.forEach(g => { g.mesh = resource; });
+
     if (!normals.length) {
       generateNormals(normals, indices, vertices, hasTexCoords);
     }
     attributes.push('a_normal');
-
-    generateGeometries(geometries, indices, hasTexCoords);
-    geometries.forEach(g => { g.mesh = resource; });
 
     if (hasTexCoords) {
       generateTanAndBitan(tangents, bitangents, vertices, texCoords, indices);

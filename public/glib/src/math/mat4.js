@@ -14,6 +14,7 @@ export default class Mat4 {
       0.0, 0.0, 0.0, 1.0,
     );
   }
+
   static fromArray (a) { return new Mat4(...a); }
 
   static perspective (fovrad, aspectRatio, near, far) {
@@ -26,6 +27,7 @@ export default class Mat4 {
       0.0, 0.0, near * far * rangeInv * 2, 0.0,
     );
   }
+
   static orthographic (left, right, bottom, top, near, far) {
     const lr = 1 / (left - right);
     const bt = 1 / (bottom - top);
@@ -37,17 +39,7 @@ export default class Mat4 {
       (left + right) * lr, (top + bottom) * bt, (far + near) * nf, 1,
     );
   }
-  static lookAt (camPos, target, up) {
-    const zAxis = camPos.sub(target).normalize;
-    const xAxis = up.cross(zAxis);
-    const yAxis = zAxis.cross(xAxis);
-    return new Mat4(
-      xAxis.x, xAxis.y, xAxis.z, 0.0,
-      yAxis.x, yAxis.y, yAxis.z, 0.0,
-      zAxis.x, zAxis.y, zAxis.z, 0.0,
-      camPos.x, camPos.y, camPos.z, 1.0,
-    );
-  }
+
   static translate (x, y, z) {
     return new Mat4(
       1.0, 0.0, 0.0, 0.0,
@@ -56,6 +48,7 @@ export default class Mat4 {
       x, y, z, 1.0,
     );
   }
+
   static scale (w, h, d) {
     return new Mat4(
       w, 0.0, 0.0, 0.0,
@@ -64,6 +57,7 @@ export default class Mat4 {
       0.0, 0.0, 0.0, 1.0,
     );
   }
+
   static rotateX (angle) {
     const cosi = cos(angle);
     const sine = sin(angle);
@@ -74,6 +68,7 @@ export default class Mat4 {
       0.0, 0.0, 0.0, 1.0,
     );
   }
+
   static rotateY (angle) {
     const cosi = cos(angle);
     const sine = sin(angle);
@@ -84,6 +79,7 @@ export default class Mat4 {
       0.0, 0.0, 0.0, 1.0,
     );
   }
+
   static rotateZ (angle) {
     const cosi = cos(angle);
     const sine = sin(angle);
@@ -110,6 +106,7 @@ export default class Mat4 {
       this.m30, this.m31, this.m32, this.m33,
     );
   }
+
   get toArray () {
     return [
       this.m00, this.m01, this.m02, this.m03,
@@ -118,6 +115,7 @@ export default class Mat4 {
       this.m30, this.m31, this.m32, this.m33,
     ];
   }
+
   get toFloat32Array () {
     return new Float32Array([
       this.m00, this.m01, this.m02, this.m03,
@@ -126,6 +124,7 @@ export default class Mat4 {
       this.m30, this.m31, this.m32, this.m33,
     ]);
   }
+
   get toMat3 () {
     return new Mat3(
       this.m00, this.m01, this.m02,
@@ -133,7 +132,22 @@ export default class Mat4 {
       this.m20, this.m21, this.m22,
     );
   }
-  get toQuat () { return this.toMat3.toQuat; }
+
+  get toQuat () {
+    return this.toMat3.toQuat;
+  }
+
+  lookAt (target, up) {
+    const zAxis = this.sub(target).normalize;
+    const xAxis = up.cross(zAxis);
+    const yAxis = zAxis.cross(xAxis);
+    return new Mat4(
+      xAxis.x, xAxis.y, xAxis.z, 0.0,
+      yAxis.x, yAxis.y, yAxis.z, 0.0,
+      zAxis.x, zAxis.y, zAxis.z, 0.0,
+      this.x, this.y, this.z, 1.0,
+    );
+  }
 
   add (v) {
     return new Mat4(
@@ -143,6 +157,7 @@ export default class Mat4 {
       this.m30 + v.m30, this.m31 + v.m31, this.m32 + v.m32, this.m33 + v.m33,
     );
   }
+
   sub (v) {
     return new Mat4(
       this.m00 - v.m00, this.m01 - v.m01, this.m02 - v.m02, this.m03 - v.m03,
@@ -151,6 +166,7 @@ export default class Mat4 {
       this.m30 - v.m30, this.m31 - v.m31, this.m32 - v.m32, this.m33 - v.m33,
     );
   }
+
   mul (v) {
     return new Mat4(
       v.m00 * this.m00 + v.m01 * this.m10 + v.m02 * this.m20 + v.m03 * this.m30,
@@ -174,6 +190,7 @@ export default class Mat4 {
       v.m30 * this.m03 + v.m31 * this.m13 + v.m32 * this.m23 + v.m33 * this.m33,
     );
   }
+
   get invert () {
     const { m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, m22, m23, m30, m31, m32, m33 } = this;
     const a00 = m11 * m22 * m33 - m11 * m23 * m32 - m21 * m12 * m33 + m21 * m13 * m32 + m31 * m12 * m23 - m31 * m13 * m22;
@@ -183,7 +200,7 @@ export default class Mat4 {
 
     let det = m00 * a00 + m01 * a10 + m02 * a20 + m03 * a30;
     if (det === 0) {
-      throw new Error(`Cannot invert matrix: ${this}`);
+      throw new Error('Cannot invert matrix', this);
     }
     det = 1.0 / det;
 
@@ -206,6 +223,7 @@ export default class Mat4 {
       det * m00 * m11 * m22 - m00 * m12 * m21 - m10 * m01 * m22 + m10 * m02 * m21 + m20 * m01 * m12 - m20 * m02 * m11,
     );
   }
+
   get transpose () {
     return new Mat4(
       this.m00, this.m10, this.m20, this.m30,
@@ -218,6 +236,7 @@ export default class Mat4 {
   get translation () {
     return new Vec3(this.m30, this.m31, this.m32);
   }
+
   get scale () {
     return new Vec3(
       new Vec3(this.m00, this.m10, this.m20).len,
@@ -225,6 +244,7 @@ export default class Mat4 {
       new Vec3(this.m02, this.m12, this.m22).len
     );
   }
+
   get rotation () {
     return new Mat3(
       this.m00, this.m01, this.m02,

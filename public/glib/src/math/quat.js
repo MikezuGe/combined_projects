@@ -17,6 +17,7 @@ export default class Quat {
   static get tiltRight () { return new Quat(0.707, 0.000, 0.000, -0.707); }
 
   static fromArray (a) { return new Quat(...a); }
+
   static fromEulers (x, y, z) {
     const c1 = cos(y * 0.5);
     const c2 = cos(z * 0.5);
@@ -31,11 +32,13 @@ export default class Quat {
       c1 * s2 * c3 - s1 * c2 * s3,
     ).normalize;
   }
+
   static fromAxisAngle (axis, angle) {
     const r = 1 / axis.len;
     const s = sin(angle / 2);
     return new Quat(cos(angle / 2), s * axis.x * r, s * axis.y * r, s * axis.z * r).normalize;
   }
+
   static fromRotation (v1, v2) {
     // https://stackoverflow.com/a/1171995
     const half = v1.add(v2);
@@ -51,8 +54,10 @@ export default class Quat {
     this.z = z || 0.0;
   }
 
-  get copy () { return new Quat(this.w, this.x, this.y, this.z); }
+  get clone () { return new Quat(this.w, this.x, this.y, this.z); }
+
   get toArray () { return [ this.w, this.x, this.y, this.z, ]; }
+
   get toMat3 () {
     const { w, x, y, z, } = this;
     const xw = x * w;
@@ -70,12 +75,17 @@ export default class Quat {
       2 * (xz - yw), 2 * (yz + xw), 1 - 2 * (xx + yy)
     );
   }
+
   get toMat4 () { return this.toMat3.toMat4; }
+
   get toEulers () { throw new Error('Quaternion toEuler not implemented'); }
 
   get len () { return sqrt(this.w * this.w + this.x * this.x + this.y * this.y + this.z * this.z); }
+
   get lenSqrt () { return this.w * this.w + this.x * this.x + this.y * this.y + this.z * this.z; }
+
   get conjugate () { return new Quat(this.w, -this.x, -this.y, -this.z); }
+
   get normalize () {
     let r = sqrt(this.w * this.w + this.x * this.x + this.y * this.y + this.z * this.z);
     if (r > 0) {
@@ -84,12 +94,12 @@ export default class Quat {
     }
     return new Quat(1.0, 0.0, 0.0, 0.0);
   }
+
   get invert () {
     const r = 1 / this.len;
     return new Quat(this.w * r, -this.x * r, -this.y * r, -this.z * r);
   }
 
-  
   mul (q) {
     const aw = this.w;
     const ax = this.x;
@@ -107,6 +117,7 @@ export default class Quat {
     ).normalize;
   }
   dot (q) { return this.w * q.w + this.x * q.x + this.y * q.y + this.z * q.z; }
+
   cross (q) { throw new Error(`Quaternion cross not implemented ${q}`); }
 
   scaleRotation (t) {
@@ -115,8 +126,11 @@ export default class Quat {
     const axis = new Vec3(this.x, this.y, this.z).scale(sin(angle));
     return new Quat(cos(angle), axis.x, axis.y, axis.z);
   }
+
   lerp (q, t) { return t >= 1.0 ? q : this.scaleRotation(1 - t).multiply(q.scaleRotation(t)); }
+
   nlerp (q, t) { return this.lerp(q, t).normalize; }
+
   slerp (q, t) {
     // http://www.euclideanspace.com/maths/algebra/realNormedAlgebra/quaternions/slerp/
     if (t <= 0.0) {

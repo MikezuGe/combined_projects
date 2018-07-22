@@ -6,6 +6,7 @@ export default class Component {
   }
 
   remove () {
+    this.removeReferences();
     this.node.removeComponent(this);
   }
 

@@ -1,9 +1,12 @@
 import 'style.css';
+import ResourceLoader from 'core/ResourceLoader';
+import Scene from 'core/Scene';
+import Renderer from 'renderer/renderer';
 
-import resourceLoader from 'core/ResourceLoader';
-//import Renderer from 'renderer';
 
-
-//resourceLoader.getScene('scene.cnf');
-const plane = resourceLoader.createShape('Plane', 10, 10);
-console.log(plane);
+const resourceLoader = new ResourceLoader();
+resourceLoader.getResource('scene.cnf', sceneSource => {
+  const scene = Scene.createScene(sceneSource, resourceLoader);
+  const renderer = new Renderer();
+  renderer.renderScene(scene);
+});

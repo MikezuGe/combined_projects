@@ -1,15 +1,9 @@
-import resourceLoader from './ResourceLoader';
 import SceneNode from './scenenode';
 import { Model, Camera, } from 'components';
 import { Vec3, } from 'math';
 
 
-const parseModel = () => {
-
-}
-
-
-const parseDataNodes = (dataNodes, parentNode) => {
+const parseDataNodes = (dataNodes, parentNode, resourceLoader) => {
   dataNodes.forEach(dataNode => {
     const sceneNode = parentNode.addChild();
     if (dataNode.transform) {
@@ -36,7 +30,7 @@ const parseDataNodes = (dataNodes, parentNode) => {
       }
     }
     if (dataNode.nodes) {
-      parseDataNodes(dataNode.nodes, sceneNode);
+      parseDataNodes(dataNode.nodes, sceneNode, resourceLoader);
     }
   });
 }
@@ -44,25 +38,22 @@ const parseDataNodes = (dataNodes, parentNode) => {
 
 class Scene extends SceneNode {
 
-  static parse (scene, data) {
-    if (typeof data !== 'object') {
-      JSON.parse(data);
-    }
+  static createScene (sceneSource, resourceLoader) {
+    const scene = new Scene(sceneSource);
+    const { data, } = sceneSource;
     if (data.transform) {
       for (let key in data.transform) {
         const { x, y, z, } = data.transform[key];
         scene.transform[key] = new Vec3(x || 0, y || 0, z || 0);
       }
     }
-    
-    // Parse nodes
-    parseDataNodes(data.nodes, scene);
-
+    parseDataNodes(data.nodes, scene, resourceLoader);
+    return scene;
   }
 
-  constructor (url) {
+  constructor (source) {
     super();
-    this.url = url;
+    this.source = source || null;
     this.scene = this;
     this.nodeRegister = [];
     this.componentRegister = [];

@@ -1,7 +1,7 @@
 import gl from 'core/gl'
 import { Vec3, Vec2, } from 'math';
 import Resource from './Resource';
-import Geometry from 'renderer/Geometry';
+import Geometry from 'misc/Geometry';
 
 
 const getAttributeInfo = attributes => {

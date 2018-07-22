@@ -18,7 +18,6 @@ export default class Material extends Resource {
 
   constructor (url) {
     super(url);
-    this.shaderProgram = null;
     this.textures = new Map();
     this.defines = new Map();
   }

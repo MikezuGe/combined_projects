@@ -3,7 +3,7 @@ import { Vec2, Vec3, } from 'math';
 
 export default class Sphere extends Mesh {
 
-  static generateShape = (resource, radius) => {
+  static generate = (resource, { radius, }) => {
     /*
     width /= 2;
     depth /= 2;

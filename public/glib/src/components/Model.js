@@ -1,4 +1,4 @@
-import Component from 'core/Component';
+import Component from './Component';
 
 
 export default class Model extends Component {
@@ -23,6 +23,11 @@ export default class Model extends Component {
   
   getMaterials () {
     return this.materials.length ? this.materials : null;
+  }
+
+  removeReferences () {
+    this.mesh = null;
+    this.materials.length = 0;
   }
 
 }

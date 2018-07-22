@@ -137,60 +137,6 @@ export default class Mat4 {
     return this.toMat3.toQuat;
   }
 
-  lookAt (target, up) {
-    const zAxis = this.sub(target).normalize;
-    const xAxis = up.cross(zAxis);
-    const yAxis = zAxis.cross(xAxis);
-    return new Mat4(
-      xAxis.x, xAxis.y, xAxis.z, 0.0,
-      yAxis.x, yAxis.y, yAxis.z, 0.0,
-      zAxis.x, zAxis.y, zAxis.z, 0.0,
-      this.x, this.y, this.z, 1.0,
-    );
-  }
-
-  add (v) {
-    return new Mat4(
-      this.m00 + v.m00, this.m01 + v.m01, this.m02 + v.m02, this.m03 + v.m03,
-      this.m10 + v.m10, this.m11 + v.m11, this.m12 + v.m12, this.m13 + v.m13,
-      this.m20 + v.m20, this.m21 + v.m21, this.m22 + v.m22, this.m23 + v.m23,
-      this.m30 + v.m30, this.m31 + v.m31, this.m32 + v.m32, this.m33 + v.m33,
-    );
-  }
-
-  sub (v) {
-    return new Mat4(
-      this.m00 - v.m00, this.m01 - v.m01, this.m02 - v.m02, this.m03 - v.m03,
-      this.m10 - v.m10, this.m11 - v.m11, this.m12 - v.m12, this.m13 - v.m13,
-      this.m20 - v.m20, this.m21 - v.m21, this.m22 - v.m22, this.m23 - v.m23,
-      this.m30 - v.m30, this.m31 - v.m31, this.m32 - v.m32, this.m33 - v.m33,
-    );
-  }
-
-  mul (v) {
-    return new Mat4(
-      v.m00 * this.m00 + v.m01 * this.m10 + v.m02 * this.m20 + v.m03 * this.m30,
-      v.m00 * this.m01 + v.m01 * this.m11 + v.m02 * this.m21 + v.m03 * this.m31,
-      v.m00 * this.m02 + v.m01 * this.m12 + v.m02 * this.m22 + v.m03 * this.m32,
-      v.m00 * this.m03 + v.m01 * this.m13 + v.m02 * this.m23 + v.m03 * this.m33,
-
-      v.m10 * this.m00 + v.m11 * this.m10 + v.m12 * this.m20 + v.m13 * this.m30,
-      v.m10 * this.m01 + v.m11 * this.m11 + v.m12 * this.m21 + v.m13 * this.m31,
-      v.m10 * this.m02 + v.m11 * this.m12 + v.m12 * this.m22 + v.m13 * this.m32,
-      v.m10 * this.m03 + v.m11 * this.m13 + v.m12 * this.m23 + v.m13 * this.m33,
-
-      v.m20 * this.m00 + v.m21 * this.m10 + v.m22 * this.m20 + v.m23 * this.m30,
-      v.m20 * this.m01 + v.m21 * this.m11 + v.m22 * this.m21 + v.m23 * this.m31,
-      v.m20 * this.m02 + v.m21 * this.m12 + v.m22 * this.m22 + v.m23 * this.m32,
-      v.m20 * this.m03 + v.m21 * this.m13 + v.m22 * this.m23 + v.m23 * this.m33,
-
-      v.m30 * this.m00 + v.m31 * this.m10 + v.m32 * this.m20 + v.m33 * this.m30,
-      v.m30 * this.m01 + v.m31 * this.m11 + v.m32 * this.m21 + v.m33 * this.m31,
-      v.m30 * this.m02 + v.m31 * this.m12 + v.m32 * this.m22 + v.m33 * this.m32,
-      v.m30 * this.m03 + v.m31 * this.m13 + v.m32 * this.m23 + v.m33 * this.m33,
-    );
-  }
-
   get invert () {
     const { m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, m22, m23, m30, m31, m32, m33 } = this;
     const a00 = m11 * m22 * m33 - m11 * m23 * m32 - m21 * m12 * m33 + m21 * m13 * m32 + m31 * m12 * m23 - m31 * m13 * m22;
@@ -250,6 +196,60 @@ export default class Mat4 {
       this.m00, this.m01, this.m02,
       this.m10, this.m11, this.m12,
       this.m20, this.m21, this.m22,
+    );
+  }
+
+  lookAt (target, up) {
+    const zAxis = this.sub(target).normalize;
+    const xAxis = up.cross(zAxis);
+    const yAxis = zAxis.cross(xAxis);
+    return new Mat4(
+      xAxis.x, xAxis.y, xAxis.z, 0.0,
+      yAxis.x, yAxis.y, yAxis.z, 0.0,
+      zAxis.x, zAxis.y, zAxis.z, 0.0,
+      this.x, this.y, this.z, 1.0,
+    );
+  }
+
+  add (v) {
+    return new Mat4(
+      this.m00 + v.m00, this.m01 + v.m01, this.m02 + v.m02, this.m03 + v.m03,
+      this.m10 + v.m10, this.m11 + v.m11, this.m12 + v.m12, this.m13 + v.m13,
+      this.m20 + v.m20, this.m21 + v.m21, this.m22 + v.m22, this.m23 + v.m23,
+      this.m30 + v.m30, this.m31 + v.m31, this.m32 + v.m32, this.m33 + v.m33,
+    );
+  }
+
+  sub (v) {
+    return new Mat4(
+      this.m00 - v.m00, this.m01 - v.m01, this.m02 - v.m02, this.m03 - v.m03,
+      this.m10 - v.m10, this.m11 - v.m11, this.m12 - v.m12, this.m13 - v.m13,
+      this.m20 - v.m20, this.m21 - v.m21, this.m22 - v.m22, this.m23 - v.m23,
+      this.m30 - v.m30, this.m31 - v.m31, this.m32 - v.m32, this.m33 - v.m33,
+    );
+  }
+
+  mul (v) {
+    return new Mat4(
+      v.m00 * this.m00 + v.m01 * this.m10 + v.m02 * this.m20 + v.m03 * this.m30,
+      v.m00 * this.m01 + v.m01 * this.m11 + v.m02 * this.m21 + v.m03 * this.m31,
+      v.m00 * this.m02 + v.m01 * this.m12 + v.m02 * this.m22 + v.m03 * this.m32,
+      v.m00 * this.m03 + v.m01 * this.m13 + v.m02 * this.m23 + v.m03 * this.m33,
+
+      v.m10 * this.m00 + v.m11 * this.m10 + v.m12 * this.m20 + v.m13 * this.m30,
+      v.m10 * this.m01 + v.m11 * this.m11 + v.m12 * this.m21 + v.m13 * this.m31,
+      v.m10 * this.m02 + v.m11 * this.m12 + v.m12 * this.m22 + v.m13 * this.m32,
+      v.m10 * this.m03 + v.m11 * this.m13 + v.m12 * this.m23 + v.m13 * this.m33,
+
+      v.m20 * this.m00 + v.m21 * this.m10 + v.m22 * this.m20 + v.m23 * this.m30,
+      v.m20 * this.m01 + v.m21 * this.m11 + v.m22 * this.m21 + v.m23 * this.m31,
+      v.m20 * this.m02 + v.m21 * this.m12 + v.m22 * this.m22 + v.m23 * this.m32,
+      v.m20 * this.m03 + v.m21 * this.m13 + v.m22 * this.m23 + v.m23 * this.m33,
+
+      v.m30 * this.m00 + v.m31 * this.m10 + v.m32 * this.m20 + v.m33 * this.m30,
+      v.m30 * this.m01 + v.m31 * this.m11 + v.m32 * this.m21 + v.m33 * this.m31,
+      v.m30 * this.m02 + v.m31 * this.m12 + v.m32 * this.m22 + v.m33 * this.m32,
+      v.m30 * this.m03 + v.m31 * this.m13 + v.m32 * this.m23 + v.m33 * this.m33,
     );
   }
 

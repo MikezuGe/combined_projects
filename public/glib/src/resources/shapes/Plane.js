@@ -3,7 +3,7 @@ import { Vec2, Vec3, } from 'math';
 
 export default class Plane extends Mesh {
 
-  static generateShape = (resource, width, depth) => {
+  static generate = (resource, { width, depth, }) => {
     width /= 2;
     depth /= 2;
     let vertexData = [];

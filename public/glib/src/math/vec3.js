@@ -52,10 +52,15 @@ export default class Vec3 {
   get up () { return this.forward.cross(this.left).normalize.invert; }
 
   get toArray () { return [ this.x, this.y, this.z, ]; }
+
   get toFloat32Array () { return new Float32Array([ this.x, this.y, this.z, ]); }
+
   get clone () { return new Vec3(this.x, this.y, this.z); }
+
   get len () { return sqrt(this.x * this.x + this.y * this.y + this.z * this.z); }
+
   get lenSqrt() { return this.x * this.x + this.y * this.y + this.z * this.z; }
+
   get normalize () {
     let r = sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
     if (r > 0) {
@@ -67,9 +72,13 @@ export default class Vec3 {
   get invert () { return new Vec3(-this.x, -this.y, -this.z); }
   
   add (v) { return new Vec3(this.x + v.x, this.y + v.y, this.z + v.z); }
+
   sub (v) { return new Vec3(this.x - v.x, this.y - v.y, this.z - v.z); }
+
   scale (f) { return new Vec3(this.x * f, this.y * f, this.z * f); }
+
   dot (v) { return this.x * v.x + this.y * v.y + this.z * v.z; }
+
   cross (v) {
     return new Vec3(
       this.y * v.z - this.z * v.y,
@@ -77,6 +86,7 @@ export default class Vec3 {
       this.x * v.y - this.y * v.x
     );
   }
+
   lerp (v, t) {
     return new Vec3(
       this.x + (v.x - this.x) * t,
@@ -84,7 +94,9 @@ export default class Vec3 {
       this.z + (v.z - this.z) * t
     )
   }
+
   getNormal (b, c) { return this.sub(b).cross(this.sub(c)).normalize; }
+
   getAngle (v) { return this.normalize.dot(v.normalize); }
 
 }

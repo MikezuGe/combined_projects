@@ -1,4 +1,4 @@
-import Transform from './Transform';
+import Transform from 'misc/Transform';
 
 
 class SceneNode {

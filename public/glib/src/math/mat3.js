@@ -13,6 +13,7 @@ export default class Mat3 {
       0.0, 0.0, 1.0,
     );
   }
+
   static fromArray = m => new Mat3(...m);
 
   constructor (m00, m01, m02, m10, m11, m12, m20, m21, m22) {
@@ -28,6 +29,7 @@ export default class Mat3 {
       this.m20, this.m21, this.m22,
     );
   }
+
   get toArray () {
     return [
       this.m00, this.m01, this.m02,
@@ -35,6 +37,7 @@ export default class Mat3 {
       this.m20, this.m21, this.m22,
     ];
   }
+
   get toFloat32Array () {
     return new Float32Array([
       this.m00, this.m01, this.m02,
@@ -42,6 +45,7 @@ export default class Mat3 {
       this.m20, this.m21, this.m22,
     ]);
   }
+
   get toMat4 () {
     return new Mat4(
         this.m00, this.m01, this.m02, 0.0,
@@ -50,6 +54,7 @@ export default class Mat3 {
         0.0, 0.0, 0.0, 1.0,
     );
   }
+
   get toQuat () {
     const trace = this.m00 + this.m11 + this.m22;
     let s;
@@ -75,6 +80,7 @@ export default class Mat3 {
       this.m20 * v.x + this.m21 * v.y + this.m22 * v.z,
     );
   }
+
   add (m) {
     return new Mat3(
       this.m00 + m.m00, this.m01 + m.m01, this.m02 + m.m02,
@@ -82,6 +88,7 @@ export default class Mat3 {
       this.m20 + m.m20, this.m21 + m.m21, this.m22 + m.m22,
     );
   }
+
   sub (m) {
     return new Mat3(
       this.m00 - m.m00, this.m01 - m.m01, this.m02 - m.m02,
@@ -89,6 +96,7 @@ export default class Mat3 {
       this.m20 - m.m20, this.m21 - m.m21, this.m22 - m.m22,
     );
   }
+
   mul (m) {
     const a00 = this.m01; const a01 = this.m02; const a02 = this.m03;
     const a10 = this.m11; const a11 = this.m12; const a12 = this.m13;

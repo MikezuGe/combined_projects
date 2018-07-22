@@ -11,7 +11,7 @@ const uploadToGPU = image => {
   gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, w, h, 0, gl.RGBA, gl.UNSIGNED_BYTE, image);
   
   if(w & (w - 1) === 0 && h & (h - 1) === 0) {
-    // Is power of 2
+    // Width and height are power of 2
     gl.generateMipmap(gl.TEXTURE_2D);
   } else {
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);

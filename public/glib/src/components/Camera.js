@@ -7,6 +7,7 @@ export default class Camera extends Component {
 
   constructor (node) {
     super(node);
+    this.active = true;
     this.inControl = true;
     //const ar = window.innerWidth / window.innerHeight;
     //this._perspective = Mat4.orthographic(-ar, ar, -1, 1, 0.01, 1000);

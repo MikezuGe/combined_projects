@@ -8,5 +8,10 @@ const resourceLoader = new ResourceLoader();
 resourceLoader.getResource('scene.cnf', sceneSource => {
   const scene = Scene.createScene(sceneSource, resourceLoader);
   const renderer = new Renderer();
-  renderer.renderScene(scene);
+  const animFrame = function () {
+    //requestAnimationFrame(animFrame);
+    renderer.renderScene(scene);
+  }
+  //requestAnimationFrame(animFrame);
+  setInterval(animFrame, 500);
 });

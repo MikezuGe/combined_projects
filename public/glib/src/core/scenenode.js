@@ -54,8 +54,8 @@ class SceneNode {
   walkEnabled (fn) {
     for (const child of this.children) {
       child.walkEnabled(fn);
-      fn(this);
     }
+    fn(this);
   }
 
 }

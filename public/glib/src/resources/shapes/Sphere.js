@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import Mesh from '../Mesh';
 import { Vec2, Vec3, } from 'math';
 

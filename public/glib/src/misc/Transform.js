@@ -116,6 +116,7 @@ export default class Transform {
   }
 
   updateLocalTransform () {
+    console.log(this);
     const transform = Mat4.identity;
     const translation = this._localTranslation;
     const rotation = this._localRotation.toMat3;

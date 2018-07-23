@@ -1,16 +1,15 @@
 import SceneNode from './scenenode';
 import { Model, Camera, } from 'components';
-import { Vec3, } from 'math';
+import { Vec3, Quat, } from 'math';
 
 
 const parseDataNodes = (dataNodes, parentNode, resourceLoader) => {
   dataNodes.forEach(dataNode => {
     const sceneNode = parentNode.addChild();
     if (dataNode.transform) {
-      for (let key in dataNode.transform) {
-        const { x, y, z, } = dataNode.transform[key];
-        sceneNode.transform[key] = new Vec3(x || 0, y || 0, z || 0);
-      }
+      sceneNode.transform.translation = new Vec3(dataNode.transform.translation.x || 0, dataNode.transform.translation.y || 0, dataNode.transform.translation.z || 0);
+      sceneNode.transform.rotation = Quat.fromEulers(dataNode.transform.rotation.x || 0, dataNode.transform.rotation.y || 0, dataNode.transform.rotation.z || 0);
+      sceneNode.transform.scale = new Vec3(dataNode.transform.scale.x || 0, dataNode.transform.scale.y || 0, dataNode.transform.scale.z || 0);
     }
     if (dataNode.components) {
       for (let key in dataNode.components) {
@@ -25,6 +24,7 @@ const parseDataNodes = (dataNodes, parentNode, resourceLoader) => {
             break;
           case 'camera':
             component = sceneNode.addComponent(Camera);
+            component.active = dataNode.components[key].active;
             break;
         }
       }
@@ -42,10 +42,9 @@ class Scene extends SceneNode {
     const scene = new Scene(sceneSource);
     const { data, } = sceneSource;
     if (data.transform) {
-      for (let key in data.transform) {
-        const { x, y, z, } = data.transform[key];
-        scene.transform[key] = new Vec3(x || 0, y || 0, z || 0);
-      }
+      scene.transform.translation = new Vec3(data.transform.translation.x || 0, data.transform.translation.y || 0, data.transform.translation.z || 0);
+      scene.transform.rotation = Quat.fromEulers(data.transform.rotation.x || 0, data.transform.rotation.y || 0, data.transform.rotation.z || 0);
+      scene.transform.scale = new Vec3(data.transform.scale.x || 0, data.transform.scale.y || 0, data.transform.scale.z || 0);
     }
     parseDataNodes(data.nodes, scene, resourceLoader);
     return scene;
@@ -57,6 +56,8 @@ class Scene extends SceneNode {
     this.scene = this;
     this.nodeRegister = [];
     this.componentRegister = [];
+    this.ambientLightStrength = 0.5;
+    this.ambientLightColor = new Vec3(1.0, 1.0, 1.0);
   }
 
   addToNodeRegister (node) {

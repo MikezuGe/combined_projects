@@ -1,0 +1,22 @@
+{
+  "defines": {
+    "COLOR": "",
+    "DIFFUSE": "",
+    "SPECULAR": ""
+  },
+  "shaderSource": "defaultShader.glsl",
+  "textures": {
+    "COLOR": {
+      "src": "puppy.png",
+      "value": 1.0
+    },
+    "DIFFUSE": {
+      "src": "puppy.png",
+      "value": 1.0
+    },
+    "SPECULAR": {
+      "src": "puppy.png",
+      "value": 1.0
+    }
+  }
+}

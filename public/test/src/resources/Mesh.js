@@ -43,10 +43,10 @@ const generateGeometries = (geometries, indices, hasTexCoords) => {
   let count = 0;
   const increment = hasTexCoords ? 9 : 6;
   const isWordRegEx = /[a-z_]+(?:\.\w+)?/i;
-  geometries.push(new Geometry(0, null));
   if (isWordRegEx.test(indices[0])) {
     indices.splice(0, 1);
   }
+  geometries.push(new Geometry(0, null));
   for (let i = 0; i < indices.length; i += increment) {
     if (isWordRegEx.test(indices[i])) {
       indices.splice(i, 1);
@@ -163,6 +163,7 @@ class Mesh extends Resource {
     const geometries = [];
     const attributes = [];
     const vertexData = [];
+    const indiceData = [];
 
     const nextLine = /^(\w+) (.+)$/gm;
     const allFloats = /-?\d+\.\d+/g;
@@ -204,18 +205,19 @@ class Mesh extends Resource {
     if (vertices.length) {
       attributes.push('a_position');
     }
+
     const hasTexCoords = !!texCoords.length;
     if (hasTexCoords) {
       attributes.push('a_texcoord');
     }
 
-    generateGeometries(geometries, indices, hasTexCoords);
-    geometries.forEach(g => { g.mesh = this; });
-
     if (!normals.length) {
       generateNormals(normals, indices, vertices, hasTexCoords);
     }
     attributes.push('a_normal');
+
+    generateGeometries(geometries, indices, hasTexCoords);
+    geometries.forEach(g => { g.mesh = this; });
 
     if (hasTexCoords) {
       generateTanAndBitan(tangents, bitangents, vertices, texCoords, indices);
@@ -230,16 +232,18 @@ class Mesh extends Resource {
         vertexData.push(...normals[indices[i + 2]].toArray);
         vertexData.push(...tangents[indices[i + 3]].toArray);
         vertexData.push(...bitangents[indices[i + 4]].toArray);
+        indiceData.push(i / 5);
       }
     } else {
       const il = indices.length;
       for (let i = 0; i < il; i += 2) {
         vertexData.push(...vertices[indices[i + 0]].toArray);
         vertexData.push(...normals[indices[i + 2]].toArray);
+        indiceData.push(i / 2);
       }
     }
 
-    const buffers = uploadToGPU(new Float32Array(vertexData), new Int16Array(indices));
+    const buffers = uploadToGPU(new Float32Array(vertexData), new Uint16Array(indiceData));
 
     this.geometries = geometries;
     this.attributes = getAttributeInfo(attributes);

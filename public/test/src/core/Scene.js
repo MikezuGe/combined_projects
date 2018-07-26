@@ -27,8 +27,14 @@ const parseNode = (nodeData, parentNode, resourceManager) => {
       default: break;
     }
   });
-  // Set node transforms
-  // Run through nodedata nodes
+
+  Object.entries(nodeData.transform).forEach(([ key, values, ]) => {
+    const { x, y, z, } = values;
+    if (isNaN(x) || isNaN(y) || isNaN(z)) {
+      throw new Error(`Nodedata is missing coordinates for ${key}`);
+    }
+    node.transform[key] = values;
+  });
   nodeData.nodes.forEach(data => { parseNode(data, node, resourceManager); });
 }
 

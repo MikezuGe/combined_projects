@@ -1,6 +1,17 @@
 import { gl, } from 'core/Glib';
 import { GeometryBatch, } from 'misc';
 import ShaderProgram from './ShaderProgram';
+import { Mat4, } from 'math';
+
+
+const logs = new Map();
+const logOnce = (name, log) => {
+  if (logs.has(name)) {
+    return;
+  }
+  logs.set(name, log);
+  console.log(name, log); // eslint-ignore-line
+}
 
 
 export default class Renderer {
@@ -15,6 +26,7 @@ export default class Renderer {
   }
 
   renderScene (scene) {
+    logOnce('scene', 'rendering');
     const geometryBatches = [];
     scene.walkEnabled(node => {
       node.components.forEach(component => {
@@ -29,15 +41,16 @@ export default class Renderer {
         }
       });
     });
-    //gl.clearColor(0.4, 0.4, 0.4, 1.0);
-    //gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+    gl.clearColor(0.4, 0.4, 0.4, 1.0);
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     this.renderPass(scene, geometryBatches);
   }
 
   queueRenderable (renderable, batches) {
-    if (!renderable.mesh) { throw new Error('Renderable mesh missing from ', renderable); }
+    if (!renderable.mesh) { return; }
     const geometries = renderable.getGeometries();
     const materials = renderable.getMaterials();
+    logOnce('materials', materials);
     if (!geometries || !materials) { return; }
     for (let i = 0; i < geometries.length; i += 1) {
       this.queueGeometry(geometries[i], materials[i], renderable.node.transform.worldTransform, batches);
@@ -122,10 +135,14 @@ export default class Renderer {
     }
   }
 
-  drawIndividual (batch, drawType, indexCount, indexType, vertexOffset) {
+  drawIndividual (batch, drawType, vertexCount, indexType, vertexOffset) {
+    if (performance.now() > 2000) {
+      logOnce('batch', batch);
+      logOnce('res', this.resourceManager);
+    }
     for (const worldTransform of batch.worldTransforms) {
       if (this.bindTransform(worldTransform)) {
-        gl.drawElements(drawType, indexCount, indexType, vertexOffset * 2);
+        gl.drawElements(drawType, vertexCount, indexType, vertexOffset * 2);
       }
     }
   }
@@ -134,15 +151,10 @@ export default class Renderer {
     if (!this.boundShaderProgram) {
       return false;
     }
-    const uniLoc = this.boundShaderProgram.uniformLocations;
-    // Camera's inverse view and perspective and model worldTransform
-    const { perspective, view, } = this.boundCamera;
-    const mv = view.invert.mul(worldTransform);
-    const mvp = perspective.mul(mv);
-    console.log(mvp);
-    gl.uniformMatrix4fv(uniLoc.u_model, false, worldTransform.toFloat32Array);
-    gl.uniformMatrix4fv(uniLoc.u_mv, false, mv.toFloat32Array);
-    gl.uniformMatrix4fv(uniLoc.u_mvp, false, mvp.toFloat32Array);
+    const { u_mvp, } = this.boundShaderProgram.uniformLocations;
+    const { view, perspective, } = this.boundCamera;
+    const mvp = perspective.mul(view.invert).mul(worldTransform).toFloat32Array;
+    gl.uniformMatrix4fv(u_mvp, false, mvp);
     return true;
   }
 

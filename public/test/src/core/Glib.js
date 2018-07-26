@@ -27,10 +27,18 @@ export default class Glib {
     resourceManager.getResource(url).then(sceneResource => {
       scene.buildFromResource(sceneResource, resourceManager);
       const frame = () => {
+        requestAnimationFrame(frame);
         renderer.renderScene(scene);
       }
-      setInterval(frame, 1000);
+      const stopAnimation = requestAnimationFrame(frame, 1000);
+      /*
+      setTimeout(() => {
+        renderer.renderScene(scene);
+      }, 2000);
+      */
       console.log(scene);
+    }).catch(err => {
+      console.error(err); // eslint-disable-line
     });
   }
 

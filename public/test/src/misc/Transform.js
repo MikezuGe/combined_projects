@@ -46,17 +46,17 @@ export default class Transform {
   // Setting transformation
   set translation (translation) {
     this.setWorldTransformDirty();
-    this._localTranslation = translation;
+    this._localTranslation = new Vec3(translation.x, translation.y, translation.z);
   }
 
   set rotation (rotation) {
     this.setWorldTransformDirty();
-    this._localRotation = rotation;
+    this._localRotation = Quat.fromEulers(rotation.x, rotation.y, rotation.z);
   }
 
   set scale (scale) {
     this.setWorldTransformDirty();
-    this._localScale = scale;
+    this._localScale = new Vec3(scale.x, scale.y, scale.z);
   }
 
   set origin (origin) {
@@ -107,12 +107,9 @@ export default class Transform {
   }
 
   setWorldTransformDirty () {
-    if (this._worldTransformDirty) {
-      return;
+    if (!this._worldTransformDirty) {
+      this.node.walkEnabled(node => { node.transform._worldTransformDirty = true; });
     }
-    this.node.walkEnabled(node => {
-      node.transform._worldTransformDirty = true;
-    });
   }
 
   updateLocalTransform () {

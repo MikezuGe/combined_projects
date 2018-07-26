@@ -52,10 +52,10 @@ export default class ResourceManager {
       } else if (this.cache.has(url)) {
         resolve(this.cache.get(url));
       } else if (this.loadQueue.has(url)) {
-        resolve(this.loadQueue.get(url));
+        resolve(this.loadQueue.get(url).resource);
       } else {
         const resource = createResource(url);
-        this.loadQueue.set(resource.url, [ resource, result => resolve(result) ]);
+        this.loadQueue.set(resource.url, { resource, callback: result => resolve(result) });
         this.loadNextResource();
       }
     }).catch(err => {
@@ -72,7 +72,7 @@ export default class ResourceManager {
       return;
     }
     this.loading = true;
-    const [ resource, callback, ] = nextValue;
+    const { resource, callback, } = nextValue;
     axios.get(resource.url).then(result => {
       this.loadQueue.delete(resource.url);
       this.cache.set(resource.url, resource);

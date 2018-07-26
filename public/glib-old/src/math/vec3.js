@@ -10,7 +10,6 @@ export default class Vec3 {
   static get right () { return new Vec3(1, 0, 0); }
   static get forward () { return new Vec3(0, 0, 1); }
   static get backward () { return new Vec3(0, 0, -1); }
-  static get one () { return new Vec3(1, 1, 1); }
 
   static fromArray (a) { return new Vec3(...a); }
   static fromQuat (q) {

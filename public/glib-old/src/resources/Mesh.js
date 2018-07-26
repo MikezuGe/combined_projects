@@ -1,7 +1,7 @@
-import { gl, } from 'core/Glib';
+import gl from 'core/gl'
+import { Vec3, Vec2, } from 'math';
 import Resource from './Resource';
 import Geometry from 'misc/Geometry';
-import { Vec3, Vec2, } from 'math';
 
 
 const getAttributeInfo = attributes => {
@@ -9,11 +9,11 @@ const getAttributeInfo = attributes => {
   let offset = 0;
   attributes.forEach(attribute => {
     switch (attribute) {
-      case 'a_position': attr.push({ name: 'a_position', vertices: 3, offset, }); offset += 3 * 4; break;
-      case 'a_texcoord': attr.push({ name: 'a_texcoord', vertices: 2, offset, }); offset += 2 * 4; break;
-      case 'a_normal': attr.push({ name: 'a_normal', vertices: 3, offset, }); offset += 3 * 4; break;
-      case 'a_tangent': attr.push({ name: 'a_tangent', vertices: 3, offset, }); offset += 3 * 4; break;
-      case 'a_bitangent': attr.push({ name: 'a_bitangent', vertices: 3, offset, }); offset += 3 * 4; break;
+      case 'a_position': attr.push({ name: 'a_position', vertices: 3, offset, }); offset += 3; break;
+      case 'a_texcoord': attr.push({ name: 'a_texcoord', vertices: 2, offset, }); offset += 2; break;
+      case 'a_normal': attr.push({ name: 'a_normal', vertices: 3, offset, }); offset += 3; break;
+      case 'a_tangent': attr.push({ name: 'a_tangent', vertices: 3, offset, }); offset += 3; break;
+      case 'a_bitangent': attr.push({ name: 'a_bitangent', vertices: 3, offset, }); offset += 3; break;
       default: throw new Error(`Unknown mesh attribute name: ${attribute}`);
     }
   });
@@ -25,11 +25,11 @@ const calculateVertexSize = attributes => {
   let size = 0;
   attributes.forEach(attribute => {
     switch (attribute) {
-      case 'a_position': size += 3 * 4; break;
-      case 'a_texcoord': size += 2 * 4; break;
-      case 'a_normal': size += 3 * 4; break;
-      case 'a_tangent': size += 3 * 4; break;
-      case 'a_bitangent': size += 3 * 4; break;
+      case 'a_position': size += 3; break;
+      case 'a_texcoord': size += 2; break;
+      case 'a_normal': size += 3; break;
+      case 'a_tangent': size += 3; break;
+      case 'a_bitangent': size += 3; break;
       default: throw new Error(`Unknown mesh attribute: ${attribute}`);
     }
   });
@@ -43,10 +43,10 @@ const generateGeometries = (geometries, indices, hasTexCoords) => {
   let count = 0;
   const increment = hasTexCoords ? 9 : 6;
   const isWordRegEx = /[a-z_]+(?:\.\w+)?/i;
+  geometries.push(new Geometry(0, null));
   if (isWordRegEx.test(indices[0])) {
     indices.splice(0, 1);
   }
-  geometries.push(new Geometry(0, null));
   for (let i = 0; i < indices.length; i += increment) {
     if (isWordRegEx.test(indices[i])) {
       indices.splice(i, 1);
@@ -143,16 +143,7 @@ const uploadToGPU = (vertexData, indices) => {
 
 class Mesh extends Resource {
 
-  constructor(url) {
-    super(url);
-    this.geometries = [];
-    this.attributes = [];
-    this.vertexSize = null;
-    this.vertexBuffer = null;
-    this.indiceBuffer = null;
-  }
-
-  parse (data) {
+  static parse(resource, data) {
     const vertices = [];
     const texCoords = [];
     const normals = [];
@@ -163,7 +154,6 @@ class Mesh extends Resource {
     const geometries = [];
     const attributes = [];
     const vertexData = [];
-    const indiceData = [];
 
     const nextLine = /^(\w+) (.+)$/gm;
     const allFloats = /-?\d+\.\d+/g;
@@ -205,19 +195,18 @@ class Mesh extends Resource {
     if (vertices.length) {
       attributes.push('a_position');
     }
-
     const hasTexCoords = !!texCoords.length;
     if (hasTexCoords) {
       attributes.push('a_texcoord');
     }
 
+    generateGeometries(geometries, indices, hasTexCoords);
+    geometries.forEach(g => { g.mesh = resource; });
+
     if (!normals.length) {
       generateNormals(normals, indices, vertices, hasTexCoords);
     }
     attributes.push('a_normal');
-
-    generateGeometries(geometries, indices, hasTexCoords);
-    geometries.forEach(g => { g.mesh = this; });
 
     if (hasTexCoords) {
       generateTanAndBitan(tangents, bitangents, vertices, texCoords, indices);
@@ -232,31 +221,29 @@ class Mesh extends Resource {
         vertexData.push(...normals[indices[i + 2]].toArray);
         vertexData.push(...tangents[indices[i + 3]].toArray);
         vertexData.push(...bitangents[indices[i + 4]].toArray);
-        indiceData.push(i / 5);
       }
     } else {
       const il = indices.length;
       for (let i = 0; i < il; i += 2) {
         vertexData.push(...vertices[indices[i + 0]].toArray);
         vertexData.push(...normals[indices[i + 2]].toArray);
-        indiceData.push(i / 2);
       }
     }
 
-    const buffers = uploadToGPU(new Float32Array(vertexData), new Uint16Array(indiceData));
+    const buffers = uploadToGPU(new Float32Array(vertexData), new Int16Array(indices));
 
-    this.geometries = geometries;
-    this.attributes = getAttributeInfo(attributes);
-    this.vertexSize = calculateVertexSize(attributes);
-    this.vertexBuffer = buffers.vertexBuffer;
-    this.indiceBuffer = buffers.indiceBuffer;
+    resource.geometries = geometries;
+    resource.attributes = getAttributeInfo(attributes);
+    resource.vertexSize = calculateVertexSize(attributes);
+    resource.vertexBuffer = buffers.vertexBuffer;
+    resource.indiceBuffer = buffers.indiceBuffer;
   }
 
-  remove () {
-    this.geometries.length = 0;
-    this.attributes.length = 0;
-    gl.deleteBuffer(this.vertexBuffer);
-    gl.deleteBuffer(this.indiceBuffer);
+  constructor(url) {
+    super(url);
+    this.geometries = [];
+    this.attributes = [];
+    this.vertexSize = null;
     this.vertexBuffer = null;
     this.indiceBuffer = null;
   }

@@ -22,15 +22,11 @@ export default class Model extends Component {
   }
   
   getMaterials () {
-    return (this.materials.length && this.materials) || null;
+    return this.materials.length ? this.materials : null;
   }
 
-  remove () {
-    this.node.removeComponent(this);
-    this.node = null;
-    this.mesh.remove();
+  removeReferences () {
     this.mesh = null;
-    this.materials.forEach(material => { material.remove(); });
     this.materials.length = 0;
   }
 

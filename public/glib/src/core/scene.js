@@ -1,87 +1,64 @@
-import SceneNode from './scenenode';
-import { Model, Camera, } from 'components';
-import { Vec3, Quat, } from 'math';
+import SceneNode from './SceneNode';
+import * as componentTypes from 'components';
+import { firstLetterToUpper, } from 'utility/';
 
 
-const parseDataNodes = (dataNodes, parentNode, resourceLoader) => {
-  dataNodes.forEach(dataNode => {
-    const sceneNode = parentNode.addChild();
-    if (dataNode.transform) {
-      sceneNode.transform.translation = new Vec3(dataNode.transform.translation.x || 0, dataNode.transform.translation.y || 0, dataNode.transform.translation.z || 0);
-      sceneNode.transform.rotation = Quat.fromEulers(dataNode.transform.rotation.x || 0, dataNode.transform.rotation.y || 0, dataNode.transform.rotation.z || 0);
-      sceneNode.transform.scale = new Vec3(dataNode.transform.scale.x || 0, dataNode.transform.scale.y || 0, dataNode.transform.scale.z || 0);
+const parseNode = (nodeData, parentNode, resourceManager) => {
+  const node = parentNode.addChild();
+  // Insert data to node from nodedata...
+  if (!nodeData.components) {
+    throw new Error('No components object defined for node in scene configuration file.');
+  }
+  Object.entries(nodeData.components).forEach(([ key, value, ]) => {
+    const componentType = firstLetterToUpper(key);
+    const ComponentClass = componentTypes[componentType];
+    if (!ComponentClass) {
+      throw new Error(`Illegal component type: ${componentType}`)
     }
-    if (dataNode.components) {
-      for (let key in dataNode.components) {
-        let component;
-        switch (key) {
-          case 'model':
-            component = sceneNode.addComponent(Model);
-            component.addMesh(resourceLoader.getResource(dataNode.components[key].mesh));
-            dataNode.components[key].materials.forEach(material => {
-              component.addMaterial(resourceLoader.getResource(material));
-            });
-            break;
-          case 'camera':
-            component = sceneNode.addComponent(Camera);
-            component.active = dataNode.components[key].active;
-            break;
-        }
-      }
-    }
-    if (dataNode.nodes) {
-      parseDataNodes(dataNode.nodes, sceneNode, resourceLoader);
+    const component = node.addComponent(ComponentClass);
+    switch (componentType) {
+      case 'Model':
+        resourceManager.getResource(value.mesh).then(resource => { component.addMesh(resource); });
+        value.materials.forEach(material => {
+          resourceManager.getResource(material).then(resource => { component.addMaterial(resource); });
+        });
+        break;
+      case 'Camera': break;
+      default: break;
     }
   });
+
+  Object.entries(nodeData.transform).forEach(([ key, values, ]) => {
+    const { x, y, z, } = values;
+    if (isNaN(x) || isNaN(y) || isNaN(z)) {
+      throw new Error(`Nodedata is missing coordinates for ${key}`);
+    }
+    node.transform[key] = values;
+  });
+  nodeData.nodes.forEach(data => { parseNode(data, node, resourceManager); });
 }
 
 
 class Scene extends SceneNode {
 
-  static createScene (sceneSource, resourceLoader) {
-    const scene = new Scene(sceneSource);
-    const { data, } = sceneSource;
-    if (data.transform) {
-      scene.transform.translation = new Vec3(data.transform.translation.x || 0, data.transform.translation.y || 0, data.transform.translation.z || 0);
-      scene.transform.rotation = Quat.fromEulers(data.transform.rotation.x || 0, data.transform.rotation.y || 0, data.transform.rotation.z || 0);
-      scene.transform.scale = new Vec3(data.transform.scale.x || 0, data.transform.scale.y || 0, data.transform.scale.z || 0);
-    }
-    parseDataNodes(data.nodes, scene, resourceLoader);
-    return scene;
-  }
-
-  constructor (source) {
+  constructor () {
     super();
-    this.source = source || null;
     this.scene = this;
-    this.nodeRegister = [];
-    this.componentRegister = [];
-    this.ambientLightStrength = 0.5;
-    this.ambientLightColor = new Vec3(1.0, 1.0, 1.0);
   }
 
-  addToNodeRegister (node) {
-    this.nodeRegister.push(node);
-  }
-
-  removeFromNodeRegister (node) {
-    this.nodeRegister.splice(this.nodeRegister.indexOf(node), 1);
-  }
-
-  addToComponentRegister (component) {
-    this.componentRegister.push(component);
-  }
-
-  removeFromComponentRegister (component) {
-    this.componentRegister.splice(this.componentRegister.indexOf(component), 1);
+  buildFromResource (resource, resourceManager) {
+    const { data, } = resource;
+    // Scene specific data should be inserted here to scene (this)
+    data.nodes.forEach(nodeData => { parseNode(nodeData, this, resourceManager); });
   }
 
   remove () {
-    for (const child of this.children) {
-      child.remove();
+    const { children, components, } = this;
+    while (children.length > 0) {
+      children[children.length - 1].remove();
     }
-    while (this.components.length > 0) {
-      this.components[this.components.length - 1].remove();
+    while (components.length > 0) {
+      components[components.length - 1].remove();
     }
   }
 

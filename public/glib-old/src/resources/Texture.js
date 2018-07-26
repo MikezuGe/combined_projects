@@ -1,4 +1,4 @@
-import { gl, } from 'core/Glib';
+import gl from 'core/gl'
 import Resource from './Resource';
 
 
@@ -24,19 +24,14 @@ const uploadToGPU = image => {
 
 class Texture extends Resource {
 
-  constructor (url) {
-    super(url);
-    this.buffer = null;
-  }
-
-  parse (data) {
+  static parse (resource, data) {
     const image = new Image();
     image.src = `data:image/png;base64,${data}`;
-    this.buffer = uploadToGPU(image);
+    resource.buffer = uploadToGPU(image);
   }
 
-  remove () {
-    gl.deleteBuffer(this.buffer);
+  constructor (url) {
+    super(url);
     this.buffer = null;
   }
 

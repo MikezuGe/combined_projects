@@ -46,17 +46,17 @@ export default class Transform {
   // Setting transformation
   set translation (translation) {
     this.setWorldTransformDirty();
-    this._localTranslation = new Vec3(translation.x, translation.y, translation.z);
+    this._localTranslation = translation;
   }
 
   set rotation (rotation) {
     this.setWorldTransformDirty();
-    this._localRotation = Quat.fromEulers(rotation.x, rotation.y, rotation.z);
+    this._localRotation = rotation;
   }
 
   set scale (scale) {
     this.setWorldTransformDirty();
-    this._localScale = new Vec3(scale.x, scale.y, scale.z);
+    this._localScale = scale;
   }
 
   set origin (origin) {
@@ -107,12 +107,16 @@ export default class Transform {
   }
 
   setWorldTransformDirty () {
-    if (!this._worldTransformDirty) {
-      this.node.walkEnabled(node => { node.transform._worldTransformDirty = true; });
+    if (this._worldTransformDirty) {
+      return;
     }
+    this.node.walkEnabled(node => {
+      node.transform._worldTransformDirty = true;
+    });
   }
 
   updateLocalTransform () {
+    console.log(this);
     const transform = Mat4.identity;
     const translation = this._localTranslation;
     const rotation = this._localRotation.toMat3;
@@ -155,8 +159,8 @@ export default class Transform {
       this._worldTransformUnscaled = this.node.parent.transform.worldTransformUnscaled.mul(this._localTransformUnscaled);
       this._worldTransform = this.node.parent.transform.worldTransformUnscaled.mul(this._localTransform);
     } else {
-      this._worldTransformUnscaled = this._localTransformUnscaled.clone;
-      this._worldTransform = this._localTransform.clone;
+      this._worldTransformUnscaled = this._localTransformUnscaled.copy;
+      this._worldTransform = this._localTransform.copy;
     }
     this._worldTransformDirty = false;
   }

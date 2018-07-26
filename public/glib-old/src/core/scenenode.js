@@ -1,18 +1,19 @@
-import { Transform, } from 'misc';
+import Transform from 'misc/Transform';
 
 
-export default class SceneNode {
+class SceneNode {
 
   constructor (scene, parent) {
-    this.scene = scene || null;
-    this.parent = parent || null;
-    this.transform = new Transform(this);
     this.children = [];
     this.components = [];
+    this.transform = new Transform(this);
+    this.scene = scene || null;
+    this.parent = parent || null;
   }
 
   addChild () {
     const node = new SceneNode(this.scene, this);
+    this.scene.addToNodeRegister(node);
     this.children.push(node);
     return node;
   }
@@ -20,32 +21,34 @@ export default class SceneNode {
   removeChild (node) {
     node.scene = null;
     node.parent = null;
+    node.transfrom.node = null;
+    node.transfrom = null;
+    this.scene.removeFromNodeRegister(node);
     this.children.splice(this.children.indexOf(node), 1);
   }
 
-  addComponent (Type) {
-    const component = new Type(this);
+  addComponent (Component) {
+    const component = new Component(this);
+    this.scene.addToComponentRegister(component);
     this.components.push(component);
     return component;
   }
 
   removeComponent (component) {
+    component.node = null;
+    this.scene.removeFromComponentRegister(component);
     this.components.splice(this.components.indexOf(component), 1);
   }
 
   remove () {
-    const { children, components, } = this;
-    while (children.length > 0) {
+    const { children, components, parent, } = this;
+    while (children.length) {
       children[children.length - 1].remove();
     }
-    while (components.length > 0) {
+    while (components.length) {
       components[components.length - 1].remove();
     }
-    this.scene = null;
-    this.parent = null;
-    this.transform.node = null;
-    this.transform = null;
-    this.parent.removeChild(this);
+    parent.removeChild(this);
   }
 
   walkEnabled (fn) {
@@ -56,3 +59,6 @@ export default class SceneNode {
   }
 
 }
+
+
+export default SceneNode;

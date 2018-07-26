@@ -32,6 +32,10 @@ const createResponse = {
     resourcePath: `${dataPaths.meshes}${url}`,
     headers: { 'Content-Type': 'text/plain', },
   }),
+  '.glsl': url => ({
+    resourcePath: `${dataPaths.shaders}${url}`,
+    headers: { 'Content-Type': 'text/plain', },
+  }),
   '.cnf': url => ({
     resourcePath: `${dataPaths.scenes}${url}`,
     headers: { 'Content-Type': 'text/plain', },

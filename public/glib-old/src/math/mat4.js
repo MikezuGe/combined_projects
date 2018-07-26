@@ -49,6 +49,15 @@ export default class Mat4 {
     );
   }
 
+  static scale (w, h, d) {
+    return new Mat4(
+      w, 0.0, 0.0, 0.0,
+      0.0, h, 0.0, 0.0,
+      0.0, 0.0, d, 0.0,
+      0.0, 0.0, 0.0, 1.0,
+    );
+  }
+
   static rotateX (angle) {
     const cosi = cos(angle);
     const sine = sin(angle);
@@ -78,15 +87,6 @@ export default class Mat4 {
       cosi, -sine, 0.0, 0.0,
       sine, cosi, 0.0, 0.0,
       0.0, 0.0, 1.0, 0.0,
-      0.0, 0.0, 0.0, 1.0,
-    );
-  }
-
-  static scale (w, h, d) {
-    return new Mat4(
-      w, 0.0, 0.0, 0.0,
-      0.0, h, 0.0, 0.0,
-      0.0, 0.0, d, 0.0,
       0.0, 0.0, 0.0, 1.0,
     );
   }

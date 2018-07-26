@@ -6,7 +6,8 @@ export default class Component {
   }
 
   remove () {
-    throw new Error(`Implement 'remove' method for component: ${this.constructor.name}.`);
+    this.removeReferences();
+    this.node.removeComponent(this);
   }
 
 }

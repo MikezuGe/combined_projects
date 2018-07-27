@@ -1,5 +1,6 @@
 node_modules
 *.png
+!**/puppy.png
 !favico.png
 *.jpg
 *.jpeg

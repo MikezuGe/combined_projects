@@ -44,23 +44,28 @@ export default class ResourceManager {
     this.loading = false;
   }
 
-  getResource (url) {
-    return new Promise((resolve, reject) => {
-      const err = isValidUrl(url);
-      if (err) {
-        reject(err);
-      } else if (this.cache.has(url)) {
-        resolve(this.cache.get(url));
-      } else if (this.loadQueue.has(url)) {
-        resolve(this.loadQueue.get(url).resource);
-      } else {
-        const resource = createResource(url);
-        this.loadQueue.set(resource.url, { resource, callback: result => resolve(result) });
-        this.loadNextResource();
+  getResource (url, onResourceLoad) {
+    const err = isValidUrl(url);
+    if (err) {
+      throw new Error(err);
+    } else if (this.cache.has(url)) {
+      const resource = this.cache.get(url)
+      onResourceLoad(resource)
+      return resource;
+    } else if (this.loadQueue.has(url)) {
+      if (onResourceLoad) {
+        const value = this.loadQueue.get(url);
+        value.callbacks.push(onResourceLoad);
+        this.loadQueue.set(url, value);
       }
-    }).catch(err => {
-      console.error(err); // eslint-disable-line
-    });
+      return this.loadQueue.get(url).resource;
+    } else {
+      const resource = createResource(url);
+      const callbacks = onResourceLoad ? [ onResourceLoad, ] : [];
+      this.loadQueue.set(resource.url, { resource, callbacks, });
+      this.loadNextResource();
+      return resource;
+    }
   }
 
   loadNextResource () {
@@ -71,14 +76,14 @@ export default class ResourceManager {
     if (!nextValue) {
       return;
     }
+    const { resource, callbacks, } = nextValue;
     this.loading = true;
-    const { resource, callback, } = nextValue;
     axios.get(resource.url).then(result => {
       this.loadQueue.delete(resource.url);
       this.cache.set(resource.url, resource);
       const loadMore = resource.parse(result.data);
       loadMore && loadMore(this);
-      callback(resource);
+      callbacks.forEach(callback => { callback(resource); });
       this.loading = false;
       this.loadNextResource();
     }).catch(err => {

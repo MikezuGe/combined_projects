@@ -17,9 +17,9 @@ export default class Material extends Resource {
     }
     this.setDefines(data.defines);
     return resourceLoader => {
-      resourceLoader.getResource(data.shaderSource).then(resource => { this.shaderSource = resource; });
+      resourceLoader.getResource(data.shaderSource, resource => { this.shaderSource = resource; });
       Object.entries(data.textures).forEach(([ key, value, ]) => {
-        resourceLoader.getResource(value.src).then(resource => { this.textures.set(key, resource); });
+        resourceLoader.getResource(value.src, resource => { this.textures.set(key, resource); });
       });
     }
   }

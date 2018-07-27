@@ -215,6 +215,10 @@ class Mesh extends Resource {
       generateNormals(normals, indices, vertices, hasTexCoords);
     }
     attributes.push('a_normal');
+    // TODO
+    //if (smoothShading) {
+    //  smoothNormals(normals, indices);
+    //}
 
     generateGeometries(geometries, indices, hasTexCoords);
     geometries.forEach(g => { g.mesh = this; });

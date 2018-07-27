@@ -17,7 +17,7 @@ const logOnce = (name, log) => {
 export default class Renderer {
 
   constructor (resourceManager) {
-    resourceManager.getResource('default.mtl').then(material => { this.defaultMaterial = material; });
+    resourceManager.getResource('default.mtl', material => { this.defaultMaterial = material; });
     this.resourceManager = resourceManager;
     this.boundScene = null;
     this.boundCamera = null;
@@ -29,7 +29,7 @@ export default class Renderer {
     const geometryBatches = [];
     scene.walkEnabled(node => {
       node.components.forEach(component => {
-        switch (component.constructor.name) {
+        switch (component.type) {
           case 'Model': this.queueRenderable(component, geometryBatches); break;
           case 'Camera':
             if (!this.boundCamera && component.active) {
@@ -107,15 +107,13 @@ export default class Renderer {
       gl.useProgram(this.boundShaderProgram.program);
       return true;
     }
-    this.resourceManager.getResource(material.shaderSource.url).then(shaderSource => {
+    this.resourceManager.getResource(material.shaderSource.url, shaderSource => {
       const shaderProgram = new ShaderProgram(shaderSource, material.getDefines());
       shaderProgram.compileShaderProgram();
       material.shaderProgram = shaderProgram;
       this.shaderProgramCache.set(shaderProgram.key, shaderProgram);
       this.boundShaderProgram = shaderProgram;
       gl.useProgram(shaderProgram.program);
-    }).catch(err => {
-      console.error(err) // eslint-disable-line
     });
   }
 

@@ -1,8 +1,9 @@
 
 export default class Component {
 
-  constructor (node) {
+  constructor (node, type) {
     this.node = node;
+    this.type = type;
   }
 
   remove () {

@@ -4,7 +4,7 @@ import Component from './Component';
 export default class Model extends Component {
 
   constructor (node) {
-    super(node);
+    super(node, 'Model');
     this.mesh = null;
     this.materials = [];
   }

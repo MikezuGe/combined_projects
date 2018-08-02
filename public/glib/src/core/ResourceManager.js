@@ -49,16 +49,16 @@ export default class ResourceManager {
     if (err) {
       throw new Error(err);
     } else if (this.cache.has(url)) {
-      const resource = this.cache.get(url)
-      onResourceLoad(resource)
+      const resource = this.cache.get(url);
+      onResourceLoad && onResourceLoad(resource);
       return resource;
     } else if (this.loadQueue.has(url)) {
+      const loadingObject = this.loadQueue.get(url);
       if (onResourceLoad) {
-        const value = this.loadQueue.get(url);
-        value.callbacks.push(onResourceLoad);
-        this.loadQueue.set(url, value);
+        loadingObject.callbacks.push(onResourceLoad);
+        this.loadQueue.set(url, loadingObject);
       }
-      return this.loadQueue.get(url).resource;
+      return loadingObject.resource;
     } else {
       const resource = createResource(url);
       const callbacks = onResourceLoad ? [ onResourceLoad, ] : [];
@@ -72,11 +72,11 @@ export default class ResourceManager {
     if (this.loading) {
       return;
     }
-    var nextValue = this.loadQueue.values().next().value;
-    if (!nextValue) {
+    var loadingObject = this.loadQueue.values().next().value;
+    if (!loadingObject) {
       return;
     }
-    const { resource, callbacks, } = nextValue;
+    const { resource, callbacks, } = loadingObject;
     this.loading = true;
     axios.get(resource.url).then(result => {
       this.loadQueue.delete(resource.url);

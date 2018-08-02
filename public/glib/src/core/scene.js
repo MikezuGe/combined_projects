@@ -9,7 +9,7 @@ const parseNode = (nodeData, parentNode, resourceManager) => {
   if (!nodeData.components) {
     throw new Error('No components object defined for node in scene configuration file.');
   }
-  Object.entries(nodeData.components).forEach(([ key, value, ]) => {
+  Object.entries(nodeData.components).forEach(([ key, { mesh, materials, }, ]) => {
     const componentType = firstLetterToUpper(key);
     const ComponentClass = componentTypes[componentType];
     if (!ComponentClass) {
@@ -18,10 +18,15 @@ const parseNode = (nodeData, parentNode, resourceManager) => {
     const component = node.addComponent(ComponentClass);
     switch (componentType) {
       case 'Model':
-        resourceManager.getResource(value.mesh, resource => { component.addMesh(resource); });
-        value.materials.forEach(material => {
-          resourceManager.getResource(material, resource => { component.addMaterial(resource); });
-        });
+        resourceManager.getResource(mesh, resource => { component.addMesh(resource); });
+        if (!materials || !materials.length) {
+          console.error('A model is missing material definitions. Using default material'); // eslint-disable-line
+          resourceManager.getResource('default.mtl', resource => { component.addMaterial(resource); });
+        } else {
+          materials.forEach(material => {
+            resourceManager.getResource(material, resource => { component.addMaterial(resource); });
+          });
+        }
         break;
       case 'Camera': break;
       default: break;

@@ -13,9 +13,7 @@ export default class ShaderProgram {
   }
 
   compileShaderProgram () {
-    if (!this.defines.length) {
-      throw new Error('No defines in shaderprogram', this.defines);
-    } else if (!this.shaderSource) {
+    if (!this.shaderSource) {
       throw new Error('No shadersource in shaderprogram');
     }
     this.createKeyFromDefines();

@@ -51,7 +51,7 @@ export default class Renderer {
     const materials = renderable.getMaterials();
     if (!geometries || !materials) { return; }
     for (let i = 0; i < geometries.length; i += 1) {
-      this.queueGeometry(geometries[i], materials[i] || this.defaultMaterial, renderable.node.transform.worldTransform, batches);
+      this.queueGeometry(geometries[i], materials[i] || materials[0], renderable.node.transform.worldTransform, batches);
     }
   }
 
@@ -103,7 +103,7 @@ export default class Renderer {
       return true;
     }
     if (!material.getDefines().length) {
-      console.error('Material missing defines. Added default colormap texture'); // eslint-disable-line
+      console.error(`Material with source ${material.src} missing defines. Added default colormap texture`); // eslint-disable-line
       material.enableDefine('COLORMAP', 1);
       material.addTexture('COLORMAP', this.defaultTexture);
       return false;

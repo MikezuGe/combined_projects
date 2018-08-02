@@ -63,7 +63,7 @@
       },
       "components": {
         "model": {
-          "mesh": "monkey.obj",
+          "mesh": "default.obj",
           "materials": [
             "default.mtl"
           ]
@@ -90,9 +90,9 @@
           },
           "components": {
             "model": {
-              "mesh": "monkey.obj",
+              "mesh": "default.obj",
               "materials": [
-                "default.mtl"
+                "test.mtl"
               ]
             }
           },

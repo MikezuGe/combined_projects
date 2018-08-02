@@ -15,27 +15,29 @@ export default class Material extends Resource {
     if (typeof data !== 'object') {
       JSON.parse(data);
     }
-    this.setDefines(data.defines);
     return resourceLoader => {
       resourceLoader.getResource(data.shaderSource, resource => { this.shaderSource = resource; });
-      Object.entries(data.textures).forEach(([ key, value, ]) => {
-        resourceLoader.getResource(value.src, resource => { this.textures.set(key, resource); });
-      });
+      for (const { define, src, value, } of data.textures) {
+        this.enableDefine(define, value);
+        resourceLoader.getResource(src, resource => { this.addTexture(define, resource); });
+      }
     }
   }
 
-  addTexture (key, texture) {
-    this.textures.set(key, texture);
+  addTexture (define, texture) {
+    this.textures.set(define, texture);
+  }
+
+  getTextures () {
+    const textures = [];
+    for (const entry of this.textures) {
+      textures.push(entry);
+    }
+    return textures;
   }
   
-  setDefines (defines) {
-    Object.entries(defines).forEach(([key, value]) => {
-      if (!this.defines.has(key)) {
-        this.defines.set(key, value || null);
-      } else {
-        this.defines.delete(key);
-      }
-    });
+  enableDefine (define, value) {
+    this.defines.set(define, value);
   }
 
   getDefines () {

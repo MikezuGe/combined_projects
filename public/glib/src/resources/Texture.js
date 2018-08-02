@@ -31,8 +31,8 @@ class Texture extends Resource {
 
   parse (data) {
     const image = new Image();
+    image.onload = () => { this.buffer = uploadToGPU(image); }
     image.src = `data:image/png;base64,${data}`;
-    this.buffer = uploadToGPU(image);
   }
 
   remove () {

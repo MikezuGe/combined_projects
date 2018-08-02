@@ -1,7 +1,6 @@
 import { gl, } from 'core/Glib';
 import { GeometryBatch, } from 'misc';
 import ShaderProgram from './ShaderProgram';
-import { Mat4, } from 'math';
 
 
 const logs = new Map();
@@ -10,14 +9,15 @@ const logOnce = (name, log) => {
     return;
   }
   logs.set(name, log);
-  console.log(name, log); // eslint-ignore-line
+  console.log(name, log); // eslint-disable-line
 }
 
 
 export default class Renderer {
 
   constructor (resourceManager) {
-    resourceManager.getResource('default.mtl', material => { this.defaultMaterial = material; });
+    resourceManager.getResource('default.png', resource => { this.defaultTexture = resource; });
+    resourceManager.getResource('default.mtl', resource => { this.defaultMaterial = resource; });
     this.resourceManager = resourceManager;
     this.boundScene = null;
     this.boundCamera = null;
@@ -51,7 +51,7 @@ export default class Renderer {
     const materials = renderable.getMaterials();
     if (!geometries || !materials) { return; }
     for (let i = 0; i < geometries.length; i += 1) {
-      this.queueGeometry(geometries[i], materials[i], renderable.node.transform.worldTransform, batches);
+      this.queueGeometry(geometries[i], materials[i] || this.defaultMaterial, renderable.node.transform.worldTransform, batches);
     }
   }
 
@@ -74,7 +74,14 @@ export default class Renderer {
     gl.depthMask(true);
     for (const batch of geometryBatches) {
       const { material, geometry: { mesh, vertexCount, vertexOffset, }, } = batch;
-      this.bindAll(mesh, material);
+      const shaderChange = this.bindMaterialAndShader(material);
+      if (!this.boundShaderProgram) {
+        continue;
+      }
+      if (shaderChange) {
+        this.bindTextures(material);
+      }
+      this.boundMesh !== mesh && this.bindMesh(mesh);
       this.drawIndividual(batch, gl.TRIANGLES, vertexCount, gl.UNSIGNED_SHORT, vertexOffset);
     }
     // After drawing, unbind all
@@ -84,20 +91,8 @@ export default class Renderer {
     this.boundShaderProgram = null;
     this.boundCamera = null;
   }
-
-  bindAll (mesh, material) {
-    const shaderChange = this.bindMaterial(material);
-
-    if (!this.boundShaderProgram) {
-      return;
-    }
-
-    this.boundMesh = mesh;
-    this.bindShaderAttributes();
-    this.enableShaderAttributes(mesh);
-  }
   
-  bindMaterial (material) {
+  bindMaterialAndShader (material) {
     if (this.boundMaterial === material) {
       return false;
     }
@@ -107,24 +102,47 @@ export default class Renderer {
       gl.useProgram(this.boundShaderProgram.program);
       return true;
     }
+    if (!material.getDefines().length) {
+      console.error('Material missing defines. Added default colormap texture'); // eslint-disable-line
+      material.enableDefine('COLORMAP', 1);
+      material.addTexture('COLORMAP', this.defaultTexture);
+      return false;
+    }
     this.resourceManager.getResource(material.shaderSource.url, shaderSource => {
       const shaderProgram = new ShaderProgram(shaderSource, material.getDefines());
       shaderProgram.compileShaderProgram();
-      material.shaderProgram = shaderProgram;
       this.shaderProgramCache.set(shaderProgram.key, shaderProgram);
       this.boundShaderProgram = shaderProgram;
+      material.shaderProgram = shaderProgram;
       gl.useProgram(shaderProgram.program);
     });
+    return false;
   }
 
-  bindShaderAttributes () {
-    gl.bindBuffer(gl.ARRAY_BUFFER, this.boundMesh.vertexBuffer);
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.boundMesh.indiceBuffer);
+  bindTextures (material) {
+    const uniformLocations = this.boundShaderProgram.uniformLocations;
+    const textures = material.getTextures();
+    for (const [ define, texture ] of textures) {
+      let num;
+      let textureUniform;
+      switch (define) {
+        case 'COLORMAP': num = 0; textureUniform = uniformLocations.u_colortexture; break;
+        case 'NORMALMAP': num = 1; textureUniform = uniformLocations.u_normaltexture; break;
+        case 'SPECULARMAP': num = 2; textureUniform = uniformLocations.u_speculartexture; break;
+        default: throw new Error(`No texture of type ${define} has been specified`);
+      }
+      gl.activeTexture(gl.TEXTURE0 + num);
+      gl.bindTexture(gl.TEXTURE_2D, texture.buffer);
+      gl.uniform1i(textureUniform, num);
+    }
   }
 
-  enableShaderAttributes () {
+  bindMesh (mesh) {
+    this.boundMesh = mesh;
+    gl.bindBuffer(gl.ARRAY_BUFFER, mesh.vertexBuffer);
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, mesh.indiceBuffer);
     const attrLoc = this.boundShaderProgram.attributeLocations;
-    const { attributes, vertexSize, } = this.boundMesh;
+    const { attributes, vertexSize, } = mesh;
     for (const { name, vertices, offset, } of attributes) {
       gl.enableVertexAttribArray(attrLoc[name]);
       gl.vertexAttribPointer(attrLoc[name], vertices, gl.FLOAT, false, vertexSize, offset);
@@ -140,9 +158,6 @@ export default class Renderer {
   }
 
   bindTransform (worldTransform) {
-    if (!this.boundShaderProgram) {
-      return false;
-    }
     const { u_mvp, } = this.boundShaderProgram.uniformLocations;
     const { view, perspective, } = this.boundCamera;
     const mvp = perspective.mul(view.invert).mul(worldTransform).toFloat32Array;

@@ -14,14 +14,12 @@ export default class ShaderProgram {
 
   compileShaderProgram () {
     if (!this.defines.length) {
-      throw new Error('No defines in shaderprogram');
+      throw new Error('No defines in shaderprogram', this.defines);
     } else if (!this.shaderSource) {
       throw new Error('No shadersource in shaderprogram');
     }
     this.createKeyFromDefines();
-    const vertexShader = this.createShader(gl.VERTEX_SHADER);
-    const fragmentShader = this.createShader(gl.FRAGMENT_SHADER);
-    this.createProgram(vertexShader, fragmentShader);
+    this.createProgram(this.createShader(gl.VERTEX_SHADER), this.createShader(gl.FRAGMENT_SHADER));
     this.getAttributeLocations();
     this.getUniformLocations();
   }

@@ -14,7 +14,7 @@ export default class Mat3 {
     );
   }
 
-  static fromArray = m => new Mat3(...m);
+  static fromArray (m) { return new Mat3(...m); }
 
   constructor (m00, m01, m02, m10, m11, m12, m20, m21, m22) {
     this.m00 = m00; this.m01 = m01; this.m02 = m02;

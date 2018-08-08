@@ -19,11 +19,12 @@ export default class ShaderSource extends Resource {
       throw new Error(`Type of shader is invalid: ${type}`);
     }
     shaderSource += type === gl.VERTEX_SHADER ? '#define VERTEX\n' : '#define FRAGMENT\n';
-    // Then defines
-    defines.forEach(([ key, val, ]) => {
-      shaderSource += `#define ${key} ${val ? ` = ${val}\n` : '\n'}`;
-    });
+    shaderSource += defines.map(([ key, val, ]) => `#define ${key}${val ? `=${val}\n` : '\n'}`).join('');
     return `${shaderSource}#line 1\n${this.data}`;
+  }
+
+  remove () {
+    this.data = null;
   }
 
 }

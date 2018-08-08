@@ -1,4 +1,5 @@
 import Component from './Component';
+import { Vec3, Quat, } from 'math';
 
 
 export default class Model extends Component {
@@ -25,12 +26,13 @@ export default class Model extends Component {
     return (this.materials.length && this.materials) || null;
   }
 
+  update () {
+    
+  }
+
   remove () {
     this.node.removeComponent(this);
-    this.node = null;
-    this.mesh.remove();
     this.mesh = null;
-    this.materials.forEach(material => { material.remove(); });
     this.materials.length = 0;
   }
 

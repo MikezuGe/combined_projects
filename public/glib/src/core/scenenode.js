@@ -30,7 +30,17 @@ export default class SceneNode {
   }
 
   removeComponent (component) {
+    component.node = null;
     this.components.splice(this.components.indexOf(component), 1);
+  }
+
+  update () {
+    for (const child of this.children) {
+      child.update();
+    }
+    for (const component of this.components) {
+      component.update();
+    }
   }
 
   remove () {
@@ -49,10 +59,10 @@ export default class SceneNode {
   }
 
   walkEnabled (fn) {
+    fn(this);
     for (const child of this.children) {
       child.walkEnabled(fn);
     }
-    fn(this);
   }
 
 }

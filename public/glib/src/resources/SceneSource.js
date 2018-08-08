@@ -13,7 +13,7 @@ export default class SceneSource extends Resource {
   }
 
   remove () {
-    this.data = null;
+
   }
 
 }

@@ -150,6 +150,7 @@ class Mesh extends Resource {
     this.vertexSize = null;
     this.vertexBuffer = null;
     this.indiceBuffer = null;
+    this.vao = null;
   }
 
   parse (data) {
@@ -257,12 +258,15 @@ class Mesh extends Resource {
   }
 
   remove () {
+    this.geometries.forEach(geometry => { geometry.mesh = null; });
     this.geometries.length = 0;
     this.attributes.length = 0;
     gl.deleteBuffer(this.vertexBuffer);
     gl.deleteBuffer(this.indiceBuffer);
+    gl.deleteBuffer(this.vao);
     this.vertexBuffer = null;
     this.indiceBuffer = null;
+    this.vao = null;
   }
 
 }

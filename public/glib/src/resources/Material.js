@@ -49,7 +49,8 @@ export default class Material extends Resource {
   }
 
   remove () {
-    this.textures.forEach(texture => { texture.remove(); });
+    this.shaderSource = null;
+    this.shaderProgram = null;
     this.textures.clear();
     this.defines.clear();
   }

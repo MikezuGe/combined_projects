@@ -3,8 +3,12 @@ import { gl, } from 'core/Glib';
 
 export default class ShaderProgram {
 
-  constructor (shaderSource, defines) {
-    this.key = null;
+  static createShaderKey (url, defines) {
+    return `${url}:${defines.map(([ key, value, ]) => `${key}=${value}`).join(',')}`;
+  }
+
+  constructor (key, shaderSource, defines) {
+    this.key = key;
     this.defines = defines;
     this.shaderSource = shaderSource;
     this.program = null;
@@ -16,15 +20,9 @@ export default class ShaderProgram {
     if (!this.shaderSource) {
       throw new Error('No shadersource in shaderprogram');
     }
-    this.createKeyFromDefines();
     this.createProgram(this.createShader(gl.VERTEX_SHADER), this.createShader(gl.FRAGMENT_SHADER));
     this.getAttributeLocations();
     this.getUniformLocations();
-  }
-
-  createKeyFromDefines () {
-    this.key = `${this.shaderSource.url}:${this.defines.map(([ key, value, ]) => `${key}=${value}`).join(',')}`;
-    return this.key;
   }
 
   createShader (shaderType) {
@@ -67,6 +65,10 @@ export default class ShaderProgram {
       uniforms[uniformName] = gl.getUniformLocation(this.program, uniformName);
     }
     this.uniformLocations = uniforms;
+  }
+
+  remove () {
+    
   }
 
 }

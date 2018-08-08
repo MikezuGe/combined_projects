@@ -1,5 +1,5 @@
 import Component from './Component';
-import { Mat4, Vec3 } from 'math';
+import { Mat4, Vec3, Quat, } from 'math';
 const { PI, } = Math;
 
 
@@ -9,34 +9,31 @@ export default class Camera extends Component {
     super(node, 'Camera');
     this.active = true;
     this.inControl = true;
-    this.node.transform.translation = new Vec3(0.0, 0.0, 5.0);
-    //const ar = window.innerWidth / window.innerHeight;
-    //this._perspective = Mat4.orthographic(-ar, ar, -1, 1, 0.01, 1000);
-    this._perspective = Mat4.perspective(PI * 0.25, window.innerWidth / window.innerHeight, 0.01, 1000);
-    this.resize = () => {
-      this.perspective = Mat4.perspective(PI * 0.25, window.innerWidth / window.innerHeight, 0.01, 1000);
-    }
+    const aspectRatio = window.innerWidth / window.innerHeight;
+    this._perspective = Mat4.perspective(PI * 0.25, aspectRatio, 0.01, 1000);
+    this._ortographic = Mat4.orthographic(-aspectRatio, aspectRatio, -1, 1, 0.01, 1000);
   }
 
-  get view () {
-    return this.node.transform.worldTransform;
+  get view () { return this.node.transform.worldTransform; }
+
+  //set perspective (perspective) { this._perspective = perspective; }
+  get perspective () { return this._perspective.clone; }
+
+  //set ortographic (ortographic) { this._ortographic = ortographic; }
+  get ortographic () { return this._ortographic.clone; }
+
+  resize () {
+    const aspectRatio = window.innerWidth / window.innerHeight;
+    this._perspective = Mat4.perspective(PI * 0.25, aspectRatio, 0.01, 1000);
+    this._ortographic = Mat4.orthographic(-aspectRatio, aspectRatio, -1, 1, 0.01, 1000);
   }
 
-  set perspective (perspective) {
-    this._perspective = perspective;
-  }
+  update () {
 
-  get perspective () {
-    return this._perspective.clone;
-  }
-
-  update = () => {
-    
   }
 
   remove () {
     this.node.removeComponent(this);
-    this.node = null;
   }
 
 }

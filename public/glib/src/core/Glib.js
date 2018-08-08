@@ -28,6 +28,7 @@ export default class Glib {
       scene.buildFromResource(sceneResource, resourceManager);
       const frame = () => {
         const nextFrame = requestAnimationFrame(frame);
+        scene.update();
         renderer.renderScene(scene);
       }
       requestAnimationFrame(frame);

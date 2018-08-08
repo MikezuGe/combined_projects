@@ -98,14 +98,12 @@ export default class ResourceManager {
   }
 
   deleteAllResources () {
-    this.cache.forEach(resource => {
-      resource.delete();
-    });
-    this.loadQueue.forEach(resource => {
-      resource.delete();
-    });
+    this.loading = true;
+    this.cache.forEach(resource => { resource.delete(); });
+    this.loadQueue.forEach(resource => { resource.delete(); });
     this.cache.clear();
     this.loadQueue.clear();
+    this.loading = false;
   }
 
 }

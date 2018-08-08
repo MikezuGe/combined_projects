@@ -47,10 +47,10 @@ export default class Vec3 {
 
   get forward () { return this.normalize; }
   get backward () { return this.normalize.invert; }
-  get left () { return this.forward.cross(Vec3.up).normalize; }
-  get right () { return this.forward.cross(Vec3.up).normalize.invert; }
-  get down () { return this.forward.cross(this.left).normalize; }
-  get up () { return this.forward.cross(this.left).normalize.invert; }
+  get left () { return this.normalize.cross(Vec3.up).normalize; }
+  get right () { return this.normalize.cross(Vec3.up).normalize.invert; }
+  get down () { return this.normalize.cross(this.left).normalize; }
+  get up () { return this.normalize.cross(this.left).normalize.invert; }
 
   get toArray () { return [ this.x, this.y, this.z, ]; }
 

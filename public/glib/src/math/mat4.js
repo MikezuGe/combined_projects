@@ -146,7 +146,7 @@ export default class Mat4 {
 
     let det = m00 * a00 + m01 * a10 + m02 * a20 + m03 * a30;
     if (det === 0) {
-      throw new Error('Cannot invert matrix', this);
+      throw new Error(`Cannot invert matrix ${this}`);
     }
     det = 1.0 / det;
 

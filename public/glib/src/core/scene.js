@@ -14,6 +14,14 @@ const parseNode = (nodeData, parentNode, resourceManager) => {
       case 'Model':
         resourceManager.getResource(mesh, resource => { component.addMesh(resource); });
         for (const material of materials) { resourceManager.getResource(material, resource => { component.addMaterial(resource); }); }
+        /*
+        // TODO
+        // Mesh resource gets material resource names from .obj file and places the names into materialSources array
+        resourceManager.getResource(mesh, resource => {
+          component.addMesh(resource);
+          for(const material of resource.materialSources) { resourceManager.getResource(material, resource => { component.addMaterial(resource); }); }
+        });
+        */
         break;
       case 'Camera':
         break;
@@ -22,10 +30,7 @@ const parseNode = (nodeData, parentNode, resourceManager) => {
     }
   }
 
-  for (const [ key, values, ] of Object.entries(nodeData.transform)) {
-    const { x, y, z, } = values;
-    node.transform[key] = values;
-  }
+  for (const [ key, values, ] of Object.entries(nodeData.transform)) { node.transform[key] = values; }
   nodeData.nodes.forEach(data => { parseNode(data, node, resourceManager); });
 }
 

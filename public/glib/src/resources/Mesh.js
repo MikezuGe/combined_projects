@@ -145,6 +145,7 @@ class Mesh extends Resource {
 
   constructor(url) {
     super(url);
+    this.materialSources = [];
     this.geometries = [];
     this.attributes = [];
     this.vertexSize = null;
@@ -160,6 +161,7 @@ class Mesh extends Resource {
     const tangents = [];
     const bitangents = [];
     const indices = [];
+    const materials = [];
 
     const geometries = [];
     const attributes = [];
@@ -172,7 +174,7 @@ class Mesh extends Resource {
     let row = '';
 
     if (typeof data === 'object') {
-      // Generated vertexdata, must have texturecoordinates
+      // Expects generated vertexdata, that must have texturecoordinates
       const vertexDataLength = data.vertexData.length;
       for (let i = 0; i < vertexDataLength; i += 2) {
         vertices.push(data.vertexData[i + 0]);
@@ -184,15 +186,16 @@ class Mesh extends Resource {
       const parseRow = {
         'v': aRow => { vertices.push(new Vec3(...aRow[2].match(allFloats).map(parseFloat))); }, // Vertice
         'vt': aRow => { texCoords.push(new Vec2(...aRow[2].match(allFloats).map(parseFloat))); }, // Texturecoordinate
-        'vn': aRow => { normals.push(new Vec3(...aRow[2].match(allFloats).map(parseFloat))); }, // Normal
+        'vn': aRow => { normals.push(new Vec3(...aRow[2].match(allFloats).map(parseFloat)).normalize); }, // Normal
         'f': aRow => { indices.push(...aRow[2].match(allInts).map(num => parseInt(num, 10) - 1)); }, // Indices for next 3 vertices
-        'g': aRow => { indices.push(aRow[2]); }, // Point where material usage starts
+        'g': aRow => { indices.push(aRow[2]); materials.push(aRow[2]); }, // Point where material usage starts
         '#': aRow => { aRow }, // Comment
         'o': aRow => { aRow }, // Object name
         'usemtl': aRow => { aRow }, // Material to switch to at this point of indices
         's': aRow => { aRow }, // Smooth shading 1 (on) or off (off)
         'mtllib': aRow => { aRow }, // Materials library and filename
       }
+
       while ((row = nextLine.exec(data))) {
         try {
           parseRow[row[1]](row);
@@ -250,6 +253,7 @@ class Mesh extends Resource {
 
     const buffers = uploadToGPU(new Float32Array(vertexData), new Uint16Array(indiceData));
 
+    this.materialSources.push(...materials.map(material => material));
     this.geometries = geometries;
     this.attributes = getAttributeInfo(attributes);
     this.vertexSize = calculateVertexSize(attributes);

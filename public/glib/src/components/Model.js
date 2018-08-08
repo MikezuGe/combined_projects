@@ -1,5 +1,5 @@
 import Component from './Component';
-import { Vec3, Quat, } from 'math';
+//import { Vec3, Quat, } from 'math';
 
 
 export default class Model extends Component {
@@ -27,7 +27,7 @@ export default class Model extends Component {
   }
 
   update () {
-    
+    //this.node.transform.rotate(Quat.fromEulers(0.0, -0.01, 0.0));
   }
 
   remove () {

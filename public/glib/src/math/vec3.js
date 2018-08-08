@@ -13,6 +13,7 @@ export default class Vec3 {
   static get one () { return new Vec3(1, 1, 1); }
 
   static fromArray (a) { return new Vec3(...a); }
+
   static fromQuat (q) {
     const x = this.x;
     const y = this.y;
@@ -31,6 +32,7 @@ export default class Vec3 {
       iz * qw + iw * -qz + ix * -qy - iy * -qx
     );
   }
+
   static fromMat4 (m) {
     return new Vec3(
       m.a14 + m.a11 * this.x + m.a12 * this.y + m.a13 * this.z,

@@ -95,7 +95,7 @@ export default class Renderer {
         }
         this.bindMesh(mesh);
         this.bindTextures();
-        // bind scene
+        this.bindScene(scene);
         this.bindCamera();
       }
       this.drawIndividual(batch, gl.TRIANGLES, vertexCount, gl.UNSIGNED_SHORT, vertexOffset);
@@ -174,8 +174,9 @@ export default class Renderer {
     }
   }
 
-  bindScene () {
-
+  bindScene (scene) {
+    const { u_time, } = this.boundShaderProgram.uniformLocations;
+    gl.uniform1f(u_time, performance.now());
   }
 
   bindCamera () {
@@ -187,12 +188,12 @@ export default class Renderer {
   }
 
   drawIndividual (batch, drawType, vertexCount, indexType, vertexOffset) {
-    const { u_model, u_mvp, } = this.boundShaderProgram.uniformLocations;
+    const { u_model, u_model_rotation, u_mvp, } = this.boundShaderProgram.uniformLocations;
     const { view, perspective, } = this.boundCamera;
     for (const worldTransform of batch.worldTransforms) {
-      const mvp = perspective.mul(view.invert).mul(worldTransform).toFloat32Array;
+      gl.uniformMatrix3fv(u_model_rotation, false, worldTransform.toMat3.invert.transpose.toFloat32Array);
       gl.uniformMatrix4fv(u_model, false, worldTransform.toFloat32Array);
-      gl.uniformMatrix4fv(u_mvp, false, mvp);
+      gl.uniformMatrix4fv(u_mvp, false, perspective.mul(view.invert).mul(worldTransform).toFloat32Array);
       gl.drawElements(drawType, vertexCount, indexType, vertexOffset * 2);
     }
   }

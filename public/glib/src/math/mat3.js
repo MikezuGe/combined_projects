@@ -73,6 +73,39 @@ export default class Mat3 {
     return new Quat((this.m10 - this.m01) / s, (this.m02 + this.m20) / s, (this.m12 + this.m21) / s);
   }
 
+  get invert () {
+    const { m00, m01, m02, m10, m11, m12, m20, m21, m22, } = this;
+    const a01 = m22 * m11 - m12 * m21
+    const a11 = -m22 * m10 + m12 * m20
+    const a21 = m21 * m10 - m11 * m20
+
+    let det = m00 * a01 + m01 * a11 + m02 * a21
+    if (det === 0) {
+      throw new Error(`Cannot invert matrix ${this}`);
+    }
+    det = 1.0 / det
+
+    return new Mat3(
+      a01 * det,
+      (-m22 * m01 + m02 * m21) * det,
+      (m12 * m01 - m02 * m11) * det,
+      a11 * det,
+      (m22 * m00 - m02 * m20) * det,
+      (-m12 * m00 + m02 * m10) * det,
+      a21 * det,
+      (-m21 * m00 + m01 * m20) * det,
+      (m11 * m00 - m01 * m10) * det,
+    );
+  }
+
+  get transpose () {
+    return new Mat3(
+      this.m00, this.m10, this.m20,
+      this.m01, this.m11, this.m21,
+      this.m02, this.m12, this.m22,
+    );
+  }
+
   multiplyVector (v) {
     return new Mat3(
       this.m00 * v.x + this.m01 * v.y + this.m02 * v.z,

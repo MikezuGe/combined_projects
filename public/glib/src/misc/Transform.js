@@ -60,7 +60,7 @@ export default class Transform {
   }
 
   set origin (origin) {
-    this._rotateAroundOrigin = (origin).lenSqrt !== 0;
+    this._rotateAroundOrigin = origin.lenSqrt !== 0;
     this._origin = origin;
   }
 

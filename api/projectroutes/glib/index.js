@@ -45,7 +45,7 @@ const createResponse = {
 
 glibRouter.get('/:url', (req, res) => {
   const { url, } = req.params;
-  const ext = url.slice(url.indexOf('.'));
+  const ext = url.slice(url.lastIndexOf('.'));
   const { resourcePath, headers, options, } = createResponse[ext](url);
   fs.exists(resourcePath, exist => {
     if (exist) {

@@ -2,7 +2,7 @@
 export default class Component {
 
   constructor (node, type) {
-    this.node = node;
+    this.node = node || null;
     this.type = type;
   }
 

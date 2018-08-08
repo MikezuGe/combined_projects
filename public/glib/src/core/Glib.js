@@ -33,9 +33,9 @@ export default class Glib {
       }
       requestAnimationFrame(frame);
       /*
-      setTimeout(() => {
+      resourceManager.onLoadDone = () => {
         renderer.renderScene(scene);
-      }, 2000);
+      }
       */
       console.log(scene); // eslint-disable-line
     });

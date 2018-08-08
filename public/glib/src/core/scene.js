@@ -1,45 +1,31 @@
 import SceneNode from './SceneNode';
-import * as componentTypes from 'components';
+import * as componentTypes from 'components/';
 import { firstLetterToUpper, } from 'utility/';
 
 
 const parseNode = (nodeData, parentNode, resourceManager) => {
   const node = parentNode.addChild();
   // Insert data to node from nodedata...
-  if (!nodeData.components) {
-    throw new Error('No components object defined for node in scene configuration file.');
-  }
-  Object.entries(nodeData.components).forEach(([ key, { mesh, materials, }, ]) => {
+  for (const [ key, { mesh, materials, }, ] of Object.entries(nodeData.components)) {
     const componentType = firstLetterToUpper(key);
     const ComponentClass = componentTypes[componentType];
-    if (!ComponentClass) {
-      throw new Error(`Illegal component type: ${componentType}`)
-    }
     const component = node.addComponent(ComponentClass);
     switch (componentType) {
       case 'Model':
         resourceManager.getResource(mesh, resource => { component.addMesh(resource); });
-        if (!materials || !materials.length) {
-          console.error('A model is missing material definitions. Using default material'); // eslint-disable-line
-          resourceManager.getResource('default.mtl', resource => { component.addMaterial(resource); });
-        } else {
-          materials.forEach(material => {
-            resourceManager.getResource(material, resource => { component.addMaterial(resource); });
-          });
-        }
+        for (const material of materials) { resourceManager.getResource(material, resource => { component.addMaterial(resource); }); }
         break;
-      case 'Camera': break;
-      default: break;
+      case 'Camera':
+        break;
+      default:
+        break;
     }
-  });
+  }
 
-  Object.entries(nodeData.transform).forEach(([ key, values, ]) => {
+  for (const [ key, values, ] of Object.entries(nodeData.transform)) {
     const { x, y, z, } = values;
-    if (isNaN(x) || isNaN(y) || isNaN(z)) {
-      throw new Error(`Nodedata is missing coordinates for ${key}`);
-    }
     node.transform[key] = values;
-  });
+  }
   nodeData.nodes.forEach(data => { parseNode(data, node, resourceManager); });
 }
 

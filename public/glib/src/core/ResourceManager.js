@@ -42,6 +42,7 @@ export default class ResourceManager {
     this.cache = new Map();
     this.loadQueue = new Map();
     this.loading = false;
+    this.onLoadDone = null;
   }
 
   getResource (url, onResourceLoad) {
@@ -72,8 +73,9 @@ export default class ResourceManager {
     if (this.loading) {
       return;
     }
-    var loadingObject = this.loadQueue.values().next().value;
+    const loadingObject = this.loadQueue.values().next().value;
     if (!loadingObject) {
+      this.onLoadDone && this.onLoadDone();
       return;
     }
     const { resource, callbacks, } = loadingObject;
@@ -85,7 +87,9 @@ export default class ResourceManager {
       loadMore && loadMore(this);
       callbacks.forEach(callback => { callback(resource); });
       this.loading = false;
-      this.loadNextResource();
+      setTimeout(() => {
+        this.loadNextResource();
+      }, 500)
     }).catch(err => {
       console.error(err); // eslint-disable-line
     });

@@ -17,6 +17,7 @@ export default class Material extends Resource {
     }
     return resourceLoader => {
       resourceLoader.getResource(data.shaderSource, resource => { this.shaderSource = resource; });
+      for (const define of data.defines) { this.enableDefine(define, null); }
       for (const { define, src, value, } of data.textures) {
         this.enableDefine(define, value);
         resourceLoader.getResource(src, resource => { this.addTexture(define, resource); });
@@ -33,7 +34,7 @@ export default class Material extends Resource {
     for (const entry of this.textures) {
       textures.push(entry);
     }
-    return textures;
+    return textures.length ? textures : null;
   }
   
   enableDefine (define, value) {
@@ -45,7 +46,7 @@ export default class Material extends Resource {
     for (const entry of this.defines) {
       defines.push(entry);
     }
-    return defines;
+    return defines.length ? defines : null;
   }
 
   remove () {

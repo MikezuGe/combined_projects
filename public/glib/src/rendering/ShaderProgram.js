@@ -31,7 +31,7 @@ export default class ShaderProgram {
     gl.shaderSource(shader, shaderSource);
     gl.compileShader(shader);
     if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-      throw new Error(gl.getShaderInfoLog(shader));
+      throw new Error(`Error while creating shaderprogram: ${gl.getShaderInfoLog(shader)}`);
     }
     return shader;
   }
@@ -42,7 +42,7 @@ export default class ShaderProgram {
     gl.attachShader(program, fragmentShader);
     gl.linkProgram(program);
     if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-      throw new Error(gl.getProgramInfoLog(program));
+      throw new Error(`Error while linking program: ${gl.getProgramInfoLog(program)}`);
     }
     this.program = program;
   }

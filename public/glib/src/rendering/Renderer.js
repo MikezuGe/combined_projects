@@ -21,6 +21,8 @@ export default class Renderer {
     this.resourceManager = resourceManager;
     this.boundScene = null;
     this.boundCamera = null;
+    this.boundShaderProgram = null;
+    this.boundMesh = null;
     this.boundMaterial = null;
     this.shaderProgramCache = new Map();
   }
@@ -51,7 +53,7 @@ export default class Renderer {
     const materials = renderable.getMaterials();
     if (!geometries || !materials) { return; }
     for (let i = 0; i < geometries.length; i += 1) {
-      this.queueGeometry(geometries[i], materials[i] || materials[0], renderable.node.transform.worldTransform, batches);
+      this.queueGeometry(geometries[i], materials[i], renderable.node.transform.worldTransform, batches);
     }
   }
 
@@ -74,71 +76,66 @@ export default class Renderer {
     gl.depthMask(true);
     for (const batch of geometryBatches) {
       const { material, geometry: { mesh, vertexCount, vertexOffset, }, } = batch;
-      const shaderChange = this.bindMaterialAndShader(material);
-      if (!this.boundShaderProgram) {
-        continue;
+      /*if (this.boundMaterial !== material) {
+        this.boundMaterial = material;
       }
-      shaderChange && this.bindTextures(material);
-      this.boundMesh !== mesh && this.bindMesh(mesh);
+      if (this.boundMaterial.shaderProgram !== this.boundShaderProgram) {
+        this.bindShaderProgram()
+        // bind scene
+        // bind camera
+        this.bindTextures();
+      }
+      this.bindMesh(mesh);
+      */
+      if (this.boundMaterial !== material) {
+        this.boundMaterial = material;
+        this.bindShaderProgram();
+        if (!this.boundShaderProgram) {
+          continue;
+        }
+        this.bindMesh(mesh);
+        this.bindTextures();
+        // bind scene
+        this.bindCamera();
+      }
       this.drawIndividual(batch, gl.TRIANGLES, vertexCount, gl.UNSIGNED_SHORT, vertexOffset);
     }
     // After drawing, unbind all
-    this.boundMaterial = null;
-    this.boundMesh = null;
     this.boundScene = null;
-    this.boundShaderProgram = null;
     this.boundCamera = null;
+    this.boundShaderProgram = null;
+    this.boundMesh = null;
+    this.boundMaterial = null;
   }
   
-  bindMaterialAndShader (material) {
-    if (this.boundMaterial === material) {
-      return false;
-    }
-    this.boundMaterial = material;
-    if (material.shaderProgram) {
-      this.boundShaderProgram = material.shaderProgram;
+  bindShaderProgram () {
+    const { boundMaterial, } = this;
+    if (boundMaterial.shaderProgram) {
+      this.boundShaderProgram = boundMaterial.shaderProgram;
       gl.useProgram(this.boundShaderProgram.program);
-      return true;
+      return;
     }
-    const defines = material.getDefines();
+    let defines = boundMaterial.getDefines();
     if (!defines.length) {
-      console.error(`Material with source ${material.src} missing defines. Added default colormap texture`); // eslint-disable-line
-      material.enableDefine('COLORMAP', 1);
-      material.addTexture('COLORMAP', this.defaultTexture);
+      console.error(`Material ${boundMaterial.src} is missing textures, added default colormap texture`); // eslint-disable-line
+      boundMaterial.enableDefine('COLORMAP', 1);
+      boundMaterial.addTexture('COLORMAP', this.defaultTexture);
+      defines = boundMaterial.getDefines();
     }
-    const key = ShaderProgram.createShaderKey(material.shaderSource.url, defines);
-    if (this.shaderProgramCache.has(key)) {
-      const shaderProgram = this.shaderProgramCache.get(key);
-      this.boundShaderProgram = shaderProgram;
-      material.shaderProgram = shaderProgram;
-      return true;
+    if (!boundMaterial.shaderSource) {
+      this.boundShaderProgram = null;
+      return;
     }
-    this.resourceManager.getResource(material.shaderSource.url, shaderSource => {
-      const shaderProgram = new ShaderProgram(key, shaderSource, defines);
+    const key = ShaderProgram.createShaderKey(boundMaterial.shaderSource.url, defines);
+    let shaderProgram = this.shaderProgramCache.get(key);
+    if (!shaderProgram) {
+      shaderProgram = new ShaderProgram(key, boundMaterial.shaderSource, defines);
       shaderProgram.compileShaderProgram();
       this.shaderProgramCache.set(shaderProgram.key, shaderProgram);
-      this.boundShaderProgram = shaderProgram;
-      material.shaderProgram = shaderProgram;
-    });
-    return false;
-  }
-
-  bindTextures (material) {
-    const uniformLocations = this.boundShaderProgram.uniformLocations;
-    const textures = material.getTextures();
-    let num = 0;
-    for (const [ define, texture ] of textures) {
-      let textureUniform;
-      switch (define) {
-        case 'COLORMAP': textureUniform = uniformLocations.u_colortexture; break;
-        case 'NORMALMAP': textureUniform = uniformLocations.u_normaltexture; break;
-        case 'SPECULARMAP': textureUniform = uniformLocations.u_speculartexture; break;
-        default: throw new Error(`No texture of type ${define} has been specified`);
-      }
-      gl.activeTexture(gl.TEXTURE0 + num);
-      gl.bindTexture(gl.TEXTURE_2D, texture.buffer);
-      gl.uniform1i(textureUniform, num++);
     }
+    boundMaterial.shaderProgram = shaderProgram;
+    this.boundShaderProgram = shaderProgram;
+    gl.useProgram(shaderProgram.program);
   }
 
   bindMesh (mesh) {
@@ -159,11 +156,42 @@ export default class Renderer {
     }
   }
 
+  bindTextures () {
+    const uniformLocations = this.boundShaderProgram.uniformLocations;
+    const textures = this.boundMaterial.getTextures() || [ [ "COLORMAP", this.defaultTexture, ], ];
+    let num = 0;
+    for (const [ define, texture ] of textures) {
+      let textureUniform;
+      switch (define) {
+        case 'COLORMAP': textureUniform = uniformLocations.u_colortexture; break;
+        case 'NORMALMAP': textureUniform = uniformLocations.u_normaltexture; break;
+        case 'SPECULARMAP': textureUniform = uniformLocations.u_speculartexture; break;
+        default: throw new Error(`No texture of type ${define} has been specified. Implement!`);
+      }
+      gl.activeTexture(gl.TEXTURE0 + num);
+      gl.bindTexture(gl.TEXTURE_2D, texture.buffer);
+      gl.uniform1i(textureUniform, num++);
+    }
+  }
+
+  bindScene () {
+
+  }
+
+  bindCamera () {
+    const { boundCamera, } = this;
+    const { u_view, u_perspectice, u_view_inverted, } = this.boundShaderProgram.uniformLocations;
+    gl.uniformMatrix4fv(u_view, false, boundCamera.view.toFloat32Array);
+    gl.uniformMatrix4fv(u_perspectice, false, boundCamera.perspective.toFloat32Array);
+    gl.uniformMatrix4fv(u_view_inverted, false, boundCamera.view.invert.toFloat32Array);
+  }
+
   drawIndividual (batch, drawType, vertexCount, indexType, vertexOffset) {
-    const { u_mvp, } = this.boundShaderProgram.uniformLocations;
+    const { u_model, u_mvp, } = this.boundShaderProgram.uniformLocations;
     const { view, perspective, } = this.boundCamera;
     for (const worldTransform of batch.worldTransforms) {
       const mvp = perspective.mul(view.invert).mul(worldTransform).toFloat32Array;
+      gl.uniformMatrix4fv(u_model, false, worldTransform.toFloat32Array);
       gl.uniformMatrix4fv(u_mvp, false, mvp);
       gl.drawElements(drawType, vertexCount, indexType, vertexOffset * 2);
     }

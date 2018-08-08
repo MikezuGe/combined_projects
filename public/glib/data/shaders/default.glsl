@@ -5,7 +5,11 @@
   in vec3 a_tangent;
   in vec3 a_bitangent;
 
+  uniform mat4 u_model;
   uniform mat4 u_mvp;
+  uniform mat4 u_view;
+  uniform mat4 u_perspectice;
+  uniform mat4 u_view_inverted;
 
   out vec2 texcoord;
   out vec3 heh;

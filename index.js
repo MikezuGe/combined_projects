@@ -12,16 +12,19 @@ const app = express();
 
 
 if (isProduction) {
+  logger.log('Running in production mode');
   // Redirect from 80 to 443
   let redirectNumber = 0;
   require('http').createServer((req, res) => {
     redirectNumber += 1;
     logger.log(`Redirect: ${req.connection.remoteAddress} ${req.method} ${req.url}. Total redirects: ${redirectNumber}`);
-    res.writeHead(301, { "Location": "https://" + req.headers.host + req.url, });
+    res.writeHead(301, { 'Location': `https://kontioweb.fi${req.url}`, });
     res.end();
   }).listen(80, () => {
     logger.log('Redirecting connections to https. Listening to port 80');
   });
+} else {
+  logger.log('Running in development mode');
 }
 
 

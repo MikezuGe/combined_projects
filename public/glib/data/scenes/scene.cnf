@@ -46,9 +46,9 @@
     {
       "transform": {
         "translation": {
-          "x": 0,
-          "y": 0,
-          "z": -5
+          "x": -1.5,
+          "y": 1.5,
+          "z": -10
         },
         "rotation": {
           "x": 0,
@@ -69,43 +69,42 @@
           ]
         }
       },
-      "nodes": [
-        {
-          "transform": {
-            "translation": {
-              "x": 2,
-              "y": 0,
-              "z": 0
-            },
-            "rotation": {
-              "x": 0,
-              "y": 0,
-              "z": 0
-            },
-            "scale": {
-              "x": 1,
-              "y": 1,
-              "z": 1
-            }
-          },
-          "components": {
-            "model": {
-              "mesh": "default.obj",
-              "materials": [
-                "default.a.mtl"
-              ]
-            }
-          },
-          "nodes": []
-        }
-      ]
+      "nodes": []
     },
     {
       "transform": {
         "translation": {
-          "x": -2,
+          "x": 1.5,
+          "y": 1.5,
+          "z": -10
+        },
+        "rotation": {
+          "x": 0,
           "y": 0,
-          "z": -5
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "components": {
+        "model": {
+          "mesh": "default.obj",
+          "materials": [
+            "default.a.mtl"
+          ]
+        }
+      },
+      "nodes": []
+    },
+    {
+      "transform": {
+        "translation": {
+          "x": -1.5,
+          "y": -1.5,
+          "z": -10
         },
         "rotation": {
           "x": 0,
@@ -132,9 +131,9 @@
     {
       "transform": {
         "translation": {
-          "x": 0,
-          "y": 2,
-          "z": -5
+          "x": 1.5,
+          "y": -1.5,
+          "z": -10
         },
         "rotation": {
           "x": 0,

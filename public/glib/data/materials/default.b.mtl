@@ -1,7 +1,7 @@
 {
   "shaderSource": "default.glsl",
   "defines": [
-    "DIFFUSE"
+    "SPECULAR"
   ],
   "textures": [
     {

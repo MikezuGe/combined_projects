@@ -1,6 +1,8 @@
 {
   "shaderSource": "default.glsl",
-  "defines": [],
+  "defines": [
+    "DIFFUSE"
+  ],
   "textures": [
     {
       "define": "COLORMAP",

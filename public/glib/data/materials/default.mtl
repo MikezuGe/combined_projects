@@ -1,10 +1,9 @@
 {
   "shaderSource": "default.glsl",
   "defines": [
-    "COLOR",
+    "COLORMAP",
     "DIFFUSE",
-    "SPECULAR",
-    "COLORMAP"
+    "SPECULAR"
   ],
   "textures": [
     {

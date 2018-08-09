@@ -27,7 +27,7 @@
 
     vertexPosition = a_position;
     cameraPosition = vec3(0.0, 0.0, 0.0);
-    lightPosition = vec3(cos(time * 0.001) * 5.0, 0.0, sin(time * 0.001) * 5.0 - 5.0);
+    lightPosition = vec3(cos(time * 0.001) * 10.0, 0.0, sin(time * 0.001) * 10.0 - 10.0);
     normal = a_normal;
 
     heh = a_normal * a_tangent * a_bitangent;
@@ -70,12 +70,15 @@
 
   #if defined (SPECULAR)
     vec3 calculateSpecularLight () {
-      float lightSpecularStrength = 0.5;
+      float lightSpecularStrength = 1.0;
       vec3 lightColor = vec3(1.0, 1.0, 1.0);
       vec3 fragPosition = vec3(u_model * vec4(vertexPosition, 1.0));
       vec3 fragNormal = normalize(u_model_rotation * normal);
       vec3 fragToLight = normalize(lightPosition - fragPosition);
-      return vec3(1.0, 1.0, 1.0);
+      vec3 fragToCamera = normalize(cameraPosition - fragPosition);
+      vec3 halfVector = normalize(fragToLight + fragToCamera);
+      float specular = max(dot(fragNormal, halfVector), 0.0);
+      return lightColor * specular * lightSpecularStrength;
     }
   #endif
 
@@ -93,9 +96,9 @@
 
 
   void main () {
-    vec3 finalColor = vec3(1.0, 1.0, 1.0);
+    vec3 finalColor = normalize(vec3(253.0, 106.0, 2.0));
     #if defined (COLORMAP)
-      finalColor *= texture(u_colortexture, texcoord).rgb;
+      finalColor = texture(u_colortexture, texcoord).rgb;
     #endif
     #if defined (DIFFUSE) || defined (SPECULAR)
       finalColor *= calculateLight();

@@ -19,7 +19,6 @@ export default class Material extends Resource {
       resourceLoader.getResource(data.shaderSource, resource => { this.shaderSource = resource; });
       for (const define of data.defines) { this.enableDefine(define, null); }
       for (const { define, src, value, } of data.textures) {
-        this.enableDefine(define, value);
         resourceLoader.getResource(src, resource => { this.addTexture(define, resource); });
       }
     }

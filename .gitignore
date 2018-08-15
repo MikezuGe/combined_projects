@@ -1,6 +1,7 @@
 node_modules
-restart.sh
 connectionstrings.json
+githook.sh
+restart.sh
 sslcert/*
 **/log.txt
 **/devBundle*

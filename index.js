@@ -1,6 +1,7 @@
 const { isProduction, PORT, httpsCert, httpsKey, } = require('./config');
 const { createHTML, logger } = require('./utility');
 const apiRouter = require('./api');
+const gitHandlerRouter = require('./githandler');
 
 const fs = require('fs');
 const path = require('path');
@@ -44,6 +45,7 @@ app.all('*', (req, res, next) => {
   logger.log(`${req.connection.remoteAddress} ${req.method} ${req.url}`);
   next();
 });
+app.use(gitHandlerRouter);
 app.use((express.static(path.resolve('./public'))));
 
 

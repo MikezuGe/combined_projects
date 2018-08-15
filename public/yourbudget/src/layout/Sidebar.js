@@ -1,26 +1,25 @@
 import React from 'react';
 import { Link, } from 'react-router-dom';
+import styled from 'styled-components';
 
 
-const styles = {
-  sidebar: {
-    gridArea: 'sidebar',
-    background: 'green',
-    display: 'flex',
-    flexDirection: 'column',
-  },
-};
+const Container = styled.div`
+  background: green;
+  display: flex;
+  flex-direction: column;
+  grid-area: sidebar;
+`;
 
 
 class Sidebar extends React.Component {
 
   render () {
     return (
-      <div style={styles.sidebar}>
+      <Container>
         <Link to='/home'>Home</Link>
         <Link to='/budget'>Budget</Link>
         <Link to='/settings'>Settings</Link>
-      </div>
+      </Container>
     )
   }
 

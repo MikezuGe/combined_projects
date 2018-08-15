@@ -1,45 +1,54 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter, Route, Switch, Redirect, } from 'react-router-dom';
+import styled from 'styled-components';
 
 import { Header, Sidebar, } from 'layout';
 import { Home, Budget, Settings, } from 'containers';
+import { ActionModal, } from 'components';
 import 'style.css';
 
 
-const styles = {
-  mainContainer: {
-    display: 'grid',
-    width: '100%',
-    height: '100%',
-    gridTemplateColumns: '10% 90%',
-    gridTemplateRows: '15% 85%',
-    gridTemplateAreas: `
-      'header header'
-      'sidebar main'
-    `,
-  },
-  main: {
-    gridArea: 'main',
-    background: 'blue',
-  }
-};
+const Container = styled.div`
+  display: grid;
+  width: 100%;
+  height: 100%;
+  grid-template-columns: 10% 90%;
+  grid-template-rows: 15% 85%;
+  grid-template-areas:
+    "header header"
+    "sidebar main";
+`;
+
+
+const Wrapper = styled.div`
+  grid-area: main;
+  background: blue;
+`;
+
+
+const MainRouter = () => {
+  return (
+    <Wrapper>
+      <Switch>
+        <Route path='/home' component={Home} />
+        <Route path='/budget' component={Budget} />
+        <Route path='/settings' component={Settings} />
+        <Redirect to='/home' />
+      </Switch>
+    </Wrapper>
+  );
+}
 
 
 const App = () => {
   return (
-    <div style={styles.mainContainer}>
+    <Container>
       <Header />
       <Sidebar />
-      <div style={styles.main}>
-        <Switch>
-          <Route path='/home' render={() => <Home />} />
-          <Route path='/budget' render={() => <Budget />} />
-          <Route path='/settings' render={() => <Settings />} />
-          <Redirect to='/home' />
-        </Switch>
-      </div>
-    </div>
+      {<MainRouter />}
+      <ActionModal />
+    </Container>
   );
 }
 

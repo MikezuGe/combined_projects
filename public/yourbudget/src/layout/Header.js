@@ -1,20 +1,20 @@
 import React from 'react';
+import styled from 'styled-components';
 
 
-const styles = {
-  head: {
-    gridArea: 'header',
-    background: 'red',
-  },
-};
+const Container = styled.div`
+  grid-area: header;
+  background: red;
+`;
 
 
 class Header extends React.Component {
 
   render () {
     return (
-      <div style={styles.head}>
-      </div>
+      <Container>
+
+      </Container>
     )
   }
 

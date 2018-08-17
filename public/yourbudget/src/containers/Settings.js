@@ -1,16 +1,16 @@
 import React from 'react';
 
 
-class Home extends React.Component {
+class Settings extends React.Component {
 
   render () {
     return (
       <div>
-        Home
+        Settings
       </div>
     );
   }
 }
 
 
-export default Home;
+export default Settings;

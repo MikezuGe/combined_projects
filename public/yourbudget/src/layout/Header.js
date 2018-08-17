@@ -1,14 +1,21 @@
-import React, { Component, } from 'react';
+import React from 'react';
+import styled from 'styled-components';
 
-import './Header.css';
+
+const Container = styled.div`
+  grid-area: header;
+  background: red;
+`;
 
 
-class Header extends Component {
+class Header extends React.Component {
 
   render () {
     return (
-      <div className={'header'}>{'Header!'}</div>
-    );
+      <Container>
+
+      </Container>
+    )
   }
 
 }

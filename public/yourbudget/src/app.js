@@ -1,113 +1,79 @@
-import React, { Component, } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
-import PropTypes from 'prop-types';
-import { BrowserRouter as Router, history, Switch, Route, Redirect, } from 'react-router-dom';
-import { Provider, connect, } from 'react-redux';
+import { BrowserRouter, Route, Switch, Redirect, } from 'react-router-dom';
+import styled from 'styled-components';
 
-import './style.css';
-
-import { Menu, Header, SideMenu, ActionModal, } from './layout';
-import { Login, Home, Budget, Options, Profile, } from './containers';
-import store from './stores';
+import { Header, Sidebar, } from 'layout';
+import { Home, Budget, Settings, } from 'containers';
+import { Modal, } from 'components';
+import 'style.css';
 
 
-let MainContent = class MainContent extends Component {
+const Container = styled.div`
+  display: grid;
+  width: 100%;
+  height: 100%;
+  grid-template-columns: 10% 90%;
+  grid-template-rows: 15% 85%;
+  grid-template-areas:
+    "header main"
+    "sidebar main";
+`;
+
+
+const Wrapper = styled.div`
+  grid-area: main;
+  background: blue;
+`;
+
+
+const MainRouter = () => {
+  return (
+    <Wrapper>
+      <Switch>
+        <Route path='/home' component={Home} />
+        <Route path='/budget' component={Budget} />
+        <Route path='/settings' component={Settings} />
+        <Redirect to='/home' />
+      </Switch>
+    </Wrapper>
+  );
+}
+
+
+class App extends React.Component {
 
   state = {
-    actionModalOpen: false,
-    actionModalFormType: '',
-    containerActionType: '',
+    modalActive: false,
+    modalForm: null,
   }
 
-  openActionModal = actionModalFormType => {
-    this.setState({
-      actionModalOpen: true,
-      actionModalFormType: actionModalFormType || '',
-    });
+  openModal = form => {
+    this.setState({ modalActive: true, modalForm: form, });
   }
 
-  toggleContainerAction = containerActionType => {
-    this.setState(prevState => {
-      prevState.containerActionType = prevState.containerActionType === containerActionType ? '' : containerActionType;
-      return prevState;
-    });
+  closeModal = () => {
+    this.setState({ modalActive: false, modalForm: null, });
   }
 
-  closeActionModal = () => {
-    this.setState({ actionModalOpen: false, });
-  }
-
-  render () {
-    const {
-      closeActionModal, openActionModal, toggleContainerAction,
-      props: { loading, sessionId, location: { pathname, }, },
-      state: { actionModalOpen, actionModalFormType, containerActionType, },
-    } = this;
-    if (loading) { return; }
-    return sessionId === '' && pathname !== '/login'
-      ? <Redirect to='/login' />
-      : <Switch>
-        { actionModalOpen &&
-          <ActionModal actionModalFormType={actionModalFormType} closeActionModal={closeActionModal} /> }
-        { sessionId === '' &&
-          <Route exact path='/login' component={Login} /> }
-        <Route exact path='/' component={Menu} />
-        <Route path='/'>
-          <div className={'maincontent'}>
-            <Header />
-            <SideMenu pathname={pathname} openActionModal={openActionModal} toggleContainerAction={toggleContainerAction} />
-            <Switch>
-              <Route path='/home' render={() => <Home />} />
-              <Route path='/budget' render={() => <Budget containerActionType={containerActionType} />} />
-              <Route path='/options' render={() => <Options />} />
-              <Route path='/profile' render={() => <Profile />} />
-              <Redirect from='*' to='/' />
-            </Switch>
-          </div>
-        </Route>
-        <Redirect from='*' to='/' />
-      </Switch>;
+  render() {
+    return (
+      <BrowserRouter basename={'yourbudget'}>
+        <Container>
+          <Header />
+          <Sidebar openModal={this.openModal} />
+          <MainRouter />
+          <Modal active={this.state.modalActive} form={this.state.modalForm} close={this.closeModal} />
+          { /*<Toaster />*/ }
+        </Container>
+      </BrowserRouter>
+    );
   }
 
 }
-
-
-MainContent.propTypes = {
-  loading: PropTypes.bool.isRequired,
-  sessionId: PropTypes.string.isRequired,
-  history: PropTypes.object.isRequired,
-  location: PropTypes.object.isRequired,
-};
-
-
-const mapStateToProps = state => ({
-  loading: state.authStore.loading,
-  sessionId: state.authStore.sessionId,
-});
-
-
-MainContent = connect(mapStateToProps, null)(MainContent);
-
-
-class App extends Component {
-
-  render () {
-    return <Route path='/' component={MainContent} />;
-  }
-
-}
-
-
-const { pathname, } = window.location;
-const slashPos = pathname.indexOf('/', 1);
-const base = (() => slashPos < 0 ? pathname : pathname.slice(0, slashPos))();
 
 
 ReactDOM.render(
-  <Provider store={store}>
-    <Router basename={base} history={history}>
-      <App />
-    </Router>
-  </Provider>,
+    <App />,
   document.getElementById('root')
 );

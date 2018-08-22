@@ -1,4 +1,4 @@
-import SceneNode from './SceneNode';
+import SceneNode from './Scenenode';
 import * as componentTypes from 'components/';
 import { firstLetterToUpper, } from 'utility/';
 

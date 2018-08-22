@@ -1,6 +1,6 @@
 import Component from './Component';
 import { Mat4, } from 'math';
-import { windowResizeEvent, } from 'core/event';
+import { windowResizeEvent, } from 'core/Event';
 const { PI, } = Math;
 
 

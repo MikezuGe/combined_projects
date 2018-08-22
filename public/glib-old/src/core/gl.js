@@ -1,4 +1,4 @@
-import { windowResizeEvent, } from './event';
+import { windowResizeEvent, } from './Event';
 
 
 let canvas = document.getElementById('canvas');

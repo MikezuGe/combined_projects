@@ -1,4 +1,4 @@
-import SceneNode from './scenenode';
+import SceneNode from './Scenenode';
 import { Model, Camera, } from 'components';
 import { Vec3, Quat, } from 'math';
 

@@ -1,9 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
 
+import Toast from './Toast';
+
 
 const defaultOptions = {
-  timeout: 1000,
+  timeout: 2500,
 };
 
 
@@ -11,60 +13,55 @@ let nextId = 0;
 let listener = null;
 
 
-export const addToast = (text, options) => {
-  options = {
-    // If some options are missing, use default options
-    ...defaultOptions,
-    ...options,
-  }
-  listener(text, options);
-}
+export const addToast = (text, options) => listener(text, {
+  // If some options are missing, use default options
+  ...defaultOptions,
+  ...options,
+});
 
 
 const Wrapper = styled.div`
 position: absolute;
+top: 10px;
+right: 10px;
 display: flex;
 flex-direction: column;
-background: white;
-`;
-
-
-const Toast = styled.div`
 `;
 
 
 class Toaster extends React.Component {
 
   componentDidMount () {
-    listener = (text, options) => this.setState(prevState => {
-      const id = nextId;
-      setTimeout(() => {
-        this.removeToast(id);
-      }, options.timeout);
-      return {
-        ...prevState,
-        toasts: [
-          ...prevState.toasts,
-          {
-            id: nextId++,
-            text,
-            ...options,
-          },
-        ],
-      }
-    });
+    listener = this.addToast;
   }
 
   state = {
     toasts: [],
   }
 
-  renderToasts () {
-    return this.state.toasts.map(toast => <Toast key={toast.id}>toast.text</Toast>);
+  addToast = (text, options) => this.setState(prevState => ({
+    ...prevState,
+    toasts: [
+      ...prevState.toasts,
+      {
+        toastId: nextId++,
+        text,
+        ...options,
+      },
+    ],
+  }));
+
+  removeToast = () => {
+    this.setState(prevState => ({ toasts: prevState.toasts.slice(1), }));
   }
 
-  removeToast (id) {
-    this.setState(prevState => ({ toasts: prevState.toasts.filter(toast => toast.id !== id), }));
+  renderToasts () {
+    return this.state.toasts.map((props, i) => <Toast
+      key={props.toastId}
+      {...props}
+      upMost={i === 0}
+      removeToast={this.removeToast}
+    />);
   }
 
   render () {

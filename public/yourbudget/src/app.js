@@ -1,30 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter, Route, Switch, Redirect, } from 'react-router-dom';
-import styled from 'styled-components';
 
-import { Header, Sidebar, } from 'layout';
-import { Home, Budget, Settings, } from 'containers';
+import { BrowserRouter, } from 'react-router-dom';
+import { Main, Header, Sidebar, } from 'layout';
 import { Modal, Toaster, } from 'components';
 import 'style.css';
-
-
-const Wrapper = styled.div`
-  grid-area: main;
-  background: blue;
-`;
-
-
-const MainRouter = () => (
-  <Wrapper>
-    <Switch>
-      <Route path='/home' component={Home} />
-      <Route path='/budget' component={Budget} />
-      <Route path='/settings' component={Settings} />
-      <Redirect to='/home' />
-    </Switch>
-  </Wrapper>
-);
 
 
 const App = () => (
@@ -32,7 +12,7 @@ const App = () => (
     <React.Fragment>
       <Header />
       <Sidebar />
-      <MainRouter />
+      <Main />
       <Modal />
       <Toaster />
     </React.Fragment>

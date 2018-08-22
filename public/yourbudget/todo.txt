@@ -1,3 +1,32 @@
 - Toaster component
 - Form component
 - Login
+
+
+Kotisivu
+  - Verkkosivun viestit, päivityksiä?
+  - Käyttäjäkohtaiset viestit
+    - Ehdottaa lisäyksiä budgettiin, tavanomaisia, mitä tulee päivittäin
+
+Budjetti
+  - Lista kaikista
+  - Lista aikaväliltä
+  - Järjestys nimen mukaan
+  - Järjestys päivänmäärän mukaan (default)
+  - Järjestys suurin/pienin summa
+  
+  - Tulojen / menojen lisäys
+    - summa
+    - kohde
+    - paikka
+    - aika (default nyt)
+
+Graafit
+  - Kulutuskohtaiset graafit
+    - Pylväsgraafi kulutuksen kohteista
+      - Kaikki
+      - Aikaväliltä
+
+Asetukset
+
+- Budgetti säästö - käyttäjä laittaa säästöön rahoja yourbudget

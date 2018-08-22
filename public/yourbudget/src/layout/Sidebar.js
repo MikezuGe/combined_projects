@@ -14,14 +14,6 @@ flex-direction: column;
 
 class Sidebar extends React.Component {
 
-  state = {
-    primary: true,
-  }
-
-  toggleMenu(isPrimary) {
-    this.setState({ primary: isPrimary, });
-  }
-
   render() {
     return (
       <Container>

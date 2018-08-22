@@ -72,22 +72,23 @@ class Menu extends React.Component {
     primary: true,
   }
 
-  toggleMenu(isPrimary) {
-    this.setState({ primary: isPrimary, });
+  togglePrimaryMenu = () => {
+    this.setState(prevState => ({ primary: !prevState.primary, }));
   }
 
   render() {
+    const { togglePrimaryMenu, state: { primary, }, } = this;
     return (
       <Wrapper>
-        <PrimaryMenu primary={this.state.primary}>
-          <MenuTogglerItem onClick={() => this.toggleMenu(false)}>To some menu</MenuTogglerItem>
+        <PrimaryMenu primary={primary}>
+          <MenuTogglerItem onClick={togglePrimaryMenu}>To some menu</MenuTogglerItem>
           <StyledMenuItem><StyledLink to='/home'>Home</StyledLink></StyledMenuItem>
           <StyledMenuItem><StyledLink to='/budget'>Budget</StyledLink></StyledMenuItem>
           <StyledMenuItem><StyledLink to='/settings'>Settings</StyledLink></StyledMenuItem>
         </PrimaryMenu>
-        <SecondaryMenu primary={this.state.primary}>
-          <MenuTogglerItem onClick={() => this.toggleMenu(true)}>To main menu</MenuTogglerItem>
-          <StyledMenuItem><StyledLink to='/home'>Home</StyledLink></StyledMenuItem>
+        <SecondaryMenu primary={primary}>
+          <MenuTogglerItem onClick={togglePrimaryMenu}>To main menu</MenuTogglerItem>
+          <StyledMenuItem><StyledLink replace to='/home/?modal=addentry'>Add entry</StyledLink></StyledMenuItem>
         </SecondaryMenu>
       </Wrapper>
     );

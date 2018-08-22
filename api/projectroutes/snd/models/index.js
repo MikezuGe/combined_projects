@@ -1,12 +1,15 @@
 const mongoose = require('mongoose');
 
-
 const { sndConnectionString, } = require('../../../../config');
 const { logger, } = require('../../../../utility');
 
 
-const db = mongoose.createConnection(sndConnectionString);
+const db = mongoose.createConnection(sndConnectionString, { useNewUrlParser: true, });
 
+
+db.catch(err => {
+  console.error(`Unable to connect to yourbudget database: ${err}`)
+});
 
 db.model('User', mongoose.Schema({
   email: String,

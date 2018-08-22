@@ -1,9 +1,15 @@
-const { yourbudgetConnectionString, } = require('../../../../config');
 const mongoose = require('mongoose');
-const db = mongoose.createConnection(yourbudgetConnectionString);
 
+const { yourbudgetConnectionString, } = require('../../../../config');
 const { logger, } = require('../../../../utility');
 
+
+const db = mongoose.createConnection(yourbudgetConnectionString, { useNewUrlParser: true, });
+
+
+db.catch(err => {
+  console.error(`Unable to connect to yourbudget database: ${err}`)
+});
 
 db.model('Budget', mongoose.Schema({
   dateAdded: { type: Date, default: Date.now, },
@@ -13,14 +19,12 @@ db.model('Budget', mongoose.Schema({
   date: String,
 }));
 
-
 db.model('Auth', mongoose.Schema({
   sessionIp: String,
   userId: mongoose.Schema.Types.ObjectId,
   loggedIn: { type: Date, default: Date.now, },
   sessionTimeout: { type: Date, default: () => Date.now + 3600000 }, // 1 hour
 }));
-
 
 db.model('User', mongoose.Schema({
   email: String,

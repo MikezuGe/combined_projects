@@ -5,7 +5,7 @@ import Toast from './Toast';
 
 
 const defaultOptions = {
-  timeout: 2500,
+  timeout: 1000,
 };
 
 
@@ -44,20 +44,22 @@ class Toaster extends React.Component {
     toasts: [
       ...prevState.toasts,
       {
-        toastId: nextId++,
+        id: nextId++,
         text,
         ...options,
       },
     ],
   }));
 
-  removeToast = () => {
-    this.setState(prevState => ({ toasts: prevState.toasts.slice(1), }));
-  }
+  removeToast = id => this.setState(prevState => ({
+    toasts: id
+      ? prevState.toasts.filter(toast => toast.id !== id)
+      : prevState.toasts.slice(1),
+  }));
 
   renderToasts () {
     return this.state.toasts.map((props, i) => <Toast
-      key={props.toastId}
+      key={props.id}
       {...props}
       upMost={i === 0}
       removeToast={this.removeToast}

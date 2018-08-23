@@ -3,28 +3,28 @@ import ReactDOM from 'react-dom';
 import styled from 'styled-components';
 
 
-const animationDelay = {
-  in: 500,
-  out: 500,
-  up: 500,
+const animate = {
+  DELAY_IN: 500,
+  DELAY_OUT: 500,
+  DELAY_UP: 500,
+  INITIAL: 'INITIAL',
+  IN: 'IN',
+  WAIT_FOR_UPDATE: 'WAIT_FOR_UPDATE',
+  UP: 'UP',
+  WAIT_FOR_TIMEOUT: 'WAIT_FOR_TIMEOUT',
+  OUT: 'OUT',
 };
-const INITIAL = 'INITIAL';
-const ANIMATE_IN = 'ANIMATE_IN';
-const WAIT_FOR_UPDATE = 'WAIT_FOR_UPDATE';
-const ANIMATE_UP = 'ANIMATE_UP';
-const ON_TIMEOUT = 'ON_TIMEOUT';
-const ANIMATE_OUT = 'ANIMATE_OUT';
-
+// KOMMENTTI
 
 const StyledToast = styled.div`
 background: red;
 transform: translate(
-  ${props => props.animation === INITIAL || props.animation === ANIMATE_OUT ? '120%' : '0%'},
-  ${props => props.animation === ANIMATE_UP ? '0%' : `${props.positionY}px`});
+  ${({ animation, }) => animation === animate.INITIAL || animation === animate.OUT ? '120' : '0'}%,
+  ${/*({ animation, }) => animation === animate.UP ? '0' : '100'*/0}%);
 padding: 25px 50px;
 margin: 2.5px 2px;
 border: 5px solid lime;
-transition: transform ${props => (props.animation === ANIMATE_IN && animationDelay.in) || (props.animation === ANIMATE_UP === 2 && animationDelay.up) || (props.animation === ANIMATE_OUT && animationDelay.out)}ms linear;
+transition: transform ${props => (props.animation === animate.IN && animate.DELAY_IN) || (props.animation === animate.UP && animate.DELAY_UP) || (props.animation === animate.OUT && animate.DELAY_OUT)}ms linear;
 &:first-child {
   margin-top: 5px;
 }
@@ -41,46 +41,51 @@ class Toast extends React.Component {
   }
   
   componentWillReceiveProps () {
-    if (this.state.animation === WAIT_FOR_UPDATE) {
+    if (this.state.animation === animate.WAIT_FOR_UPDATE) {
       this.update();
     }
   }
 
   state = {
     ...this.props,
-    animation: INITIAL,
+    animation: animate.INITIAL,
     positionY: null,
   }
 
-  update = () => {
+  update = (forceRemove) => {
+    if (forceRemove) {
+      this.setState({ animation: animate.OUT, });
+      setTimeout(() => this.props.removeToast(this.props.id), animate.DELAY_OUT);
+      return;
+    }
     const { animation, } = this.state;
-    if (animation === INITIAL) {
+    if (animation === animate.INITIAL) {
       this.setState({
-        animation: ANIMATE_IN,
+        animation: animate.IN,
         positionY: ReactDOM.findDOMNode(this.refs['toast']).getBoundingClientRect().y,
       });
-      setTimeout(this.update, animationDelay.in);
+      setTimeout(this.update, animate.DELAY_IN);
     } else if (this.props.upMost) {
-      if (animation === ANIMATE_IN || animation === ANIMATE_UP) {
-        this.setState({ animation: ON_TIMEOUT, }); 
+      if (animation === animate.IN || animation === animate.UP) {
+        this.setState({ animation: animate.WAIT_FOR_TIMEOUT, }); 
         setTimeout(this.update, this.props.timeout);
-      } else if (animation === ON_TIMEOUT) {
-        this.setState({ animation: ANIMATE_OUT, });
-        setTimeout(this.props.removeToast, animationDelay.out);
+      } else if (animation === animate.WAIT_FOR_TIMEOUT) {
+        this.setState({ animation: animate.OUT, });
+        setTimeout(this.props.removeToast, animate.DELAY_OUT);
       }
     } else {
-      if (animation === ANIMATE_IN) {
+      if (animation === animate.IN) {
         this.setState({
-          animation: WAIT_FOR_UPDATE,
+          animation: animate.WAIT_FOR_UPDATE,
           positionY: ReactDOM.findDOMNode(this.refs['toast']).getBoundingClientRect().y,
         });
-      } else if (animation === ANIMATE_UP) {
+      } else if (animation === animate.UP) {
         this.setState({
-          animation: WAIT_FOR_UPDATE,
+          animation: animate.WAIT_FOR_UPDATE,
           positionY: ReactDOM.findDOMNode(this.refs['toast']).getBoundingClientRect().y,
         });
-      } else if (animation === WAIT_FOR_UPDATE) {
-        this.setState({ animation: ANIMATE_UP, });
+      } else if (animation === animate.WAIT_FOR_UPDATE) {
+        this.setState({ animation: animate.UP, });
         setTimeout(this.update, this.props.timeout);
       }
     }
@@ -92,8 +97,9 @@ class Toast extends React.Component {
         ref='toast'
         animation={this.state.animation}
         positionY={this.state.positionY}
+        onClick={() => this.update(true)}
       >
-        {this.props.text}
+        {this.props.text + ' ' + this.props.id}
       </StyledToast>
     );
   }

@@ -7,7 +7,7 @@ class Home extends React.Component {
 
   render () {
     return (
-      <div onClick={() => addToast('Toast text', { timeout: 2500, })}>
+      <div onClick={() => addToast('Toast text')}>
         Home button
       </div>
     );

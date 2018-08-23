@@ -4,7 +4,7 @@ const { yourbudgetConnectionString, } = require('../../../../config');
 const { logger, } = require('../../../../utility');
 
 
-const db = mongoose.createConnection(yourbudgetConnectionString, { useNewUrlParser: true, });
+const db = mongoose.createConnection(yourbudgetConnectionString);
 
 
 db.catch(err => {

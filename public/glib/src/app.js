@@ -47,9 +47,6 @@ gl.linkProgram(program);
 
 const posLoc = gl.getAttribLocation(program, 'a_pos');
 const colLoc = gl.getAttribLocation(program, 'a_col');
-const modLoc = gl.getUniformLocation(program, 'u_m');
-const vieLoc = gl.getUniformLocation(program, 'u_v');
-const perLoc = gl.getUniformLocation(program, 'u_p');
 const mvpLoc = gl.getUniformLocation(program, 'u_mvp');
 
 const buffer = gl.createBuffer();

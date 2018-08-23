@@ -176,7 +176,7 @@ export default class Renderer {
 
   bindScene (scene) {
     const { u_time, } = this.boundShaderProgram.uniformLocations;
-    gl.uniform1f(u_time, performance.now());
+    gl.uniform1f(u_time, performance.now() /*Scene.time.now*/); // Scene should carry global time
   }
 
   bindCamera () {

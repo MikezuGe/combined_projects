@@ -4,7 +4,7 @@ const { sndConnectionString, } = require('../../../../config');
 const { logger, } = require('../../../../utility');
 
 
-const db = mongoose.createConnection(sndConnectionString, { useNewUrlParser: true, });
+const db = mongoose.createConnection(sndConnectionString);
 
 
 db.catch(err => {

@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import PropTypes from 'prop-types'
 import styled from 'styled-components';
 
 
@@ -20,7 +20,7 @@ const StyledToast = styled.div`
 background: red;
 transform: translate(
   ${({ animation, }) => animation === animate.INITIAL || animation === animate.OUT ? '120' : '0'}%,
-  ${/*({ animation, }) => animation === animate.UP ? '0' : '100'*/0}%);
+  ${({ animation, }) => animation === animate.UP ? '0' : '100'}%);
 padding: 25px 50px;
 margin: 2.5px 2px;
 border: 5px solid lime;
@@ -62,7 +62,7 @@ class Toast extends React.Component {
     if (animation === animate.INITIAL) {
       this.setState({
         animation: animate.IN,
-        positionY: ReactDOM.findDOMNode(this.refs['toast']).getBoundingClientRect().y,
+        positionY: this.node.getBoundingClientRect().y,
       });
       setTimeout(this.update, animate.DELAY_IN);
     } else if (this.props.upMost) {
@@ -77,12 +77,12 @@ class Toast extends React.Component {
       if (animation === animate.IN) {
         this.setState({
           animation: animate.WAIT_FOR_UPDATE,
-          positionY: ReactDOM.findDOMNode(this.refs['toast']).getBoundingClientRect().y,
+          positionY: this.node.getBoundingClientRect().y,
         });
       } else if (animation === animate.UP) {
         this.setState({
           animation: animate.WAIT_FOR_UPDATE,
-          positionY: ReactDOM.findDOMNode(this.refs['toast']).getBoundingClientRect().y,
+          positionY: this.node.getBoundingClientRect().y,
         });
       } else if (animation === animate.WAIT_FOR_UPDATE) {
         this.setState({ animation: animate.UP, });
@@ -94,7 +94,7 @@ class Toast extends React.Component {
   render () {
     return (
       <StyledToast
-        ref='toast'
+        innerRef={node => this.node = node}
         animation={this.state.animation}
         positionY={this.state.positionY}
         onClick={() => this.update(true)}
@@ -104,6 +104,15 @@ class Toast extends React.Component {
     );
   }
 
+}
+
+
+Toast.propTypes = {
+  id: PropTypes.number.isRequired,
+  text: PropTypes.string.isRequired,
+  timeout: PropTypes.number.isRequired,
+  upMost: PropTypes.bool.isRequired,
+  removeToast: PropTypes.func.isRequired,
 }
 
 

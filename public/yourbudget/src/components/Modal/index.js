@@ -2,6 +2,14 @@ import React from 'react';
 import styled from 'styled-components';
 import { withRouter, } from 'react-router-dom';
 
+import Form from 'components/Form';
+
+
+export const openModal = form => listener(form);
+
+
+let listener = null;
+
 
 const GrayoutContainer = styled.div`
   position: absolute;
@@ -28,13 +36,20 @@ const Container = styled.div`
 
 
 class Modal extends React.Component {
+  
+  componentDidMount () {
+    listener = this.open;
+  }
 
   state = {
     active: false,
   }
 
-  open = () => {
-    this.setState({ active: true, });
+  open = form => {
+    this.setState({
+      active: true,
+      form,
+    });
   }
 
   close = () => {
@@ -47,7 +62,7 @@ class Modal extends React.Component {
       <GrayoutContainer active={active}>
         {/* Move onclick={close} to the form, which as exit button, or cancel */}
         <Container active={active} onClick={close}>
-          <div style={{background: 'red', width: '10%', height: '10%',}}>test</div>
+          <Form></Form>
         </Container>
       </GrayoutContainer>
     )

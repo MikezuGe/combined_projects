@@ -21,28 +21,11 @@ export const addToast = (text, options) => listener({
 });
 
 
-const MOVE_UP = props => `
-`;
-
-
-const Wrapper = styled.div`
+const Wrapper = styled.ul`
 position: absolute;
 top: 10px;
 right: 10px;
-`;
-
-
-const MoveUp = styled.div`
-display: flex;
-flex-direction: column;
-${props => props.shouldMoveUp ?
-`@keyframes MOVE_UP {
-  from { transform: translateY(${props.height || 80}px); }
-}
-animation: MOVE_UP ${props.duration || 1000}ms;
-`
-: ''}
-`;
+list-style: none;`;
 
 
 class Toaster extends React.Component {
@@ -52,7 +35,6 @@ class Toaster extends React.Component {
   }
 
   state = {
-    shouldMoveUp: false,
     toasts: [],
   }
 
@@ -64,34 +46,24 @@ class Toaster extends React.Component {
   }));
 
   removeToast = id => this.setState(prevState => ({
-    shouldMoveUp: !!id,
     toasts: id
       ? prevState.toasts.filter(toast => toast.id !== id)
       : prevState.toasts.slice(1),
   }));
-        
 
   renderToasts () {
     return this.state.toasts.map((props, i) => <Toast
       key={props.id}
       {...props}
-      uppermostToast={i === 0}
+      nthToast={i}
       removeToast={this.removeToast}
     />);
-  }
-
-  onMoveUpDone = e => {
-    if (e.animationName === 'MOVE_UP') {
-      this.setState({ shouldMoveUp: false, });
-    }
   }
 
   render () {
     return (
       <Wrapper>
-        <MoveUp shouldMoveUp={this.state.shouldMoveUp} onAnimationEnd={this.onMoveUpDone}>
-          {this.renderToasts()}
-        </MoveUp>
+        {this.renderToasts()}
       </Wrapper>
     );
   }

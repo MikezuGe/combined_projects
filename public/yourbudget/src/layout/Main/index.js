@@ -7,8 +7,7 @@ import { Home, Budget, Settings, } from 'containers';
 
 const Wrapper = styled.div`
 grid-area: main;
-background: blue;
-`;
+background: lightgray;`;
 
 
 const Main = () => (

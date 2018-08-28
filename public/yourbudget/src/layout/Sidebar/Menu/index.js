@@ -6,8 +6,7 @@ import styled from 'styled-components';
 const Wrapper = styled.div`
 flex: 1 1 100%;
 position: relative;
-overflow: hidden;
-`;
+overflow: hidden;`;
 
 
 const styledUl = styled.ul`
@@ -16,20 +15,17 @@ display: flex;
 flex-direction: column;
 width: 100%;
 transition: left 0.5s ease-out;
-list-style: none;
-`;
+list-style: none;`;
 
 
 const PrimaryMenu = styled(styledUl)`
 left: ${props => props.primary ? '0' : '-100'}%;
-background: lime;
-`;
+background: lime;`;
 
 
 const SecondaryMenu = styled(styledUl)`
 left: ${props => props.primary ? '100' : '0'}%;
-background: yellow;
-`;
+background: yellow;`;
 
 
 const StyledMenuItem = styled.li`
@@ -39,8 +35,7 @@ padding: 2.5px 5px;
 }
 &:last-child {
   padding-bottom: 5px;
-}
-`;
+}`;
 
 
 const MenuTogglerItem = styled.li`
@@ -48,8 +43,7 @@ display: flex;
 justify-content: center;
 align-items: center;
 min-height: 48px;
-cursor: pointer;
-`;
+cursor: pointer;`;
 
 
 const StyledLink = styled(Link)`
@@ -62,8 +56,7 @@ min-height: 32px;
 text-decoration: none;
 &:hover {
   background: purple;
-}
-`;
+}`;
 
 
 class Menu extends React.Component {

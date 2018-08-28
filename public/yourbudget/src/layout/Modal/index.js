@@ -1,10 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
-import { withRouter, } from 'react-router-dom';
 
-import Form from 'components/Form';
+import { BudgetAdd, modalFormTypes, } from './forms';
 
 
+export { modalFormTypes, };
 export const openModal = form => listener(form);
 let listener = null;
 
@@ -45,7 +45,7 @@ animation: MODAL_OUT 500ms;
 `}`;
 
 
-class Modal extends React.Component {
+export default class Modal extends React.Component {
   
   componentDidMount () {
     listener = this.open;
@@ -53,32 +53,28 @@ class Modal extends React.Component {
 
   state = {
     active: true,
+    modalFormType: modalFormTypes.BUDGET_ADD,
   }
 
-  open = form => {
-    this.setState({
-      active: true,
-      form,
-    });
-  }
+  open = modalFormType => this.setState({
+    active: true,
+    modalFormType,
+  });
 
-  close = () => {
-    this.setState({ active: false, });
-  }
+  close = () => this.setState({ active: false, });
 
   render () {
-    const { close, state:{ active, }, } = this;
+    const { state: { modalFormType, active, }, } = this;
     return (
       <GrayoutContainer active={active}>
-        {/* Move onclick={close} to the form, which as exit button, or cancel */}
-        <Wrapper active={active}>
-          <Form></Form>
+        <Wrapper active={active} onAnimationEnd={() => !this.state.active && this.setState({ modalFormType: null, })}>
+          {
+            (modalFormType === modalFormTypes.BUDGET_ADD && <BudgetAdd close={this.close} />) ||
+            <div>{`Invalid form type ${modalFormType}`}</div>
+          }
         </Wrapper>
       </GrayoutContainer>
     )
   }
 
 }
-
-
-export default withRouter(Modal);

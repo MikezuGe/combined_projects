@@ -1,7 +1,6 @@
 import React from 'react';
 
-import { addToast, } from 'components';
-import { openModal, } from 'components';
+import { addToast, openModal, modalFormTypes, } from 'layout';
 
 
 class Home extends React.Component {
@@ -12,7 +11,7 @@ class Home extends React.Component {
         <div onClick={() => addToast('Toast text')}>
           Try toast
         </div>
-        <div onClick={() => openModal('Some form type')}>
+        <div onClick={() => openModal(modalFormTypes.BUDGET_ADD)}>
           Try modal
         </div>
       </React.Fragment>

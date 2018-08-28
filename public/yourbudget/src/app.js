@@ -2,8 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import { BrowserRouter, } from 'react-router-dom';
-import { Main, Header, Sidebar, } from 'layout';
-import { Modal, Toaster, } from 'components';
+import { Main, Header, Sidebar, Modal, Toaster, } from 'layout';
 import 'style.css';
 
 

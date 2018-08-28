@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
-import { Textfield, } from './Fields';
+export { default as Field, } from './Field';
 
 
 const Wrapper = styled.form`
@@ -12,19 +12,23 @@ flex-direction: column;`;
 
 export default class Form extends React.Component {
 
-  state = {
-    fields: {},
+  addPropsToField (field) {
+    return <field.type
+      {...field.props}
+      additional={'asdasd'}
+    />;
   }
 
-  onSubmit (e) {
-    console.log(e);
+  onSubmit = e => {
     e.preventDefault();
+    this.props.onSubmit();
   }
 
   render () {
     return (
       <Wrapper onSubmit={this.onSubmit}>
-        <Textfield name={'name'} />
+        { this.props.children.map(this.addPropsToField) }
+        <div onClick={this.props.close}>{'Cancel'}</div>
       </Wrapper>
     );
   }
@@ -33,5 +37,7 @@ export default class Form extends React.Component {
 
 
 Form.propTypes = {
-
+  onSubmit: PropTypes.func.isRequired,
+  children: PropTypes.array.isRequired,
+  close: PropTypes.func.isRequired,
 };

@@ -1,44 +1,128 @@
 const express = require('express');
 const expressGraphql = require('express-graphql');
-const { buildSchema, } = require('graphql');
-const { GraphQLInt, GraphQLString, GraphQLBoolean, GraphQLObjectType, GraphQLID } = require('graphql/type');
+/*
+const {
+  GraphQLSchema,
+  GraphQLObjectType,
+  GraphQLNonNull,
+  GraphQLList,
+  GraphQLInt,
+  GraphQLFloat,
+  GraphQLString,
+  GraphQLBoolean,
+} = require('graphql');
+*/
+
+const { buildSchema, } = require('graphql')
+
+const { Fund, } = require('../mongoose/models/yourbudget');
 
 const graphqlRoute = express.Router();
-const { Funds, } = require('../mongoose/models/yourbudget');
 
 
-const BudgetType = new GraphQLObjectType({
-  name: 'budget',
-  description: 'Incomes and expenses',
-  fields: () => ({
-    _id: {
-      type 
-    },
-    name: {
-      type: GraphQLString,
-      description: 'The source or destination of income or expense',
-    },
-    amount: {
-      type: GraphQLInt,
-      description: 'The amount of income or expense, always positive',
-    },
-    isIncome: {
-      type: GraphQLBoolean,
-      description: 'Indicates if the entry is income or expense',
-    },
-    date: {
-      type: GraphQLString,
-      description: 'Date the income or expense has happened'
-    },
-  }),
-});
+const schema = buildSchema(`
+  type Fund {
+    _id: ID
+    name: String
+    amount: Float
+    date: String
+    isIncome: Boolean
+  }
+
+  type Query {
+    fund(_id: ID!): Fund
+    funds: [Fund]
+  }
+  
+
+  input FundInput {
+    name: String!
+    amount: Float!
+    date: String!
+    isIncome: Boolean!
+  }
+  
+  input FundUpdate {
+    name: String
+    amount: Float
+    date: String
+    isIncome: Boolean
+  }
+
+  type Mutation {
+    createFund(input: FundInput!): Fund
+    updateFund(_id: ID!, input: FundUpdate!): Fund
+    removeFund(_id: ID!): Fund
+  }
+`);
+
+
+const Query = {
+  fund: async args => await Fund.findOne(args),
+  funds: async () => await Fund.find(),
+}
+
+
+const Mutations = {
+  createFund: async ({ input, }) => await Fund.create(input),
+  updateFund: async ({ _id, input, }) => await Fund.findByIdAndUpdate({ _id, }, input),
+  removeFund: async args => await Fund.findByIdAndRemove(args),
+}
+
+
+const rootValue = {
+  ...Query,
+  ...Mutations,
+};
 
 
 graphqlRoute.use('/', expressGraphql({
-  //schema: schema,
+  schema,
+  rootValue,
   graphiql: true,
-  rootValue: root,
 }));
 
 
 module.exports = graphqlRoute;
+
+
+
+/*
+mutation createFund($input: FundInput!) {
+  createFund(input: $input) {
+    name,
+    amount,
+    date,
+    isIncome,
+  }
+}
+{
+  "input": {
+    "name": "Nakki",
+    "amount": 5,
+    "date": "2018-08-29T13:59:19.576Z",
+    "isIncome": false
+  }
+}
+query {
+  funds {
+    _id
+    name,
+    amount,
+    date,
+    isIncome
+  }
+}
+mutation deleteFund($_id: ID!) {
+  deleteFund(_id: $_id) {
+    _id,
+    name,
+    amount,
+    isIncome,
+    date
+  }
+}
+{
+  "_id": "5b86a800a4839b2998d8303d"
+}
+*/

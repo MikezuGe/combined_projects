@@ -12,11 +12,11 @@ flex-direction: column;`;
 
 export default class Form extends React.Component {
 
-  addPropsToField (field) {
-    return <field.type
+  renderChildren () {
+    return this.props.children.map(field => <field.type
       {...field.props}
       additional={'asdasd'}
-    />;
+    />);
   }
 
   onSubmit = e => {
@@ -27,7 +27,7 @@ export default class Form extends React.Component {
   render () {
     return (
       <Wrapper onSubmit={this.onSubmit}>
-        { this.props.children.map(this.addPropsToField) }
+        { this.renderChildren() }
         <div onClick={this.props.close}>{'Cancel'}</div>
       </Wrapper>
     );

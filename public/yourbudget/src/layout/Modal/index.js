@@ -1,7 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { BudgetAdd, modalFormTypes, } from './forms';
+import {
+  BudgetAdd,
+  Login,
+  modalFormTypes,
+} from './forms';
 
 
 export { modalFormTypes, };
@@ -53,7 +57,7 @@ export default class Modal extends React.Component {
 
   state = {
     active: true,
-    modalFormType: modalFormTypes.BUDGET_ADD,
+    modalFormType: modalFormTypes.LOGIN,
   }
 
   open = modalFormType => this.setState({
@@ -70,6 +74,7 @@ export default class Modal extends React.Component {
         <Wrapper active={active} onAnimationEnd={() => !this.state.active && this.setState({ modalFormType: null, })}>
           {
             (modalFormType === modalFormTypes.BUDGET_ADD && <BudgetAdd close={this.close} />) ||
+            (modalFormType === modalFormTypes.LOGIN && <Login close={this.close} />) ||
             <div>{`Invalid form type ${modalFormType}`}</div>
           }
         </Wrapper>

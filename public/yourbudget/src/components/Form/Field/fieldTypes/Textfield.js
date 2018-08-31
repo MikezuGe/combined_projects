@@ -16,11 +16,13 @@ const Input = styled.input`
 `;
 
 
-const Textfield = ({ name, label, }) => <Wrapper>
-{ label &&
-  <Label name={name} htmlFor={name}>{label}</Label> }
-<Input id={name} type='text'></Input>
-</Wrapper>;
+const Textfield = ({ name, label, }) => (
+  <Wrapper>
+    { label &&
+      <Label name={name} htmlFor={name}>{label}</Label> }
+    <Input id={name} type='text'></Input>
+  </Wrapper>
+);
 
 
 Textfield.propTypes = {

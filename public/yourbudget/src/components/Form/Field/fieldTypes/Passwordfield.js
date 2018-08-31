@@ -16,19 +16,19 @@ const Input = styled.input`
 `;
 
 
-const Textfield = ({ name, label, }) => (
+const Passworfield = ({ name, label, }) => (
   <Wrapper>
     { label &&
       <Label name={name} htmlFor={name}>{label}</Label> }
-    <Input id={name} type='number'></Input>
+    <Input id={name} type='password'></Input>
   </Wrapper>
 );
 
 
-Textfield.propTypes = {
+Passworfield.propTypes = {
   name: PropTypes.string.isRequired,
   label: PropTypes.string,
 };
 
 
-export default Textfield;
+export default Passworfield;

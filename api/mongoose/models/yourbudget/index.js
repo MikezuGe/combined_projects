@@ -1,6 +1,4 @@
-const Fund = require('./Fund');
-
 
 module.exports = {
-  Fund,
+  Fund: require('./Fund'),
 };

@@ -1,0 +1,32 @@
+type Fund {
+  _id: ID
+  name: String
+  amount: Float
+  date: String
+  isIncome: Boolean
+}
+
+input FundInput {
+  name: String!
+  amount: Float!
+  date: String!
+  isIncome: Boolean!
+}
+
+input FundUpdate {
+  name: String
+  amount: Float
+  date: String
+  isIncome: Boolean
+}
+
+type Query {
+  fund(_id: ID!): Fund
+  funds: [Fund]
+}
+
+type Mutation {
+  createFund(input: FundInput!): Fund
+  updateFund(_id: ID!, input: FundUpdate!): Fund
+  removeFund(_id: ID!): Fund
+}

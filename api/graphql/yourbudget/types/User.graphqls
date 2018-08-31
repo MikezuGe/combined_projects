@@ -1,16 +1,19 @@
 type User {
   _id: ID
+  email: String
   username: String
   password: String
   lastLogin: String
 }
 
 input UserInput {
-  username: String
-  password: String
+  email: String!
+  username: String!
+  password: String!
 }
 
 input UserUpdate {
+  email: String
   username: String
   password: String
   lastLogin: String

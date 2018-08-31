@@ -2,21 +2,21 @@ const mongoose = require('mongoose');
 const db = require('../../connections/yourbudget');
 
 
-module.exports = db.model('Fund', new mongoose.Schema({
+module.exports = db.model('User', new mongoose.Schema({
   _id: {
     type: mongoose.Schema.Types.ObjectId,
     default: mongoose.Types.ObjectId(),
   },
-  name: {
+  email: {
     type: String,
   },
-  amount: {
-    type: Number,
+  username: {
+    type: String,
   },
-  isIncome: {
-    type: Boolean,
+  password: {
+    type: String,
   },
-  date: {
+  lastLogin: {
     type: Date,
   },
   dateAdded: {

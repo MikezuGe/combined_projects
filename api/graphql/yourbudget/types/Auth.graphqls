@@ -1,0 +1,27 @@
+type Auth {
+  _id: ID
+  userId: ID
+  sessionIp: String
+  sessionTimeout: String
+  loggedIn: String
+}
+
+input AuthInput {
+  userId: ID!
+  sessionIp: String!
+}
+
+input AuthUpdate {
+  sessionTimeout: String
+}
+
+type Query {
+  auth(_id: ID!): Auth
+  auths: [Auth]
+}
+
+type Mutation {
+  createAuth(input: AuthInput!): Auth
+  updateAuth(_id: ID!, input: AuthUpdate!): Auth
+  removeAuth(_id: ID!): Auth
+}

@@ -12,15 +12,26 @@ const Label = styled.label`
 `;
 
 
+const ErrorLabel = styled(Label)`
+color: red;`;
+
+
 const Input = styled.input`
 `;
 
 
-const Textfield = ({ name, label, }) => (
+const Textfield = ({ name, label, onChange, meta: { submitted, valid, error, }, }) => (
   <Wrapper>
     { label &&
-      <Label name={name} htmlFor={name}>{label}</Label> }
-    <Input id={name} type='text'></Input>
+      <Label htmlFor={name}>{label}</Label> }
+    { submitted && !valid &&
+      <ErrorLabel htmlFor={name}>{error}</ErrorLabel> }
+    <Input
+      id={name}
+      name={name}
+      type='text'
+      onChange={onChange}
+    />
   </Wrapper>
 );
 
@@ -28,6 +39,8 @@ const Textfield = ({ name, label, }) => (
 Textfield.propTypes = {
   name: PropTypes.string.isRequired,
   label: PropTypes.string,
+  onChange: PropTypes.func.isRequired,
+  meta: PropTypes.object.isRequired,
 };
 
 

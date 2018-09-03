@@ -65,7 +65,9 @@ export default class Modal extends React.Component {
     modalFormType,
   });
 
-  close = () => this.setState({ active: false, });
+  close = () => this.setState({
+    active: false,
+  });
 
   render () {
     const { state: { modalFormType, active, }, } = this;

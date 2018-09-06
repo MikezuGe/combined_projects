@@ -5,7 +5,7 @@ import Toast from './Toast';
 
 
 const defaultOptions = {
-  timeout: 1000,
+  timeout: 5000,
 };
 
 

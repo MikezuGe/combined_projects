@@ -1,18 +1,11 @@
 type Auth {
-  _id: ID
-  userId: ID
-  sessionIp: String
-  sessionTimeout: String
-  loggedIn: String
+  sessionId: ID
+  user: User
 }
 
 input AuthInput {
-  userId: ID!
-  sessionIp: String!
-}
-
-input AuthUpdate {
-  sessionTimeout: String
+  email: String!
+  password: String!
 }
 
 type Query {
@@ -22,6 +15,6 @@ type Query {
 
 type Mutation {
   createAuth(input: AuthInput!): Auth
-  updateAuth(_id: ID!, input: AuthUpdate!): Auth
-  removeAuth(_id: ID!): Auth
+  deleteAuth(_id: ID!): Auth
+  deleteAuths: [Auth]
 }

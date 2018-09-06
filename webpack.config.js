@@ -34,7 +34,13 @@ const babelLoader = {
     'loader': 'babel-loader',
     'options': {
       'presets': [
-        [ 'env', { 'targets': { 'node': 'current', }, }, ],
+        [
+          'env', {
+            'targets': {
+              'node': 'current',
+            },
+          },
+        ],
         'stage-2',
         'react',
       ],
@@ -76,7 +82,6 @@ const fileLoader = {
     'options': {},
   },
 };
-
 
 const pluginEnvSetter = new webpack.DefinePlugin({
   'process.env.NODE_ENV': JSON.stringify(mode),

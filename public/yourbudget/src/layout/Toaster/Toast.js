@@ -72,7 +72,7 @@ class Toast extends React.Component {
         onTransitionEnd={this.nextAction}
         onClick={this.nextAction}
       >
-        {this.props.text + ' ' + this.props.id}
+        {this.props.text}
       </StyledToast>
     );
   }

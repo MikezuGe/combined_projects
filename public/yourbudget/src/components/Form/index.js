@@ -67,7 +67,7 @@ export default class Form extends React.Component {
     return valid;
   }
 
-  onChange = (name, value, meta) => {
+  handleChange = (name, value, meta) => {
     this.setState(prevState => ({
       [name]: {
         ...prevState[name],
@@ -77,31 +77,29 @@ export default class Form extends React.Component {
     }));
   }
 
-  handleSubmit = e => {
+  handleSubmit = async e => {
     e.preventDefault();
     if (this.button.getAttribute('submit') === 'true') {
       if (this.isValid()) {
-        this.props.onSubmit(Object.values(this.state).reduce((total, { name, value, }) => {
+        const result = await this.props.onSubmit(Object.values(this.state).reduce((total, { name, value, }) => {
           total[name] = value;
           return total;
         }, {}));
-        if (this.button.getAttribute('close') === 'true') {
-          this.onClose();
+        console.log(result);
+        if (result && this.button.getAttribute('close') === 'true') {
+          this.handleClose();
         }
-      } else {
-        return false;
       }
     } else if (this.button.getAttribute('close') === 'true') {
-      this.onClose();
+      this.handleClose();
     }
   }
 
-  onClose = () => {
+  handleClose = () => {
     this.props.onClose();
   }
 
   handleButton = e => {
-    console.log('button');
     this.button = e.target;
   }
   
@@ -118,7 +116,7 @@ export default class Form extends React.Component {
           return <Type
             key={i}
             {...this.state[props.name]}
-            onChange={this.onChange}
+            onChange={this.handleChange}
           />
         } else {
           return <Type

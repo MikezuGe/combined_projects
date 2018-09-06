@@ -16,7 +16,11 @@ const eslintLoader = {
   'use': {
     'loader': 'eslint-loader',
     'options': {
-      'presets': [ 'env', 'stage-2', 'react' ],
+      'presets': [
+        'env',
+        'stage-2',
+        'react',
+      ],
       'fix': false,
       'emitWarning': true,
     },
@@ -29,7 +33,11 @@ const babelLoader = {
   'use': {
     'loader': 'babel-loader',
     'options': {
-      'presets': [ 'env', 'stage-2', 'react' ],
+      'presets': [
+        [ 'env', { 'targets': { 'node': 'current', }, }, ],
+        'stage-2',
+        'react',
+      ],
     },
   },
 }

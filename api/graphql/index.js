@@ -9,11 +9,12 @@ const { types, resolvers, } = require('./yourbudget');
 const graphqlRoute = express.Router();
 
 
-graphqlRoute.use('/', expressGraphql({
+graphqlRoute.use('/', expressGraphql((req, res) => ({
   schema: buildSchema(types),
   rootValue: resolvers,
+  context: { req, res, },
   graphiql: true,
-}));
+})));
 
 
 module.exports = graphqlRoute;

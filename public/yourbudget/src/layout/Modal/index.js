@@ -57,7 +57,7 @@ export default class Modal extends React.Component {
 
   state = {
     active: true,
-    modalFormType: modalFormTypes.LOGIN,
+    modalFormType: modalFormTypes.BUDGET_ADD,
   }
 
   open = modalFormType => this.setState({

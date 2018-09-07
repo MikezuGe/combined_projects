@@ -46,7 +46,8 @@ export default class Form extends React.Component {
   };
 
   form = null
-  button = null
+  submit = null
+  close = null
 
   state = { ...this.inputFieldsToState(), }
 
@@ -79,28 +80,30 @@ export default class Form extends React.Component {
 
   handleSubmit = async e => {
     e.preventDefault();
-    if (this.button.getAttribute('submit') === 'true') {
+    if (this.submit) {
       if (this.isValid()) {
         const result = await this.props.onSubmit(Object.values(this.state).reduce((total, { name, value, }) => {
           total[name] = value;
           return total;
         }, {}));
         console.log(result);
-        if (result && this.button.getAttribute('close') === 'true') {
+        if (result && this.close) {
           this.handleClose();
         }
       }
-    } else if (this.button.getAttribute('close') === 'true') {
+    } else if (this.close) {
       this.handleClose();
     }
   }
 
-  handleClose = () => {
-    this.props.onClose();
+  handleButton = e => {
+    const button = e.target;
+    this.submit = button.getAttribute('submit') === 'true';
+    this.close = button.getAttribute('close') === 'true';
   }
 
-  handleButton = e => {
-    this.button = e.target;
+  handleClose = () => {
+    this.props.onClose();
   }
   
   renderWithProps = children => {

@@ -1,6 +1,20 @@
 type Auth {
+  userId: ID
   sessionId: ID
+  sessionTimeout: String
+  sessionStarted: String
   user: User
+}
+
+type AuthUpdate {
+  ok: Int
+  nModified: Int
+  n: Int
+}
+
+type AuthDelete {
+  ok: Int
+  n: Int
 }
 
 input AuthInput {
@@ -15,6 +29,6 @@ type Query {
 
 type Mutation {
   createAuth(input: AuthInput!): Auth
-  deleteAuth(_id: ID!): Auth
-  deleteAuths: [Auth]
+  updateAuth(sessionId: ID): AuthUpdate
+  deleteAuth(_id: ID!): AuthDelete
 }

@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "cross-env NODE_ENV=development run-p start:*",
     "start:webpack": "webpack --watch",
-    "start:nodemon": "nodemon --watch index.js --watch api --watch utility index.js",
+    "start:nodemon": "nodemon --watch index.js --watch api --watch utility --ignore public index.js",
     "deploy": "run-s deploy:build deploy:add \"deploy:commit -- {1}\" --",
     "deploy:build": "cross-env NODE_ENV=production webpack",
     "deploy:add": "git add .",

@@ -14,9 +14,12 @@ export default class BudgetAdd extends React.Component {
 
   render () {
     return (
-      <Form onSubmit={this.onSubmit} close={this.props.close}>
+      <Form onSubmit={this.onSubmit} onClose={this.props.close}>
         <Field type='text' name={'budgetname'} label={'Gimme ur username'} />
         <Field type='number' name={'amount'} label={'Gimme ur number'} />
+        <Field type='submit' value={'Submit & add'} submit />
+        <Field type='submit' value={'Submit & close'} submit close />
+        <Field type='submit' value={'Close'} close />
       </Form>
     );
   }

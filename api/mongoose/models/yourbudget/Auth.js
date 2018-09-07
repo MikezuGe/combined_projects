@@ -10,14 +10,15 @@ module.exports = db.model('Auth', new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
   },
-  sessionIp: {
-    type: String,
+  sessionId: {
+    type: mongoose.Schema.Types.ObjectId,
+    default: mongoose.Types.ObjectId(),
   },
   sessionTimeout: {
     type: Date,
     default: () => Date.now() + 3600000, // 1 hour
   },
-  loggedIn: {
+  sessionStarted: {
     type: Date,
     default: Date.now,
   },

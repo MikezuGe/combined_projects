@@ -4,52 +4,50 @@ const { logger, } = require('../../../../utility');
 
 const Query = {
   auth: async args => {
-    const auth = await Auth.findById(args);
-    return { ...auth, user: await User.findById({ _id: auth.userId, }), }
+    const auth = await Auth.findOne(args);
+    const user = await User.findOne({ _id: auth.userId, });
+    auth.user = user;
+    return auth;
   },
   auths: async () => {
-    console.log('getting auths');
     const auths = await Auth.find();
-    console.log('auths', auths);
     const users = await User.find({ _id: { $in: auths.map(auth => auth.userId), }, });
-    console.log('users', users);
-    const combined = auths.map(auth => { auth.user = users.find(user => user._id = auth.userId); });
-    console.log('combined', combined);
-    return combined;
+    return auths.map(auth => {
+      auth.user = users.find(user => user._id.equals(auth.userId));
+      return auth;
+    });
   },
 };
 
 
 const Mutations = {
-  createAuth: async ({ input, }) => {
-    logger.log(`Yourbudget login: ${input.email}.`);
+  createAuth: async ({ input, }, { req, res, }) => {
     const user = await User.findOne({ email: input.email, });
     if (!user) {
-      logger.log(`Yourbudget login: ${input.email} failed: No such email`);
-    } else if (input.password !== user.password) {
-      logger.log(`Yourbudget login: ${input.email} failed: Incorrect password`);
+      res.write('Email not found');
+      return;
+    } else if (user.password !== input.password) {
+      res.write('Invalid password');
+      return;
     }
-    let auth = await Auth.findOne({ userId: user._id, });
-    if (!auth) {
-      auth = await Auth.create({ userId: user._id, /* sessionIp: get ip of user, */ });
-      logger.log(`Yourbudget login: ${input.email} success.`);
-    } else {
-      logger.log(`Yourbudget login: ${input.email} already logged.`);
+    const { sessionId, } = req.cookies;
+    if (sessionId) {
+      await Auth.deleteOne({ sessionId, });
     }
-    return { sessionId: auth._id, user, };
+    const auth = await Auth.create({ userId: user._id, });
+    auth.user = user;
+    res.cookie('sessionId', auth.sessionId, { httpOnly: true, });
+    return auth;
   },
+  updateAuth: async args => await Auth.updateOne(args, { sessionTimeout: Date.now() + 3600000, }),
   deleteAuth: async args => await Auth.deleteOne(args),
-  deleteAuths: async () => {
-    console.log('getting auths');
-    const auths = await Auth.deleteMany();
-    console.log('auths', auths);
-    const users = await User.find({ _id: { $in: auths.map(auth => auth.userId), }, });
-    console.log('users', users);
-    const combined = auths.map(auth => { auth.user = users.find(user => user._id = auth.userId); });
-    console.log('combined', combined);
-    return combined;
-  },
 };
+
+
+setInterval(async () => {
+  const result = await Auth.deleteMany({ sessionTimeout: { $lt: Date.now(), } });
+  logger.log(`Deleted ${result.n} timed out sessions.`);
+}, 60000);
 
 
 module.exports = {

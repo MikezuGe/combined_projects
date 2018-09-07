@@ -52,7 +52,6 @@ const validatePassword = password => {
 
 const query = `mutation ($input: AuthInput!) {
   createAuth(input: $input) {
-    sessionId
     user {
       username
     }
@@ -70,8 +69,9 @@ export default class BudgetAdd extends React.Component {
 
   onSubmit = input => new Promise(async resolve => {
     const result = await login({ input, });
+    console.log(result);
     if (result.status === 200 && result.data.data.createAuth) {
-      addToast(`You are not logged in as ${result.data.data.createAuth.user.username}`);
+      addToast(`You are now logged in as ${result.data.data.createAuth.user.username}`);
       return resolve(true);
     }
     resolve(false);

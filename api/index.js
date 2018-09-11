@@ -4,7 +4,7 @@ const router = express.Router();
 
 router
   .use('/graphql', require('./graphql'))
-  .use('/glib', require('./projectroutes/glib'));
+  .use('/glib', require('./routes/glib'));
 
 
 module.exports = router;

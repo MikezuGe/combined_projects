@@ -56,6 +56,10 @@ class Scene extends SceneNode {
     while (components.length > 0) {
       components[components.length - 1].remove();
     }
+    this.scene = null;
+    this.parent = null;
+    this.transform.node = null;
+    this.transform = null;
   }
 
 }

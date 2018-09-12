@@ -131,12 +131,12 @@ export default class Mat3 {
   }
 
   mul (m) {
-    const a00 = this.m01; const a01 = this.m02; const a02 = this.m03;
-    const a10 = this.m11; const a11 = this.m12; const a12 = this.m13;
-    const a20 = this.m21; const a21 = this.m22; const a22 = this.m23;
-    const b00 = m.m01; const b01 = m.m02; const b02 = m.m03;
-    const b10 = m.m11; const b11 = m.m12; const b12 = m.m13;
-    const b20 = m.m21; const b21 = m.m22; const b22 = m.m23;
+    const a00 = this.m00; const a01 = this.m01; const a02 = this.m02;
+    const a10 = this.m10; const a11 = this.m11; const a12 = this.m12;
+    const a20 = this.m20; const a21 = this.m21; const a22 = this.m22;
+    const b00 = m.m00; const b01 = m.m01; const b02 = m.m02;
+    const b10 = m.m10; const b11 = m.m11; const b12 = m.m12;
+    const b20 = m.m20; const b21 = m.m21; const b22 = m.m22;
     return new Mat3(
       a00 * b00 + a01 * b10 + a02 * b20,
       a00 * b01 + a01 * b11 + a02 * b21,

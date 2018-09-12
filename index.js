@@ -19,7 +19,7 @@ if (isProduction) {
   require('http').createServer((req, res) => {
     redirectNumber += 1;
     logger.log(`Redirect: ${req.connection.remoteAddress} ${req.method} ${req.url}. Total redirects: ${redirectNumber}`);
-    res.writeHead(301, { 'Location': `https://kontioweb.fi${req.url}`, });
+    res.writeHead(301, { 'Location': `https://www.kontioweb.fi${req.url}`, });
     res.end();
   }).listen(80, () => {
     logger.log('Redirecting connections to https. Listening to port 80');

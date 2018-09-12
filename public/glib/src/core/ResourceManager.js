@@ -69,7 +69,7 @@ export default class ResourceManager {
     }
   }
 
-  loadNextResource () {
+  async loadNextResource () {
     if (this.loading) {
       return;
     }
@@ -78,21 +78,18 @@ export default class ResourceManager {
       this.onLoadDone && this.onLoadDone();
       return;
     }
-    const { resource, callbacks, } = loadingObject;
     this.loading = true;
-    axios.get(resource.url).then(result => {
-      this.loadQueue.delete(resource.url);
-      this.cache.set(resource.url, resource);
-      const loadMore = resource.parse(result.data);
-      loadMore && loadMore(this);
-      callbacks.forEach(callback => { callback(resource); });
-      this.loading = false;
-      setTimeout(() => {
-        this.loadNextResource();
-      }, 500)
-    }).catch(err => {
-      console.error(err); // eslint-disable-line
-    });
+    const { resource, callbacks, } = loadingObject;
+    const result = await axios.get(resource.url);
+    this.loadQueue.delete(resource.url);
+    this.cache.set(resource.url, resource);
+    const loadMore = resource.parse(result.data);
+    loadMore && loadMore(this);
+    callbacks.forEach(callback => { callback(resource); });
+    this.loading = false;
+    //setTimeout(() => {
+      this.loadNextResource();
+    //}, 500);
   }
 
   deleteResource (resource) {

@@ -7,7 +7,7 @@ sslcert/*
 **/devBundle*
 
 public/glib/data/*/*
-!public/glib/data/*/default*
+!public/glib/data/*/*.default.*
 !public/glib/data/*/scene.cnf
 
 public/images/data/*/*

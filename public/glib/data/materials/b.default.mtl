@@ -1,0 +1,13 @@
+{
+  "shaderSource": "def.default.glsl",
+  "defines": [
+    "SPECULAR"
+  ],
+  "textures": [
+    {
+      "define": "COLORMAP",
+      "src": "b_colormap.default.png",
+      "value": 1.0
+    }
+  ]
+}

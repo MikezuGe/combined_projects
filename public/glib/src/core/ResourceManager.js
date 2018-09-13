@@ -6,7 +6,7 @@ axios.defaults.baseURL = `${window.location.origin}/api/glib`;
 axios.defaults.headers.common['accept'] = 'image/png';
 
 
-const allowedExt = /^\.(?:obj|mtl|png|cnf|glsl)$/;
+const allowedExt = /^\.(?:obj|mtl|png|jpg|cnf|glsl)$/;
 
 const isAllowedExt = ext => allowedExt.test(ext);
 
@@ -28,7 +28,8 @@ const createResource = url => {
   switch (url.slice(url.lastIndexOf('.'))) {
     case '.obj': return new Mesh(url);
     case '.mtl': return new Material(url);
-    case '.png': return new Texture(url);
+    case '.png':
+    case '.jpg': return new Texture(url);
     case '.glsl': return new ShaderSource(url);
     case '.cnf': return new SceneSource(url);
     default: throw new Error(`Unable to find resource with url: ${url}`);

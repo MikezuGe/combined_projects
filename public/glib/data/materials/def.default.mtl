@@ -1,0 +1,15 @@
+{
+  "shaderSource": "def.default.glsl",
+  "defines": [
+    "COLORMAP",
+    "DIFFUSE",
+    "SPECULAR"
+  ],
+  "textures": [
+    {
+      "define": "COLORMAP",
+      "src": "def_colormap.default.png",
+      "value": 1.0
+    }
+  ]
+}

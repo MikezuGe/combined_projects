@@ -19,6 +19,11 @@ const dataPaths = createDataFolderStructure(rootFolder, {
 
 
 const createResponse = {
+  '.jpg': url => ({
+    resourcePath: `${dataPaths.textures}${url}`,
+    headers: { 'Content-Type': 'image/jpg', },
+    options: { 'encoding': 'base64', },
+  }),
   '.png': url => ({
     resourcePath: `${dataPaths.textures}${url}`,
     headers: { 'Content-Type': 'image/png', },

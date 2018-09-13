@@ -1,0 +1,160 @@
+{
+  "transform": {
+    "translation": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 1.0,
+      "y": 1.0,
+      "z": 1.0
+    }
+  },
+  "components": {},
+  "nodes": [
+    {
+      "transform": {
+        "translation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "components": {
+        "camera": {
+          "active": "true"
+        }
+      },
+      "nodes": []
+    },
+    {
+      "transform": {
+        "translation": {
+          "x": -1.5,
+          "y": 1.5,
+          "z": -10.0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "components": {
+        "model": {
+          "mesh": "def.default.obj",
+          "materials": [
+            "def.default.mtl"
+          ]
+        }
+      },
+      "nodes": []
+    },
+    {
+      "transform": {
+        "translation": {
+          "x": 1.5,
+          "y": 1.5,
+          "z": -10.0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "components": {
+        "model": {
+          "mesh": "def.default.obj",
+          "materials": [
+            "a.default.mtl"
+          ]
+        }
+      },
+      "nodes": []
+    },
+    {
+      "transform": {
+        "translation": {
+          "x": -1.5,
+          "y": -1.5,
+          "z": -10.0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "components": {
+        "model": {
+          "mesh": "def.default.obj",
+          "materials": [
+            "b.default.mtl"
+          ]
+        }
+      },
+      "nodes": []
+    },
+    
+    {
+      "transform": {
+        "translation": {
+          "x": 1.5,
+          "y": -1.5,
+          "z": -10.0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "components": {
+        "model": {
+          "mesh": "def.default.obj",
+          "materials": [
+            "c.default.mtl"
+          ]
+        }
+      },
+      "nodes": []
+    }
+  ]
+}

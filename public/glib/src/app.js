@@ -9,7 +9,7 @@ const glib = new Glib({
 });
 
 
-glib.createScene('scene.cnf');
+glib.createScene('def.default.cnf');
 
 
 const vss = `#version 300 es

@@ -16,8 +16,9 @@ const logOnce = (name, log) => {
 export default class Renderer {
 
   constructor (resourceManager) {
-    resourceManager.getResource('default.png', resource => { this.defaultTexture = resource; });
-    resourceManager.getResource('default.mtl', resource => { this.defaultMaterial = resource; });
+    resourceManager.getResource('def_colormap.default.png', resource => { this.defaultTexture = resource; });
+    // Add default normalmap, and others
+    resourceManager.getResource('def.default.mtl', resource => { this.defaultMaterial = resource; });
     this.resourceManager = resourceManager;
     this.boundScene = null;
     this.boundCamera = null;
@@ -163,9 +164,9 @@ export default class Renderer {
     for (const [ define, texture ] of textures) {
       let textureUniform;
       switch (define) {
-        case 'COLORMAP': textureUniform = uniformLocations.u_colortexture; break;
-        case 'NORMALMAP': textureUniform = uniformLocations.u_normaltexture; break;
-        case 'SPECULARMAP': textureUniform = uniformLocations.u_speculartexture; break;
+        case 'COLORMAP': textureUniform = uniformLocations.u_color_texture; break;
+        case 'NORMALMAP': textureUniform = uniformLocations.u_normal_texture; break;
+        case 'SPECULARMAP': textureUniform = uniformLocations.u_specular_texture; break;
         default: throw new Error(`No texture of type ${define} has been specified. Implement!`);
       }
       gl.activeTexture(gl.TEXTURE0 + num);

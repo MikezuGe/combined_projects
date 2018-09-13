@@ -15,10 +15,7 @@ const app = express();
 if (isProduction) {
   logger.log('Running in production mode');
   // Redirect from 80 to 443
-  let redirectNumber = 0;
   require('http').createServer((req, res) => {
-    redirectNumber += 1;
-    logger.log(`Redirect: ${req.connection.remoteAddress} ${req.method} ${req.url}. Total redirects: ${redirectNumber}`);
     res.writeHead(301, { 'Location': `https://www.kontioweb.fi${req.url}`, });
     res.end();
   }).listen(80, () => {
@@ -40,12 +37,24 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true, }));
 app.use(cookieParser());
 
-
-app.all('*', (req, res, next) => {
-  logger.log(`${req.connection.remoteAddress} ${req.method} ${req.url}`);
-  next();
-});
-app.use(gitHandlerRouter);
+if (isProduction) {
+  // Redirect from https://kontioweb.fi to https://www.kontioweb.fi
+  app.all('*', (req, res, next) => {
+    if (req.hostname.slice(0, 3) !== 'www') {
+      res.writeHead(301, { 'Location': `https://www.kontioweb.fi${req.url}`, });
+      res.end();
+      return;
+    }
+    logger.log(`${req.connection.remoteAddress} ${req.method} ${req.url}`);
+    next();
+  });
+  app.use(gitHandlerRouter);
+} else {
+  app.all('*', (req, res, next) => {
+    logger.log(`${req.connection.remoteAddress} ${req.method} ${req.url}`);
+    next();
+  });
+}
 app.use((express.static(path.resolve('./public'))));
 
 

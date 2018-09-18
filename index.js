@@ -11,7 +11,7 @@ const cookieParser = require('cookie-parser');
 
 const app = express();
 
-
+/*
 if (isProduction) {
   logger.log('Running in production mode');
   // Redirect from 80 to 443
@@ -25,10 +25,10 @@ if (isProduction) {
   logger.log('Running in development mode');
 }
 
-
-const server = isProduction
+*/
+const server = /*isProduction
 ? require('https').createServer({ cert: httpsCert, key: httpsKey, }, app)
-: require('http').createServer(app);
+: */require('http').createServer(app);
 const io = require('socket.io')(server);
 
 

@@ -18,18 +18,11 @@ try {
   console.error(`Unable to get connectionstrings: ${err}`);
 }
 
+config.PORT = 3000;
 if (isProduction) {
   // Production
-  config.PORT = 443;
-  try {
-    config.httpsCert = fs.readFileSync(fs.readlinkSync('./sslcert/fullchain.pem'));
-    config.httpsKey = fs.readFileSync(fs.readlinkSync('./sslcert/privkey.pem'));
-  } catch (err) {
-    console.error(`Unable to get certificate files: ${err}`);
-  }
 } else {
   // Development
-  config.PORT = 3000;
 }
 
 

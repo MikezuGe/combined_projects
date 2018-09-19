@@ -10,4 +10,4 @@ git pull
 npm install
 npm update
 
-node index.js
+nohup node index.js &> /var/log/nodesrv.log &

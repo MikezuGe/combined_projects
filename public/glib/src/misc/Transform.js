@@ -51,7 +51,7 @@ export default class Transform {
 
   set rotation (rotation) {
     this.setWorldTransformDirty();
-    this._localRotation = Quat.fromEulers(rotation.x, rotation.y, rotation.z);
+    this._localRotation = new Quat(rotation.w, rotation.x, rotation.y, rotation.z);
   }
 
   set scale (scale) {

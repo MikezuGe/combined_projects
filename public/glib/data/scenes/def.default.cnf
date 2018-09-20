@@ -63,7 +63,7 @@
       },
       "components": {
         "model": {
-          "mesh": "def.default.obj",
+          "mesh": "ball.default.obj",
           "materials": [
             "def.default.mtl"
           ]
@@ -91,7 +91,7 @@
       },
       "components": {
         "model": {
-          "mesh": "def.default.obj",
+          "mesh": "ball.default.obj",
           "materials": [
             "a.default.mtl"
           ]
@@ -119,7 +119,7 @@
       },
       "components": {
         "model": {
-          "mesh": "def.default.obj",
+          "mesh": "ball.default.obj",
           "materials": [
             "b.default.mtl"
           ]
@@ -148,7 +148,7 @@
       },
       "components": {
         "model": {
-          "mesh": "def.default.obj",
+          "mesh": "ball.default.obj",
           "materials": [
             "c.default.mtl"
           ]

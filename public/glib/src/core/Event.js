@@ -1,6 +1,5 @@
 
-
-class Event {
+export default class Event {
 
   constructor (preventDefault = false, stopPropagation = false) {
     // Contains functions that are called when invoke is called
@@ -20,7 +19,7 @@ class Event {
     }
   }
 
-  getInvoker = (preventDefault, stopPropagation) => {
+  getInvoker (preventDefault, stopPropagation) {
     if (preventDefault && stopPropagation) {
       return e => {
         e.preventDefault();
@@ -48,18 +47,26 @@ class Event {
 
 
 const windowResizeEvent = new Event();
-const windowKeyupEvent = new Event();
-const windowKeydownEvent = new Event();
+const windowKeyupEvent = new Event(true, true);
+const windowKeydownEvent = new Event(false, true);
+const windowMouseupEvent = new Event(true, true);
+const windowMousedownEvent = new Event(true, true);
+const windowMousemoveEvent = new Event(true, true);
 
 
 window.addEventListener('resize', windowResizeEvent.invoke, false);
 window.addEventListener('keyup', windowKeyupEvent.invoke, false);
 window.addEventListener('keydown', windowKeydownEvent.invoke, false);
+window.addEventListener('mouseup', windowMouseupEvent.invoke, false);
+window.addEventListener('mousedown', windowMousedownEvent.invoke, false);
+window.addEventListener('mousemove', windowMousemoveEvent.invoke, false);
 
 
 export {
   windowResizeEvent,
   windowKeyupEvent,
   windowKeydownEvent,
+  windowMouseupEvent,
+  windowMousedownEvent,
+  windowMousemoveEvent,
 };
-

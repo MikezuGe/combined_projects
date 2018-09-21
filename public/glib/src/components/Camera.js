@@ -34,33 +34,32 @@ export default class Camera extends Component {
   }
 
   update () {
+    if (!this.inControl) {
+      return;
+    }
+
     const keys = input.getKeys();
-    const { transform, } = this.node;
-    if (keys.includes('w')) {
-      transform.translate(transform.forward.scale(-0.1));
-    } else if (keys.includes('s')) {
-      transform.translate(transform.forward.scale(0.1));
-    }
-    if (keys.includes('d')) {
-      transform.translate(transform.right.scale(0.1));
-    } else if (keys.includes('a')) {
-      transform.translate(transform.right.scale(-0.1));
-    }
-    if (keys.includes('e')) {
-      transform.translate(transform.up.scale(0.1));
-    } else if (keys.includes('q')) {
-      transform.translate(transform.up.scale(-0.1));
-    }
+    const dx = keys.includes('d') ? 0.1 : keys.includes('a') ? -0.1 : 0.0
+    const dy = keys.includes('e') ? 0.1 : keys.includes('q') ? -0.1 : 0.0
+    const dz = keys.includes('s') ? 0.1 : keys.includes('w') ? -0.1 : 0.0
 
+    if (dx !== 0 || dy !== 0 || dz !== 0) {
+      const { transform, } = this.node;
+      const translation = transform.forward.scale(dz).add(transform.right.scale(dx)).add(transform.up.scale(dy));
+      transform.translateTo(translation);
+    };
+
+    /*
     const mouse = input.getMouse();
-
-    const rotation = transform.rotation;
-    transform.rotation = rotation.mul(Quat.fromEulers(
-      0.0,
-      mouse.dx * 0.005,
-      0.0,
-    ));
-    
+    if (mouse.dx > 0 || mouse.dy > 0) {
+      const { transform, } = this.node;
+      transform.rotateTo(Quat.fromEulers(
+        0.0,
+        mouse.dx * 0.005,
+        0.0,
+      ));
+    }
+    */
 
   }
 

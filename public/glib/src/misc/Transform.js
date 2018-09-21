@@ -6,11 +6,8 @@ export default class Transform {
   constructor (node) {
     this.node = node || null;
 
-    this._startTranslation = null;
     this._targetTranslation = null;
-    this._startRotation = null;
     this._targetRotation = null;
-    this._startScale = null;
     this._targetScale = null;
     this._origin = Vec3.zero;
 
@@ -25,6 +22,18 @@ export default class Transform {
     this._worldTransformUnscaled = Mat4.identity;
     this._worldTransform = Mat4.identity;
     this._worldTransformDirty = true;
+  }
+
+  translateTo (translation) {
+    this._targetTranslation = this._targetTranslation ?
+      this._targetTranslation.add(translation) :
+      this._localTranslation.add(translation);
+  }
+
+  rotateTo (rotation) {
+    this._targetRotation = this._targetRotation ?
+      this._targetRotation.mul(rotation) :
+      this._localRotation.mul(rotation);
   }
 
   // Directional vectors relative to local transformation
@@ -66,7 +75,7 @@ export default class Transform {
 
   // Local transformation getters
   get translation () {
-    return this._localTranslation;
+    return this._targetTranslation || this._localTranslation;
   }
 
   get rotation () {
@@ -159,6 +168,29 @@ export default class Transform {
       this._worldTransform = this._localTransform.clone;
     }
     this._worldTransformDirty = false;
+  }
+
+  update () {
+    let shouldSetWorldTransformDirty = false;
+    if (this._targetTranslation) {
+      shouldSetWorldTransformDirty = true;
+      this._localTranslation = this._localTranslation.lerp(this._targetTranslation, 0.1);
+      if (this._targetTranslation.sub(this._localTranslation).lenSqrt < 0.000001) {
+        this._localTranslation = this._targetTranslation;
+        this._targetTranslation = null;
+      }
+    }
+    if (this._targetRotation) {
+      shouldSetWorldTransformDirty = true;
+      this._localRotation = this._localRotation.lerp(this._targetRotation, 0.1);
+      if (this._targetRotation.dot(this._targetRotation) < 0.000001) {
+        this._localRotation = this._targetRotation;
+        this._targetRotation = null;
+      }
+    }
+    if (shouldSetWorldTransformDirty) {
+      this.setWorldTransformDirty();
+    }
   }
 
 }

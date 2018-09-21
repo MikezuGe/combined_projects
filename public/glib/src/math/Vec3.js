@@ -72,6 +72,7 @@ export default class Vec3 {
     }
     return new Vec3(0, 0, 0);
   }
+
   get invert () { return new Vec3(-this.x, -this.y, -this.z); }
   
   add (v) { return new Vec3(this.x + v.x, this.y + v.y, this.z + v.z); }

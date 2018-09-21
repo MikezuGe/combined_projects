@@ -44,10 +44,12 @@ const Mutations = {
 };
 
 
+/*
 setInterval(async () => {
   const result = await Auth.deleteMany({ sessionTimeout: { $lt: Date.now(), } });
   logger.log(`Deleted ${result.n} timed out sessions.`);
 }, 60000);
+*/
 
 
 module.exports = {

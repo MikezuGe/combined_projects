@@ -35,6 +35,7 @@ export default class SceneNode {
   }
 
   update () {
+    this.transform.update();
     for (const child of this.children) {
       child.update();
     }

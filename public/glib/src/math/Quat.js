@@ -116,6 +116,7 @@ export default class Quat {
       az * bw + aw * bz + ax * by - ay * bx
     ).normalize;
   }
+
   dot (q) { return this.w * q.w + this.x * q.x + this.y * q.y + this.z * q.z; }
 
   cross (q) { throw new Error(`Quaternion cross not implemented ${q}`); }
@@ -127,7 +128,7 @@ export default class Quat {
     return new Quat(cos(angle), axis.x, axis.y, axis.z);
   }
 
-  lerp (q, t) { return t >= 1.0 ? q : this.scaleRotation(1 - t).multiply(q.scaleRotation(t)); }
+  lerp (q, t) { return t >= 1.0 ? q : this.scaleRotation(1 - t).mul(q.scaleRotation(t)); }
 
   nlerp (q, t) { return this.lerp(q, t).normalize; }
 

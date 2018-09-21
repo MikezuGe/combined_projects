@@ -97,7 +97,7 @@ const pluginHtmlWebpackPlugin = project => new HtmlWebpackPlugin({
 
 
 module.exports = fs.readdirSync('./public')
-  .filter(file => fs.lstatSync(`./public/${file}`).isDirectory() && fs.readdirSync(`./public/${file}`).includes('index.html'))
+  .filter(file => fs.lstatSync(`./public/${file}`).isDirectory() && fs.readdirSync(`./public/${file}`).includes('src'))
   .map(project => ({
     mode,
     'entry': path.resolve(`./public/${project}/src/app.js`),

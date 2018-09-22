@@ -41,10 +41,11 @@ gl.attachShader(program, fs);
 gl.linkProgram(program);
 
 const vertices = new Float32Array([
-  -0.25, -0.25, 1.0, 0.0, 0.0, 5.0,
-  -0.25, 0.25, 0.0, 1.0, 0.0, 5.0,
-  0.25, -0.25, 0.0, 0.0, 1.0, 5.0,
-  0.25, 0.25, 1.0, 0.0, 1.0, 5.0,
+  -0.25, -0.25, 1.0, 0.0, 0.0, 10.0,
+  -0.25, 0.25, 0.0, 1.0, 0.0, 10.0,
+  0.0, 0.0, 50 / 255, 205 / 255, 50 / 255, 100.0,
+  0.25, -0.25, 0.0, 0.0, 1.0, 10.0,
+  0.25, 0.25, 1.0, 0.0, 1.0, 10.0,
 ]);
 const buffer = gl.createBuffer();
 gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
@@ -77,4 +78,23 @@ gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 gl.enable(gl.DITHER);
 gl.viewport(0, 0, canvas.width, canvas.height);
 
-gl.drawArrays(gl.POINTS, 0, 4);
+gl.drawArrays(gl.POINTS, 0, 5);
+
+export default class Renderer {
+
+  constructor () {
+    this.vertexPositions = [];
+  }
+
+  setVertexPositions (world) {
+    for (const { renderingPosition, } of world.field) {
+      this.vertexPositions.push(renderingPosition.x, renderingPosition.y);
+    }
+    console.log(this.setupVertexPositions);
+  }
+
+  renderWorld (world) {
+
+  }
+
+}

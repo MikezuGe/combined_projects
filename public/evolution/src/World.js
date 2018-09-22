@@ -2,6 +2,9 @@ import Cell from 'Cell';
 import { entityTypes, } from 'Entities';
 
 
+const { floor, } = Math;
+
+
 export default class World {
 
   constructor (width = 32, height = 32) {
@@ -16,11 +19,16 @@ export default class World {
   }
 
   setupFieldCells () {
-    const { field, width, dimension, getCellType, } = this;
+    const { field, width, height, dimension, getCellType, } = this;
     for (let i = 0; i < dimension; i++) {
-      field[i] = new Cell(i, getCellType(i, width, dimension));
+      field[i] = new Cell(i, getCellType(i, width, dimension), {
+        x: -1 + 2 * ((i % width * 10 + 5) / 10 / width),
+        y: -1 + 2 * ((floor(i / width) * 10 + 5) / 10 / height),
+      });
+      console.log(field[i].renderingPosition);
     }
     for (let i = 0; i < dimension; i++) {
+      // Get adjacent cells
       const adjacentCells = {};
       if (field[i - width]) adjacentCells.top = field[i - width];
       if (field[i + width]) adjacentCells.bottom = field[i + width];

@@ -4,9 +4,10 @@ const { random, floor, } = Math;
 
 export default class Cell {
 
-  constructor (cellNumber, cellType) {
+  constructor (cellNumber, cellType, renderingPosition) {
     this.cellNumber = cellNumber;
     this.cellType = cellType;
+    this.renderingPosition = renderingPosition;
     this.adjacentCells = {};
     this._entity = null;
   }

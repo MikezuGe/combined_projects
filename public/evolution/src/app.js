@@ -4,5 +4,6 @@ import 'style.css';
 
 
 const world = new World(3, 3);
-
+const renderer = new Renderer();
+renderer.setVertexPositions(world);
 

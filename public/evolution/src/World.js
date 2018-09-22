@@ -7,7 +7,7 @@ const { floor, } = Math;
 
 export default class World {
 
-  constructor (width = 32, height = 32) {
+  constructor (width, height) {
     if (width < 3 || height < 3) {
       throw new Error('Too small world, must be at least 3x3');
     }
@@ -22,10 +22,10 @@ export default class World {
     const { field, width, height, dimension, getCellType, } = this;
     for (let i = 0; i < dimension; i++) {
       field[i] = new Cell(i, getCellType(i, width, dimension), {
+        // Cell draw position in clipspace
         x: -1 + 2 * ((i % width * 10 + 5) / 10 / width),
         y: -1 + 2 * ((floor(i / width) * 10 + 5) / 10 / height),
       });
-      console.log(field[i].renderingPosition);
     }
     for (let i = 0; i < dimension; i++) {
       // Get adjacent cells

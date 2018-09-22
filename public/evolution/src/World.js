@@ -1,34 +1,42 @@
 import Cell from 'Cell';
+import { entityTypes, } from 'Entities';
 
 
 export default class World {
 
-  constructor (width, height) {
+  constructor (width = 32, height = 32) {
+    if (width < 3 || height < 3) {
+      throw new Error('Too small world, must be at least 3x3');
+    }
     this.width = width;
     this.height = height;
     this.dimension = width * height;
     this.field = [];
-    for (let i = 0; i < this.dimension; i++) {
-      this.field[i] = new Cell(i, this.getCellType(i));
+    this.setupFieldCells();
+  }
+
+  setupFieldCells () {
+    const { field, width, dimension, getCellType, } = this;
+    for (let i = 0; i < dimension; i++) {
+      field[i] = new Cell(i, getCellType(i, width, dimension));
     }
-    for (let i = 0; i < this.dimension; i++) {
-      this.field[i].setAdjacentCells([
-        this.field[i - width] || undefined,
-        this.field[i + width] || undefined,
-        this.field[i - 1] || undefined,
-        this.field[i - 1] || undefined,
-      ]);
+    for (let i = 0; i < dimension; i++) {
+      const adjacentCells = {};
+      if (field[i - width]) adjacentCells.top = field[i - width];
+      if (field[i + width]) adjacentCells.bottom = field[i + width];
+      if (i % width !== 0 && field[i - 1]) adjacentCells.left = field[i - 1];
+      if ((i + 1) % width !== 0 && field[i + 1]) adjacentCells.right = field[i + 1];
+      field[i].adjacentCells = adjacentCells;
     }
   }
 
-  getCellType (i) {
-    const { width, dimension, } = this;
+  getCellType (i, width, dimension) {
     if (i === 0) return 'top-left';
-    if (i === width - 1) return 'top-right';
-    if (i === dimension - width) return 'bottom-left';
-    if (i === dimension - 1) return 'bottom-right';
+    if (i + 1 === width) return 'top-right';
+    if (i + width === dimension) return 'bottom-left';
+    if (i + 1 === dimension) return 'bottom-right';
     if (i < width) return 'top';
-    if (i > dimension - width - 1) return 'bottom';
+    if (i + width + 1 > dimension) return 'bottom';
     if (i % width === 0) return 'left';
     if ((i + 1) % width === 0) return 'right';
     return 'normal';

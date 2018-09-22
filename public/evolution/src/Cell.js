@@ -5,23 +5,22 @@ const { random, floor, } = Math;
 export default class Cell {
 
   constructor (cellNumber, cellType) {
-    this.adjacentCells = null;
     this.cellNumber = cellNumber;
-    this._entity = null;
     this.cellType = cellType;
+    this.adjacentCells = {};
+    this._entity = null;
   }
 
   getEmptyAdjacentCell () {
-    cell = this.adjacentCells[floor(random() * 4)];
-    return cell;
-  }
-
-  setAdjacentCells (cells) {
-    this.adjacentCells = cells;
+    const openCells = Object.values(this.adjacentCells)
+      .filter(({ entity, }) => entity === null);
+    return openCells.length
+      ? this.openCells[floor(random() * openCells.length)]
+      : null;
   }
 
   set entity (entity) {
-    entity.cell = this;
+    if (entity) entity.cell = this;
     this._entity = entity;
   }
 
@@ -30,7 +29,7 @@ export default class Cell {
   }
 
   update () {
-    entity.update();
+    this._entity.update();
   }
 
 }

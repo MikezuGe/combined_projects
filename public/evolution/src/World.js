@@ -1,5 +1,5 @@
-import Cell from 'Cell';
-import { entityTypes, } from 'Entities';
+import Cell from './Cell';
+import { entityTypes, } from './Entities';
 
 
 const { floor, } = Math;

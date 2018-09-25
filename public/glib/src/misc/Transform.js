@@ -1,4 +1,4 @@
-import { Vec3, Quat, Mat4, } from 'math';
+import { Vec3, Quat, Mat4, } from '../math';
 
 
 export default class Transform {

@@ -1,6 +1,35 @@
-import 'style.css';
-import Glib, { gl, } from 'core/Glib';
-import { Mat4, } from 'math';
+import { injectGlobal, } from 'styled-components';
+
+import Glib, { gl, } from './core/Glib';
+import { Mat4, } from './math';
+
+
+injectGlobal`
+* {
+  font-family: 'Ubuntu', sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-size: 16px;
+}
+
+html body {
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+canvas {
+  width: 100%;
+  height: 100%;
+  background: gray;
+}
+`;
 
 
 const glib = new Glib({

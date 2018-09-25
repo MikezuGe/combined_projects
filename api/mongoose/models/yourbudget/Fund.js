@@ -5,7 +5,7 @@ const db = require('../../connections/yourbudget');
 module.exports = db.model('Fund', new mongoose.Schema({
   _id: {
     type: mongoose.Schema.Types.ObjectId,
-    default: mongoose.Types.ObjectId(),
+    default: () => mongoose.Types.ObjectId(),
   },
   name: {
     type: String,
@@ -21,6 +21,6 @@ module.exports = db.model('Fund', new mongoose.Schema({
   },
   dateAdded: {
     type: Date,
-    default: Date.now,
+    default: () => Date.now(),
   },
 }));

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { addToast, openModal, modalFormTypes, } from 'layout';
+import { addToast, openModal, modalFormTypes, } from '../../layout';
 
 
 class Home extends React.Component {

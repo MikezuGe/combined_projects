@@ -1,4 +1,4 @@
-import { gl, } from 'core/Glib';
+import { gl, } from '../core/Glib';
 
 
 export default class ShaderProgram {

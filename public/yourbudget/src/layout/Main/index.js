@@ -2,7 +2,7 @@ import React from 'react';
 import { Route, Switch, Redirect, } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { Home, Budget, Settings, } from 'containers';
+import { Home, Budget, Settings, } from '../../containers';
 
 
 const Wrapper = styled.div`

@@ -7,6 +7,7 @@ export default class Plant extends Entity {
   
   static BASE_COLOR = 'green';
   static ENTITY_TYPE = ENTITY_TYPE;
+  static ENTITY_MAX_SIZE = 10;
   static TIME_TO_LIVE_MAX = 1800;
   static TIME_TO_LIVE_MIN = 1200;
   static TIME_TO_GROW_MIN = 80;

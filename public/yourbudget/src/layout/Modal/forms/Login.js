@@ -4,8 +4,8 @@ import styled from 'styled-components';
 import axios from 'axios';
 axios.defaults.baseURL = `${window.location.origin}/api/graphql`;
 
-import { addToast, } from 'layout';
-import { Form, Field, } from 'components';
+import { addToast, } from '../../Toaster';
+import { Form, Field, } from '../../../components/organisms';
 
 
 export const formType = 'LOGIN';
@@ -31,7 +31,6 @@ const validateEmail = email => {
 
 
 const validatePassword = password => {
-  return '';
   if (!password) {
     return 'Password not defined.';
   } else if (password.length < 5) {
@@ -69,7 +68,6 @@ export default class BudgetAdd extends React.Component {
 
   onSubmit = input => new Promise(async resolve => {
     const result = await login({ input, });
-    console.log(result);
     if (result.status === 200 && result.data.data.createAuth) {
       addToast(`You are now logged in as ${result.data.data.createAuth.user.username}`);
       return resolve(true);

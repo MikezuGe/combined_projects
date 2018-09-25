@@ -5,7 +5,7 @@ const db = require('../../connections/yourbudget');
 module.exports = db.model('Auth', new mongoose.Schema({
   _id: {
     type: mongoose.Schema.Types.ObjectId,
-    default: mongoose.Types.ObjectId(),
+    default: () => mongoose.Types.ObjectId(),
   },
   userId: {
     type: mongoose.Schema.Types.ObjectId,

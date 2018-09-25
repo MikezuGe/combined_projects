@@ -106,12 +106,12 @@ module.exports = fs.readdirSync('./public')
       'path': path.resolve(`./public/${project}`),
     },
     'devtool': isProduction ? 'hidden-source-map' : 'source-map',
-    'resolve': {
+    /*'resolve': {
       'modules': [
         path.resolve(`./public/${project}/src`),
         path.resolve(`./node_modules`),
       ],
-    },
+    },*/
     'module': {
       'rules': [
         eslintLoader,

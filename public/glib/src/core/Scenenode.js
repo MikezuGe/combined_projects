@@ -1,4 +1,4 @@
-import { Transform, } from 'misc';
+import { Transform, } from '../misc';
 
 
 export default class SceneNode {

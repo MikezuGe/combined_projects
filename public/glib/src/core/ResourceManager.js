@@ -1,5 +1,6 @@
 import axios from 'axios';
-import { Material, Mesh, SceneSource, ShaderSource, Texture, } from 'resources';
+
+import { Material, Mesh, SceneSource, ShaderSource, Texture, } from '../resources';
 
 
 axios.defaults.baseURL = `${window.location.origin}/api/glib`;

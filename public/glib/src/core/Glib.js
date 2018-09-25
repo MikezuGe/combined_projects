@@ -1,8 +1,8 @@
-import Scene from 'core/Scene';
-import ResourceManager from 'core/ResourceManager';
-import Renderer from 'rendering/Renderer';
-import { windowResizeEvent, } from 'core/Event';
-import input from 'core/Input';
+import input from './Input';
+import Scene from './Scene';
+import ResourceManager from './ResourceManager';
+import Renderer from '../rendering/Renderer';
+import { windowResizeEvent, } from './Event';
 
 
 const scene = new Scene();

@@ -1,6 +1,6 @@
 import SceneNode from './Scenenode';
-import * as componentTypes from 'components/';
-import { firstLetterToUpper, } from 'utility/';
+import * as componentTypes from '../components';
+import { firstLetterToUpper, } from '../utility';
 
 
 const parseNode = (nodeData, parentNode, resourceManager) => {

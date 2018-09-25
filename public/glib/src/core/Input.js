@@ -4,7 +4,7 @@ import {
   windowMouseupEvent,
   windowMousedownEvent,
   windowMousemoveEvent,
-} from 'core/Event';
+} from './Event';
 
 
 const { abs, } = Math;

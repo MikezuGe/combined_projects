@@ -1,5 +1,5 @@
-import { gl, } from 'core/Glib';
-import { GeometryBatch, } from 'misc';
+import { gl, } from '../core/Glib';
+import { GeometryBatch, } from '../misc';
 import ShaderProgram from './ShaderProgram';
 
 
@@ -177,7 +177,7 @@ export default class Renderer {
 
   bindScene (scene) {
     const { u_time, } = this.boundShaderProgram.uniformLocations;
-    gl.uniform1f(u_time, performance.now() /*Scene.time.now*/); // Scene should carry global time
+    gl.uniform1f(u_time, performance.now() /*scene.time.now*/); // Scene should carry global time
   }
 
   bindCamera () {

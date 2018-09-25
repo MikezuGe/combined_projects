@@ -1,7 +1,7 @@
 import Component from './Component';
-import { Mat4, Vec3, Quat, } from 'math';
-import { windowResizeEvent } from 'core/Event';
-import input from 'core/Input';
+import { Mat4, Vec3, Quat, } from '../math';
+import { windowResizeEvent } from '../core/Event';
+import input from '../core/Input';
 
 
 const { PI, } = Math;
@@ -47,7 +47,7 @@ export default class Camera extends Component {
       const { transform, } = this.node;
       const translation = transform.forward.scale(dz).add(transform.right.scale(dx)).add(transform.up.scale(dy));
       transform.translateTo(translation);
-    };
+    }
 
     /*
     const mouse = input.getMouse();

@@ -1,10 +1,12 @@
 const createDataFolderStructure = require('./createdatafolderstructure');
-const createHTML = require('./createhtml');
+const indexRoute = require('./indexRoute');
+const fallbackRoute = require('./fallbackRoute');
 const logger = require('./logger');
 
 
 module.exports = {
   createDataFolderStructure,
-  createHTML,
+  indexRoute,
+  fallbackRoute,
   logger,
 };

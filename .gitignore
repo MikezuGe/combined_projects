@@ -4,6 +4,7 @@ sslcert/*
 **/log.txt
 **/devBundle*
 
+public/index.html
 public/glib/data/*/*
 !public/glib/data/*/*.default.*
 !public/glib/data/*/scene.cnf

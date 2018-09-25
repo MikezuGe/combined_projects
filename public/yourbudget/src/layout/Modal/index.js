@@ -20,16 +20,9 @@ height: 100%;
 display: flex;
 align-items: center;
 justify-content: center;
-${props => props.active
-? `
-visibility: visible;
-@keyframes GRAYOUT_IN { from { background: rgba(128, 128, 128, 0.0) } to { background: rgba(128, 128, 128, 0.5) } }
-animation: GRAYOUT_IN 500ms linear 0ms forwards;`
-: `
-visibility: hidden;
-@keyframes GRAYOUT_OUT { from { background: rgba(128, 128, 128, 0.5) } to { background: rgba(128, 128, 128, 0.0) } }
-transition: visibility 0ms linear 500ms;
-animation: GRAYOUT_OUT 500ms;`}`;
+transition: background 500ms, visibility 0ms linear ${({ active, }) => active ? 0 : 500}ms;
+background: rgba(128, 128, 128, ${({ active, }) => active ? 0.5 : 0.0});
+visibility: ${({ active, }) => active ? 'visible' : 'hidden'}`;
 
 
 const Wrapper = styled.div`
@@ -38,36 +31,40 @@ width: 100%;
 height: 100%;
 align-items: center;
 justify-content: center;
-${props => props.active
-? `
-@keyframes MODAL_IN { from { transform: translateY(-100%) } }
-animation: MODAL_IN 500ms;
-`
-: `
-@keyframes MODAL_OUT { to { transform: translateY(-100%) } }
-animation: MODAL_OUT 500ms;
-`}`;
+transition: transform 500ms;
+transform: translateY(${({ active, }) => active ? 0 : -100}%);`;
 
 
 export default class Modal extends React.Component {
   
   componentDidMount () {
     listener = this.open;
+    // Remove when done debugging
+    this.open(modalFormTypes.BUDGET_ADD);
   }
 
   state = {
-    active: true,
+    active: false,
     modalFormType: modalFormTypes.BUDGET_ADD,
   }
 
-  open = modalFormType => this.setState({
-    active: true,
-    modalFormType,
-  });
+  keyupListener = e => {
+    if (e.keyCode === '27' || e.key === 'Escape') {
+      this.close();
+    }
+  }
 
-  close = () => this.setState({
-    active: false,
-  });
+  open = modalFormType => {
+    window.addEventListener('keyup', this.keyupListener, false);
+    this.setState({
+      active: true,
+      modalFormType,
+    });
+  }
+  close = () => {
+    this.setState({ active: false, });
+    window.removeEventListener('keyup', this.keyupListener, false);
+  }
 
   render () {
     const { state: { modalFormType, active, }, } = this;

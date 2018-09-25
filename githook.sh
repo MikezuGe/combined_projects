@@ -10,4 +10,4 @@ git pull
 npm install
 npm update
 
-nohup node index.js &> /var/log/nodesrv.log &
+NODE_ENV=production nohup node index.js &> /var/log/nodesrv.log &

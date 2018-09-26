@@ -43,23 +43,18 @@ export default class Camera extends Component {
     const dy = keys.includes('e') ? 0.1 : keys.includes('q') ? -0.1 : 0.0
     const dz = keys.includes('s') ? 0.1 : keys.includes('w') ? -0.1 : 0.0
 
+    const { transform, } = this.node;
     if (dx !== 0 || dy !== 0 || dz !== 0) {
-      const { transform, } = this.node;
       const translation = transform.forward.scale(dz).add(transform.right.scale(dx)).add(transform.up.scale(dy));
       transform.translateTo(translation);
     }
 
-    /*
     const mouse = input.getMouse();
-    if (mouse.dx > 0 || mouse.dy > 0) {
-      const { transform, } = this.node;
-      transform.rotateTo(Quat.fromEulers(
-        0.0,
-        mouse.dx * 0.005,
-        0.0,
-      ));
+    if (mouse.dx !== 0 || mouse.dy !== 0) {
+      const qx = Quat.fromAxisAngle(transform.right, - mouse.dy * 0.005);
+      const qy = Quat.fromAxisAngle(Vec3.up, mouse.dx * 0.005)
+      transform.rotateTo(qx.mul(qy));
     }
-    */
 
   }
 

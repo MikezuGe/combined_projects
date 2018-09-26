@@ -117,18 +117,33 @@ export default class Quat {
     ).normalize;
   }
 
+  scale (f) { return new Quat(this.w * f, this.x * f, this.y * f, this.z * f); }
+
   dot (q) { return this.w * q.w + this.x * q.x + this.y * q.y + this.z * q.z; }
 
   cross (q) { throw new Error(`Quaternion cross not implemented ${q}`); }
 
+  /*
   scaleRotation (t) {
-    // Redundant multiplication
     const angle = acos(this.w) * t;
     const axis = new Vec3(this.x, this.y, this.z).scale(sin(angle));
     return new Quat(cos(angle), axis.x, axis.y, axis.z);
   }
 
-  lerp (q, t) { return t >= 1.0 ? q : this.scaleRotation(1 - t).mul(q.scaleRotation(t)); }
+  lerp (q, t) { return this.mul(q.mul(this.invert).scaleRotation(t)); }
+  */
+  /*
+  lerp (q, t) { return this.mul(q.mul(this.invert).scale(t)); }
+  */
+  lerp (q, t) {
+    const t_ = 1 - t;
+    return new Quat(
+      this.w * t_ + q.w * t,
+      this.x * t_ + q.x * t,
+      this.y * t_ + q.y * t,
+      this.z * t_ + q.z * t,
+    );
+  }
 
   nlerp (q, t) { return this.lerp(q, t).normalize; }
 
@@ -139,39 +154,31 @@ export default class Quat {
     } else if (t >= 1.0) {
       return q;
     }
-    // Calculate angle between a and b
     let cosHalfTheta = this.dot(q);
-    // if a=b or a=-b then theta = 0 and we can return a
     if (abs(cosHalfTheta) >= 1.0) {
       return this;
     }
-
     if (cosHalfTheta < 0.0) {
-      q.w = -q.w; q.x = -q.x; q.y = -q.y; q.z = -q.z;
+      q = q.scale(-1.0);
       cosHalfTheta = -cosHalfTheta;
     }
-
-    // Calculate temporary values
     const sinHalfTheta = sqrt(1.0 - cosHalfTheta * cosHalfTheta);
-
-    // if theta = 180 degrees then result is not fully defined, we could rotate around any axis normal to a or b
     if (abs(sinHalfTheta) < 0.001) {
       return new Quat(
         (this.w + q.w) * 0.5,
         (this.x + q.x) * 0.5,
-        (this.y + q.y) * 0.5,
+        (this.y + q.y) * 0.5, 
         (this.z + q.z) * 0.5
       ).normalize;
     }
-
     const halfTheta = acos(cosHalfTheta);
-    const ratioA = sin((1 - t) * halfTheta) / sinHalfTheta;
-    const ratioB = sin(t * halfTheta) / sinHalfTheta;
+    const ra = sin((1 - t) * halfTheta) / sinHalfTheta;
+    const rb = sin(t * halfTheta) / sinHalfTheta;
     return new Quat(
-      this.w * ratioA + q.w * ratioB,
-      this.x * ratioA + q.x * ratioB,
-      this.y * ratioA + q.y * ratioB,
-      this.z * ratioA + q.z * ratioB
+      this.w * ra + q.w * rb,
+      this.x * ra + q.x * rb,
+      this.y * ra + q.y * rb,
+      this.z * ra + q.z * rb
     ).normalize;
   }
 

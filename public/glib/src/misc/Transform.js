@@ -36,23 +36,21 @@ export default class Transform {
       this._localRotation.mul(rotation);
   }
 
-  // Directional vectors relative to local transformation
   get right () {
-    const { m00, m10, m20, } = this.worldTransform;
-    return new Vec3(m00, m10, m20);
+    const { m00, m01, m02, } = this.worldTransform;
+    return new Vec3(m00, m01, m02);
   }
 
   get up () {
-    const { m01, m11, m21, } = this.worldTransform;
-    return new Vec3(m01, m11, m21);
+    const { m10, m11, m12, } = this.worldTransform;
+    return new Vec3(m10, m11, m12);
   }
 
   get forward () {
-    const { m02, m12, m22, } = this.worldTransform;
-    return new Vec3(m02, m12, m22);
+    const { m20, m21, m22, } = this.worldTransform;
+    return new Vec3(m20, m21, m22);
   }
 
-  // Setting transformation
   set translation (translation) {
     this.setWorldTransformDirty();
     this._localTranslation = new Vec3(translation.x, translation.y, translation.z);
@@ -182,8 +180,8 @@ export default class Transform {
     }
     if (this._targetRotation) {
       shouldSetWorldTransformDirty = true;
-      this._localRotation = this._localRotation.lerp(this._targetRotation, 0.1);
-      if (this._targetRotation.dot(this._targetRotation) < 0.000001) {
+      this._localRotation = this._localRotation.nlerp(this._targetRotation, 0.1);
+      if (this._targetRotation.dot(this._localRotation) > 0.999999) {
         this._localRotation = this._targetRotation;
         this._targetRotation = null;
       }

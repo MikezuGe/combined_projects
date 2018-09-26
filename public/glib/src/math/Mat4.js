@@ -200,14 +200,15 @@ export default class Mat4 {
   }
 
   lookAt (target, up) {
-    const zAxis = this.sub(target).normalize;
+    const t = new Vec3(this.m30, this.m31, this.m32);
+    const zAxis = t.sub(target).normalize;
     const xAxis = up.cross(zAxis);
     const yAxis = zAxis.cross(xAxis);
     return new Mat4(
       xAxis.x, xAxis.y, xAxis.z, 0.0,
       yAxis.x, yAxis.y, yAxis.z, 0.0,
       zAxis.x, zAxis.y, zAxis.z, 0.0,
-      this.x, this.y, this.z, 1.0,
+      t.x, t.y, t.z, 1.0,
     );
   }
 

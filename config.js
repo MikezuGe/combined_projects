@@ -1,28 +1,28 @@
 const fs = require('fs');
 
 
-const config = {};
-
 const isProduction = process.env.NODE_ENV === 'production';
-config.isProduction = isProduction;
+const config = {
+  isProduction: isProduction,
+  PORT: 3000,
+  logfilePath: './',
+  logfileName: 'log.txt',
+  mongodb: {
+    address: isProduction ? '127.0.0.1' : 'kontioweb.fi',
+    port: '27017',
+    connectionStrings: {},
+  },
+};
 
-config.logfilePath = './';
-config.logfileName = 'log.txt';
 
 try {
-  const connectionStrings = JSON.parse(fs.readFileSync('./connectionstrings.json', { encoding: 'utf-8', }));
-  for (const [ key, value, ] of Object.entries(connectionStrings)) {
-    config[key] = value;
-  }
+  const { address, port, connectionStrings, } = config.mongodb;
+  JSON.parse(fs.readFileSync('./connectionstrings.json', { encoding: 'utf-8', }))
+    .forEach(({ db, user, secret, }) => {
+      connectionStrings[db] = `mongodb://${user}:${secret}@${address}:${port}/${db}`;
+    });
 } catch (err) {
   console.error(`Unable to get connectionstrings: ${err}`);
-}
-
-config.PORT = 3000;
-if (isProduction) {
-  // Production
-} else {
-  // Development
 }
 
 

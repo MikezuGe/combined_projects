@@ -1,10 +1,7 @@
+const { isProduction, logfilePath, logfileName } = require('../config');
 const fs = require('fs');
 
-
 const parseDate = require('./parsedate');
-
-
-const { isProduction, logfilePath, logfileName } = require('../config');
 
 
 class ProductionLogger {
@@ -31,7 +28,7 @@ class ProductionLogger {
         }
         return str;
       }) + '/' + logfileName;
-    const toConsole = `\nProgram initiated at ${parseDate(new Date(), 'hh:mm:ss')}\n`;
+    const toConsole = `\nProgram initiated at ${parseDate(new Date(), 'DD.MM.YYYY hh:mm:ss')}\n`;
     try {
       fs.appendFileSync(this.logfile, toConsole);
       console.log(toConsole);
@@ -43,7 +40,7 @@ class ProductionLogger {
   }
 
   log (msg, ...other) {
-    const time = parseDate(new Date(), 'hh:mm:ss');
+    const time = parseDate(new Date(), 'DD.MM.YYYY hh:mm:ss');
     const content = `Log\t${time} - ${msg}\n`;
     fs.appendFile(this.logfile.replace('/', ''), content, err => {
       if (err) {
@@ -53,7 +50,7 @@ class ProductionLogger {
   }
 
   warn (msg, ...other) {
-    const time = parseDate(new Date(), 'hh:mm:ss');
+    const time = parseDate(new Date(), 'DD.MM.YYYY hh:mm:ss');
     const content = `Warn\t${time} - ${msg}\n`;
     fs.appendFile(this.logfile, content, err => {
       if (err) {
@@ -63,7 +60,7 @@ class ProductionLogger {
   }
 
   err (msg, ...other) {
-    const time = parseDate(new Date(), 'hh:mm:ss');
+    const time = parseDate(new Date(), 'DD.MM.YYYY hh:mm:ss');
     const toConsole = `Err - ${time} - ${msg}`;
     const content = `Err\t${time} - ${msg}\n`;
     fs.appendFile(this.logfile, content, err => {
@@ -101,7 +98,7 @@ class DevelopmentLogger {
         }
         return str;
       }) + '/' + logfileName;
-    const toConsole = `\nProgram initiated at ${parseDate(new Date(), 'hh:mm:ss')}\n`;
+    const toConsole = `\nProgram initiated at ${parseDate(new Date(), 'DD.MM.YYYY hh:mm:ss')}\n`;
     try {
       fs.appendFileSync(this.logfile, toConsole);
       console.log(toConsole);
@@ -113,7 +110,7 @@ class DevelopmentLogger {
   }
 
   log (msg, ...other) {
-    const time = parseDate(new Date(), 'hh:mm:ss');
+    const time = parseDate(new Date(), 'DD.MM.YYYY hh:mm:ss');
     const toConsole = `Log - ${time} - ${msg}`;
     const content = `Log\t${time} - ${msg}\n`;
     fs.appendFile(this.logfile.replace('/', ''), content, err => {
@@ -125,7 +122,7 @@ class DevelopmentLogger {
   }
 
   warn (msg, ...other) {
-    const time = parseDate(new Date(), 'hh:mm:ss');
+    const time = parseDate(new Date(), 'DD.MM.YYYY hh:mm:ss');
     const toConsole = `Warn - ${time} - ${msg}`;
     const content = `Warn\t${time} - ${msg}\n`;
     fs.appendFile(this.logfile, content, err => {
@@ -137,7 +134,7 @@ class DevelopmentLogger {
   }
 
   err (msg, ...other) {
-    const time = parseDate(new Date(), 'hh:mm:ss');
+    const time = parseDate(new Date(), 'DD.MM.YYYY hh:mm:ss');
     const toConsole = `Err - ${time} - ${msg}`;
     const content = `Err\t${time} - ${msg}\n`;
     fs.appendFile(this.logfile, content, err => {

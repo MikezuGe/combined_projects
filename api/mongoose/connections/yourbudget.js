@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
-const config = require('../../../config');
+const { mongodb: { connectionStrings: { yourbudget, }, }, } = require('../../../config');
 const { logger, } = require('../../../utility');
 
 
-const db = mongoose.createConnection(config.yourbudgetConnectionString, { useNewUrlParser: true });
+const db = mongoose.createConnection(yourbudget, { useNewUrlParser: true });
 db.on('error', err => {
   logger.err(`Unable to connect to yourbudget ${err}`);
 });

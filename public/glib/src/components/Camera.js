@@ -50,7 +50,7 @@ export default class Camera extends Component {
     }
 
     const mouse = input.getMouse();
-    if (mouse.dx !== 0 || mouse.dy !== 0) {
+    if (input.getMouse1().press && (mouse.dx !== 0 || mouse.dy !== 0)) {
       const qx = Quat.fromAxisAngle(transform.right, - mouse.dy * 0.005);
       const qy = Quat.fromAxisAngle(Vec3.up, mouse.dx * 0.005)
       transform.rotateTo(qx.mul(qy));

@@ -68,13 +68,14 @@ class Input {
   }
 
   mouseup = e => {
-    this[`mouse${e.button}`].press = false;
-    this[`mouse${e.button}`].hold = false;
-    this[`mouse${e.button}`].drag = false;
-    this[`mouse${e.button}`].sx = null;
-    this[`mouse${e.button}`].sx = null;
-    this[`mouse${e.button}`].dx = null;
-    this[`mouse${e.button}`].dy = null;
+    const m = this[`mouse${e.button}`];
+    m.press = false;
+    m.hold = false;
+    m.drag = false;
+    m.sx = null;
+    m.sx = null;
+    m.dx = null;
+    m.dy = null;
     for (let i = 0; i < 3; i++) {
       if (this[`mouse${i}`].press) {
         return;
@@ -84,10 +85,11 @@ class Input {
   }
 
   mousedown = e => {
+    const m = this[`mouse${e.button}`];
     this.mouse.press = true;
-    this[`mouse${e.button}`].press = true;
-    this[`mouse${e.button}`].sx = e.clientX;
-    this[`mouse${e.button}`].sy = e.clientY;
+    m.press = true;
+    m.sx = e.clientX;
+    m.sy = e.clientY;
   }
 
   mousemove = ({ clientX, clientY, }) => {

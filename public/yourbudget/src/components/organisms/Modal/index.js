@@ -5,7 +5,7 @@ import {
   BudgetAdd,
   Login,
   modalFormTypes,
-} from './forms';
+} from '../../modalForms';
 
 
 export { modalFormTypes, };
@@ -40,7 +40,7 @@ export default class Modal extends React.Component {
   componentDidMount () {
     listener = this.open;
     // Remove when done debugging
-    this.open(modalFormTypes.BUDGET_ADD);
+    //this.open(modalFormTypes.BUDGET_ADD);
   }
 
   state = {

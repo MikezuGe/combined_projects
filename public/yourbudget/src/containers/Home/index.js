@@ -1,20 +1,21 @@
 import React from 'react';
 
-import { addToast, openModal, modalFormTypes, } from '../../layout';
+import { Desktop, } from '../../components/pages';
+import { addToast, openModal, modalFormTypes, } from '../../components/organisms';
 
 
 class Home extends React.Component {
 
   render () {
     return (
-      <React.Fragment>
+      <Desktop>
         <div onClick={() => addToast('Toast text')}>
           Try toast
         </div>
         <div onClick={() => openModal(modalFormTypes.BUDGET_ADD)}>
           Try modal
         </div>
-      </React.Fragment>
+      </Desktop>
     );
   }
 }

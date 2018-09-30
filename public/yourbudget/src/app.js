@@ -1,18 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter, } from 'react-router-dom';
+import { BrowserRouter, Route, Switch, Redirect, } from 'react-router-dom';
 import { injectGlobal, } from 'styled-components';
 
-import { Main, Header, Sidebar, Modal, Toaster, } from './layout';
+import { Home, Budget, Settings, } from './containers';
 
 
 injectGlobal`
 * {
   font-family: 'Ubuntu', sans-serif;
+  font-size: 16px;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-size: 16px;
   /*
   color: white;
   text-shadow: 2px 0 0 #000, -2px 0 0 #000, 0 2px 0 #000, 0 -2px 0 #000, 1px 1px #000, -1px -1px #000, -1px 1px #000, 1px -1px #000;
@@ -39,13 +39,12 @@ html body {
 
 const App = () => (
   <BrowserRouter basename={'/yourbudget'}>
-    <React.Fragment>
-      <Header />
-      <Sidebar />
-      <Main />
-      <Modal />
-      <Toaster />
-    </React.Fragment>
+    <Switch>
+      <Route path='/home' component={Home} />
+      <Route path='/budget' component={Budget} />
+      <Route path='/settings' component={Settings} />
+      <Redirect to='/home' />
+    </Switch>
   </BrowserRouter>
 );
 

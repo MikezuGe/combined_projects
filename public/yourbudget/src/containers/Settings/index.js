@@ -1,13 +1,15 @@
 import React from 'react';
 
+import { Desktop, } from '../../components/pages';
+
 
 class Settings extends React.Component {
 
   render () {
     return (
-      <div>
-        Settings
-      </div>
+      <Desktop>
+        <div>Settings</div>
+      </Desktop>
     );
   }
 }

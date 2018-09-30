@@ -1,6 +1,8 @@
 import React from 'react';
 import axios from 'axios';
+
 import { Table, } from '../../components/molecules';
+import { Desktop, } from '../../components/pages';
 
 
 axios.defaults.baseURL = `${window.location.origin}/api/graphql`;
@@ -27,7 +29,7 @@ class Budget extends React.Component {
   render () {
     const { funds, } = this.state;
     return (
-      <React.Fragment>
+      <Desktop>
         { (!funds.length && <div>Loading!</div>) || (
           <Table
             headers={[
@@ -38,7 +40,7 @@ class Budget extends React.Component {
             data={funds}
           />
         )}
-      </React.Fragment>
+      </Desktop>
     );
   }
 }

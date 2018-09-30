@@ -1,0 +1,85 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Link, withRouter, } from 'react-router-dom';
+import styled from 'styled-components';
+
+
+const Wrapper = styled.div`
+background: green;
+grid-area: sidebar;
+overflow-X: hidden;
+`;
+
+const InnerWrapper = styled.div`
+position: relative;
+left: ${({ primary, }) => primary ? 0 : -100}%;
+display: flex;
+width: 200%;
+transition: left 250ms;
+`;
+
+const StyledList = styled.ul`
+width: 100%;
+display: inline;
+list-style: none;
+padding: 0.5rem;
+`;
+
+const ListItem = styled(Link)`
+background: linear-gradient(to right, white, pink 20%);
+display: block;
+border: 2px solid black;
+border-radius: 5px;
+margin: 0.5rem 0;
+padding: 0.5rem;
+&:first-child {
+  margin-top: 0;
+}
+&:last-child {
+  margin-bottom: 0;
+}
+`;
+
+
+class Menu extends React.Component {
+
+  state = {
+    primary: false,
+  }
+
+  togglePrimary = primary => {
+    this.setState({ primary });
+  }
+
+  render () {
+    return (
+      <Wrapper>
+        <InnerWrapper primary={this.state.primary}>
+          <StyledList>
+            <ListItem to='#' onClick={() => this.togglePrimary(false)}>Change menu</ListItem>
+            <ListItem to='/Home'>Home</ListItem>
+            <ListItem to='/Budget'>Budget</ListItem>
+            <ListItem to='/Settings'>Settings</ListItem>
+          </StyledList>
+          <StyledList>
+            <ListItem to='#' onClick={() => this.togglePrimary(true)}>Change menu</ListItem>
+            <ListItem to='/'>primary</ListItem>
+            <ListItem to='/'>secondary</ListItem>
+          </StyledList>
+        </InnerWrapper>
+      </Wrapper>
+    );
+  }
+
+}
+
+
+Menu.propTypes = {
+  menuItems: PropTypes.oneOfType([
+    PropTypes.array,
+    PropTypes.element,
+  ]),
+};
+
+
+export default withRouter(Menu);

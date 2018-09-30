@@ -4,8 +4,7 @@ import styled from 'styled-components';
 import axios from 'axios';
 axios.defaults.baseURL = `${window.location.origin}/api/graphql`;
 
-import { addToast, } from '../../Toaster';
-import { Form, Field, } from '../../../components/organisms';
+import { addToast, Form, Field, } from '../organisms';
 
 
 export const formType = 'LOGIN';

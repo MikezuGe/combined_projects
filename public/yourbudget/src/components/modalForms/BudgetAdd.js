@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { Form, Field, } from '../../../components/organisms';
+import { Form, Field, } from '../organisms';
 
 
 export const formType = 'BUDGET_ADD';

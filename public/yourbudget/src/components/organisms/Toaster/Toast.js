@@ -86,7 +86,7 @@ Toast.propTypes = {
   timeout: PropTypes.number.isRequired,
   nthToast: PropTypes.number.isRequired,
   removeToast: PropTypes.func.isRequired,
-}
+};
 
 
 export default Toast;

@@ -16,7 +16,6 @@ const MainWrapper = styled.div`
 class Desktop extends React.Component {
 
   render () {
-    console.log(this.props.children);
     return (
       <React.Fragment>
         <Header />
@@ -42,7 +41,7 @@ Desktop.propTypes = {
     PropTypes.array,
     PropTypes.element,
   ]).isRequired,
-}
+};
 
 
 export default Desktop;

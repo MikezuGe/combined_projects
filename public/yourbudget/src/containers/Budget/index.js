@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 
-import { Table, } from '../../components/molecules';
+import { DataTable, } from '../../components/molecules';
 import { Desktop, } from '../../components/pages';
 
 
@@ -31,7 +31,7 @@ class Budget extends React.Component {
     return (
       <Desktop>
         { (!funds.length && <div>Loading!</div>) || (
-          <Table
+          <DataTable
             headers={[
               'Name',
               'Amount',

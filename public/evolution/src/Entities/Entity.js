@@ -1,4 +1,3 @@
-
 const { random, floor, } = Math;
 const randomize = (min, max) => floor(random() * (max - min)) + min;
 
@@ -8,6 +7,7 @@ export default class Entity {
   constructor () {
     const {
       ENTITY_TYPE,
+      ENTITY_COLOR,
       ENTITY_MAX_SIZE,
       TIME_TO_LIVE_MIN,
       TIME_TO_LIVE_MAX,
@@ -19,6 +19,7 @@ export default class Entity {
     } = this.constructor;
 
     ENTITY_TYPE && (this.ENTITY_TYPE = ENTITY_TYPE);
+    ENTITY_COLOR && (this.ENTITY_COLOR = ENTITY_COLOR);
     ENTITY_MAX_SIZE && (this.ENTITY_MAX_SIZE = ENTITY_MAX_SIZE);
     TIME_TO_LIVE_MIN && (this.TIME_TO_LIVE_MIN = TIME_TO_LIVE_MIN);
     TIME_TO_LIVE_MAX && (this.TIME_TO_LIVE_MAX = TIME_TO_LIVE_MAX);
@@ -36,7 +37,7 @@ export default class Entity {
   }
 
   grow () {
-    if (this.size < ENTITY_MAX_SIZE) {
+    if (this.size < this.ENTITY_MAX_SIZE) {
       this.size++;
       this.timeToCanGrow = randomize(this.TIME_TO_GROW_MIN, this.TIME_TO_GROW_MAX);
     }

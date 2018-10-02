@@ -25,12 +25,20 @@ html body {
 }
 
 canvas {
-  width: 100%;
-  height: 100%;
+  //width: 100%;
+  //height: 100%;
   background: gray;
 }
 `;
 
 
-const world = new World(3, 3);
-const renderer = new Renderer(world);
+const world = new World(10, 10);
+const renderer = new Renderer();
+renderer.setupWorldRender(world);
+const frame = () => {
+  requestAnimationFrame(frame);
+  world.update();
+  renderer.renderWorld(world);
+}
+//requestAnimationFrame(frame);
+setInterval(frame, 1000);

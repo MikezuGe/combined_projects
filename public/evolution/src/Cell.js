@@ -1,4 +1,3 @@
-
 const { random, floor, } = Math;
 
 
@@ -16,7 +15,7 @@ export default class Cell {
     const openCells = Object.values(this.adjacentCells)
       .filter(({ entity, }) => entity === null);
     return openCells.length
-      ? this.openCells[floor(random() * openCells.length)]
+      ? openCells[floor(random() * openCells.length)]
       : null;
   }
 
@@ -30,7 +29,7 @@ export default class Cell {
   }
 
   update () {
-    this._entity.update();
+    this._entity && this._entity.update();
   }
 
 }

@@ -1,4 +1,4 @@
-export { Plant, } from './Plant.js'
+export { default as Plant, } from './Plant'
 
 
 import { ENTITY_TYPE as ENTITY_PLANT, } from './Plant';

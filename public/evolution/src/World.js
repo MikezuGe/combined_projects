@@ -1,5 +1,5 @@
 import Cell from './Cell';
-import { entityTypes, } from './Entities';
+import { Plant, } from './Entities';
 
 
 const { floor, } = Math;
@@ -16,6 +16,9 @@ export default class World {
     this.dimension = width * height;
     this.field = [];
     this.setupFieldCells();
+    // TEMP
+    // REMOVE AFTER
+    this.field[0].entity = new Plant();
   }
 
   setupFieldCells () {

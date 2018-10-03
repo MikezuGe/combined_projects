@@ -34,7 +34,7 @@ canvas {
 
 window.addEventListener('keyup', e => {
   if (e.key === 'p') {
-    updTime += updTime < 10 ? 1 : 0;
+    updTime += updTime < 20 ? 1 : 0;
   } else if (e.key === 'o') {
     updTime -= updTime > 0 ? 1 : 0;
   }

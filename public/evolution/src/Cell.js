@@ -7,13 +7,13 @@ export default class Cell {
     this.cellNumber = cellNumber;
     this.cellType = cellType;
     this.renderingPosition = renderingPosition;
-    this.adjacentCells = {};
+    this.adjacentCells = [];
     this.entity = null;
   }
 
   getEmptyAdjacentCell () {
-    const openCells = Object.values(this.adjacentCells)
-      .filter(({ entity, }) => entity === null);
+    const { adjacentCells, } = this;
+    const openCells = adjacentCells.filter(cell => cell && !cell.entity);
     return openCells.length
       ? openCells[floor(random() * openCells.length)]
       : null;

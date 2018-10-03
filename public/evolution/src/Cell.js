@@ -1,3 +1,11 @@
+import { entityTypes, } from './Entities';
+const {
+  ENTITY_PLANT,
+  ENTITY_HERBIVORE,
+  //ENTITY_CARNIVORE,
+} = entityTypes;
+
+
 const { random, floor, } = Math;
 
 
@@ -12,14 +20,23 @@ export default class Cell {
   }
 
   getEmptyAdjacentCell () {
-    const { adjacentCells, } = this;
-    const openCells = adjacentCells.filter(cell => cell && !cell.entity);
+    const { adjacentCells, entity: { ENTITY_TYPE, }, } = this;
+    const openCells = adjacentCells.filter(cell => {
+      if (!cell) return false;
+      if (!cell.entity) return true;
+      switch (ENTITY_TYPE) {
+        case ENTITY_HERBIVORE: return cell.entity.ENTITY_TYPE === ENTITY_PLANT;
+        //case ENTITY_CARNIVORE: return cell.entity.ENTITY_TYPE !== ENTITY_CARNIVORE;
+        default: return false;
+      }
+    });
     return openCells.length
       ? openCells[floor(random() * openCells.length)]
       : null;
   }
 
   setEntity (entity) {
+    this.entity && this.removeEntity();
     this.entity = entity;
     entity.cell = this;
   }

@@ -5,10 +5,10 @@ const { random, floor, } = Math;
 const randomize = (min, max) => floor(random() * (max - min)) + min;
 
 
-export const ENTITY_TYPE = 'ENTITY_PLANT';
+export const ENTITY_TYPE = 'ENTITY_HERBIVORE';
 
 
-export default class Plant extends Entity {
+export default class Herbivore extends Entity {
 
   constructor () {
     super();
@@ -16,6 +16,14 @@ export default class Plant extends Entity {
     this.timeToLive = randomize(this.TIME_TO_LIVE_MIN, this.TIME_TO_LIVE_MAX);
     this.timeToCanGrow = randomize(this.TIME_TO_GROW_MIN, this.TIME_TO_GROW_MAX);
     this.timeToCanBreed = randomize(this.TIME_TO_BREED_MIN, this.TIME_TO_BREED_MAX);
+  }
+
+  findFood () {
+
+  }
+
+  eat () {
+
   }
 
   grow () {
@@ -44,15 +52,15 @@ export default class Plant extends Entity {
 
 }
 
-Plant.prototype.ENTITY_TYPE = ENTITY_TYPE;
-Plant.prototype.ENTITY_COLOR = 0;
-Plant.prototype.TIME_TO_LIVE_MIN = 800;
-Plant.prototype.TIME_TO_LIVE_MAX = 1000;
-Plant.prototype.TIME_TO_GROW_MIN = 10;//80;
-Plant.prototype.TIME_TO_GROW_MAX = 20;//120;
-Plant.prototype.TIME_TO_BREED_MIN = 50;//100;
-Plant.prototype.TIME_TO_BREED_MAX = 100;//500;
+Herbivore.prototype.ENTITY_TYPE = ENTITY_TYPE;
+Herbivore.prototype.ENTITY_COLOR = 1;
+Herbivore.prototype.TIME_TO_LIVE_MIN = 3000;
+Herbivore.prototype.TIME_TO_LIVE_MAX = 3500;
+Herbivore.prototype.TIME_TO_GROW_MIN = 150;
+Herbivore.prototype.TIME_TO_GROW_MAX = 200;
+Herbivore.prototype.TIME_TO_BREED_MIN = 800;
+Herbivore.prototype.TIME_TO_BREED_MAX = 1000;
 
-Plant.prototype.ENTITY_MAX_SIZE = 10;
-Plant.prototype.SIZE_TO_BREED = 6;
-Plant.prototype.SHRINK_ON_BREED = 4;
+Herbivore.prototype.ENTITY_MAX_SIZE = 10;
+Herbivore.prototype.SIZE_TO_BREED = 8;
+Herbivore.prototype.SHRINK_ON_BREED = 5;

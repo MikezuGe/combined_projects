@@ -1,5 +1,8 @@
 import Cell from './Cell';
-import { Plant, } from './Entities';
+import {
+  Plant,
+  Herbivore,
+} from './Entities';
 
 
 const { floor, } = Math;
@@ -19,6 +22,9 @@ export default class World {
     // TEMP
     // REMOVE AFTER
     this.field[0].setEntity(new Plant());
+    setTimeout(() => {
+      //this.field[0].setEntity(new Herbivore());
+    }, 10000);
   }
 
   setupFieldCells () {

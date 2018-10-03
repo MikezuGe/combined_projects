@@ -37,7 +37,14 @@ void main () {
   if (color.w == 0.0) {
     discard;
   }
-  fragColor = vec4(color);
+  vec2 cxy = 2.0 * gl_PointCoord - 1.0;
+  float r = dot(cxy, cxy);
+  if (r > 1.0) {
+    discard;
+  }
+  float delta = fwidth(r);
+  float alpha = 1.0 - smoothstep(1.0 - delta, 1.0 + delta, r);
+  fragColor = vec4(color.xyz * alpha, color.w);
 }
 `;
 

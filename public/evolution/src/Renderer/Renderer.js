@@ -12,7 +12,7 @@ in float a_size;
 vec3 getColor () {
   switch (int(a_color)) {
     case 0: return vec3(0.0, 1.0, 0.0);
-    case 1: return vec3(0.0, 0.0, 1.0);
+    case 1: return vec3(1.0, 0.75, 0.8);
     case 2: return vec3(1.0, 0.0, 0.0);
     default: return vec3(0.0, 0.0, 0.0);
   }

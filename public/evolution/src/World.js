@@ -23,7 +23,7 @@ export default class World {
     // REMOVE AFTER
     this.field[0].setEntity(new Plant());
     setTimeout(() => {
-      //this.field[0].setEntity(new Herbivore());
+      this.field[100].setEntity(new Herbivore());
     }, 10000);
   }
 

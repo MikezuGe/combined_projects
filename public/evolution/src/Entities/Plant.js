@@ -35,9 +35,7 @@ export default class Plant extends Entity {
   }
 
   update () {
-    if (--this.timeToLive <= 0) {
-      return this.die();
-    }
+    if (--this.timeToLive <= 0) return this.die();
     this.timeToCanGrow <= 0 ? this.grow() : this.timeToCanGrow--;
     this.timeToCanBreed <= 0 ? this.breed() : this.timeToCanBreed--;
   }

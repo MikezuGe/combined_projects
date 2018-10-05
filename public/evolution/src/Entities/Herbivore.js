@@ -31,9 +31,13 @@ export default class Herbivore extends Entity {
       while ((nextCell = nextCell.adjacentCells[i])) {
         distance++;
         if (!nextCell.entity) continue;
-        if (nextCell.entity.ENTITY_TYPE === ENTITY_PLANT && distance < closest) {
-          closest = distance
-          direction = i;
+        if (nextCell.entity.ENTITY_TYPE === ENTITY_PLANT) {
+          if (distance < closest) {
+            closest = distance
+            direction = i;
+          }
+        } else {
+          break;
         }
       }
     }

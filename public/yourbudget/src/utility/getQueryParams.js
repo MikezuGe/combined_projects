@@ -8,5 +8,6 @@ const getQueryParams = search => (!search && {}) || search.slice(1)
   return total;
 }, {});
 
+
 export default getQueryParams;
   

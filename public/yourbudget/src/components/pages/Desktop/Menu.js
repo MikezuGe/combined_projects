@@ -16,6 +16,10 @@ left: ${({ primary, }) => primary ? 0 : -100}%;
 display: flex;
 width: 200%;
 transition: left 250ms;
+@keyframes animatein {
+  from { left: 0%; }
+}
+animation: animatein 250ms;
 `;
 
 const StyledList = styled.ul`
@@ -52,17 +56,18 @@ class Menu extends React.Component {
   }
 
   render () {
+    const { togglePrimary, state: { primary, }, } = this;
     return (
       <Wrapper>
-        <InnerWrapper primary={this.state.primary}>
+        <InnerWrapper primary={primary}>
           <StyledList>
-            <ListItem to='#' onClick={() => this.togglePrimary(false)}>Change menu</ListItem>
+            <ListItem to='#' onClick={() => togglePrimary(false)}>Change menu</ListItem>
             <ListItem to='/Home'>Home</ListItem>
             <ListItem to='/Budget'>Budget</ListItem>
             <ListItem to='/Settings'>Settings</ListItem>
           </StyledList>
           <StyledList>
-            <ListItem to='#' onClick={() => this.togglePrimary(true)}>Change menu</ListItem>
+            <ListItem to='#' onClick={() => togglePrimary(true)}>Change menu</ListItem>
             <ListItem to='/'>primary</ListItem>
             <ListItem to='/'>secondary</ListItem>
           </StyledList>

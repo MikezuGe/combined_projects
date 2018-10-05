@@ -24,7 +24,8 @@ transform: translate(
   ${({ currentAction, nthToast }) => `${currentAction === TOAST_INITIAL || currentAction === TOAST_OUT ? 120 : 0}%,
   ${115 * nthToast}%`}
 );
-transition: transform 1000ms;`;
+transition: transform 1000ms
+;`;
 
 
 class Toast extends React.Component {

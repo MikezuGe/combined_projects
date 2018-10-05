@@ -25,7 +25,8 @@ const Wrapper = styled.ul`
 position: absolute;
 top: 10px;
 right: 10px;
-list-style: none;`;
+list-style: none;
+`;
 
 
 class Toaster extends React.Component {

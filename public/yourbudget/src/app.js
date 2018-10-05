@@ -3,7 +3,11 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter, Route, Switch, Redirect, } from 'react-router-dom';
 import { injectGlobal, } from 'styled-components';
 
-import { Home, Budget, Settings, } from './containers';
+import {
+  Home,
+  Budget,
+  Settings,
+} from './containers';
 
 
 injectGlobal`

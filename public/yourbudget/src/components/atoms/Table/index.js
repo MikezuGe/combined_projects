@@ -3,14 +3,16 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 
-const StyledTable = styled.tr`
+const StyledTable = styled.table`
 
 `;
 
 
 const Table = ({ children, }) => (
   <StyledTable>
-    {children}
+    <tbody>
+      {children}
+    </tbody>
   </StyledTable>
 );
 

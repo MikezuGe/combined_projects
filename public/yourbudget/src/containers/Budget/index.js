@@ -1,8 +1,8 @@
 import React from 'react';
 import axios from 'axios';
 
-import { DataTable, } from '../../components/molecules';
 import { Desktop, } from '../../components/pages';
+import { DataTable, } from '../../components/molecules';
 
 
 axios.defaults.baseURL = `${window.location.origin}/api/graphql`;
@@ -32,11 +32,7 @@ class Budget extends React.Component {
       <Desktop>
         { (!funds.length && <div>Loading!</div>) || (
           <DataTable
-            headers={[
-              'Name',
-              'Amount',
-              'Date',
-            ]}
+            headerFilter={'_id'}
             data={funds}
           />
         )}

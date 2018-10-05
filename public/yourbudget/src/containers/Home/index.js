@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Desktop, } from '../../components/pages';
-import { addToast, openModal, modalFormTypes, } from '../../components/organisms';
+import { addToast, openModal, } from '../../components/organisms';
 
 
 class Home extends React.Component {
@@ -12,7 +12,7 @@ class Home extends React.Component {
         <div onClick={() => addToast('Toast text')}>
           Try toast
         </div>
-        <div onClick={() => openModal(modalFormTypes.BUDGET_ADD)}>
+        <div onClick={() => openModal()}>
           Try modal
         </div>
       </Desktop>

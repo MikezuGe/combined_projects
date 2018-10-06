@@ -32,6 +32,7 @@ padding: 0.5rem;
 const ListItem = styled(Link)`
 background: linear-gradient(to right, white, pink 20%);
 display: block;
+text-decoration: none;
 border: 2px solid black;
 border-radius: 5px;
 margin: 0.5rem 0;
@@ -56,7 +57,7 @@ class Menu extends React.Component {
   }
 
   render () {
-    const { togglePrimary, state: { primary, }, } = this;
+    const { togglePrimary, state: { primary, }, props: { secondaryMenuItems, }, } = this;
     return (
       <Wrapper>
         <InnerWrapper primary={primary}>
@@ -68,8 +69,21 @@ class Menu extends React.Component {
           </StyledList>
           <StyledList>
             <ListItem to='#' onClick={() => togglePrimary(true)}>Change menu</ListItem>
-            <ListItem to='/'>primary</ListItem>
-            <ListItem to='/'>secondary</ListItem>
+            { secondaryMenuItems && (Array.isArray(secondaryMenuItems)
+              ? secondaryMenuItems.map((item, i) => <ListItem
+                key={i}
+                to='#'
+                onClick={item.onClick}
+              >
+                {item.text}
+              </ListItem>)
+              : <ListItem
+                to='#'
+                onClick={secondaryMenuItems.onClick}
+              >
+                {secondaryMenuItems.text}
+              </ListItem>
+            )}
           </StyledList>
         </InnerWrapper>
       </Wrapper>
@@ -80,9 +94,9 @@ class Menu extends React.Component {
 
 
 Menu.propTypes = {
-  menuItems: PropTypes.oneOfType([
+  secondaryMenuItems: PropTypes.oneOfType([
     PropTypes.array,
-    PropTypes.element,
+    PropTypes.object,
   ]),
 };
 

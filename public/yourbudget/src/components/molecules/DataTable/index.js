@@ -11,16 +11,16 @@ import { firstLetterToUpperCase, } from '../../../utility';
 
 
 const DataTable = ({ headerFilter, headerMap, data, }) => {
-  const headers = !headerFilter
+  const headers = !headerFilter.length
     ? Object.keys(data[0])
     : Object.keys(data[0])
-      .filter(h => Array.isArray(headerFilter)
+      .filter(h => typeof headerFilter === 'object'
         ? !headerFilter.includes(h)
         : headerFilter !== h
       );
   const capitalHeaders = !headerMap
     ? headers.map(firstLetterToUpperCase)
-    : headers.map(h => headerMap[h]).map(firstLetterToUpperCase);
+    : headers.map(h => headerMap[h] || h).map(firstLetterToUpperCase);
   return (
     <Table>
       <TableRow>

@@ -29,7 +29,13 @@ class Budget extends React.Component {
   render () {
     const { funds, } = this.state;
     return (
-      <Desktop>
+      <Desktop
+        secondaryMenuItems={[
+          {
+            text: 'test',
+            onClick: () => console.log('asd'),
+          }
+        ]}>
         { (!funds.length && <div>Loading!</div>) || (
           <DataTable
             headerFilter={'_id'}

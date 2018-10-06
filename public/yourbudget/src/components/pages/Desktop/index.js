@@ -16,15 +16,16 @@ const MainWrapper = styled.div`
 class Desktop extends React.Component {
 
   render () {
+    const { children, secondaryMenuItems, } = this.props;
     return (
       <React.Fragment>
         <Header />
-        <Menu />
+        <Menu secondaryMenuItems={secondaryMenuItems} />
         <MainWrapper>
-          {this.props.children}
+          { children }
         </MainWrapper>
-        <Modal/>
-        <Toaster/>
+        <Modal />
+        <Toaster />
       </React.Fragment>
     );
   }
@@ -33,9 +34,9 @@ class Desktop extends React.Component {
 
 
 Desktop.propTypes = {
-  menuItems: PropTypes.oneOfType([
+  secondaryMenuItems: PropTypes.oneOfType([
     PropTypes.array,
-    PropTypes.element,
+    PropTypes.object,
   ]),
   children: PropTypes.oneOfType([
     PropTypes.array,

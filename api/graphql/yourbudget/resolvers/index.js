@@ -10,7 +10,7 @@ module.exports = (() => {
     .filter(fileName => fileName !== 'index.js')
     .map(fileName => {
       const resolvers = require(`./${fileName}`);
-      for (let resolverName of Object.keys(resolvers)) {
+      for (const resolverName of Object.keys(resolvers)) {
         if (reservedResolverNames.includes(resolverName)) {
           logger.warn(`Resolver name ${resolverName} was defined more than once. Skipping resolver.`);
         }

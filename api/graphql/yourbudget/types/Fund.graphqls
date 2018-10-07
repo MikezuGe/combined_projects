@@ -1,5 +1,5 @@
 type Fund {
-  _id: ID
+  id: ID
   name: String
   amount: Float
   date: String
@@ -21,12 +21,12 @@ input FundUpdate {
 }
 
 type Query {
-  fund(_id: ID!): Fund
+  fund(id: ID!): Fund
   funds: [Fund]
 }
 
 type Mutation {
   createFund(input: FundInput!): Fund
-  updateFund(_id: ID!, input: FundUpdate!): Fund
-  removeFund(_id: ID!): Fund
+  updateFund(id: ID!, input: FundUpdate!): Fund
+  removeFund(id: ID!): Fund
 }

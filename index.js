@@ -3,7 +3,6 @@ const { indexRoute, fallbackRoute, logger, } = require('./utility');
 const apiRouter = require('./api');
 const gitHandlerRouter = require('./githandler');
 
-const fs = require('fs');
 const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');

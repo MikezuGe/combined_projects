@@ -23,4 +23,7 @@ module.exports = db.model('User', new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+}, {
+  toJSON: { virtuals: true, },
+  toObject: { virtuals: true, },
 }));

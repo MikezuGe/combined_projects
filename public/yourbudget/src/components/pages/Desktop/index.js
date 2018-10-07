@@ -16,7 +16,7 @@ const MainWrapper = styled.div`
 class Desktop extends React.Component {
 
   render () {
-    const { children, secondaryMenuItems, } = this.props;
+    const { children, secondaryMenuItems, modalViews } = this.props;
     return (
       <React.Fragment>
         <Header />
@@ -24,7 +24,7 @@ class Desktop extends React.Component {
         <MainWrapper>
           { children }
         </MainWrapper>
-        <Modal />
+        <Modal modalViews={modalViews} />
         <Toaster />
       </React.Fragment>
     );

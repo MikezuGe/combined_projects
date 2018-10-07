@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 
@@ -35,13 +36,14 @@ const InnerWrapper = styled.div`
 `;
 
 
-export default class Modal extends React.Component {
+class Modal extends React.Component {
 
   componentDidMount () {
     listener = this.open;
   }
 
   state = {
+    childInView: null,
     active: false,
   }
 
@@ -51,23 +53,29 @@ export default class Modal extends React.Component {
     }
   }
 
-  open = () => {
-    this.setState({ active: true, });
+  open = (childInView) => {
+    this.setState({
+      active: true,
+      childInView,
+    });
     window.addEventListener('keyup', this.keyupListener, false);
   }
 
   close = () => {
-    this.setState({ active: false, });
+    this.setState({
+      active: false,
+      childInView: null,
+    });
     window.removeEventListener('keyup', this.keyupListener, false);
   }
 
   render () {
-    const { props: { children, }, state: { active, }, } = this;
+    const { props: { modalViews, }, state: { active, childInView, }, } = this;
     return (
       <GrayoutContainer active={active} onClick={this.close}>
         <Wrapper active={active}>
           <InnerWrapper onClick={e => e.stopPropagation()}>
-            { children }
+            { childInView && modalViews[childInView]() }
           </InnerWrapper>
         </Wrapper>
       </GrayoutContainer>
@@ -75,3 +83,14 @@ export default class Modal extends React.Component {
   }
 
 }
+
+
+Modal.propTypes = {
+  children: PropTypes.oneOfType([
+    PropTypes.element,
+    PropTypes.array,
+  ]),
+}
+
+
+export default Modal;

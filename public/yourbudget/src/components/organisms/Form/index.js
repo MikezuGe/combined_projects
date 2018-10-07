@@ -4,21 +4,32 @@ import styled from 'styled-components';
 
 
 const StyledForm = styled.form`
-
+background: red;
+padding: 1em;
 `;
+
+
+const meta = {
+  error: '',
+  pristine: true,
+  touched: false,
+  changed: false,
+  submitted: false,
+};
 
 
 const fieldsToState = (total, current) => {
   if (!React.isValidElement(current)) return total;
   const { children, } = current.props;
-  children && Array.isArray(children)
-    ? children.reduce(fieldsToState, total)
-    : fieldsToState(total, children);
-  console.log(current);
-  if (current.type === 'input') {
-    total[current.props.name] = {
+  children && React.Children.map(children, child => fieldsToState(total, child));
+  const { name, } = current.props;
+  if (name) {
+    total[name] = {
       ...current.props,
       value: '',
+      meta: {
+        ...meta,
+      },
     };
   }
   return total;
@@ -31,32 +42,42 @@ class Form extends React.Component {
     ...this.props.children.reduce(fieldsToState, {}),
   }
 
-  handleChange = ({ name, value, meta, }) => {
-    this.setState(prevState => ({ [name]: {
-      ...prevState[name],
-      value,
-      meta: {
-        ...prevState.meta,
-        ...meta,
-      },
-    }}))
+  handleChange = ({ name, value, }) => {
+    this.setState(prevState => {
+      const field = prevState[name];
+      return {
+        [name]: {
+          ...field,
+          value,
+          meta: {
+            ...field.meta,
+            pristine: false,
+            changed: true,
+          },
+        },
+      };
+    });
   }
   
   renderChildren = children => {
-    if (Array.isArray(children)) return children.map(this.renderChildren);
-    return children.type === 'input'
-      ? <children.type {...this.state[children.props.name]} onChange={this.handleChange} />
-      : children;
+    return React.Children.map(children, child => {
+      const { children, } = child.props;
+      if (children) return React.cloneElement(child, { children: this.renderChildren(children), });
+      const { name, } = child.props;
+      return name && this.state[name]
+        ? React.cloneElement(child, {
+          ...this.state[name],
+          onChange: this.handleChange,
+        })
+        : child;
+    });
   }
 
   render () {
     const { children, } = this.props;
-    console.log(this.state);
     return (
       <StyledForm>
-        { Array.isArray(children)
-          ? children.map(this.renderChildren)
-          : this.renderChildren(children) }
+        { this.renderChildren(children) }
       </StyledForm>
     );
   }
@@ -65,7 +86,10 @@ class Form extends React.Component {
 
 
 Form.propTypes = {
-
+  children: PropTypes.oneOfType([
+    PropTypes.element,
+    PropTypes.array,
+  ]).isRequired,
 };
 
 

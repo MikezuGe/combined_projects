@@ -3,19 +3,20 @@ import propTypes from 'prop-types';
 import styled from 'styled-components';
 
 import { Form, } from '../../organisms';
-import { fields, } from '../../molecules';
+import { Field, } from '../../molecules';
 
-console.log(fields);
 
 class BudgetAdd extends React.Component {
 
+  handleSubmit = fields => {
+    console.log(fields);
+  }
+
   render () {
     return (
-      <Form>
-        <fields.TextField name='name' type='text' />
-        <div>
-          <fields.TextField name='password' type='password' />
-        </div>
+      <Form onSubmit={this.handleSubmit}>
+        <Field name='name' type='text' label='name' />
+        <Field name='password' type='password' label='password' />
       </Form>
     );
   }
@@ -25,7 +26,7 @@ class BudgetAdd extends React.Component {
 
 BudgetAdd.propTypes = {
   
-}
+};
 
 
 export default BudgetAdd;

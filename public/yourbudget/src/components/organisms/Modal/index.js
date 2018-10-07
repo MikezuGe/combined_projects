@@ -90,7 +90,7 @@ Modal.propTypes = {
     PropTypes.element,
     PropTypes.array,
   ]),
-}
+};
 
 
 export default Modal;

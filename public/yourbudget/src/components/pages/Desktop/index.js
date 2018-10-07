@@ -13,30 +13,27 @@ const MainWrapper = styled.div`
 `;
 
 
-class Desktop extends React.Component {
-
-  render () {
-    const { children, secondaryMenuItems, modalViews } = this.props;
-    return (
-      <React.Fragment>
-        <Header />
-        <Menu secondaryMenuItems={secondaryMenuItems} />
-        <MainWrapper>
-          { children }
-        </MainWrapper>
-        <Modal modalViews={modalViews} />
-        <Toaster />
-      </React.Fragment>
-    );
-  }
-
-}
+const Desktop = ({ children, secondaryMenuItems, modalViews }) => (
+  <React.Fragment>
+    <Header />
+    <Menu secondaryMenuItems={secondaryMenuItems} />
+    <MainWrapper>
+      { children }
+    </MainWrapper>
+    <Modal modalViews={modalViews} />
+    <Toaster />
+  </React.Fragment>
+);
 
 
 Desktop.propTypes = {
   secondaryMenuItems: PropTypes.oneOfType([
-    PropTypes.array,
     PropTypes.object,
+    PropTypes.array,
+  ]),
+  modalViews: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.array,
   ]),
   children: PropTypes.oneOfType([
     PropTypes.array,

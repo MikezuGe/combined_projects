@@ -25,8 +25,12 @@ class Budget extends React.Component {
   }
 
   async componentDidMount () {
-    const funds = await getAllfunds();
-    this.setState({ funds, });
+    try {
+      const funds = await getAllfunds();
+      this.setState({ funds, });
+    } catch (e) {
+      addToast(e);
+    }
     // Remove after testing!!! -----------------------------------
     openModal(BUDGET_ADD);
   }

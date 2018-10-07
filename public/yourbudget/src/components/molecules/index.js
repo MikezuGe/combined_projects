@@ -1,4 +1,2 @@
-import * as fields from './Field'
-
-export { fields };
+export { default as Field, } from './Field';
 export { default as DataTable, } from './DataTable';

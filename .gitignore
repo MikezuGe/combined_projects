@@ -5,9 +5,12 @@ sslcert/*
 **/devBundle*
 
 public/index.html
+
 public/glib/data/*/*
 !public/glib/data/*/*.default.*
 !public/glib/data/*/scene.cnf
 
 public/images/data/*/*
 !public/images/data/bigimages/default*
+
+dist

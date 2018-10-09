@@ -63,9 +63,9 @@ class Menu extends React.Component {
         <InnerWrapper primary={primary}>
           <StyledList>
             <ListItem to='#' onClick={() => togglePrimary(false)}>Change menu</ListItem>
-            <ListItem to='/Home'>Home</ListItem>
-            <ListItem to='/Budget'>Budget</ListItem>
-            <ListItem to='/Settings'>Settings</ListItem>
+            <ListItem to='/home'>Home</ListItem>
+            <ListItem to='/budget'>Budget</ListItem>
+            <ListItem to='/settings'>Settings</ListItem>
           </StyledList>
           <StyledList>
             <ListItem to='#' onClick={() => togglePrimary(true)}>Change menu</ListItem>

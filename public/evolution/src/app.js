@@ -45,8 +45,7 @@ const world = new World(190, 75);
 const renderer = new Renderer();
 renderer.setupWorldRender(world);
 //renderer.renderWorld(world);
-//eslint-disable-next-line
-const frame = () => {
+const frame = () => { // eslint-disable-line
   requestAnimationFrame(frame);
   for (let i = 0; i < updTime; i++)
     world.update();

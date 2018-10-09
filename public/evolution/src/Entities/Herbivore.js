@@ -1,4 +1,5 @@
 import Entity from './Entity';
+import { ENTITY_TYPE as ENTITY_PLANT, } from './Plant';
 
 
 const { random, floor, } = Math;

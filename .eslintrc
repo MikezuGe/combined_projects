@@ -3,8 +3,7 @@
   "env": {
     "browser": true,
     "es6": true,
-    "worker": true,
-    "mongo": true
+    "worker": true
   },
   "parser": "babel-eslint",
   "parserOptions": {

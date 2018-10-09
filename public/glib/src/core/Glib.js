@@ -34,7 +34,7 @@ export default class Glib {
     resourceManager.getResource(url, sceneResource => {
       scene.buildFromResource(sceneResource, resourceManager);
       const frame = () => {
-        const nextFrame = requestAnimationFrame(frame);
+        const nextFrame = requestAnimationFrame(frame); // eslint-disable-line
         scene.update();
         input.update();
         renderer.renderScene(scene);

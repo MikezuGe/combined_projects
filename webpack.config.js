@@ -1,7 +1,10 @@
 const webpack = require('webpack');
 const path = require('path');
 const fs = require('fs');
+const WebpackLivereloadPlugin = require('webpack-livereload-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+
+const htmlTemplate = require('./utility/htmlTemplate');
 
 
 const mode = process.env.NODE_ENV || 'development';
@@ -16,16 +19,11 @@ const eslintLoader = {
   'use': {
     'loader': 'eslint-loader',
     'options': {
-      'presets': [
-        'env',
-        'stage-2',
-        'react',
-      ],
       'fix': false,
       'emitWarning': true,
     },
   },
-}
+};
 
 const babelLoader = {
   'test': /\.js$/,
@@ -35,41 +33,18 @@ const babelLoader = {
     'options': {
       'presets': [
         [
-          'env', {
+          '@babel/preset-env',
+          {
             'targets': {
-              'node': 'current',
+              'node': true,
             },
           },
         ],
-        'stage-2',
-        'react',
+        '@babel/preset-react',
       ],
-    },
-  },
-}
-
-const cssLoader = {
-  'test': /\.css$/,
-  'exclude': /node_modules/,
-  'use': {
-    'loader': 'css-loader',
-    'options': {
-      'minimize': false,
-      'sourceMap': false, // Style loader creates the sourcemap
-      'camelCase': false,
-    },
-  },
-};
-
-const styleLoader = {
-  'test': /\.css$/,
-  'exclude': /node_modules/,
-  'use': {
-    'loader': 'style-loader',
-    'options': {
-      'singleton': true,
-      'sourceMap': false, // Create sourcemap here. Cssloader might sourcemap the single css-file styleloader creates
-      'convertToAbsoluteUrls': true,
+      'plugins': [
+        '@babel/plugin-proposal-class-properties',
+      ]
     },
   },
 };
@@ -87,42 +62,51 @@ const pluginEnvSetter = new webpack.DefinePlugin({
   'process.env.NODE_ENV': JSON.stringify(mode),
 });
 
-const pluginHtmlWebpackPlugin = project => new HtmlWebpackPlugin({
-  'filename': path.resolve(`./public/${project}/index.html`),
-  'title': project,
-  'template': 'utility/template.html',
-  'jsSource': `/${project}/${bundleName}`,
-  'inject': false,
-});
+const pluginHtmlWebpackPlugin = project => {
+  return new HtmlWebpackPlugin({
+    'filename': path.resolve(`./public/${project}/index.html`),
+    'inject': false,
+    'cache': true,
+    'templateContent': htmlTemplate({
+      'title': project,
+      'jsSources': [
+        `/${project}/${bundleName}`,
+        'http://localhost:35729/livereload.js',
+      ],
+    }),
+  });
+}
+
+const webpackLivereloadPlugin = new WebpackLivereloadPlugin({});
 
 
-module.exports = fs.readdirSync('./public')
-  .filter(file => fs.lstatSync(`./public/${file}`).isDirectory() && fs.readdirSync(`./public/${file}`).includes('src'))
-  .map(project => ({
-    mode,
-    'entry': path.resolve(`./public/${project}/src/app.js`),
-    'output': {
-      'filename': bundleName,
-      'path': path.resolve(`./public/${project}`),
-    },
-    'devtool': isProduction ? 'hidden-source-map' : 'source-map',
-    /*'resolve': {
-      'modules': [
-        path.resolve(`./public/${project}/src`),
-        path.resolve(`./node_modules`),
-      ],
-    },*/
-    'module': {
-      'rules': [
-        eslintLoader,
-        babelLoader,
-        styleLoader,
-        cssLoader,
-        fileLoader,
-      ],
-    },
-    plugins: [
-      pluginEnvSetter,
-      pluginHtmlWebpackPlugin(project),
+const projects = fs.readdirSync('./public')
+.filter(file =>
+  fs.lstatSync(`./public/${file}`).isDirectory() &&
+  fs.readdirSync(`./public/${file}`).includes('src'));
+
+
+module.exports = {
+  mode,
+  'entry': projects.reduce((total, current) => {
+    total[current] = `./public/${current}/src/app.js`;
+    return total;
+  }, {}),
+  'output': {
+    'path': __dirname + '/public',
+    'filename': `[name]/${bundleName}`,
+  },
+  'devtool': isProduction ? 'hidden-source-map' : 'source-map',
+  'module': {
+    'rules': [
+      eslintLoader,
+      babelLoader,
+      fileLoader,
     ],
-  }));
+  },
+  plugins: [
+    pluginEnvSetter,
+    webpackLivereloadPlugin,
+    ...projects.map(pluginHtmlWebpackPlugin),
+  ],
+};

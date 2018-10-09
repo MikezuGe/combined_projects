@@ -38,10 +38,11 @@ const TextField = props => {
 TextField.propTypes = {
   name: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
-  placeholder: PropTypes.string,
   value: PropTypes.string,
-  onChange: PropTypes.func.isRequired,
   label: PropTypes.string,
+  placeholder: PropTypes.string,
+  meta: PropTypes.object.isRequired,
+  onChange: PropTypes.func.isRequired,
 };
 
 

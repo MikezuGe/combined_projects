@@ -61,6 +61,7 @@ class Form extends React.Component {
   
   renderChildren = children => {
     return React.Children.map(children, child => {
+      if (typeof child === 'string') return child;
       const { children, } = child.props;
       if (children) return React.cloneElement(child, { children: this.renderChildren(children), });
       const { name, } = child.props;

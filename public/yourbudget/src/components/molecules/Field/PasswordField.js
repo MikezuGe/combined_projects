@@ -18,7 +18,6 @@ const Input = styled.input`
 
 
 const PasswordField = props => {
-  console.log(props);
   const { name, type, value, placeholder, onChange, label, meta: { error, } } = props;
   return (
     <Wrapper>
@@ -39,10 +38,11 @@ const PasswordField = props => {
 PasswordField.propTypes = {
   name: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
-  placeholder: PropTypes.string,
   value: PropTypes.string,
-  onChange: PropTypes.func.isRequired,
   label: PropTypes.string,
+  placeholder: PropTypes.string,
+  meta: PropTypes.object.isRequired,
+  onChange: PropTypes.func.isRequired,
 };
 
 

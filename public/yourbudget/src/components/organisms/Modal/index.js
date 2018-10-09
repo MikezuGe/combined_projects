@@ -90,6 +90,7 @@ Modal.propTypes = {
     PropTypes.element,
     PropTypes.array,
   ]),
+  modalViews: PropTypes.object,
 };
 
 

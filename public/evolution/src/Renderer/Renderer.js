@@ -56,11 +56,9 @@ gl.shaderSource(fs, fss);
 gl.compileShader(vs);
 gl.compileShader(fs);
 const verr = gl.getShaderInfoLog(vs);
-//eslint-disable-next-line
-console.log('vs compile err: ', verr);
+console.log('vs compile err: ', verr); //eslint-disable-line
 const ferr = gl.getShaderInfoLog(fs);
-//eslint-disable-next-line
-console.log('fs compile err: ', ferr);
+console.log('fs compile err: ', ferr); //eslint-disable-line
 
 
 const program = gl.createProgram();

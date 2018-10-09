@@ -4,7 +4,7 @@ import ShaderProgram from './ShaderProgram';
 
 
 const logs = new Map();
-const logOnce = (name, log) => {
+const logOnce = (name, log) => {  // eslint-disable-line
   if (logs.has(name)) {
     return;
   }
@@ -175,7 +175,7 @@ export default class Renderer {
     }
   }
 
-  bindScene (scene) {
+  bindScene (scene) { // eslint-disable-line
     const { u_time, } = this.boundShaderProgram.uniformLocations;
     gl.uniform1f(u_time, performance.now() /*scene.time.now*/); // Scene should carry global time
   }

@@ -18,11 +18,11 @@ const Input = styled.input`
 
 
 const PasswordField = props => {
-  const { name, type, value, placeholder, onChange, label, meta: { error, } } = props;
+  const { name, type, value, placeholder, onChange, label, meta: { error, submitted, } } = props;
   return (
     <Wrapper>
       { label && <Label>{label}</Label> }
-      { error && <Label>{error}</Label> }
+      { submitted && error && <Label>{error}</Label> }
       <Input
         name={name}
         type={type}

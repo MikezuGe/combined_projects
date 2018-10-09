@@ -11,6 +11,7 @@ padding: 1em;
 
 const meta = {
   error: '',
+  valid: false,
   pristine: true,
   touched: false,
   changed: false,
@@ -42,21 +43,20 @@ class Form extends React.Component {
     ...this.props.children.reduce(fieldsToState, {}),
   }
 
-  handleChange = ({ name, value, }) => {
-    this.setState(prevState => {
-      const field = prevState[name];
-      return {
-        [name]: {
-          ...field,
-          value,
-          meta: {
-            ...field.meta,
-            pristine: false,
-            changed: true,
-          },
-        },
-      };
-    });
+  handleChange = ({ name, value, meta, }) => {
+    console.log(this.state[name].meta);
+    this.setState(prevState => ({
+      [name]: {
+        ...prevState[name],
+        value,
+        meta,
+      },
+    }));
+  }
+
+  handleSubmit = e => {
+    e.preventDefault();
+    // Check state values
   }
   
   renderChildren = children => {
@@ -77,7 +77,7 @@ class Form extends React.Component {
   render () {
     const { children, } = this.props;
     return (
-      <StyledForm>
+      <StyledForm onSubmit={this.handleSubmit}>
         { this.renderChildren(children) }
       </StyledForm>
     );

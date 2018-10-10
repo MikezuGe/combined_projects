@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const db = require('../../connections/yourbudget');
+const db = require('../../getConnection')('yourbudget');
 
 
 module.exports = db.model('User', new mongoose.Schema({

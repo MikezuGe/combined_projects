@@ -1,8 +1,7 @@
 node_modules
-connectionstrings.json
-sslcert/*
-**/log.txt
 **/devBundle*
+debug_log.txt
+log.txt
 
 public/index.html
 
@@ -13,4 +12,4 @@ public/glib/data/*/*
 public/images/data/*/*
 !public/images/data/bigimages/default*
 
-dist
+.env

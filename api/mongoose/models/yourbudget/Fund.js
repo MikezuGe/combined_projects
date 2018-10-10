@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const db = require('../../connections/yourbudget');
+const db = require('../../getConnection')('yourbudget');
 
 
 const FundSchema = new mongoose.Schema({

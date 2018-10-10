@@ -7,12 +7,11 @@ const logger = require('./logger');
 fallbackRoute.all('*', (req, res) => {
   const reqUrl = path.resolve('./public', req.path.split('/')[1], 'index.html');
   fs.access(reqUrl, fs.constants.F_OK, err => {
-    if (!err) {
-      res.sendFile(reqUrl);
-    } else {
+    if (err) {
       logger.warn(err);
-      res.redirect('/');
+      return res.redirect('/');
     }
+    res.sendFile(reqUrl);
   });
 });
 

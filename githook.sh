@@ -8,7 +8,6 @@ git add .
 git reset --hard
 git pull
 
-npm install
-npm update
+npm install --only=production
 
-NODE_ENV=production nohup node index.js &> /var/log/nodesrv.log &
+nohup node index.js &> /var/log/nodesrv.log &

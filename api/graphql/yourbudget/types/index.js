@@ -1,4 +1,5 @@
 require('path');
+const { logger, } = require('../../../../utility');
 
 
 module.exports = (() => {
@@ -12,7 +13,7 @@ module.exports = (() => {
     const [ type, name ] = typeLine.split(' ');
     if (type === 'input') {
       if (inputs[name]) {
-        throw new Error(`Type ${name} is used more than once.`);
+        logger.err(new Error(`Type ${name} is used more than once.`));
       }
       inputs[name] = block;
     } else if (type === 'type') {
@@ -20,7 +21,7 @@ module.exports = (() => {
         let match = null;
         while ((match = nameRegExp.exec(block))) {
           if (queries[match[1]]) {
-            throw new Error(`Query ${name} is used more than once`);
+            logger.err(new Error(`Query ${name} is used more than once`));
           }
           queries[match[1]] = match[0];
         }
@@ -28,13 +29,13 @@ module.exports = (() => {
         let match = null;
         while ((match = nameRegExp.exec(block))) {
           if (mutations[match[1]]) {
-            throw new Error(`Query ${name} is used more than once`);
+            logger.err(new Error(`Query ${name} is used more than once`));
           }
           mutations[match[1]] = match[0];
         }
       } else {
         if (types[name]) {
-          throw new Error(`Type ${name} is used more than once.`);
+          logger.err(new Error(`Type ${name} is used more than once.`));
         }
         types[name] = block;
       }

@@ -4,7 +4,7 @@ const fs = require('fs');
 const WebpackLivereloadPlugin = require('webpack-livereload-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-const htmlTemplate = require('./utility/htmlTemplate');
+const { htmlTemplate, } = require('./utility');
 
 
 const mode = process.env.NODE_ENV || 'development';
@@ -58,7 +58,7 @@ const fileLoader = {
   },
 };
 
-const pluginEnvSetter = new webpack.DefinePlugin({
+const webpackDefinedPlugin = new webpack.DefinePlugin({
   'process.env.NODE_ENV': JSON.stringify(mode),
 });
 
@@ -67,11 +67,12 @@ const pluginHtmlWebpackPlugin = project => {
     'filename': path.resolve(`./public/${project}/index.html`),
     'inject': false,
     'cache': true,
+    'minify': isProduction,
     'templateContent': htmlTemplate({
       'title': project,
       'jsSources': [
         `/${project}/${bundleName}`,
-        'http://localhost:35729/livereload.js',
+        isProduction ? '' : 'http://localhost:35729/livereload.js',
       ],
     }),
   });
@@ -105,7 +106,7 @@ module.exports = {
     ],
   },
   plugins: [
-    pluginEnvSetter,
+    webpackDefinedPlugin,
     webpackLivereloadPlugin,
     ...projects.map(pluginHtmlWebpackPlugin),
   ],

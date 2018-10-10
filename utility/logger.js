@@ -1,154 +1,81 @@
-const { isProduction, logfilePath, logfileName } = require('../config');
+require('dotenv').config();
 const fs = require('fs');
 
 const parseDate = require('./parsedate');
 
 
-class ProductionLogger {
+const notProduction = process.env.NODE_ENV !== 'production';
+
+
+const getTimeNow = () => parseDate(new Date(), 'DD.MM.YYYY hh:mm:ss');
+
+
+const createFileAndGetUrl = (path, fileName) => {
+  if (path.length === 0) {
+    throw new Error('Logger requires a logfilepath to be specified');
+  } else if (!/[\.\/]|[a-z]?/gi.test(path)) {
+    throw new Error(`Not a valid filepath: ${path}`);
+  }
+
+  return path.split('/')
+  .reduce((str, folder) => {
+    str += `/${folder}`;
+    try {
+      fs.mkdirSync(str);
+    } catch (err) {
+      if (err.code !== 'EEXIST') {
+        throw new Error(`Unable to create logfile folder ${str}`);
+      }
+    }
+    return str;
+  }) + fileName;
+}
+
+const appendFile = (file, content) => {
+  fs.appendFile(file, content, err => {
+    if (err) throw new Error(`Failed to write to logfile ${err} ${content}`);
+  });
+}
+
+
+class Logger {
 
   constructor () {
-    this.logfile = '';
+    this.debugfile = createFileAndGetUrl(process.env.DEBUGFILE_PATH, 'debug_log.txt')
+    this.logfile = createFileAndGetUrl(process.env.LOGFILE_PATH, 'log.txt');
 
-    if (logfilePath.length === 0) {
-      throw new Error('Logger requires a logfilepath to be specified');
-    } else if (!/[\.\/]|[a-z]?/gi.test(logfilePath)) {
-      throw new Error(`Not a valid filepath: ${logfilePath}`);
-    }
-
-    this.logfile = logfilePath
-      .split('/')
-      .reduce((str, folder) => {
-        str += `/${folder}`;
-        try {
-          fs.mkdirSync(str);
-        } catch (err) {
-          if (err.code !== 'EEXIST') {
-            throw new Error(`Unable to create logfile folder ${str}`);
-          }
-        }
-        return str;
-      }) + '/' + logfileName;
-    const toConsole = `\nProgram initiated at ${parseDate(new Date(), 'DD.MM.YYYY hh:mm:ss')}\n`;
+    const content = `\nApplication initiated at ${getTimeNow()}\n`;
+    console.log(content); // Log to crash file
     try {
-      fs.appendFileSync(this.logfile, toConsole);
-      console.log(toConsole);
+      fs.appendFileSync(this.logfile, content);
+      fs.appendFileSync(this.debugfile, content);
     } catch (err) {
-      if (err) {
-        throw new Error(`Failed to write to logfile' ${err}`);
-      }
+      throw new Error(err);
     }
   }
 
   log (msg, ...other) {
-    const time = parseDate(new Date(), 'DD.MM.YYYY hh:mm:ss');
-    const content = `Log\t${time} - ${msg}\n`;
-    fs.appendFile(this.logfile.replace('/', ''), content, err => {
-      if (err) {
-        throw new Error(`Failed to write to logfile ${err} ${content}`);
-      }
-    });
+    const content = `Log\t${getTimeNow()} - ${msg}\n${other || !other.length ? '' : `${JSON.stringify(other)}\n`}`;
+    appendFile(this.logfile, content);
+    notProduction && console.log(content.replace(/\s/gi, ' '));
   }
 
   warn (msg, ...other) {
-    const time = parseDate(new Date(), 'DD.MM.YYYY hh:mm:ss');
-    const content = `Warn\t${time} - ${msg}\n`;
-    fs.appendFile(this.logfile, content, err => {
-      if (err) {
-        throw new Error(`Failed to write to logfile ${err} ${content}`);
-      }
-    });
+    const content = `Warn\t${getTimeNow()} - ${msg}\n${other || !other.length ? '' : `${JSON.stringify(other)}\n`}`;
+    appendFile(this.debugfile, content);
+    console.warn(content);
   }
 
   err (msg, ...other) {
-    const time = parseDate(new Date(), 'DD.MM.YYYY hh:mm:ss');
-    const toConsole = `Err - ${time} - ${msg}`;
-    const content = `Err\t${time} - ${msg}\n`;
-    fs.appendFile(this.logfile, content, err => {
-      if (err) {
-        throw new Error(`Failed to write to logfile ${err} ${content}`);
-      }
-    });
-    throw new Error(toConsole);
+    const content = `Err\t${getTimeNow()} - ${msg}\n${other || !other.length ? '' : `${JSON.stringify(other)}\n`}`;
+    appendFile(this.debugfile, content);
+    throw new Error(content);
   }
 
 }
 
 
-class DevelopmentLogger {
-
-  constructor () {
-    this.logfile = '';
-
-    if (logfilePath.length === 0) {
-      throw new Error('Logger requires a logfilepath to be specified');
-    } else if (!/[\.\/]|[a-z]?/gi.test(logfilePath)) {
-      throw new Error(`Not a valid filepath: ${logfilePath}`);
-    }
-
-    this.logfile = logfilePath
-      .split('/')
-      .reduce((str, folder) => {
-        str += `/${folder}`;
-        try {
-          fs.mkdirSync(str);
-        } catch (err) {
-          if (err.code !== 'EEXIST') {
-            throw new Error(`Unable to create logfile folder ${str}`);
-          }
-        }
-        return str;
-      }) + '/' + logfileName;
-    const toConsole = `\nProgram initiated at ${parseDate(new Date(), 'DD.MM.YYYY hh:mm:ss')}\n`;
-    try {
-      fs.appendFileSync(this.logfile, toConsole);
-      console.log(toConsole);
-    } catch (err) {
-      if (err) {
-        throw new Error(`Failed to write to logfile' ${err}`);
-      }
-    }
-  }
-
-  log (msg, ...other) {
-    const time = parseDate(new Date(), 'DD.MM.YYYY hh:mm:ss');
-    const toConsole = `Log - ${time} - ${msg}`;
-    const content = `Log\t${time} - ${msg}\n`;
-    fs.appendFile(this.logfile.replace('/', ''), content, err => {
-      if (err) {
-        throw new Error(`Failed to write to logfile ${err} ${content}`);
-      }
-    });
-    console.log(toConsole);
-  }
-
-  warn (msg, ...other) {
-    const time = parseDate(new Date(), 'DD.MM.YYYY hh:mm:ss');
-    const toConsole = `Warn - ${time} - ${msg}`;
-    const content = `Warn\t${time} - ${msg}\n`;
-    fs.appendFile(this.logfile, content, err => {
-      if (err) {
-        throw new Error(`Failed to write to logfile ${err} ${content}`);
-      }
-    });
-    console.warn(toConsole);
-  }
-
-  err (msg, ...other) {
-    const time = parseDate(new Date(), 'DD.MM.YYYY hh:mm:ss');
-    const toConsole = `Err - ${time} - ${msg}`;
-    const content = `Err\t${time} - ${msg}\n`;
-    fs.appendFile(this.logfile, content, err => {
-      if (err) {
-        throw new Error(`Failed to write to logfile ${err} ${content}`);
-      }
-    });
-    throw new Error(toConsole);
-  }
-
-}
-
-
-const logger = isProduction ? new ProductionLogger() : new DevelopmentLogger;
+const logger = new Logger;
 
 
 module.exports = logger;

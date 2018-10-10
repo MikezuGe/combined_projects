@@ -13,7 +13,7 @@ const createDataFolderStructure = (parentFolderPath, folderStructure, allFolders
             ? createDataFolderStructure(folderPath, folderStructure[folder], allFolders)
             : allFolders;
         }
-        logger.err(`Unable to create folder ${folderPath} ${err}`);
+        logger.err(`Unable to create folder ${folderPath}`, err);
       }
       logger.log(`Created folder ${folderPath}`);
       if (folderStructure[folder]) {

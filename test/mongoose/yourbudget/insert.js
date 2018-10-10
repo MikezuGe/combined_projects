@@ -4,7 +4,6 @@ const Fund = require('../../../api/mongoose/models/yourbudget').Fund;
 (async () => {
   await Fund.deleteMany();
   if (!(await Fund.find()).length) {
-    console.log('Inserting testdata to yourbudget');
     const testData = [
       {
         name: 'Livion',
@@ -24,8 +23,5 @@ const Fund = require('../../../api/mongoose/models/yourbudget').Fund;
       },
     ];
     await Fund.insertMany(testData);
-  } else {
-    console.log('Yourbudget is populated with data');
   }
-  console.log(await Fund.find());
 })();

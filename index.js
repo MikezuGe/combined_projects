@@ -1,14 +1,20 @@
-const { isProduction, PORT, } = require('./config');
-const { indexRoute, fallbackRoute, logger, } = require('./utility');
-const apiRouter = require('./api');
-const gitHandlerRouter = require('./githandler');
+require('dotenv').config()
 
 const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 
+const { indexRoute, fallbackRoute, logger, } = require('./utility');
+const apiRouter = require('./api');
+const gitHandlerRouter = require('./githandler');
+
+
+const isProduction = process.env.NODE_ENV === 'production';
 const app = express();
+
+
+!isProduction && require('./test');
 
 
 const server = require('http').createServer(app);
@@ -34,6 +40,6 @@ app.use(indexRoute);
 app.use(fallbackRoute);
 
 
-server.listen(PORT, () => {
-  logger.log(`Listening to port ${PORT}`);
+server.listen(process.env.PORT, () => {
+  logger.log(`Listening to port ${process.env.PORT}`);
 });

@@ -1,4 +1,3 @@
-
 export default class Resource {
 
   constructor (url) {

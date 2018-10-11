@@ -1,4 +1,4 @@
-Contact: mailto:
+Contact: mailto: 
 Encryption: 
 Acknowledgements: 
 Policy: 

@@ -1,4 +1,3 @@
-
 export class GeometryBatch {
 
   constructor (geometry, material, worldTransform) {

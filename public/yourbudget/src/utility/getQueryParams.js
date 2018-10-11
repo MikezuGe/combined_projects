@@ -1,4 +1,3 @@
-
 const getQueryParams = search => (!search && {}) || search.slice(1)
 .split('&')
 .reduce((total, current) => {

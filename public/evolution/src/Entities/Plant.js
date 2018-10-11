@@ -3,6 +3,7 @@ import Entity from './Entity';
 
 export const ENTITY_TYPE = 'ENTITY_PLANT';
 
+
 export default class Plant extends Entity {
   
   static BASE_COLOR = 'green';

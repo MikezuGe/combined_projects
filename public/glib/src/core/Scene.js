@@ -29,7 +29,6 @@ const parseNode = (nodeData, parentNode, resourceManager) => {
         break;
     }
   }
-
   for (const [ key, values, ] of Object.entries(nodeData.transform)) { node.transform[key] = values; }
   nodeData.nodes.forEach(data => { parseNode(data, node, resourceManager); });
 }

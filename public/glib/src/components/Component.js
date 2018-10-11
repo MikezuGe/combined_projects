@@ -1,4 +1,3 @@
-
 export default class Component {
 
   constructor (node, type) {

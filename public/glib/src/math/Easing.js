@@ -1,4 +1,3 @@
-
 export default class Easing {
 
     // no easing, no acceleration

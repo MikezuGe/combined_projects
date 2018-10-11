@@ -1,4 +1,3 @@
-
 export default class Event {
 
   constructor (preventDefault = false, stopPropagation = false) {

@@ -25,7 +25,7 @@ const validateAmount = t => {
     return 'Amount not defined';
   } else if (isNaN(t)) {
     return 'Must be a number';
-  } else if (!/^(?:[0-9]*)?[.,][0-9]{0,2}$/gi.test(t)) {
+  } else if (!/^[0-9]*[.,][0-9]{0,2}$/gi.test(t)) {
     return 'Must be defined as xxx,xx';
   }
 }
@@ -35,6 +35,8 @@ class BudgetAdd extends React.Component {
 
   handleSubmit = fields => {
     console.log(fields); //eslint-disable-line
+    // if operation was successfull, return true, else false
+    return Math.floor(Math.random() * 2); // for now, return randomly 1 or 0 (true or false)
   }
 
   render () {

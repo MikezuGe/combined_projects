@@ -44,7 +44,7 @@ class Form extends React.Component {
   }
 
   handleChange = ({ name, value, meta, }) => {
-    console.log(this.state[name].meta);
+    console.log(name, value, meta);
     this.setState(prevState => ({
       [name]: {
         ...prevState[name],
@@ -56,7 +56,29 @@ class Form extends React.Component {
 
   handleSubmit = e => {
     e.preventDefault();
-    // Check state values
+    let isValid = true;
+    const fields = {};
+    const newState = {};
+    for (const input of Object.values(this.state)) {
+      const { name, value, validate, meta, } = input;
+      meta.error = validate(value);
+      meta.submitted = true;
+      meta.valid = !meta.error;
+      if (meta.valid) {
+        fields[name] = value;
+      } else {
+        isValid = false;
+      }
+      newState[name] = {
+        ...input,
+        meta,
+      };
+    }
+    this.setState(newState);
+    if (!isValid) {
+      return;
+    }
+    const result = this.props.onSubmit(fields);
   }
   
   renderChildren = children => {

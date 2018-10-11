@@ -5,6 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "prod:test": "cross-env run-s deploy:build prod:node",
+    "prod:node": "cross-env NODE_ENV=development node index",
     "start": "cross-env NODE_ENV=development run-p start:*",
     "start:nodemon": "nodemon --watch index.js --watch api --watch utility --ignore public index.js",
     "start:webpack": "webpack --watch",

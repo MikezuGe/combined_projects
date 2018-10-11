@@ -5,26 +5,29 @@ export const ENTITY_TYPE = 'ENTITY_PLANT';
 
 
 export default class Plant extends Entity {
-  
-  static ENTITY_TYPE = ENTITY_TYPE;
-  static ENTITY_COLOR = 0;
-  static ENTITY_MAX_SIZE = 10;
-  static TIME_TO_LIVE_MIN = 1200;
-  static TIME_TO_LIVE_MAX = 1800;
-  static TIME_TO_GROW_MIN = 80;
-  static TIME_TO_GROW_MAX = 120;
-  static TIME_TO_BREED_MIN = 400;
-  static TIME_TO_BREED_MAX = 500;
-  static SIZE_TO_BREED = 6;
 
   constructor () {
     super();
   }
 
   update () {
-    !--this.timeToLive && this.die();
-    (!this.timeToCanGrow && this.grow()) || this.timeToCanGrow--;
-    (!this.timeToCanBreed && this.breed()) || this.timeToCanBreed--;
+    if (--this.timeToLive <= 0) {
+      return this.die();
+    }
+    this.timeToCanGrow <= 0 ? this.grow() : this.timeToCanGrow--;
+    this.timeToCanBreed <= 0 ? this.breed() : this.timeToCanBreed--;
   }
 
 }
+
+Plant.prototype.ENTITY_TYPE = ENTITY_TYPE;
+Plant.prototype.ENTITY_COLOR = 0;
+Plant.prototype.ENTITY_MAX_SIZE = 10;
+Plant.prototype.TIME_TO_LIVE_MIN = 1200;
+Plant.prototype.TIME_TO_LIVE_MAX = 1800;
+Plant.prototype.TIME_TO_GROW_MIN = 10;//80;
+Plant.prototype.TIME_TO_GROW_MAX = 20;//120;
+Plant.prototype.TIME_TO_BREED_MIN = 50;//100;
+Plant.prototype.TIME_TO_BREED_MAX = 100;//500;
+Plant.prototype.SIZE_TO_BREED = 6;
+Plant.prototype.SHRINK_ON_BREED = 4;

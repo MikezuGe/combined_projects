@@ -5,14 +5,12 @@ document.getElementById('root').appendChild(canvas);
 
 const vss = `#version 300 es
 in vec2 a_position;
-in int a_color;
+in float a_color;
 in float a_alpha;
 in float a_size;
 
-uniform vec3 a_cas;
-
 vec3 getColor () {
-  switch (int(a_cas.x)) {
+  switch (int(a_color)) {
     case 0: return vec3(0.0, 1.0, 0.0);
     case 1: return vec3(0.0, 0.0, 1.0);
     case 2: return vec3(1.0, 0.0, 0.0);
@@ -22,9 +20,9 @@ vec3 getColor () {
 
 out vec4 color;
 void main () {
-  color = vec4(getColor(), a_cas.y);
+  color = vec4(getColor(), a_alpha);
   gl_Position = vec4(a_position.x, -a_position.y, 0.0, 1.0);
-  gl_PointSize = 10.0;
+  gl_PointSize = a_size;
 }
 `;
 
@@ -51,8 +49,10 @@ gl.shaderSource(fs, fss);
 gl.compileShader(vs);
 gl.compileShader(fs);
 const verr = gl.getShaderInfoLog(vs);
+//eslint-disable-next-line
 console.log('vs compile err: ', verr);
 const ferr = gl.getShaderInfoLog(fs);
+//eslint-disable-next-line
 console.log('fs compile err: ', ferr);
 
 
@@ -65,10 +65,11 @@ gl.useProgram(program);
 
 export default class Renderer {
 
-  constructor (world) {
+  constructor () {
     this.vertices = [];
+    this.varying = [];
     this.positionBuffer = gl.createBuffer();
-    this.casUniform = gl.getUniformLocation(program, 'a_cas')
+    this.varyingBuffer = gl.createBuffer();
     this.vertexAttributes = {
       a_position: {
         buffer: this.positionBuffer,
@@ -77,6 +78,30 @@ export default class Renderer {
         size: 2,
         stride: 2 * 4,
         offset: 0,
+      },
+      a_color: {
+        buffer: this.varyingBuffer,
+        attribute: gl.getAttribLocation(program, 'a_color'),
+        type: gl.FLOAT,
+        size: 1,
+        stride: 3 * 4,
+        offset: 0,
+      },
+      a_alpha: {
+        buffer: this.varyingBuffer,
+        attribute: gl.getAttribLocation(program, 'a_alpha'),
+        type: gl.FLOAT,
+        size: 1,
+        stride: 3 * 4,
+        offset: 1 * 4,
+      },
+      a_size: {
+        buffer: this.varyingBuffer,
+        attribute: gl.getAttribLocation(program, 'a_size'),
+        type: gl.FLOAT,
+        size: 1,
+        stride: 3 * 4,
+        offset: 2 * 4,
       },
     };
   }
@@ -92,29 +117,46 @@ export default class Renderer {
         renderingPosition.x,
         renderingPosition.y,
       );
+      varying.push(
+        0.0,
+        0.0,
+        0.0,
+      );
     }
 
     gl.bindBuffer(gl.ARRAY_BUFFER, this.positionBuffer);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
 
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.varyingBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(varying), gl.DYNAMIC_DRAW);
+
     for (const { buffer, attribute, size, type, stride, offset, } of Object.values(this.vertexAttributes)) {
+      gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
       gl.enableVertexAttribArray(attribute);
       gl.vertexAttribPointer(attribute, size, type, false, stride, offset);
     }
+    // Varying buffer is left last to be bound. This is important!
 
     gl.clearColor(0.4, 0.4, 0.4, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
   }
 
-  renderWorld (world) {
+  renderWorld ({ field, dimension, }) {
     gl.clearColor(0.4, 0.4, 0.4, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-    const { casUniform, } = this;
-    let num = 0;
-    for (const { entity, } of world.field) {
-      gl.uniform3fv(casUniform, new Float32Array(entity ? [ entity.ENTITY_COLOR, 1.0, entity.size, ] : [ 0.0, 0.0, 0.0, ]));
-      gl.drawArrays(gl.POINTS, num++, 1);
+    const { varying, } = this;
+    for (const { entity, cellNumber, } of field) {
+      const pos = cellNumber * 3;
+      if (entity) {
+        varying[pos + 0] = entity.ENTITY_COLOR;
+        varying[pos + 1] = 1.0
+        varying[pos + 2] = entity.size;
+      } else {
+        varying[pos + 1] = 0.0;
+      }
     }
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(varying), gl.DYNAMIC_DRAW);
+    gl.drawArrays(gl.POINTS, 0, dimension);
   }
 
 }

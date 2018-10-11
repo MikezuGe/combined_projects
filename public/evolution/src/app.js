@@ -32,13 +32,25 @@ canvas {
 `;
 
 
-const world = new World(10, 10);
+window.addEventListener('keyup', e => {
+  if (e.key === 'p') {
+    updTime += updTime < 10 ? 1 : 0;
+  } else if (e.key === 'o') {
+    updTime -= updTime > 0 ? 1 : 0;
+  }
+}, false)
+let updTime = 3;
+
+const world = new World(190, 75);
 const renderer = new Renderer();
 renderer.setupWorldRender(world);
+//renderer.renderWorld(world);
+//eslint-disable-next-line
 const frame = () => {
   requestAnimationFrame(frame);
-  world.update();
+  for (let i = 0; i < updTime; i++)
+    world.update();
   renderer.renderWorld(world);
 }
-//requestAnimationFrame(frame);
-setInterval(frame, 1000);
+requestAnimationFrame(frame);
+//setInterval(frame, 1000);

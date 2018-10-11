@@ -18,7 +18,7 @@ export default class World {
     this.setupFieldCells();
     // TEMP
     // REMOVE AFTER
-    this.field[0].entity = new Plant();
+    this.field[0].setEntity(new Plant());
   }
 
   setupFieldCells () {

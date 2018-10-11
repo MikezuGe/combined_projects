@@ -8,7 +8,7 @@ export default class Cell {
     this.cellType = cellType;
     this.renderingPosition = renderingPosition;
     this.adjacentCells = {};
-    this._entity = null;
+    this.entity = null;
   }
 
   getEmptyAdjacentCell () {
@@ -19,17 +19,18 @@ export default class Cell {
       : null;
   }
 
-  set entity (entity) {
-    if (entity) entity.cell = this;
-    this._entity = entity;
+  setEntity (entity) {
+    this.entity = entity;
+    entity.cell = this;
   }
 
-  get entity () {
-    return this._entity;
+  removeEntity () {
+    this.entity.cell = null;
+    this.entity = null;
   }
 
   update () {
-    this._entity && this._entity.update();
+    this.entity && this.entity.update();
   }
 
 }

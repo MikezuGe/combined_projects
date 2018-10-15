@@ -7,6 +7,9 @@ const parseDate = require('./parsedate');
 const notProduction = process.env.NODE_ENV !== 'production';
 
 
+const { isArray, } = Array;
+const { stringify, } = JSON;
+const { log, warn, } = console;
 const getTimeNow = () => parseDate(new Date(), 'DD.MM.YYYY hh:mm:ss');
 
 
@@ -29,40 +32,52 @@ const createFileAndGetUrl = (path, fileName) => {
     }
     return str;
   }) + fileName;
-}
+};
 
-const appendFile = (file, content) => {
-  fs.appendFile(file, content, err => {
-    if (err) throw new Error(`Failed to write to logfile ${err} ${content}`);
-  });
-}
+
+let replacerIteration = 0;
+const replacer = (key, value) =>
+  (++replacerIteration && replacerIteration < 3 && value)
+  || (typeof value !== 'object' && value)
+  || (isArray(value) && '[Array]')
+  || '{Object}';
 
 
 class Logger {
 
   constructor () {
-    this.debugfile = createFileAndGetUrl(process.env.DEBUGFILE_PATH, 'debug_log.txt')
-    this.logfile = createFileAndGetUrl(process.env.LOGFILE_PATH, 'log.txt');
+    const options = {
+      flags: 'a',
+      encoding: 'utf8',
+    };
+    this.infoStream = fs.createWriteStream(createFileAndGetUrl(process.env.INFOFILE_PATH, 'info.txt'), options);
+    this.debugStream = fs.createWriteStream(createFileAndGetUrl(process.env.DEBUGFILE_PATH, 'debug.txt'), options);
+    this.errorStream = fs.createWriteStream(createFileAndGetUrl(process.env.ERRORFILE_PATH, 'error.txt'), options);
+    const content = `\nLog    ${getTimeNow()} - Application initiated, running in ${process.env.NODE_ENV}\n`;
+    this.infoStream.write(content);
+    notProduction && log(content.replace(/[^\n\S]/gi, ' '));
   }
 
-  log (msg, ...other) {
-    const content = `Log\t${getTimeNow()} - ${msg}\n${other || !other.length ? '' : `${JSON.stringify(other)}\n`}`;
-    appendFile(this.logfile, content);
-    notProduction && console.log(content.replace(/\s/gi, ' '));
+  info (msg, ...other) {
+    replacerIteration = 0;
+    const content = `Log    ${getTimeNow()} - ${msg}\n${!other.length ? '' : `${stringify(other, replacer, 2)}\n`}`;
+    this.infoStream.write(content);
+    notProduction && log(content.replace(/\s/gi, ' '));
   }
 
   warn (msg, ...other) {
-    const time = getTimeNow();
-    const logMsg = `Warn\t${time} - Error logged into debugfile\n}`;
-    const content = `Warn\t${time} - ${msg}\n${other || !other.length ? '' : `${JSON.stringify(other)}\n`}`;
-    appendFile(this.logfile, logMsg);
-    appendFile(this.debugfile, content);
-    console.warn(content);
+    replacerIteration = 0;
+    const content = `Warn   ${getTimeNow()} - ${msg}\n${!other.length ? '' : `${stringify(other, replacer, 2)}\n`}`;
+    this.infoStream.write(content);
+    this.debugStream.write(content);
+    notProduction && warn(content.replace(/\s/gi, ' '));
   }
 
   err (msg, ...other) {
-    const content = `Err\t${getTimeNow()} - ${msg}\n${other || !other.length ? '' : `${JSON.stringify(other)}\n`}`;
-    appendFile(this.debugfile, content);
+    replacerIteration = 0;
+    const content = `Err    ${getTimeNow()} - ${msg}\n${!other.length ? '' : `${stringify(other, replacer, 2)}\n`}`;
+    this.infoStream.write(content);
+    this.errorStream.write(content);
     throw new Error(content);
   }
 

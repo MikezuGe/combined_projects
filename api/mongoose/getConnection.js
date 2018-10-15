@@ -23,12 +23,8 @@ module.exports = dbName => {
   }
   if (connections[dbName]) return connections[dbName];
   const db = mongoose.createConnection();
-  db.once('open', () => {
-    logger.log(`Connected to ${dbName} at 127.0.0.1`);
-  });
-  db.on('error', err => {
-    logger.err('Unable to create connection', err);
-  });
+  db.once('open', () => logger.info(`Connected to ${dbName} at 127.0.0.1`));
+  db.on('error', err => logger.err('Unable to create connection', err));
   (async () => {
     try {
       const connectionString = await getConnectionString(dbName);

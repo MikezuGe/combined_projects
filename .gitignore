@@ -1,7 +1,8 @@
 node_modules
 **/devBundle*
-debug_log.txt
-log.txt
+info.txt
+debug.txt
+error.txt
 
 public/index.html
 

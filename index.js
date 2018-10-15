@@ -16,8 +16,6 @@ const server = require('http').createServer(app);
 //const io = require('socket.io')(server);
 
 
-logger.log(`\nApplication initiated, running in ${process.env.NODE_ENV}\n`);
-logger.warn(`\nApplication initiated, running in ${process.env.NODE_ENV}\n`);
 !isProduction && require('./test');
 
 
@@ -28,7 +26,7 @@ app.use(cookieParser());
 
 
 app.all('*', (req, res, next) => {
-  logger.log(`${req.connection.remoteAddress} ${req.method} ${req.url}`);
+  logger.info(`${req.connection.remoteAddress} ${req.method} ${req.url}`);
   next();
 });
 
@@ -41,5 +39,5 @@ app.use(fallbackRoute);
 
 
 server.listen(process.env.PORT, () => {
-  logger.log(`Listening to port ${process.env.PORT}`);
+  logger.info(`Listening to port ${process.env.PORT}`);
 });

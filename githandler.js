@@ -16,8 +16,8 @@ gitHandlerRouter.post('/', (req, res, next) => {
     lstat('./githook.sh', (err, stats) => {
       if (err) {
         if (err.code === 'ENOENT') {
-          logger.warn('Error, no executable file found.');
-          res.send('Error, no executable file found.');
+          logger.warn('Error, no executable file found');
+          res.send('Error, no executable file found');
         } else {
           logger.warn(`Error: ${err.code}`);
           res.send(`Error: ${err.code}`);
@@ -25,15 +25,15 @@ gitHandlerRouter.post('/', (req, res, next) => {
         return;
       }
       if (!stats.isFile()) {
-        logger.warn('Error, no executable file found.');
-        res.send('Error, no executable file found.');
+        logger.warn('Error, no executable file found');
+        res.send('Error, no executable file found');
         return;
       }
-      logger.log('Attempting pulling from git and restarting, due to git webhook activation.');
-      res.send('Attempting pulling from git and restarting, due to git webhook activation.');
+      logger.info('Attempting pulling from git and restarting, due to git webhook activation');
+      res.send('Attempting pulling from git and restarting, due to git webhook activation');
       exec('./githook.sh', (err, stdout, stderr) => {
         if (err) {
-          logger.warn('Unable to run githook.sh.');
+          logger.warn('Unable to run githook.sh');
         }
       });
     });

@@ -43,15 +43,6 @@ class Logger {
   constructor () {
     this.debugfile = createFileAndGetUrl(process.env.DEBUGFILE_PATH, 'debug_log.txt')
     this.logfile = createFileAndGetUrl(process.env.LOGFILE_PATH, 'log.txt');
-
-    const content = `\nApplication initiated at ${getTimeNow()}\n`;
-    console.log(content); // Log to crash file
-    try {
-      fs.appendFileSync(this.logfile, content);
-      fs.appendFileSync(this.debugfile, content);
-    } catch (err) {
-      throw new Error(err);
-    }
   }
 
   log (msg, ...other) {
@@ -61,7 +52,10 @@ class Logger {
   }
 
   warn (msg, ...other) {
-    const content = `Warn\t${getTimeNow()} - ${msg}\n${other || !other.length ? '' : `${JSON.stringify(other)}\n`}`;
+    const time = getTimeNow();
+    const logMsg = `Warn\t${time} - Error logged into debugfile\n}`;
+    const content = `Warn\t${time} - ${msg}\n${other || !other.length ? '' : `${JSON.stringify(other)}\n`}`;
+    appendFile(this.logfile, logMsg);
     appendFile(this.debugfile, content);
     console.warn(content);
   }

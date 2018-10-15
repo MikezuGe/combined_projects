@@ -12,13 +12,13 @@ const gitHandlerRouter = require('./githandler');
 
 const isProduction = process.env.NODE_ENV === 'production';
 const app = express();
-
-
-!isProduction && require('./test');
-
-
 const server = require('http').createServer(app);
 //const io = require('socket.io')(server);
+
+
+logger.log(`\nApplication initiated, running in ${process.env.NODE_ENV}\n`);
+logger.warn(`\nApplication initiated, running in ${process.env.NODE_ENV}\n`);
+!isProduction && require('./test');
 
 
 app.disable('x-powered-by');

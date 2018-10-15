@@ -32,7 +32,7 @@ const TextField = props => {
       />
     </Wrapper>
   );
-}
+};
 
 
 TextField.propTypes = {

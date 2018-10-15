@@ -32,7 +32,7 @@ const PasswordField = props => {
       />
     </Wrapper>
   );
-}
+};
 
 
 PasswordField.propTypes = {

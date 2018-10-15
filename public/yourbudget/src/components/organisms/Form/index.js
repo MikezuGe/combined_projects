@@ -23,11 +23,12 @@ const fieldsToState = (total, current) => {
   if (!React.isValidElement(current)) return total;
   const { children, } = current.props;
   children && React.Children.map(children, child => fieldsToState(total, child));
-  const { name, } = current.props;
+  const { name, value, checked, } = current.props;
   if (name) {
     total[name] = {
       ...current.props,
-      value: '',
+      value: value || '',
+      checked: !!checked,
       meta: {
         ...meta,
       },
@@ -43,12 +44,12 @@ class Form extends React.Component {
     ...this.props.children.reduce(fieldsToState, {}),
   }
 
-  handleChange = ({ name, value, meta, }) => {
-    console.log(name, value, meta);
+  handleChange = ({ name, value, checked, meta, }) => {
     this.setState(prevState => ({
       [name]: {
         ...prevState[name],
         value,
+        checked,
         meta,
       },
     }));
@@ -60,12 +61,14 @@ class Form extends React.Component {
     const fields = {};
     const newState = {};
     for (const input of Object.values(this.state)) {
-      const { name, value, validate, meta, } = input;
-      meta.error = validate(value);
+      const { name, type, value, checked, validate, meta, } = input;
+      if (validate) {
+        meta.error = validate(value);
+      }
       meta.submitted = true;
       meta.valid = !meta.error;
       if (meta.valid) {
-        fields[name] = value;
+        fields[name] = type !== 'checkbox' ? value : checked;
       } else {
         isValid = false;
       }

@@ -42,8 +42,9 @@ class BudgetAdd extends React.Component {
   render () {
     return (
       <Form onSubmit={this.handleSubmit}>
-        <Field name='name' type='text' label='Name' placeHolder='eg. Prisma Kokkola' validate={validateName} />
-        <Field name='amount' type='text' label='Amount' placeHolder='xxx,xx' validate={validateAmount} />
+        <Field name='name' type='text' label='Name' placeholder='eg. Prisma Kokkola' validate={validateName} />
+        <Field name='amount' type='text' label='Amount' placeholder='xxx,xx' validate={validateAmount} />
+        <Field name='isIncome' type='checkbox' placeholder='xxx,xx' offValue={'Income'} onValue={'Expense'} toggle />
         <Button>Submit!</Button>
       </Form>
     );

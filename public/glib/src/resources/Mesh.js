@@ -42,13 +42,13 @@ const generateGeometries = (geometries, indices, hasTexCoords) => {
   // Geometries are expected to be split at vertice that can be divided by 3
   let count = 0;
   const increment = hasTexCoords ? 9 : 6;
-  const isWordRegEx = /[a-z_]+(?:\.\w+)?/i;
-  if (isWordRegEx.test(indices[0])) {
+  const isWordRegex = /[a-z_]+(?:\.\w+)?/i;
+  if (isWordRegex.test(indices[0])) {
     indices.splice(0, 1);
   }
   geometries.push(new Geometry(0, null));
   for (let i = 0; i < indices.length; i += increment) {
-    if (isWordRegEx.test(indices[i])) {
+    if (isWordRegex.test(indices[i])) {
       indices.splice(i, 1);
       geometries[geometries.length - 1].vertexCount = count * 3;
       geometries.push(new Geometry(i * 3, null));

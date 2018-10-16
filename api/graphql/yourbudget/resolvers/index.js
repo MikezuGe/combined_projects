@@ -1,14 +1,13 @@
 require('path');
-const { readdirSync, } = require('fs');
-
-const { logger, } = require('../../../../utility');
 
 
 module.exports = (() => {
+  const { readdirSync, } = require('fs');
+  const { logger, } = require('../../../../utility');
   const reservedResolverNames = [];
   return readdirSync(__dirname)
     .filter(fileName => fileName !== 'index.js')
-    .map(fileName => {
+    .reduce((total, fileName) => {
       const resolvers = require(`./${fileName}`);
       for (const resolverName of Object.keys(resolvers)) {
         if (reservedResolverNames.includes(resolverName)) {
@@ -16,6 +15,6 @@ module.exports = (() => {
         }
         reservedResolverNames.push(resolverName);
       }
-      return resolvers;
-    }).reduce((total, current) => ({ ...total, ...current, }), {});
+      return { ...total, ...resolvers, };
+    }, {});
 })();

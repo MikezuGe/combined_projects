@@ -29,7 +29,7 @@ class Budget extends React.Component {
       const funds = await getAllFunds();
       this.setState({ funds, });
     } catch (err) {
-      addToast(err);
+      addToast(`${err.response.status}, ${err.response.statusText}`);
     }
     // Remove after testing!!! -----------------------------------
     openModal(BUDGET_ADD);

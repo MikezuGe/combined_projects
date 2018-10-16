@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { default as TextField, } from './TextField';
 import { default as PasswordField, } from './PasswordField';
 import { default as NumberField, } from './NumberField';
+import { default as DateField, } from './DateField';
 import { default as CheckboxField, } from './CheckboxField';
 
 
@@ -35,6 +36,7 @@ class Field extends React.Component {
         { type === 'text' && <TextField {...this.props} onChange={this.handleChange} /> }
         { type === 'password' && <PasswordField {...this.props} onChange={this.handleChange} /> }
         { type === 'number' && <NumberField {...this.props} onChange={this.handleChange} /> }
+        { type === 'date' && <DateField {...this.props} onChange={this.handleChange} /> }
         { type === 'checkbox' && <CheckboxField {...this.props} onChange={this.handleChange} /> }
       </React.Fragment>
     );

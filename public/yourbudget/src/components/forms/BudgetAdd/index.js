@@ -23,7 +23,6 @@ const createFund = input => new Promise((resolve, reject) => {
     input: {
       ...input,
       amount: parseFloat(input.amount),
-      date: new Date().toISOString(),
     },
   };
   return axios({
@@ -73,6 +72,7 @@ class BudgetAdd extends React.Component {
         <Field name='name' type='text' label='Name' placeholder='eg. Prisma Kokkola' validate={validateName} required />
         <Field name='amount' type='text' label='Amount' placeholder='xxx,xx' validate={validateAmount} required />
         <Field name='isIncome' type='checkbox' placeholder='xxx,xx' offValue={'Income'} onValue={'Expense'} toggle required />
+        <Field name='date' type='date' placeholder='date' required />
         <Button>Submit!</Button>
       </Form>
     );

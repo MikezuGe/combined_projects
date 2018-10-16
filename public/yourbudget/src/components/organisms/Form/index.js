@@ -55,7 +55,7 @@ class Form extends React.Component {
     }));
   }
 
-  handleSubmit = e => {
+  handleSubmit = async e => {
     e.preventDefault();
     let isValid = true;
     const fields = {};
@@ -81,7 +81,7 @@ class Form extends React.Component {
     if (!isValid) {
       return;
     }
-    const result = this.props.onSubmit(fields);
+    const result = await this.props.onSubmit(fields);
     console.log('submitresult', result);
   }
   
@@ -117,6 +117,7 @@ Form.propTypes = {
     PropTypes.element,
     PropTypes.array,
   ]).isRequired,
+  onSubmit: PropTypes.func.isRequired,
 };
 
 

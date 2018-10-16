@@ -1,68 +1,87 @@
 require('path');
-const { logger, } = require('../../../../utility');
 
 
 module.exports = (() => {
+  const { logger, } = require('../../../../utility');
   const { readdirSync, readFileSync, } = require('fs');
+
+  const scalars = [];
   const types = {};
   const inputs = {};
-  const queries = {};
-  const mutations = {};
-  const nameRegExp = /(\w+)(?:.+)/gi;
-  const checkType = (typeLine, block) => {
-    const [ type, name ] = typeLine.split(' ');
-    if (type === 'input') {
-      if (inputs[name]) {
-        logger.err(new Error(`Type ${name} is used more than once.`));
+  const queries = [];
+  const mutations = [];
+  let currentType = null;
+
+  const functionNameRegex = /[a-z]+/i;
+  const parseLine = line => {
+    if (currentType) {
+      if (line.trim() === '}') {
+        currentType = null
+        return;
       }
-      inputs[name] = block;
-    } else if (type === 'type') {
-      if (name === 'Query') {
-        let match = null;
-        while ((match = nameRegExp.exec(block))) {
-          if (queries[match[1]]) {
-            logger.err(new Error(`Query ${name} is used more than once`));
+      const { type, name, } = currentType;
+      if (type === 'type') {
+        if (name === 'Query') {
+          const queryName = line.match(functionNameRegex)[0];
+          if (queries.includes(queryName)) {
+            logger.err(`Graphql query ${queryName} is defined more than once`);
           }
-          queries[match[1]] = match[0];
-        }
-      } else if (name === 'Mutation') {
-        let match = null;
-        while ((match = nameRegExp.exec(block))) {
-          if (mutations[match[1]]) {
-            logger.err(new Error(`Query ${name} is used more than once`));
+          queries.push(line);
+        } else if (name === 'Mutation') {
+          const mutationName = line.match(functionNameRegex)[0];
+          if (mutations.includes(mutationName)) {
+            logger.err(`Graphql query ${mutationName} is defined more than once`);
           }
-          mutations[match[1]] = match[0];
+          mutations.push(line);
+        } else {
+          types[name].push(line);
         }
+      } else if (type === 'input') {
+        inputs[name].push(line);
+      }
+    } else {
+      const [ s0, s1, ] = line.trim().split(' ');
+      currentType = { type: s0, name: s1, };
+      if (s0 === 'scalar') {
+        currentType = null;
+        if (!scalars.includes(s1)) {
+          scalars.push(s1);
+        }
+      } else if (s0 === 'type') {
+        if (s1 !== 'Query' && s1 !== 'Mutation') {
+          if (types[s1]) {
+            logger.err(`Graphql type ${s1} is defined more than once`);
+          }
+          types[s1] = [];
+        }
+      } else if (s0 === 'input') {
+        if (inputs[s1]) {
+          logger.err(`Graphql type ${s1} is defined more than once`);
+        }
+        inputs[s1] = [];
       } else {
-        if (types[name]) {
-          logger.err(new Error(`Type ${name} is used more than once.`));
-        }
-        types[name] = block;
+        logger.err(`Unknown graphql type ${s0}`);
       }
     }
-  }
-  let start = null;
-  let end = null;
-  const regExp = /\w+ *\w+ *\{|\}/gi;
+  };
+
+  const gqlFileRegex = /^.+\.graphqls$/;
   readdirSync(__dirname)
-    .filter(fileName => /^.+\.graphqls$/.test(fileName))
-    .map(fileName => readFileSync(`${__dirname}/${fileName}`, 'utf-8'))
-    .forEach(file => {
-      while ((result = regExp.exec(file))) {
-        if (start === null) {
-          start = result.index;
-          end = start + result[0].length;
-        } else {
-          checkType(file.slice(start, end), file.slice(end, result.index));
-          start = null;
-          end = null;
-        }
+    .filter(fileName => gqlFileRegex.test(fileName))
+    .forEach(fileName => {
+      const nextLineRegex = /^.+$/gm;
+      const file = readFileSync(`${__dirname}/${fileName}`, 'utf-8');
+      let line = null;
+      while ((line = nextLineRegex.exec(file))) {
+        parseLine(line[0]);
       }
     });
+    
   return [
-    `${Object.entries(types).map(([ name, block ]) => `type ${name} {${block}}\n\n`).join('')}`,
-    `${Object.entries(inputs).map(([ name, block ]) => `input ${name} {${block}}\n\n`).join('')}`,
-    `type Query {\n${Object.values(queries).map(query => `  ${query}\n`).join('')}}\n\n`,
-    `type Mutation {\n${Object.values(mutations).map(mutation => `  ${mutation}\n`).join('')}}\n\n`,
-  ].join('').replace(/\r/g, ' ');
+    ...scalars.map(scalar => `scalar ${scalar}`),
+    ...Object.entries(types).map(([ key, values, ]) => `type ${key} {\n${values.join('\n')}\n}`),
+    ...Object.entries(inputs).map(([ key, values, ]) => `input ${key} {\n${values.join('\n')}\n}`),
+    `type Query {\n${queries.join('\n')}\n}`,
+    `type Mutation {\n${mutations.join('\n')}\n}`,
+  ].join('\n\n');
 })();

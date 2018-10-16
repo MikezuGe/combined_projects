@@ -5,16 +5,15 @@ const { buildSchema, } = require('graphql');
 
 const { logger, } = require('../../utility');
 const { types, resolvers, } = require('./yourbudget');
-//const customScalars = require('./customScalars');
+const customScalars = require('./customScalars');
 
 
 const graphqlRoute = express.Router();
 
-console.log('types', types);
 
 graphqlRoute.use('/', expressGraphql((req, res) => ({
   schema: buildSchema(types),
-  rootValue: resolvers,
+  rootValue: { ...resolvers, ...customScalars, },
   context: { req, res, },
   graphiql: true,
   formatError: err => logger.warn(err),

@@ -13,13 +13,12 @@ const { log, warn, } = console;
 const getTimeNow = () => parseDate(new Date(), 'DD.MM.YYYY hh:mm:ss');
 
 
-const createFileAndGetUrl = (path, fileName) => {
+const createFileAndGetUrl = (path='./', fileName) => {
   if (path.length === 0) {
     throw new Error('Logger requires a logfilepath to be specified');
   } else if (!/[\.\/]|[a-z]?/gi.test(path)) {
     throw new Error(`Not a valid filepath: ${path}`);
   }
-
   return path.split('/')
   .reduce((str, folder) => {
     str += `/${folder}`;

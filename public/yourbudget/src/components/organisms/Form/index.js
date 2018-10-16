@@ -82,6 +82,7 @@ class Form extends React.Component {
       return;
     }
     const result = this.props.onSubmit(fields);
+    console.log('submitresult', result);
   }
   
   renderChildren = children => {

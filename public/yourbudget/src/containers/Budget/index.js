@@ -8,7 +8,7 @@ import { addToast, openModal, } from '../../components/organisms';
 import { BudgetAdd, } from '../../components/forms';
 
 
-const getAllfunds = () => new Promise((resolve, reject) => {
+const getAllFunds = () => new Promise((resolve, reject) => {
   axios.get('/?query={funds{id,name,amount,date}}')
     .then(val => resolve(val.data.data.funds))
     .catch(err => reject(err));
@@ -26,7 +26,7 @@ class Budget extends React.Component {
 
   async componentDidMount () {
     try {
-      const funds = await getAllfunds();
+      const funds = await getAllFunds();
       this.setState({ funds, });
     } catch (err) {
       addToast(err);

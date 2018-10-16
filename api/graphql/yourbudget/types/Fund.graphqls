@@ -3,21 +3,21 @@ scalar Date
 type Fund {
   id: ID
   name: String
-  amount: Float
+  amount: String
   date: Date
   isIncome: Boolean
 }
 
 input FundInput {
   name: String!
-  amount: Float!
+  amount: String!
   date: Date!
   isIncome: Boolean!
 }
 
 input FundUpdate {
   name: String
-  amount: Float
+  amount: String
   date: Date
   isIncome: Boolean
 }

@@ -11,7 +11,7 @@ const FundSchema = new mongoose.Schema({
     type: String,
   },
   amount: {
-    type: Number,
+    type: String,
   },
   isIncome: {
     type: Boolean,

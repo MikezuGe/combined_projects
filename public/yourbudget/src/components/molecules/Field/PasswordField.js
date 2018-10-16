@@ -18,7 +18,7 @@ const Input = styled.input`
 
 
 const PasswordField = props => {
-  const { name, type, value, placeholder, onChange, label, meta: { error, submitted, } } = props;
+  const { name, type, value, placeholder, onChange, label, meta: { error, submitted, }, ...rest } = props;
   return (
     <Wrapper>
       { label && <Label>{label}</Label> }
@@ -29,6 +29,7 @@ const PasswordField = props => {
         placeholder={placeholder}
         value={value}
         onChange={onChange}
+        {...rest}
       />
     </Wrapper>
   );

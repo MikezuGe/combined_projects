@@ -74,7 +74,7 @@ class Modal extends React.Component {
       <GrayoutContainer active={active} onClick={this.close}>
         <Wrapper active={active}>
           <InnerWrapper onClick={e => e.stopPropagation()}>
-            { childInView && modalViews[childInView]() }
+            { childInView && modalViews[childInView]({ onClose: this.close }) }
           </InnerWrapper>
         </Wrapper>
       </GrayoutContainer>

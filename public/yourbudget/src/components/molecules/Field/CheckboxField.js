@@ -23,7 +23,7 @@ const Input = styled.input`
 
 
 const CheckboxField = props => {
-  const { name, type, toggle, offValue, onValue, checked, placeholder, onChange, label, } = props;
+  const { name, type, toggle, offValue, onValue, checked, placeholder, onChange, label, ...rest } = props;
   return (
     <Wrapper>
       { label && <Label>{label}</Label> }
@@ -37,6 +37,7 @@ const CheckboxField = props => {
               placeholder={placeholder}
               checked={!!checked}
               onChange={onChange}
+              {...rest}
             />
             { onValue && <Label>{onValue}</Label>}
           </InnerWrapper>
@@ -47,6 +48,7 @@ const CheckboxField = props => {
           placeholder={placeholder}
           checked={!!checked}
           onChange={onChange}
+          {...rest}
         />
       ) }
     </Wrapper>

@@ -1,18 +1,10 @@
 import React from 'react';
-import axios from 'axios';
-axios.defaults.baseURL = `${window.location.origin}/api/graphql`;
 
 import { Desktop, } from '../../components/pages';
 import { DataTable, } from '../../components/molecules';
 import { addToast, openModal, } from '../../components/organisms';
-import { BudgetAdd, } from '../../components/forms';
-
-
-const getAllFunds = () => new Promise((resolve, reject) => {
-  axios.get('/?query={funds{id,name,amount,date}}')
-    .then(val => resolve(val.data.data.funds))
-    .catch(err => reject(err));
-});
+import { BudgetAdd, } from '../../forms';
+import query, { GET_FUNDS, } from '../../queries';
 
 
 const BUDGET_ADD = 'BUDGET_ADD';
@@ -21,22 +13,27 @@ const BUDGET_ADD = 'BUDGET_ADD';
 class Budget extends React.Component {
 
   state = {
-    funds: [],
+    error: false,
+    data: [],
   }
 
   async componentDidMount () {
-    try {
-      const funds = await getAllFunds();
-      this.setState({ funds, });
-    } catch (err) {
-      addToast(`${err.response.status}, ${err.response.statusText}`);
+    const result = await query(GET_FUNDS);
+    if (result.status === 200) {
+      this.setState({
+        error: false,
+        data: result.data,
+      });
+    } else {
+      this.setState({ error: true, });
+      addToast(`${result.status}, ${result.statusText}`);
     }
     // Remove after testing!!! -----------------------------------
     openModal(BUDGET_ADD);
   }
 
   render () {
-    const { funds, } = this.state;
+    const { error, data, } = this.state;
     return (
       <Desktop
         secondaryMenuItems={[
@@ -46,15 +43,18 @@ class Budget extends React.Component {
           }
         ]}
         modalViews={{
-          [BUDGET_ADD]: () => <BudgetAdd />,
+          [BUDGET_ADD]: props => <BudgetAdd {...props} />,
         }}
       >
-        { (!funds.length && <div>Loading!</div>) || (
-          <DataTable
-            headerFilter={'id'}
-            data={funds}
-          />
-        )}
+        { (error && <div>An error occurred while loading data...</div>)
+          || (!data.length && <div>Loading...</div>)
+          || (
+            <DataTable
+              headerFilter={'id'}
+              data={data}
+            />
+          )
+        }
       </Desktop>
     );
   }

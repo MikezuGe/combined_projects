@@ -82,7 +82,9 @@ class Form extends React.Component {
       return;
     }
     const result = await this.props.onSubmit(fields);
-    console.log('submitresult', result);
+    if (result) {
+      this.props.onClose();
+    }
   }
   
   renderChildren = children => {
@@ -117,6 +119,7 @@ Form.propTypes = {
     PropTypes.element,
     PropTypes.array,
   ]).isRequired,
+  onClose: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
 };
 

@@ -10,25 +10,25 @@ import {
 import { firstLetterToUpperCase, } from '../../../utility';
 
 
-const DataTable = ({ headerFilter, headerMap, data, }) => {
-  const headers = !headerFilter.length
-    ? Object.keys(data[0])
-    : Object.keys(data[0])
-      .filter(h => typeof headerFilter === 'object'
-        ? !headerFilter.includes(h)
-        : headerFilter !== h
-      );
-  const capitalHeaders = !headerMap
-    ? headers.map(firstLetterToUpperCase)
-    : headers.map(h => headerMap[h] || h).map(firstLetterToUpperCase);
+const DataTable = ({ rows, data, }) => {
   return (
     <Table>
       <TableRow>
-        { capitalHeaders.map(h => <TableCell key={h} header>{h}</TableCell>) }
+        { rows.map(({ title, }) => <TableCell key={title} header>{title}</TableCell>) }
       </TableRow>
       { data.map((d, i) => (
-        <TableRow key={i}>
-          { headers.map(h => <TableCell key={d[h]}>{d[h]}</TableCell>) }
+        <TableRow key={`row-${i}`}>
+          { rows.map(({ title, dataKey, render, ...props }) =>
+            <TableCell
+              key={`${dataKey}-${i}`}
+              {...props}
+            >
+              {
+                render && render(props)
+                || d[dataKey]
+              }
+            </TableCell>)
+          }
         </TableRow>
       )) }
     </Table>
@@ -36,11 +36,7 @@ const DataTable = ({ headerFilter, headerMap, data, }) => {
 }
 
 DataTable.propTypes = {
-  headerFilter: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.array,
-  ]),
-  headerMap: PropTypes.object,
+  rows: PropTypes.array.isRequired,
   data: PropTypes.array.isRequired,
 };
 

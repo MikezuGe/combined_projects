@@ -29,6 +29,7 @@ class Budget extends React.Component {
 
   render () {
     const { error, data, } = this.state;
+    console.log(data);
     return (
       <Desktop
         secondaryMenuItems={[
@@ -42,7 +43,22 @@ class Budget extends React.Component {
           || (!data.length && <div>Loading...</div>)
           || (
             <DataTable
-              headerFilter={'id'}
+              rows={[
+                {
+                  title: 'Name',
+                  dataKey: 'name',
+                }, {
+                  title: 'Amount',
+                  dataKey: 'amount',
+                }, {
+                  title: 'Date',
+                  dataKey: 'date',
+                }, {
+                  title: 'Income/Expense',
+                  dataKey: 'isIncome',
+                  render: () => <img src={`/shared_assets/icons/chevron_right.svg`}/>,
+                }
+              ]}
               data={data}
             />
           )

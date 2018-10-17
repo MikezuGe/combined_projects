@@ -8,7 +8,9 @@ const HeaderCell = styled.td`
 `;
 
 const DataCell = styled.td`
-
+background: cyan;
+padding: 0.5em;
+border-radius: 0.5em;
 `;
 
 
@@ -29,6 +31,7 @@ TableCell.propTypes = {
   children: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.number,
+    PropTypes.element,
   ])
 };
 

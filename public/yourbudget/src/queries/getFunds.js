@@ -4,7 +4,8 @@ query = {
     id,
     name,
     amount,
-    date
+    date,
+    isIncome
   }
 }
 `;

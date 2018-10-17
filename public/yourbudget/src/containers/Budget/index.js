@@ -1,10 +1,16 @@
 import React from 'react';
+import styled from 'styled-components';
 
 import { Desktop, } from '../../components/pages';
 import { DataTable, } from '../../components/molecules';
 import { addToast, openModal, } from '../../components/organisms';
 import { BudgetAdd, } from '../../forms';
 import query, { GET_FUNDS, } from '../../queries';
+
+
+const IncomeExpenseImage = styled.img`
+transform: rotate(${({ dataValue }) => dataValue ? -90 : 90}deg);
+`;
 
 
 class Budget extends React.Component {
@@ -25,17 +31,18 @@ class Budget extends React.Component {
       this.setState({ error: true, });
       addToast(`${result.status}, ${result.statusText}`);
     }
+    // ----- Remove after testing
+    openModal(<BudgetAdd />)
   }
 
   render () {
     const { error, data, } = this.state;
-    console.log(data);
     return (
       <Desktop
         secondaryMenuItems={[
           {
             text: 'Add',
-            onClick: () => openModal(<BudgetAdd someProps={'test'} />),
+            onClick: () => openModal(<BudgetAdd />),
           }
         ]}
       >
@@ -54,9 +61,9 @@ class Budget extends React.Component {
                   title: 'Date',
                   dataKey: 'date',
                 }, {
-                  title: 'Income/Expense',
+                  title: '',
                   dataKey: 'isIncome',
-                  render: () => <img src={`/shared_assets/icons/chevron_right.svg`}/>,
+                  render: props => <IncomeExpenseImage {...props} src={`/shared_assets/icons/chevron_right.svg`}/>,
                 }
               ]}
               data={data}

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 import { Form, addToast, } from '../../components/organisms';
@@ -46,13 +47,18 @@ class BudgetAdd extends React.Component {
       <Form onSubmit={this.handleSubmit} onClose={this.props.onClose}>
         <Field name='name' type='text' label='Name' placeholder='eg. Prisma Kokkola' validate={validateName} required />
         <Field name='amount' type='number' label='Amount' placeholder='xxx,xx' validate={validateAmount} min='0' step='0.01' required />
-        <Field name='isIncome' type='checkbox' placeholder='xxx,xx' offValue={'Income'} onValue={'Expense'} toggle />
+        <Field name='isIncome' type='checkbox' placeholder='xxx,xx' offValue={'Expense'} onValue={'Income'} toggle />
         <Field name='date' type='date' placeholder='date' required />
         <Button>Submit!</Button>
       </Form>
     );
   }
 
+}
+
+
+BudgetAdd.propTypes = {
+  onClose: PropTypes.func,
 }
 
 

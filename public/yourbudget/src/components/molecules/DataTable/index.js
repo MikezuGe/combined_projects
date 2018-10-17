@@ -7,8 +7,6 @@ import {
   TableCell,
 } from '../../atoms';
 
-import { firstLetterToUpperCase, } from '../../../utility';
-
 
 const DataTable = ({ rows, data, }) => {
   return (
@@ -18,13 +16,13 @@ const DataTable = ({ rows, data, }) => {
       </TableRow>
       { data.map((d, i) => (
         <TableRow key={`row-${i}`}>
-          { rows.map(({ title, dataKey, render, ...props }) =>
+          { rows.map(({ dataKey, render, ...rest }) =>
             <TableCell
               key={`${dataKey}-${i}`}
-              {...props}
+              {...rest}
             >
               {
-                render && render(props)
+                render && render({ dataKey, dataValue: d[dataKey], rowNum: i, ...rest })
                 || d[dataKey]
               }
             </TableCell>)

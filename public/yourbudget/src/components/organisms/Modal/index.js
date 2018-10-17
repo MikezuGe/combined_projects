@@ -38,6 +38,14 @@ const InnerWrapper = styled.div`
 
 class Modal extends React.Component {
 
+  static propTypes = {
+    children: PropTypes.oneOfType([
+      PropTypes.element,
+      PropTypes.array,
+    ]),
+    modalViews: PropTypes.object,
+  }
+
   componentDidMount () {
     listener = this.open;
   }
@@ -86,15 +94,6 @@ class Modal extends React.Component {
   }
 
 }
-
-
-Modal.propTypes = {
-  children: PropTypes.oneOfType([
-    PropTypes.element,
-    PropTypes.array,
-  ]),
-  modalViews: PropTypes.object,
-};
 
 
 export default Modal;

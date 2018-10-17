@@ -9,6 +9,15 @@ import { default as CheckboxField, } from './CheckboxField';
 
 
 class Field extends React.Component {
+
+  static propTypes = {
+    name: PropTypes.string.isRequired,
+    type: PropTypes.string.isRequired,
+    value: PropTypes.string,
+    checked: PropTypes.bool,
+    label: PropTypes.string,
+    placeholder: PropTypes.string,
+  }
   
   handleChange = ({ target: { name, value, checked, }, }) => {
     const { meta, validate, } = this.props;
@@ -43,16 +52,6 @@ class Field extends React.Component {
   }
 
 }
-
-
-Field.propTypes = {
-  name: PropTypes.string.isRequired,
-  type: PropTypes.string.isRequired,
-  value: PropTypes.string,
-  checked: PropTypes.bool,
-  label: PropTypes.string,
-  placeholder: PropTypes.string,
-};
 
 
 export default Field;

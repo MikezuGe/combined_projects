@@ -48,6 +48,13 @@ padding: 0.5rem;
 
 class Menu extends React.Component {
 
+  static propTypes = {
+    secondaryMenuItems: PropTypes.oneOfType([
+      PropTypes.object,
+      PropTypes.array,
+    ]),
+  }
+
   state = {
     primary: false,
   }
@@ -91,14 +98,6 @@ class Menu extends React.Component {
   }
 
 }
-
-
-Menu.propTypes = {
-  secondaryMenuItems: PropTypes.oneOfType([
-    PropTypes.array,
-    PropTypes.object,
-  ]),
-};
 
 
 export default withRouter(Menu);

@@ -10,7 +10,8 @@ const defaultOptions = {
 
 
 let nextId = 0;
-let listener = null;
+let listener = toast => toastsInQueue.push(toast);
+const toastsInQueue = [];
 
 
 export const addToast = (text, options) => listener({
@@ -36,7 +37,7 @@ class Toaster extends React.Component {
   }
 
   state = {
-    toasts: [],
+    toasts: toastsInQueue,
   }
 
   addToast = toast => this.setState(prevState => ({

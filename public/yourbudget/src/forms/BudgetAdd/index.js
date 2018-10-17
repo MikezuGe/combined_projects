@@ -36,6 +36,10 @@ const validateAmount = t => {
 
 class BudgetAdd extends React.Component {
 
+  static propTypes = {
+    onClose: PropTypes.func,
+  }
+
   handleSubmit = async input => {
     const result = await query(CREATE_FUND, input);
     addToast(result.statusText);
@@ -54,11 +58,6 @@ class BudgetAdd extends React.Component {
     );
   }
 
-}
-
-
-BudgetAdd.propTypes = {
-  onClose: PropTypes.func,
 }
 
 

@@ -4,7 +4,6 @@ import styled from 'styled-components';
 
 import Menu from './Menu';
 import Header from './Header';
-import { Toaster, Modal, } from '../../organisms';
 
 
 const MainWrapper = styled.div`
@@ -20,8 +19,6 @@ const Desktop = ({ children, secondaryMenuItems, }) => (
     <MainWrapper>
       { children }
     </MainWrapper>
-    <Modal />
-    <Toaster />
   </React.Fragment>
 );
 

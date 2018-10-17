@@ -14,15 +14,17 @@ border-radius: 0.5em;
 `;
 
 
-const TableCell = ({ header, children, }) => 
-header ? (
-  <HeaderCell>
-    {children}
-  </HeaderCell>
-) : (
-  <DataCell>
-    {children}
-  </DataCell>
+const TableCell = ({ header, children, }) => (
+  header
+  ? (
+    <HeaderCell>
+      {children}
+    </HeaderCell>
+  ) : (
+    <DataCell>
+      {children}
+    </DataCell>
+  )
 );
 
 
@@ -32,7 +34,7 @@ TableCell.propTypes = {
     PropTypes.string,
     PropTypes.number,
     PropTypes.element,
-  ])
+  ]),
 };
 
 

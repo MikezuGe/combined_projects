@@ -39,6 +39,15 @@ const fieldsToState = (total, current) => {
 
 
 class Form extends React.Component {
+
+  static propTypes = {
+    children: PropTypes.oneOfType([
+      PropTypes.element,
+      PropTypes.array,
+    ]).isRequired,
+    onClose: PropTypes.func.isRequired,
+    onSubmit: PropTypes.func.isRequired,
+  }
   
   state = {
     ...this.props.children.reduce(fieldsToState, {}),
@@ -112,16 +121,6 @@ class Form extends React.Component {
   }
 
 }
-
-
-Form.propTypes = {
-  children: PropTypes.oneOfType([
-    PropTypes.element,
-    PropTypes.array,
-  ]).isRequired,
-  onClose: PropTypes.func.isRequired,
-  onSubmit: PropTypes.func.isRequired,
-};
 
 
 export default Form;

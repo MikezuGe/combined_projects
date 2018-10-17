@@ -30,6 +30,14 @@ transition: transform 1000ms
 
 class Toast extends React.Component {
 
+  static propTypes = {
+    id: PropTypes.number.isRequired,
+    text: PropTypes.string.isRequired,
+    timeout: PropTypes.number.isRequired,
+    nthToast: PropTypes.number.isRequired,
+    removeToast: PropTypes.func.isRequired,
+  }
+
   componentDidMount () {
     this.nextActiontimeout = setTimeout(this.nextAction, 50);
   }
@@ -79,15 +87,6 @@ class Toast extends React.Component {
   }
 
 }
-
-
-Toast.propTypes = {
-  id: PropTypes.number.isRequired,
-  text: PropTypes.string.isRequired,
-  timeout: PropTypes.number.isRequired,
-  nthToast: PropTypes.number.isRequired,
-  removeToast: PropTypes.func.isRequired,
-};
 
 
 export default Toast;

@@ -8,30 +8,29 @@ import {
 } from '../../atoms';
 
 
-const DataTable = ({ rows, data, }) => {
-  return (
-    <Table>
-      <TableRow>
-        { rows.map(({ title, }) => <TableCell key={title} header>{title}</TableCell>) }
+const DataTable = ({ rows, data, }) => (
+  <Table>
+    <TableRow>
+      { rows.map(({ title, }) => <TableCell key={title} header>{title}</TableCell>) }
+    </TableRow>
+    { data.map((d, i) => (
+      <TableRow key={`row-${i}`}>
+        { rows.map(({ dataKey, render, ...rest }) =>
+          <TableCell
+            key={`${dataKey}-${i}`}
+            {...rest}
+          >
+            {
+              render && render({ dataKey, dataValue: d[dataKey], rowNum: i, ...rest })
+              || d[dataKey]
+            }
+          </TableCell>)
+        }
       </TableRow>
-      { data.map((d, i) => (
-        <TableRow key={`row-${i}`}>
-          { rows.map(({ dataKey, render, ...rest }) =>
-            <TableCell
-              key={`${dataKey}-${i}`}
-              {...rest}
-            >
-              {
-                render && render({ dataKey, dataValue: d[dataKey], rowNum: i, ...rest })
-                || d[dataKey]
-              }
-            </TableCell>)
-          }
-        </TableRow>
-      )) }
-    </Table>
-  );
-}
+    )) }
+  </Table>
+);
+
 
 DataTable.propTypes = {
   rows: PropTypes.array.isRequired,

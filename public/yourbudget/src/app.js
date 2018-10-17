@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter, Route, Switch, Redirect, } from 'react-router-dom';
 import { injectGlobal, } from 'styled-components';
 
+import { Toaster, Modal, } from './components/organisms';
 import {
   Home,
   Budget,
@@ -23,15 +24,14 @@ injectGlobal`
   */
 }
 
-html body {
-  height: 100vh;
-  width: 100vw;
+html, body {
   overflow: hidden;
 }
 
 #root {
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
   display: grid;
   grid-template-columns: 10% 90%;
   grid-template-rows: 15% 85%;
@@ -55,6 +55,10 @@ const App = () => (
 
 
 ReactDOM.render(
-  <App />,
+  <React.Fragment>
+    <App />
+    <Modal />
+    <Toaster />
+  </React.Fragment>,
   document.getElementById('root')
 );

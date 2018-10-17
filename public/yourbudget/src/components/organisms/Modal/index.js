@@ -43,7 +43,7 @@ class Modal extends React.Component {
   }
 
   state = {
-    childInView: null,
+    modalContent: null,
     active: false,
   }
 
@@ -53,10 +53,10 @@ class Modal extends React.Component {
     }
   }
 
-  open = (childInView) => {
+  open = modalContent => {
     this.setState({
       active: true,
-      childInView,
+      modalContent,
     });
     window.addEventListener('keyup', this.keyupListener, false);
   }
@@ -69,12 +69,16 @@ class Modal extends React.Component {
   }
 
   render () {
-    const { props: { modalViews, }, state: { active, childInView, }, } = this;
+    const { active, modalContent, } = this.state;
     return (
       <GrayoutContainer active={active} onClick={this.close}>
         <Wrapper active={active}>
           <InnerWrapper onClick={e => e.stopPropagation()}>
-            { childInView && modalViews[childInView]({ onClose: this.close }) }
+            {
+              modalContent && React.cloneElement(modalContent, {
+                onClose: this.close,
+              })
+            }
           </InnerWrapper>
         </Wrapper>
       </GrayoutContainer>

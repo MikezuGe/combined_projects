@@ -13,14 +13,14 @@ const MainWrapper = styled.div`
 `;
 
 
-const Desktop = ({ children, secondaryMenuItems, modalViews }) => (
+const Desktop = ({ children, secondaryMenuItems, }) => (
   <React.Fragment>
     <Header />
     <Menu secondaryMenuItems={secondaryMenuItems} />
     <MainWrapper>
       { children }
     </MainWrapper>
-    <Modal modalViews={modalViews} />
+    <Modal />
     <Toaster />
   </React.Fragment>
 );
@@ -28,10 +28,6 @@ const Desktop = ({ children, secondaryMenuItems, modalViews }) => (
 
 Desktop.propTypes = {
   secondaryMenuItems: PropTypes.oneOfType([
-    PropTypes.object,
-    PropTypes.array,
-  ]),
-  modalViews: PropTypes.oneOfType([
     PropTypes.object,
     PropTypes.array,
   ]),

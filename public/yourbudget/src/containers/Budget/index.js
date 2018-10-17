@@ -7,9 +7,6 @@ import { BudgetAdd, } from '../../forms';
 import query, { GET_FUNDS, } from '../../queries';
 
 
-const BUDGET_ADD = 'BUDGET_ADD';
-
-
 class Budget extends React.Component {
 
   state = {
@@ -28,8 +25,6 @@ class Budget extends React.Component {
       this.setState({ error: true, });
       addToast(`${result.status}, ${result.statusText}`);
     }
-    // Remove after testing!!! -----------------------------------
-    openModal(BUDGET_ADD);
   }
 
   render () {
@@ -39,12 +34,9 @@ class Budget extends React.Component {
         secondaryMenuItems={[
           {
             text: 'Add',
-            onClick: () => openModal(BUDGET_ADD),
+            onClick: () => openModal(<BudgetAdd someProps={'test'} />),
           }
         ]}
-        modalViews={{
-          [BUDGET_ADD]: props => <BudgetAdd {...props} />,
-        }}
       >
         { (error && <div>An error occurred while loading data...</div>)
           || (!data.length && <div>Loading...</div>)

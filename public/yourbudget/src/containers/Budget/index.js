@@ -5,7 +5,7 @@ import { Desktop, } from '../../components/pages';
 import { DataTable, } from '../../components/molecules';
 import { addToast, openModal, } from '../../components/organisms';
 import { BudgetAdd, } from '../../forms';
-import Query, { GET_FUNDS, } from '../../queries';
+import { Query, GET_FUNDS, } from '../../queries';
 
 
 const IncomeExpenseImage = styled.img`

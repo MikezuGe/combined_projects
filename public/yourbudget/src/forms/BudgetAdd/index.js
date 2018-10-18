@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import { Form, addToast, } from '../../components/organisms';
 import { Field, } from '../../components/molecules';
-import query, { CREATE_FUND, } from '../../queries';
+import { Mutation, CREATE_FUND, } from '../../queries';
 
 
 
@@ -40,21 +40,26 @@ class BudgetAdd extends React.Component {
     onClose: PropTypes.func,
   }
 
-  handleSubmit = async input => {
-    const result = await query(CREATE_FUND, input);
-    addToast(result.statusText);
-    return result.status === 200;
-  };
-
   render () {
     return (
-      <Form onSubmit={this.handleSubmit} onClose={this.props.onClose}>
-        <Field name='name' type='text' label='Name' placeholder='eg. Prisma Kokkola' validate={validateName} required />
-        <Field name='amount' type='number' label='Amount' placeholder='xxx,xx' validate={validateAmount} min='0' step='0.01' required />
-        <Field name='isIncome' type='checkbox' placeholder='xxx,xx' offValue={'Expense'} onValue={'Income'} toggle />
-        <Field name='date' type='date' placeholder='date' required />
-        <Button>Submit!</Button>
-      </Form>
+      <Mutation
+        query={CREATE_FUND}
+        onError={({ status, statusText, }) => addToast(`${status} ${statusText}`)}
+      >
+        {
+          ({ onSubmit, }) => (
+            <React.Fragment>
+              <Form onSubmit={onSubmit} onClose={this.props.onClose}>
+                <Field name='name' type='text' label='Name' placeholder='eg. Prisma Kokkola' validate={validateName} required />
+                <Field name='amount' type='number' label='Amount' placeholder='xxx,xx' validate={validateAmount} min='0' step='0.01' required />
+                <Field name='isIncome' type='checkbox' placeholder='xxx,xx' offValue={'Expense'} onValue={'Income'} toggle />
+                <Field name='date' type='date' placeholder='date' required />
+                <Button>Submit!</Button>
+              </Form>
+            </React.Fragment>
+          )
+        }
+      </Mutation>
     );
   }
 

@@ -29,11 +29,12 @@ const queries = {
 };
 
 
-class Query extends React.Component {
+export class Query extends React.Component {
 
   static propTypes = {
     children: PropTypes.oneOfType([
       PropTypes.element,
+      PropTypes.func,
       PropTypes.array,
     ]).isRequired,
     query: PropTypes.string.isRequired,
@@ -79,10 +80,65 @@ class Query extends React.Component {
   
   render () {
     const { loading, error, data, status, statusText, } = this.state;
-    return this.props.children({ loading, error, data, status, statusText, });
+    return this.props.children({ loading, error, data, });
   }
 
 }
 
 
-export default Query;
+export class Mutation extends React.Component {
+
+  static propTypes = {
+    children: PropTypes.oneOfType([
+      PropTypes.element,
+      PropTypes.func,
+      PropTypes.array,
+    ]).isRequired,
+    query: PropTypes.string.isRequired,
+    onError: PropTypes.func,
+  }
+
+  state = {
+    loading: true,
+    error: false,
+    data: [],
+    status: null,
+    statusText: '',
+  }
+
+  onSubmit = async input => {
+    const variables = { input, };
+    const { method, query, } = queries[this.props.query];
+    let result = null;
+    let error = false;
+    try {
+      result = method === POST
+        ? await axios.post('/', JSON.stringify({ query, variables, }))
+        : console.log('DELETE METHOD NOT IMPLEMENTED IN MUTATION');
+        // Delete method maybe?
+    } catch (err) {
+      error = true;
+      result = err.response;
+      this.props.onError({ status: result.status, statusText: result.statusText, });
+    }
+    this.setState({
+      loading: false,
+      error: error,
+      data: error ? [] : result.status === 200 ? result.data.data[Object.keys(result.data.data)[0]] : null,
+      status: result.status,
+      statusText: result.statusText,
+    });
+    return !error;
+  }
+
+  shouldComponentUpdate (nextProps, nextState) {
+    return this.state.loading !== nextState.loading;
+  }
+
+  render () {
+    const { loading, error, data, status, statusText, } = this.state;
+    const { onSubmit, } = this;
+    return this.props.children({ onSubmit, });
+  }
+
+}

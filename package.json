@@ -1,6 +1,6 @@
 {
   "name": "combined_projects",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "This is a repository of multiple webpages.\r Each webpage has its own folder in the root folder.\r Each webpage's folder has an index file that will be served when a folder is accessed",
   "main": "index.js",
   "config": {

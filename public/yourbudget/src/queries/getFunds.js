@@ -1,6 +1,6 @@
 export default `
-query = {
-  funds {
+query Funds($filter: FundFilter) {
+  funds(filter: $filter) {
     id,
     name,
     amount,

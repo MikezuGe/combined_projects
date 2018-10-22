@@ -1,11 +1,18 @@
-scalar Date
-
 type Fund {
   id: ID
   name: String
   amount: String
   date: Date
   isIncome: Boolean
+}
+
+input FundFilter {
+  id: ID,
+  name: String,
+  minAmount: String,
+  maxAmount: String,
+  startDate: Date,
+  endDate: Date
 }
 
 input FundInput {
@@ -23,12 +30,11 @@ input FundUpdate {
 }
 
 type Query {
-  fund(id: ID!): Fund
-  funds: [Fund]
+  funds(filter: FundFilter): [Fund]
 }
 
 type Mutation {
   createFund(input: FundInput!): Fund
-  updateFund(id: ID!, input: FundUpdate!): Fund
-  removeFund(id: ID!): Fund
+  updateFund(filter: FundFilter!, input: FundUpdate!): [Fund]
+  removeFund(filter: FundFilter!): [Fund]
 }

@@ -1,16 +1,38 @@
 const { Fund, } = require('../../../mongoose/models/yourbudget');
 
 
+const setFilters = filter => {
+  console.log('---', filter);
+  if (filter.startDate) {
+    filter.date = { $gte: new Date(filter.startDate), };
+    delete filter.startDate;
+  }
+  if (filter.endDate) {
+    filter.date = { ...filter.date, $lte: new Date(filter.endDate), };
+    delete filter.endDate;
+  }
+  if (filter.minAmount) {
+    filter.amount = { $gte: parseFloat(filter.minAmount), };
+    delete filter.minAmount;
+  }
+  if (filter.maxAmount) {
+    filter.amount = { ...filter.amount, $lte: parseFloat(filter.maxAmount), };
+    delete filter.maxAmount;
+  }
+  console.log('---', filter);
+  return filter;
+}
+
+
 const Query = {
-  fund: async args => await Fund.findById(args.id),
-  funds: async () => await Fund.find(),
+  funds: async args => { return await Fund.find(setFilters(args.filter)); },
 };
 
 
 const Mutations = {
-  createFund: async args => await Fund.create(args.input),
-  updateFund: async args => await Fund.findByIdAndUpdate({ _id: args.id, }, args.input, { new: true, }),
-  removeFund: async args => await Fund.findByIdAndRemove({ _id: args.id, }),
+  createFunds: async args => await Fund.create(args.input),
+  updateFunds: async args => await Fund.updateMany({ id: args.id, }, args.input, { new: true, }),
+  removeFunds: async args => await Fund.deleteMany({ id: args.id, }),
 };
 
 

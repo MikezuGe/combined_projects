@@ -49,7 +49,7 @@ class BudgetAdd extends React.Component {
         {
           ({ onSubmit, }) => (
             <React.Fragment>
-              <Form onSubmit={onSubmit} onClose={this.props.onClose}>
+              <Form onSubmit={input => onSubmit({ input, })} onClose={this.props.onClose}>
                 <Field name='name' type='text' label='Name' placeholder='eg. Prisma Kokkola' validate={validateName} required />
                 <Field name='amount' type='number' label='Amount' placeholder='xxx,xx' validate={validateAmount} min='0' step='0.01' required />
                 <Field name='isIncome' type='checkbox' placeholder='xxx,xx' offValue={'Expense'} onValue={'Income'} toggle />

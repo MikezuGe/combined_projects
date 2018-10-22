@@ -13,19 +13,9 @@ export const CREATE_FUND = 'CREATE_FUND';
 export const GET_FUNDS = 'GET_FUNDS';
 
 
-const POST = 'POST';
-const GET = 'GET';
-
-
 const queries = {
-  CREATE_FUND: {
-    method: POST,
-    query: createFund,
-  },
-  GET_FUNDS: {
-    method: GET,
-    query: getFunds.replace(/\s/gi, ''),
-  }
+  GET_FUNDS: getFunds,
+  CREATE_FUND: createFund,
 };
 
 
@@ -51,15 +41,12 @@ export class Query extends React.Component {
   }
 
   async componentDidMount () {
-    const variables = { input: this.props.input, };
-    const { method, query, } = queries[this.props.query];
+    const { variables, } = this.props;
+    const query = queries[this.props.query];
     let result = null;
     let error = false;
     try {
-      result = method === GET
-        ? await axios.get(`/?${query}`)
-        : await axios.post('/', JSON.stringify({ query, variables, }));
-        // Delete method maybe?
+      result = await axios.post(`/`, JSON.stringify({ query, variables, }));
     } catch (err) {
       error = true;
       result = err.response;
@@ -79,7 +66,7 @@ export class Query extends React.Component {
   }
   
   render () {
-    const { loading, error, data, status, statusText, } = this.state;
+    const { loading, error, data, } = this.state;
     return this.props.children({ loading, error, data, });
   }
 
@@ -106,16 +93,13 @@ export class Mutation extends React.Component {
     statusText: '',
   }
 
-  onSubmit = async input => {
-    const variables = { input, };
-    const { method, query, } = queries[this.props.query];
+  onSubmit = async variables => {
+    console.log(variables);
+    const query = queries[this.props.query];
     let result = null;
     let error = false;
     try {
-      result = method === POST
-        ? await axios.post('/', JSON.stringify({ query, variables, }))
-        : console.log('DELETE METHOD NOT IMPLEMENTED IN MUTATION');
-        // Delete method maybe?
+      result = await axios.post('/', JSON.stringify({ query, variables, }));
     } catch (err) {
       error = true;
       result = err.response;
@@ -136,7 +120,6 @@ export class Mutation extends React.Component {
   }
 
   render () {
-    const { loading, error, data, status, statusText, } = this.state;
     const { onSubmit, } = this;
     return this.props.children({ onSubmit, });
   }

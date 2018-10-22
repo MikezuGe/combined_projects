@@ -9,17 +9,17 @@ const Fund = require('../../../api/mongoose/models/yourbudget').Fund;
         name: 'Livion',
         amount: 360.50,
         isIncome: true,
-        date: new Date().toISOString(),
+        date: new Date('2018-10-20').toISOString(),
       }, {
         name: 'Prisma',
         amount: 15.10,
         isIncome: false,
-        date: new Date().toISOString(),
+        date: new Date('2018-10-22').toISOString(),
       }, {
         name: 'K-market',
         amount: 5.04,
         isIncome: false,
-        date: new Date().toISOString(),
+        date: new Date('2018-10-24').toISOString(),
       },
     ];
     await Fund.insertMany(testData);

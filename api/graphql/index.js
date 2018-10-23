@@ -1,3 +1,4 @@
+require('dotenv').config();
 require('path');
 const express = require('express');
 const expressGraphql = require('express-graphql');
@@ -10,12 +11,11 @@ const customScalars = require('./customScalars');
 
 const graphqlRoute = express.Router();
 
-
 graphqlRoute.use('/', expressGraphql((req, res) => ({
   schema: buildSchema(types),
   rootValue: { ...resolvers, ...customScalars, },
   context: { req, res, },
-  graphiql: true,
+  graphiql: process.env.NODE_ENV !== 'production',
   formatError: err => logger.warn(err),
 })));
 

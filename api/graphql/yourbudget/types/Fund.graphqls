@@ -23,6 +23,7 @@ input FundInput {
 }
 
 input FundUpdate {
+  id: ID!
   name: String
   amount: String
   date: Date
@@ -30,11 +31,11 @@ input FundUpdate {
 }
 
 type Query {
-  funds(filter: FundFilter): [Fund]
+  getFunds(filter: FundFilter): [Fund]
 }
 
 type Mutation {
-  createFund(input: FundInput!): Fund
-  updateFund(filter: FundFilter!, input: FundUpdate!): [Fund]
-  removeFund(filter: FundFilter!): [Fund]
+  createFunds(input: FundInput!): Fund
+  updateFunds(input: FundUpdate!): Fund
+  removeFunds(id: ID!): Boolean
 }

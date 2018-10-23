@@ -1,11 +1,11 @@
 export default `
-query Funds($filter: FundFilter) {
-  funds(filter: $filter) {
+query getFunds ($filter: FundFilter) {
+  getFunds (filter: $filter) {
     id,
     name,
     amount,
-    date,
-    isIncome
+    isIncome,
+    date
   }
 }
 `;

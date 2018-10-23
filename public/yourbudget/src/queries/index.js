@@ -5,7 +5,7 @@ axios.defaults.baseURL = `${window.location.origin}/api/graphql`;
 axios.defaults.headers = { 'Content-Type': 'application/json', };
 
 
-import { default as createFund, } from './createFund';
+import { default as createFunds, } from './createFunds';
 import { default as getFunds, } from './getFunds';
 
 
@@ -15,7 +15,7 @@ export const GET_FUNDS = 'GET_FUNDS';
 
 const queries = {
   GET_FUNDS: getFunds,
-  CREATE_FUND: createFund,
+  CREATE_FUND: createFunds,
 };
 
 

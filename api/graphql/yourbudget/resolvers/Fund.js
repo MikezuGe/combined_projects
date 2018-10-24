@@ -46,8 +46,8 @@ const Query = {
 
 const Mutations = {
   createFunds: async args => await Fund.create(args.input),
-  updateFunds: async args => await Fund.findOneAndUpdate({ _id: args.input.id, }, (delete args.input.id && args.input), { new: true, }),
-  removeFunds: async args => await Fund.deleteOne({ _id: args.id, }),
+  updateFunds: async args => await Fund.findOneAndUpdate({ _id: args.id, }, args.input, { new: true, }),
+  removeFunds: async args => await Fund.findOneAndDelete({ _id: args.id, }),
 };
 
 

@@ -41,33 +41,46 @@ export class Query extends React.Component {
   }
 
   async componentDidMount () {
-    const { variables, } = this.props;
-    const query = queries[this.props.query];
-    let result = null;
-    let error = false;
-    try {
-      result = await axios.post(`/`, JSON.stringify({ query, variables, }));
-    } catch (err) {
-      error = true;
-      result = err.response;
-      this.props.onError({ status: result.status, statusText: result.statusText, });
-    }
-    this.setState({
-      loading: false,
-      error: error,
-      data: error ? [] : result.status === 200 ? result.data.data[Object.keys(result.data.data)[0]] : null,
-      status: result.status,
-      statusText: result.statusText,
-    });
+    this.updateState(await this.tryFetch());
   }
   
   shouldComponentUpdate (nextProps, nextState) {
     return this.state.loading !== nextState.loading;
   }
+
+  async tryFetch () {
+    const { variables, } = this.props;
+    const query = queries[this.props.query];
+    let result = null;
+    try {
+      result = await axios.post(`/`, JSON.stringify({ query, variables, }));
+      result.error = false;
+    } catch (err) {
+      result = err.response;
+      result.error = true;
+      this.props.onError({ status: result.status, statusText: result.statusText, });
+    }
+    return result;
+  }
+
+  updateState ({ error, status, statusText, data: { data, }, }) {
+    this.setState({
+      loading: false,
+      error,
+      data: error ? [] : status === 200 ? data[Object.keys(data)[0]] : null,
+      status,
+      statusText,
+    });
+  }
+
+  refetch = () => {
+    this.setState({ loading: true, });
+    this.updateState(this.tryFetch());
+  }
   
   render () {
-    const { loading, error, data, } = this.state;
-    return this.props.children({ loading, error, data, });
+    const { refetch, state: { loading, error, data, }, } = this;
+    return this.props.children({ loading, error, data, refetch, });
   }
 
 }
@@ -94,23 +107,23 @@ export class Mutation extends React.Component {
   }
 
   onSubmit = async variables => {
-    console.log(variables);
     const query = queries[this.props.query];
     let result = null;
-    let error = false;
     try {
       result = await axios.post('/', JSON.stringify({ query, variables, }));
+      result.error = false;
     } catch (err) {
-      error = true;
       result = err.response;
+      result.error = true;
       this.props.onError({ status: result.status, statusText: result.statusText, });
     }
+    const { error, status, statusText, data: { data, }, } = result;
     this.setState({
       loading: false,
-      error: error,
-      data: error ? [] : result.status === 200 ? result.data.data[Object.keys(result.data.data)[0]] : null,
-      status: result.status,
-      statusText: result.statusText,
+      error,
+      data: error ? [] : status === 200 ? data[Object.keys(data)[0]] : null,
+      status: status,
+      statusText: statusText,
     });
     return !error;
   }

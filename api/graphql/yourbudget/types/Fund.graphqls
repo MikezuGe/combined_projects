@@ -23,7 +23,6 @@ input FundInput {
 }
 
 input FundUpdate {
-  id: ID!
   name: String
   amount: String
   date: Date
@@ -36,6 +35,6 @@ type Query {
 
 type Mutation {
   createFunds(input: FundInput!): Fund
-  updateFunds(input: FundUpdate!): Fund
+  updateFunds(id: ID!, input: FundUpdate!): Fund
   removeFunds(id: ID!): Boolean
 }

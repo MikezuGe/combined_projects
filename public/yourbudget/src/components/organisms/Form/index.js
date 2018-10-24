@@ -53,6 +53,23 @@ class Form extends React.Component {
     ...this.props.children.reduce(fieldsToState, {}),
   }
 
+  resetFields () {
+    this.setState(prevState => {
+      const fields = Object.entries(prevState).reduce((total, [ key, value, ]) => {
+        total[key] = {
+          ...value,
+          value: '',
+          checked: true,
+          meta: {
+            ...meta,
+          },
+        };
+        return total;
+      }, {});
+      return fields;
+    });
+  }
+
   handleChange = ({ name, value, checked, meta, }) => {
     this.setState(prevState => ({
       [name]: {
@@ -66,10 +83,16 @@ class Form extends React.Component {
 
   handleSubmit = async e => {
     e.preventDefault();
+    const { target, } = e;
+    const submit = target.getAttribute('submit');
+    const reset = target.getAttribute('reset');
+    const close = target.getAttribute('close');
+    if (!submit && close) {
+      return this.props.onClose();
+    }
     let isValid = true;
-    const fields = {};
-    const newState = {};
-    for (const input of Object.values(this.state)) {
+    const inputs = {};
+    this.setState(Object.values(this.state).reduce((total, input) => {
       const { name, type, value, checked, validate, meta, } = input;
       if (validate) {
         meta.error = validate(value);
@@ -77,45 +100,50 @@ class Form extends React.Component {
       meta.submitted = true;
       meta.valid = !meta.error;
       if (meta.valid) {
-        fields[name] = type !== 'checkbox' ? value : checked;
+        inputs[name] = type !== 'checkbox' ? value : checked;
       } else {
         isValid = false;
       }
-      newState[name] = {
+      total[name] = {
         ...input,
         meta,
-      };
-    }
-    this.setState(newState);
+      }
+      return total;
+    }, {}));
     if (!isValid) {
       return;
     }
-    const result = await this.props.onSubmit(fields);
-    if (result) {
-      this.props.onClose();
+    const success = await this.props.onSubmit(inputs);
+    if (success) {
+      if (reset) {
+        this.resetFields();
+      } else if (close) {
+        this.props.onClose();
+      }
     }
   }
   
-  renderChildren = children => {
-    return React.Children.map(children, child => {
-      if (typeof child === 'string') return child;
-      const { children, } = child.props;
-      if (children) return React.cloneElement(child, { children: this.renderChildren(children), });
-      const { name, } = child.props;
-      return name && this.state[name]
+  renderChildren = children => React.Children.map(children, child => {
+    if (typeof child === 'string') return child;
+    const { children, } = child.props;
+    if (children) return React.cloneElement(child, { children: this.renderChildren(children), });
+    const { name, type, } = child.props;
+    return name && this.state[name]
+      ? React.cloneElement(child, {
+        ...this.state[name],
+        onChange: this.handleChange,
+      })
+      : type === 'submit'
         ? React.cloneElement(child, {
-          ...this.state[name],
-          onChange: this.handleChange,
+          onClick: this.handleSubmit,
         })
         : child;
-    });
-  }
+  });
 
   render () {
-    const { children, } = this.props;
     return (
-      <StyledForm onSubmit={this.handleSubmit}>
-        { this.renderChildren(children) }
+      <StyledForm>
+        { this.renderChildren(this.props.children) }
       </StyledForm>
     );
   }

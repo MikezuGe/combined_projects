@@ -6,17 +6,13 @@ import { default as PasswordField, } from './PasswordField';
 import { default as NumberField, } from './NumberField';
 import { default as DateField, } from './DateField';
 import { default as CheckboxField, } from './CheckboxField';
+import { default as SubmitField, } from './SubmitField';
 
 
 class Field extends React.Component {
 
   static propTypes = {
-    name: PropTypes.string.isRequired,
     type: PropTypes.string.isRequired,
-    value: PropTypes.string,
-    checked: PropTypes.bool,
-    label: PropTypes.string,
-    placeholder: PropTypes.string,
   }
   
   handleChange = ({ target: { name, value, checked, }, }) => {
@@ -47,6 +43,7 @@ class Field extends React.Component {
         { type === 'number' && <NumberField {...this.props} onChange={this.handleChange} /> }
         { type === 'date' && <DateField {...this.props} onChange={this.handleChange} /> }
         { type === 'checkbox' && <CheckboxField {...this.props} onChange={this.handleChange} /> }
+        { type === 'submit' && <SubmitField {...this.props} /> }
       </React.Fragment>
     );
   }

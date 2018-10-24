@@ -1,16 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
 
 import { Form, addToast, } from '../../components/organisms';
 import { Field, } from '../../components/molecules';
 import { Mutation, CREATE_FUND, } from '../../queries';
-
-
-
-const Button = styled.button`
-background: lime;
-`;
 
 
 const validateName = t => {
@@ -50,11 +43,13 @@ class BudgetAdd extends React.Component {
           ({ onSubmit, }) => (
             <React.Fragment>
               <Form onSubmit={input => onSubmit({ input, })} onClose={this.props.onClose}>
-                <Field name='name' type='text' label='Name' placeholder='eg. Prisma Kokkola' validate={validateName} required />
-                <Field name='amount' type='number' label='Amount' placeholder='xxx,xx' validate={validateAmount} min='0' step='0.01' required />
+                <Field name='name' type='text' label='Name' placeholder='eg. Prisma Kokkola' validate={validateName} />
+                <Field name='amount' type='number' label='Amount' placeholder='xxx,xx' validate={validateAmount} min='0' step='0.01' />
                 <Field name='isIncome' type='checkbox' placeholder='xxx,xx' offValue={'Expense'} onValue={'Income'} toggle />
-                <Field name='date' type='date' placeholder='date' required />
-                <Button>Submit!</Button>
+                <Field name='date' type='date' placeholder='date' />
+                <Field type='submit' value='Submit & Add' submit={'true'} reset={'true'} />
+                <Field type='submit' value='Submit & Close' submit={'true'} close={'true'} />
+                <Field type='submit' value='Close' close={'true'} />
               </Form>
             </React.Fragment>
           )

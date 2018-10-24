@@ -13,7 +13,7 @@ const IncomeExpenseIcon = styled(Icon)`
 transform: rotate(${({ dataValue }) => dataValue ? -90 : 90}deg);
 `;
 
-
+setTimeout(() => openModal(<BudgetAdd />), 100);
 class Budget extends React.Component {
 
   render () {

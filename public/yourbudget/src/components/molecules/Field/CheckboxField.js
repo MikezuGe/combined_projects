@@ -50,7 +50,7 @@ const CheckboxField = props => {
       { toggle
         ? (
           <InnerWrapper>
-            { offValue && <Label>{offValue}</Label>}
+            { onValue && <Label htmlFor={name}>{onValue}</Label> }
             <Input
               id={name}
               name={name}
@@ -62,7 +62,7 @@ const CheckboxField = props => {
               {...rest}
             />
             <ToggleLabel htmlFor={name} checked={checked} />
-            { onValue && <Label>{onValue}</Label>}
+            { offValue && <Label htmlFor={name}>{offValue}</Label> }
           </InnerWrapper>
         ) : (
         <Input

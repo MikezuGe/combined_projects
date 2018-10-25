@@ -54,8 +54,8 @@ class Form extends React.Component {
   }
 
   resetFields () {
-    this.setState(prevState => {
-      const fields = Object.entries(prevState).reduce((total, [ key, value, ]) => {
+    this.setState(prevState =>
+      Object.entries(prevState).reduce((total, [ key, value, ]) => {
         total[key] = {
           ...value,
           value: '',
@@ -65,9 +65,8 @@ class Form extends React.Component {
           },
         };
         return total;
-      }, {});
-      return fields;
-    });
+      }, {})
+    );
   }
 
   handleChange = ({ name, value, checked, meta, }) => {

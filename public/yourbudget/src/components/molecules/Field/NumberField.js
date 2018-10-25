@@ -13,12 +13,12 @@ const Label = styled.label`
 `;
 
 const Input = styled.input`
-
+width: 100%;
 `;
 
 
 const TextField = props => {
-  const { name, type, value, placeholder, onChange, label, meta: { error, submitted, }, ...rest } = props;
+  const { name, type, value, label, placeholder, onChange, meta: { error, submitted, }, ...rest } = props;
   return (
     <Wrapper>
       { label && <Label>{label}</Label> }
@@ -42,8 +42,8 @@ TextField.propTypes = {
   value: PropTypes.string,
   label: PropTypes.string,
   placeholder: PropTypes.string,
-  meta: PropTypes.object.isRequired,
   onChange: PropTypes.func.isRequired,
+  meta: PropTypes.object.isRequired,
 };
 
 

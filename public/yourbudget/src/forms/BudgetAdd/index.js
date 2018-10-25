@@ -34,6 +34,8 @@ class BudgetAdd extends React.Component {
   }
 
   render () {
+    const tzoffset = new Date().getTimezoneOffset() * 60000;
+    const dateString = new Date(Date.now() - tzoffset).toISOString();
     return (
       <Mutation
         query={CREATE_FUND}
@@ -46,10 +48,12 @@ class BudgetAdd extends React.Component {
                 <Field name='name' type='text' label='Name' placeholder='eg. Prisma Kokkola' validate={validateName} />
                 <Field name='amount' type='number' label='Amount' placeholder='xxx,xx' validate={validateAmount} min='0' step='0.01' />
                 <Field name='isIncome' type='checkbox' placeholder='xxx,xx' offValue={'Expense'} onValue={'Income'} toggle />
-                <Field name='date' type='date' placeholder='date' />
-                <Field type='submit' value='Submit & Add' submit={'true'} reset={'true'} />
-                <Field type='submit' value='Submit & Close' submit={'true'} close={'true'} />
-                <Field type='submit' value='Close' close={'true'} />
+                <Field name='date' type='date' placeholder='date' value={dateString.slice(0, dateString.indexOf('T'))} />
+                <div style={{ display: 'flex', flexDirection: 'column', }}>
+                  <Field type='submit' value='Submit & Add' submit reset />
+                  <Field type='submit' value='Submit & Close' submit close />
+                  <Field type='submit' value='Close' close />
+                </div>
               </Form>
             </React.Fragment>
           )

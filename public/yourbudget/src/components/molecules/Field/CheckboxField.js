@@ -43,7 +43,7 @@ display: ${({ toggle, }) => toggle ? 'none' : 'block'};
 
 
 const CheckboxField = props => {
-  const { name, type, toggle, offValue, onValue, checked, placeholder, onChange, label, ...rest } = props;
+  const { name, type, checked, label, onValue, offValue, placeholder, toggle, onChange, ...rest } = props;
   return (
     <Wrapper>
       { label && <Label>{label}</Label> }
@@ -82,12 +82,12 @@ const CheckboxField = props => {
 CheckboxField.propTypes = {
   name: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
-  toggle: PropTypes.bool,
   checked: PropTypes.bool,
+  label: PropTypes.string,
   onValue: PropTypes.string,
   offValue: PropTypes.string,
-  label: PropTypes.string,
   placeholder: PropTypes.string,
+  toggle: PropTypes.bool,
   onChange: PropTypes.func.isRequired,
 };
 

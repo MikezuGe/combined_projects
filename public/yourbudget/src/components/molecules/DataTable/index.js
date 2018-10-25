@@ -11,17 +11,18 @@ import {
 const DataTable = ({ rows, data, }) => (
   <Table>
     <TableRow>
-      { rows.map(({ title, }) => <TableCell key={title} header>{title}</TableCell>) }
+      { rows.map(({ title, }, k) => <TableCell key={`header-cell-${k}`} header>{title}</TableCell>) }
     </TableRow>
     { data.map((d, i) => (
       <TableRow key={`row-${i}`}>
-        { rows.map(({ dataKey, render, ...rest }) =>
+        { rows.map(({ dataKey, parseValue, render, ...rest }, k) =>
           <TableCell
-            key={`${dataKey}-${i}`}
+            key={`row-${i}-cell-${k}`}
             {...rest}
           >
             {
-              render && render({ dataKey, dataValue: d[dataKey], rowNum: i, ...rest })
+              render && render(d)
+              || (parseValue && parseValue(d[dataKey]))
               || d[dataKey]
             }
           </TableCell>)

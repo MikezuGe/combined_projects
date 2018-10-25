@@ -10,7 +10,6 @@ import { Query, GET_FUNDS, } from '../../queries';
 
 
 const IncomeExpenseIcon = styled(Icon)`
-transform: rotate(${({ dataValue }) => dataValue ? -90 : 90}deg);
 `;
 
 
@@ -48,10 +47,19 @@ class Budget extends React.Component {
                     }, {
                       title: 'Date',
                       dataKey: 'date',
+                      parseValue: value => value.slice(0, value.indexOf('T')),
                     }, {
-                      title: '',
                       dataKey: 'isIncome',
-                      render: props => <IncomeExpenseIcon {...props} icon={'chevron_right'}/>,
+                      render: data => (
+                        <IncomeExpenseIcon
+                          rotate={data.isIncome ? 270 : 90}
+                          icon={'chevron_right'}
+                        />
+                      ),
+                    }, {
+                      render: data => <div onClick={() => console.log('Should edit')}>{'Edit by clicking here'}</div>,
+                    }, {
+                      render: data => <div onClick={() => console.log('Should remove')}>{'Remove by clicking here'}</div>,
                     }
                   ]}
                 />

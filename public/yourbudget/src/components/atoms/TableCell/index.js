@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 
 const HeaderCell = styled.td`
-
+text-align: center;
 `;
 
 const DataCell = styled.td`
@@ -13,14 +13,14 @@ border-radius: 0.5em;
 `;
 
 
-const TableCell = ({ header, children, }) => (
+const TableCell = ({ header, children, ...rest }) => (
   header
   ? (
-    <HeaderCell>
+    <HeaderCell {...rest}>
       {children}
     </HeaderCell>
   ) : (
-    <DataCell>
+    <DataCell {...rest}>
       {children}
     </DataCell>
   )

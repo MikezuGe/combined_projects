@@ -36,5 +36,5 @@ type Query {
 type Mutation {
   createFunds(input: FundInput!): Fund
   updateFunds(id: ID!, input: FundUpdate!): Fund
-  removeFunds(id: ID!): Boolean
+  removeFunds(ids: [ID]!): [Fund]
 }

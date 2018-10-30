@@ -72,6 +72,7 @@ class Modal extends React.Component {
   close = () => {
     this.setState({
       active: false,
+      modalContent: null,
     });
     window.removeEventListener('keyup', this.keyupListener, false);
   }
@@ -84,7 +85,10 @@ class Modal extends React.Component {
           <InnerWrapper onClick={e => e.stopPropagation()}>
             {
               modalContent && React.cloneElement(modalContent, {
-                onClose: this.close,
+                onClose: () => {
+                  modalContent.props.onClose();
+                  this.close();
+                },
               })
             }
           </InnerWrapper>

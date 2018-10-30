@@ -23,12 +23,12 @@ const fieldsToState = (total, current) => {
   if (!React.isValidElement(current)) return total;
   const { children, } = current.props;
   children && React.Children.map(children, child => fieldsToState(total, child));
-  const { name, value, checked, } = current.props;
+  const { name, value, } = current.props;
   if (name) {
     total[name] = {
       ...current.props,
       value: value || '',
-      checked: !!checked,
+      checked: !!value,
       meta: {
         ...meta,
       },
@@ -123,7 +123,7 @@ class Form extends React.Component {
   }
   
   renderChildren = children => React.Children.map(children, child => {
-    if (typeof child === 'string') return child;
+    if (!child || typeof child === 'string') return child;
     const { children, } = child.props;
     if (children) return React.cloneElement(child, { children: this.renderChildren(children), });
     const { name, type, } = child.props;

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { Form, addToast, } from '../../components/organisms';
 import { Field, } from '../../components/molecules';
-import { Mutation, CREATE_FUND, } from '../../queries';
+import { Mutation, CREATE_FUND, UPDATE_FUND, } from '../../queries';
 
 
 const validateName = t => {
@@ -26,38 +26,70 @@ const validateAmount = t => {
   }
 };
 
+const defaultDate = () => new Date(Date.now() - (new Date().getTimezoneOffset() * 60000)).toISOString();
+
 
 class BudgetAdd extends React.Component {
 
   static propTypes = {
     onClose: PropTypes.func,
+    data: PropTypes.object,
   }
 
   render () {
-    const tzoffset = new Date().getTimezoneOffset() * 60000;
-    const dateString = new Date(Date.now() - tzoffset).toISOString();
+    const { data, } = this.props;
+    const dateString = data ? data.date : defaultDate();
     return (
       <Mutation
-        query={CREATE_FUND}
+        query={data ? UPDATE_FUND : CREATE_FUND}
         onError={({ status, statusText, }) => addToast(`${status} ${statusText}`)}
       >
-        {
-          ({ onSubmit, }) => (
-            <React.Fragment>
-              <Form onSubmit={input => onSubmit({ input, })} onClose={this.props.onClose}>
-                <Field name='name' type='text' label='Name' placeholder='eg. Prisma Kokkola' validate={validateName} />
-                <Field name='amount' type='number' label='Amount' placeholder='xxx,xx' validate={validateAmount} min='0' step='0.01' />
-                <Field name='isIncome' type='checkbox' placeholder='xxx,xx' offValue={'Expense'} onValue={'Income'} toggle />
-                <Field name='date' type='date' placeholder='date' value={dateString.slice(0, dateString.indexOf('T'))} />
-                <div style={{ display: 'flex', flexDirection: 'column', }}>
-                  <Field type='submit' value='Submit & Add' submit reset />
-                  <Field type='submit' value='Submit & Close' submit close />
-                  <Field type='submit' value='Close' close />
-                </div>
-              </Form>
-            </React.Fragment>
-          )
-        }
+        {({ onSubmit, }) => (
+          <React.Fragment>
+            <Form
+              onSubmit={input => onSubmit({ id: data && data.id, input, })}
+              onClose={this.props.onClose}
+            >
+              <Field
+                name='name'
+                type='text'
+                label='Name'
+                placeholder='eg. Prisma Kokkola'
+                value={data ? data.name : ''}
+                validate={validateName}
+              />
+              <Field
+                name='amount'
+                type='number'
+                label='Amount'
+                placeholder='xxx,xx'
+                value={data ? data.amount : ''}
+                validate={validateAmount}
+                min='0'
+                step='0.01'
+              />
+              <Field
+                name='isIncome'
+                type='checkbox'
+                placeholder='xxx,xx'
+                value={data ? data.isIncome : false}
+                onValue={'Income'}
+                offValue={'Expense'}
+                toggle />
+              <Field
+                name='date'
+                type='date'
+                placeholder='date'
+                value={dateString.slice(0, dateString.indexOf('T'))}
+              />
+              <div style={{ display: 'flex', flexDirection: 'column', }}>
+                {!data && <Field type='submit' value='Submit & Add' submit reset />}
+                <Field type='submit' value='Submit & Close' submit close />
+                <Field type='submit' value='Close' close />
+              </div>
+            </Form>
+          </React.Fragment>
+        )}
       </Mutation>
     );
   }

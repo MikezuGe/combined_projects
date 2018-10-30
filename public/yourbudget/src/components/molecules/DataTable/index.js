@@ -15,9 +15,10 @@ const DataTable = ({ rows, data, }) => (
     </TableRow>
     { data.map((d, i) => (
       <TableRow key={`row-${i}`}>
-        { rows.map(({ dataKey, parseValue, render, ...rest }, k) =>
+        { rows.map(({ dataKey, parseValue, render, onClick, ...rest }, k) =>
           <TableCell
             key={`row-${i}-cell-${k}`}
+            onClick={() => onClick(d)}
             {...rest}
           >
             {

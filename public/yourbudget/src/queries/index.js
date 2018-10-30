@@ -5,17 +5,20 @@ axios.defaults.baseURL = `${window.location.origin}/api/graphql`;
 axios.defaults.headers = { 'Content-Type': 'application/json', };
 
 
-import { default as createFunds, } from './createFunds';
-import { default as getFunds, } from './getFunds';
+import { getFunds, createFunds, updateFunds, removeFunds, } from './funds';
 
 
-export const CREATE_FUND = 'CREATE_FUND';
 export const GET_FUNDS = 'GET_FUNDS';
+export const CREATE_FUND = 'CREATE_FUND';
+export const UPDATE_FUND = 'UPDATE_FUND';
+export const REMOVE_FUNDS = 'REMOVE_FUNDS';
 
 
 const queries = {
   GET_FUNDS: getFunds,
   CREATE_FUND: createFunds,
+  UPDATE_FUND: updateFunds,
+  REMOVE_FUNDS: removeFunds,
 };
 
 
@@ -45,7 +48,7 @@ export class Query extends React.Component {
   }
   
   shouldComponentUpdate (nextProps, nextState) {
-    return this.state.loading !== nextState.loading;
+    return !nextState.loading;
   }
 
   async tryFetch () {
@@ -58,7 +61,10 @@ export class Query extends React.Component {
     } catch (err) {
       result = err.response;
       result.error = true;
-      this.props.onError({ status: result.status, statusText: result.statusText, });
+      this.props.onError && this.props.onError({
+        status: result.status,
+        statusText: result.statusText,
+      });
     }
     return result;
   }
@@ -73,9 +79,9 @@ export class Query extends React.Component {
     });
   }
 
-  refetch = () => {
+  refetch = async () => {
     this.setState({ loading: true, });
-    this.updateState(this.tryFetch());
+    this.updateState(await this.tryFetch());
   }
   
   render () {
@@ -106,7 +112,7 @@ export class Mutation extends React.Component {
     statusText: '',
   }
 
-  onSubmit = async variables => {
+  async tryMutate (variables) {
     const query = queries[this.props.query];
     let result = null;
     try {
@@ -115,9 +121,15 @@ export class Mutation extends React.Component {
     } catch (err) {
       result = err.response;
       result.error = true;
-      this.props.onError({ status: result.status, statusText: result.statusText, });
+      this.props.onError && this.props.onError({
+        status: result.status,
+        statusText: result.statusText,
+      });
     }
-    const { error, status, statusText, data: { data, }, } = result;
+    return result;
+  }
+
+  updateState ({ error, status, statusText, data: { data, }, }) {
     this.setState({
       loading: false,
       error,
@@ -125,11 +137,17 @@ export class Mutation extends React.Component {
       status: status,
       statusText: statusText,
     });
-    return !error;
+  }
+
+  onSubmit = async variables => {
+    this.setState({ loading: true, });
+    const result = await this.tryMutate(variables);
+    this.updateState(result);
+    return !result.error;
   }
 
   shouldComponentUpdate (nextProps, nextState) {
-    return this.state.loading !== nextState.loading;
+    return nextState.loading;
   }
 
   render () {

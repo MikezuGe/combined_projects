@@ -2,6 +2,7 @@ const webpack = require('webpack');
 const path = require('path');
 const fs = require('fs');
 const WebpackLivereloadPlugin = require('webpack-livereload-plugin');
+const OpenBrowserWebpackPlugin = require('open-browser-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 
@@ -92,6 +93,11 @@ const pluginHtmlWebpackPlugin = project => {
   });
 }
 
+const openBrowserWebpackPlugin = new OpenBrowserWebpackPlugin({
+  url: 'http://localhost:3000',
+  //ignoreErrors: true,
+});
+
 const webpackLivereloadPlugin = new WebpackLivereloadPlugin({});
 
 
@@ -121,6 +127,7 @@ module.exports = {
   },
   plugins: [
     webpackDefinedPlugin,
+    openBrowserWebpackPlugin,
     webpackLivereloadPlugin,
     ...projects.map(pluginHtmlWebpackPlugin),
   ],

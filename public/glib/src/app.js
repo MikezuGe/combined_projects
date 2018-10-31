@@ -1,10 +1,10 @@
-import { injectGlobal, } from 'styled-components';
+import { setGlobalStyle, } from './utility';
 
 import Glib, { gl, } from './core/Glib';
 import { Mat4, } from './math';
 
 
-injectGlobal`
+setGlobalStyle(`
 * {
   font-family: 'Ubuntu', sans-serif;
   margin: 0;
@@ -29,7 +29,7 @@ canvas {
   height: 100%;
   background: gray;
 }
-`;
+`);
 
 
 const glib = new Glib({

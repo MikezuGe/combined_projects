@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { injectGlobal, ThemeProvider as StyledComponentThemeProvider, } from 'styled-components';
+import { createGlobalStyle, ThemeProvider as StyledComponentThemeProvider, } from 'styled-components';
 
 
-injectGlobal`
+const GlobalStyle = createGlobalStyle`
 * {
   font-family: 'Ubuntu', sans-serif;
   font-size: 16px;
@@ -70,13 +70,16 @@ class ThemeProvider extends React.Component {
 
   render () {
     return (
-      <StyledComponentThemeProvider theme={{
-          ...theme[this.state.active],
-          changeTheme: this.changeTheme,
-        }}
-      >
-        {this.props.children}
-      </StyledComponentThemeProvider>
+      <React.Fragment>
+        <StyledComponentThemeProvider theme={{
+            ...theme[this.state.active],
+            changeTheme: this.changeTheme,
+          }}
+        >
+          {this.props.children}
+        </StyledComponentThemeProvider>
+        <GlobalStyle />
+      </React.Fragment>
     )
   }
 

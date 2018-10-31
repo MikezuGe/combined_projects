@@ -1,10 +1,9 @@
-import { injectGlobal, } from 'styled-components';
-
 import World from './World';
 import { Renderer, } from './Renderer';
 
+import { setGlobalStyle, } from './utility';
 
-injectGlobal`
+setGlobalStyle(`
 * {
   font-family: 'Ubuntu', sans-serif;
   margin: 0;
@@ -29,7 +28,7 @@ canvas {
   //height: 100%;
   background: gray;
 }
-`;
+`);
 
 
 window.addEventListener('keyup', e => {

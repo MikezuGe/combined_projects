@@ -72,15 +72,16 @@ class Modal extends React.Component {
   close = () => {
     this.setState({
       active: false,
-      modalContent: null,
     });
     window.removeEventListener('keyup', this.keyupListener, false);
   }
 
+  clearModal = () => !this.state.active && this.setState({ modalContent: null, })
+
   render () {
     const { active, modalContent, } = this.state;
     return (
-      <GrayoutContainer active={active} onClick={this.close}>
+      <GrayoutContainer active={active} onClick={this.close} onTransitionEnd={this.clearModal}>
         <Wrapper active={active}>
           <InnerWrapper onClick={e => e.stopPropagation()}>
             {

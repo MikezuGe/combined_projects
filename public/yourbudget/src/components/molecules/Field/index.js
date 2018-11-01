@@ -38,12 +38,12 @@ class Field extends React.Component {
     const { type, } = this.props;
     return (
       <React.Fragment>
-        { type === 'text' && <TextField {...this.props} onChange={this.handleChange} /> }
-        { type === 'password' && <PasswordField {...this.props} onChange={this.handleChange} /> }
-        { type === 'number' && <NumberField {...this.props} onChange={this.handleChange} /> }
-        { type === 'date' && <DateField {...this.props} onChange={this.handleChange} /> }
-        { type === 'checkbox' && <CheckboxField {...this.props} onChange={this.handleChange} /> }
-        { type === 'submit' && <SubmitField {...this.props} /> }
+        {type === 'text' && <TextField {...this.props} onChange={this.handleChange} />}
+        {type === 'password' && <PasswordField {...this.props} onChange={this.handleChange} />}
+        {type === 'number' && <NumberField {...this.props} onChange={this.handleChange} />}
+        {type === 'date' && <DateField {...this.props} onChange={this.handleChange} />}
+        {type === 'checkbox' && <CheckboxField {...this.props} onChange={this.handleChange} />}
+        {type === 'submit' && <SubmitField {...this.props} />}
       </React.Fragment>
     );
   }

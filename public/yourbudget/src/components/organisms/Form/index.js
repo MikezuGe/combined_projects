@@ -142,7 +142,7 @@ class Form extends React.Component {
   render () {
     return (
       <StyledForm>
-        { this.renderChildren(this.props.children) }
+        {this.renderChildren(this.props.children)}
       </StyledForm>
     );
   }

@@ -21,8 +21,8 @@ const TextField = props => {
   const { name, type, value, label, placeholder, onChange, meta: { error, submitted, }, ...rest } = props;
   return (
     <Wrapper>
-      { label && <Label>{label}</Label> }
-      { submitted && error && <Label>{error}</Label> }
+      {label && <Label>{label}</Label>}
+      {submitted && error && <Label>{error}</Label>}
       <Input
         name={name}
         type={type}

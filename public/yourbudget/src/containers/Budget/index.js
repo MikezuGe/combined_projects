@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Icon, } from '../../components/atoms';
 import { DataTable, } from '../../components/molecules';
-import { addToast, openModal, } from '../../components/organisms';
+import { addToast, } from '../../components/organisms';
 import { Desktop, } from '../../components/pages';
 import { BudgetAdd, } from '../../forms';
 import { Query, Mutation, GET_FUNDS, REMOVE_FUNDS, } from '../../queries';
@@ -22,7 +22,7 @@ class Budget extends React.Component {
               secondaryMenuItems={[
                 {
                   text: 'Add',
-                  onClick: () => openModal(<BudgetAdd onClose={refetch} />),
+                  onClick: () => console.log('should open budget add modal'),
                 }
               ]}
             >
@@ -50,19 +50,16 @@ class Budget extends React.Component {
                           parseValue: value => value.slice(0, value.indexOf('T')),
                         }, {
                           dataKey: 'isIncome',
-                          render: data => (
+                          render: ({ isIncome, }) => (
                             <Icon
                               icon={'chevron_right'}
-                              fill={data.isIncome ? 'green' : 'red'}
-                              rotate={data.isIncome ? 270 : 90}
+                              fill={isIncome ? 'green' : 'red'}
+                              rotate={isIncome ? 270 : 90}
                             />
                           ),
                         }, {
                           title: 'Edit',
-                          onClick: data => openModal(<BudgetAdd
-                            data={data}
-                            onClose={refetch}
-                          />),
+                          onClick: rowData => console.log('Should open budget editing modal'),
                           render: () => (
                             <Icon icon={'pencil'} />
                           ),

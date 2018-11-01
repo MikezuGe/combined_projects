@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter, Route, Switch, Redirect, } from 'react-router-dom';
 
 import ThemeProvider from './components/ThemeProvider';
-import { Toaster, Modal, } from './components/organisms';
 import {
   Home,
   Budget,
@@ -27,8 +26,6 @@ ReactDOM.render(
   <ThemeProvider>
     <React.Fragment>
       <App />
-      <Modal />
-      <Toaster />
     </React.Fragment>
   </ThemeProvider>,
   document.getElementById('root')

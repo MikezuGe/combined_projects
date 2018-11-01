@@ -46,11 +46,11 @@ const CheckboxField = props => {
   const { name, type, checked, label, onValue, offValue, placeholder, toggle, onChange, ...rest } = props;
   return (
     <Wrapper>
-      { label && <Label>{label}</Label> }
-      { toggle
+      {label && <Label>{label}</Label>}
+      {toggle
         ? (
           <InnerWrapper>
-            { offValue && <Label htmlFor={name}>{offValue}</Label> }
+            {offValue && <Label htmlFor={name}>{offValue}</Label>}
             <Input
               id={name}
               name={name}
@@ -62,7 +62,7 @@ const CheckboxField = props => {
               {...rest}
             />
             <ToggleLabel htmlFor={name} checked={checked} />
-            { onValue && <Label htmlFor={name}>{onValue}</Label> }
+            {onValue && <Label htmlFor={name}>{onValue}</Label>}
           </InnerWrapper>
         ) : (
         <Input
@@ -73,7 +73,7 @@ const CheckboxField = props => {
           onChange={onChange}
           {...rest}
         />
-      ) }
+      )}
     </Wrapper>
   );
 };

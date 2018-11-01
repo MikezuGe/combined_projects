@@ -11,11 +11,11 @@ import {
 const DataTable = ({ rows, data, }) => (
   <Table>
     <TableRow>
-      { rows.map(({ title, }, k) => <TableCell key={`header-cell-${k}`} header>{title}</TableCell>) }
+      {rows.map(({ title, }, k) => <TableCell key={`header-cell-${k}`} header>{title}</TableCell>) }
     </TableRow>
-    { data.map((d, i) => (
+    {data.map((d, i) => (
       <TableRow key={`row-${i}`}>
-        { rows.map(({ dataKey, parseValue, render, onClick, ...rest }, k) =>
+        {rows.map(({ dataKey, parseValue, render, onClick, ...rest }, k) =>
           <TableCell
             key={`row-${i}-cell-${k}`}
             onClick={() => onClick(d)}

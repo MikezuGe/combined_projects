@@ -26,7 +26,8 @@ const validateAmount = t => {
   }
 };
 
-const defaultDate = () => new Date(Date.now() - (new Date().getTimezoneOffset() * 60000)).toISOString();
+const defaultDateString = () => new Date(Date.now() - (new Date().getTimezoneOffset() * 60000)).toISOString();
+const parseDate = dateString => dateString.slice(0, dateString.indexOf('T'))
 
 
 class BudgetAdd extends React.Component {
@@ -36,18 +37,21 @@ class BudgetAdd extends React.Component {
     data: PropTypes.object,
   }
 
+  static defaultProps = {
+    data: {},
+  }
+
   render () {
-    const { data, } = this.props;
-    const dateString = data ? data.date : defaultDate();
+    const { data: { id, name, amount, isIncome, date, }, } = this.props;
     return (
       <Mutation
-        query={data ? UPDATE_FUND : CREATE_FUND}
+        query={id ? UPDATE_FUND : CREATE_FUND}
         onError={({ status, statusText, }) => addToast(`${status} ${statusText}`)}
       >
         {({ onSubmit, }) => (
           <React.Fragment>
             <Form
-              onSubmit={input => onSubmit({ id: data && data.id, input, })}
+              onSubmit={input => onSubmit({ id, input, })}
               onClose={this.props.onClose}
             >
               <Field
@@ -55,7 +59,7 @@ class BudgetAdd extends React.Component {
                 type='text'
                 label='Name'
                 placeholder='eg. Prisma Kokkola'
-                value={data ? data.name : ''}
+                value={name || ''}
                 validate={validateName}
               />
               <Field
@@ -63,7 +67,7 @@ class BudgetAdd extends React.Component {
                 type='number'
                 label='Amount'
                 placeholder='xxx,xx'
-                value={data ? data.amount : ''}
+                value={amount || ''}
                 validate={validateAmount}
                 min='0'
                 step='0.01'
@@ -72,7 +76,7 @@ class BudgetAdd extends React.Component {
                 name='isIncome'
                 type='checkbox'
                 placeholder='xxx,xx'
-                value={data ? data.isIncome : false}
+                value={!!isIncome}
                 onValue={'Income'}
                 offValue={'Expense'}
                 toggle />
@@ -80,10 +84,10 @@ class BudgetAdd extends React.Component {
                 name='date'
                 type='date'
                 placeholder='date'
-                value={dateString.slice(0, dateString.indexOf('T'))}
+                value={parseDate(date || defaultDateString())}
               />
               <div style={{ display: 'flex', flexDirection: 'column', }}>
-                {!data && <Field type='submit' value='Submit & Add' submit reset />}
+                {!id && <Field type='submit' value='Submit & Add' submit reset />}
                 <Field type='submit' value='Submit & Close' submit close />
                 <Field type='submit' value='Close' close />
               </div>

@@ -71,7 +71,7 @@ class Menu extends React.Component {
           </StyledList>
           <StyledList>
             <ListItem to='#' onClick={togglePrimary}>Change menu</ListItem>
-            { secondaryMenuItems && (
+            {secondaryMenuItems && (
               secondaryMenuItems.map((item, i) => (
                 <ListItem
                   key={i}

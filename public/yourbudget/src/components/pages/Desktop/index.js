@@ -17,7 +17,7 @@ const Desktop = ({ children, secondaryMenuItems, }) => (
     <Header />
     <Menu secondaryMenuItems={secondaryMenuItems} />
     <MainWrapper>
-      { children }
+      {children}
     </MainWrapper>
   </React.Fragment>
 );

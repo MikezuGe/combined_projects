@@ -1,10 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import styled from 'styled-components';
-
-
-export const openModal = form => listener(form);
-let listener = null;
 
 
 const GrayoutContainer = styled.div`
@@ -38,20 +33,8 @@ const InnerWrapper = styled.div`
 
 class Modal extends React.Component {
 
-  static propTypes = {
-    children: PropTypes.oneOfType([
-      PropTypes.element,
-      PropTypes.array,
-    ]),
-    modalViews: PropTypes.object,
-  }
-
-  componentDidMount () {
-    listener = this.open;
-  }
-
   state = {
-    modalContent: null,
+    ModalChild: null,
     active: false,
   }
 
@@ -61,36 +44,39 @@ class Modal extends React.Component {
     }
   }
 
-  open = modalContent => {
+  openModal = ({ component, }) => {
+    console.log(component);
     this.setState({
       active: true,
-      modalContent,
+      ModalChild: component,
     });
     window.addEventListener('keyup', this.keyupListener, false);
   }
 
-  close = () => {
+  closeModal = () => {
     this.setState({
       active: false,
     });
     window.removeEventListener('keyup', this.keyupListener, false);
   }
 
-  clearModal = () => !this.state.active && this.setState({ modalContent: null, })
+  clearModal = () => !this.state.active && this.setState({ ModalChild: null, })
 
   render () {
-    const { active, modalContent, } = this.state;
+    const { active, ModalChild, } = this.state;
     return (
-      <GrayoutContainer active={active} onClick={this.close} onTransitionEnd={this.clearModal}>
+      <GrayoutContainer active={active} onClick={this.closeModal} onTransitionEnd={this.clearModal}>
         <Wrapper active={active}>
           <InnerWrapper onClick={e => e.stopPropagation()}>
             {
-              modalContent && React.cloneElement(modalContent, {
-                onClose: () => {
-                  modalContent.props.onClose();
-                  this.close();
-                },
-              })
+              ModalChild && (
+                <ModalChild
+                  onClose={() => {
+                    ModalChild.props.onClose();
+                    this.close();
+                  }}
+                />
+              )
             }
           </InnerWrapper>
         </Wrapper>

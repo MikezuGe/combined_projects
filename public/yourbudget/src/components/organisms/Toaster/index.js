@@ -4,22 +4,10 @@ import styled from 'styled-components';
 import Toast from './Toast';
 
 
+let nextToastId = 0;
 const defaultOptions = {
   timeout: 5000,
 };
-
-
-let nextId = 0;
-let listener = toast => toastsInQueue.push(toast);
-const toastsInQueue = [];
-
-
-export const addToast = (text, options) => listener({
-  ...defaultOptions,
-  ...options,
-  id: nextId++,
-  text,
-});
 
 
 const Wrapper = styled.ul`
@@ -32,18 +20,19 @@ list-style: none;
 
 class Toaster extends React.Component {
 
-  componentDidMount () {
-    listener = this.addToast;
-  }
-
   state = {
-    toasts: toastsInQueue,
+    toasts: [],
   }
 
-  addToast = toast => this.setState(prevState => ({
+  addToast = (text, options) => this.setState(prevState => ({
     toasts: [
       ...prevState.toasts,
-      toast,
+      {
+        ...defaultOptions,
+        ...options,
+        id: nextToastId++,
+        text,
+      },
     ],
   }));
 
@@ -64,9 +53,12 @@ class Toaster extends React.Component {
 
   render () {
     return (
-      <Wrapper>
-        {this.renderToasts()}
-      </Wrapper>
+      <React.Fragment>
+        <Wrapper>
+          {this.renderToasts()}
+        </Wrapper>
+        {this.props.children}
+      </React.Fragment>
     );
   }
 

@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter, Route, Switch, Redirect, } from 'react-router-dom';
 
 import ThemeProvider from './components/ThemeProvider';
+import { ToasterContextProvider, ModalContextProvider, } from './components/contexts';
 import {
   Home,
   Budget,
@@ -24,9 +25,11 @@ const App = () => (
 
 ReactDOM.render(
   <ThemeProvider>
-    <React.Fragment>
-      <App />
-    </React.Fragment>
+    <ToasterContextProvider>
+      <ModalContextProvider>
+        <App />
+      </ModalContextProvider>
+    </ToasterContextProvider>
   </ThemeProvider>,
   document.getElementById('root')
 );

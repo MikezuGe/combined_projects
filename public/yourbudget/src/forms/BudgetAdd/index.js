@@ -1,8 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { Form, addToast, } from '../../components/organisms';
+import { ToasterContextConsumer, } from '../../components/contexts';
+import { Form, } from '../../components/organisms';
 import { Field, } from '../../components/molecules';
+
 import { Mutation, CREATE_FUND, UPDATE_FUND, } from '../../queries';
 
 
@@ -44,57 +46,59 @@ class BudgetAdd extends React.Component {
   render () {
     const { data: { id, name, amount, isIncome, date, }, } = this.props;
     return (
-      <Mutation
-        query={id ? UPDATE_FUND : CREATE_FUND}
-        onError={({ status, statusText, }) => addToast(`${status} ${statusText}`)}
-      >
-        {({ onSubmit, }) => (
-          <React.Fragment>
-            <Form
-              onSubmit={input => onSubmit({ id, input, })}
-              onClose={this.props.onClose}
-            >
-              <Field
-                name='name'
-                type='text'
-                label='Name'
-                placeholder='eg. Prisma Kokkola'
-                value={name || ''}
-                validate={validateName}
-              />
-              <Field
-                name='amount'
-                type='number'
-                label='Amount'
-                placeholder='xxx,xx'
-                value={amount || ''}
-                validate={validateAmount}
-                min='0'
-                step='0.01'
-              />
-              <Field
-                name='isIncome'
-                type='checkbox'
-                placeholder='xxx,xx'
-                value={!!isIncome}
-                onValue={'Income'}
-                offValue={'Expense'}
-                toggle />
-              <Field
-                name='date'
-                type='date'
-                placeholder='date'
-                value={parseDate(date || defaultDateString())}
-              />
-              <div style={{ display: 'flex', flexDirection: 'column', }}>
-                {!id && <Field type='submit' value='Submit & Add' submit reset />}
-                <Field type='submit' value='Submit & Close' submit close />
-                <Field type='submit' value='Close' close />
-              </div>
-            </Form>
-          </React.Fragment>
+      <ToasterContextConsumer>
+        {({ addToast, }) => (
+          <Mutation
+            query={id ? UPDATE_FUND : CREATE_FUND}
+            onError={({ status, statusText, }) => addToast(`${status} ${statusText}`)}
+          >
+            {({ onSubmit, }) => (
+              <Form
+                onSubmit={input => onSubmit({ id, input, })}
+                onClose={this.props.onClose}
+              >
+                <Field
+                  name='name'
+                  type='text'
+                  label='Name'
+                  placeholder='eg. Prisma Kokkola'
+                  value={name || ''}
+                  validate={validateName}
+                />
+                <Field
+                  name='amount'
+                  type='number'
+                  label='Amount'
+                  placeholder='xxx,xx'
+                  value={amount || ''}
+                  validate={validateAmount}
+                  min='0'
+                  step='0.01'
+                />
+                <Field
+                  name='isIncome'
+                  type='checkbox'
+                  placeholder='xxx,xx'
+                  value={!!isIncome}
+                  onValue={'Income'}
+                  offValue={'Expense'}
+                  toggle />
+                <Field
+                  name='date'
+                  type='date'
+                  placeholder='date'
+                  value={parseDate(date || defaultDateString())}
+                />
+                <div style={{ display: 'flex', flexDirection: 'column', }}>
+                  {!id && <Field type='submit' value='Submit & Add' submit reset />}
+                  <Field type='submit' value='Submit & Close' submit close />
+                  <Field type='submit' value='Close' close />
+                </div>
+              </Form>
+            )}
+          </Mutation>
         )}
-      </Mutation>
+      </ToasterContextConsumer>
     );
   }
 

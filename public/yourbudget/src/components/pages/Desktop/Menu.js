@@ -49,47 +49,38 @@ padding: 0.5rem;
 class Menu extends React.Component {
 
   static propTypes = {
-    secondaryMenuItems: PropTypes.oneOfType([
-      PropTypes.object,
-      PropTypes.array,
-    ]),
+    secondaryMenuItems: PropTypes.array,
   }
 
   state = {
     primary: false,
   }
 
-  togglePrimary = primary => {
-    this.setState({ primary });
-  }
+  togglePrimary = () => this.setState({ primary: !this.state.primary });
 
   render () {
-    const { togglePrimary, state: { primary, }, props: { secondaryMenuItems, }, } = this;
+    const { togglePrimary, props: { secondaryMenuItems, }, state: { primary, }, } = this;
     return (
       <Wrapper>
         <InnerWrapper primary={primary}>
           <StyledList>
-            <ListItem to='#' onClick={() => togglePrimary(false)}>Change menu</ListItem>
+            <ListItem to='#' onClick={togglePrimary}>Change menu</ListItem>
             <ListItem to='/home'>Home</ListItem>
             <ListItem to='/budget'>Budget</ListItem>
             <ListItem to='/settings'>Settings</ListItem>
           </StyledList>
           <StyledList>
-            <ListItem to='#' onClick={() => togglePrimary(true)}>Change menu</ListItem>
-            { secondaryMenuItems && (Array.isArray(secondaryMenuItems)
-              ? secondaryMenuItems.map((item, i) => <ListItem
-                key={i}
-                to='#'
-                onClick={item.onClick}
-              >
-                {item.text}
-              </ListItem>)
-              : <ListItem
-                to='#'
-                onClick={secondaryMenuItems.onClick}
-              >
-                {secondaryMenuItems.text}
-              </ListItem>
+            <ListItem to='#' onClick={togglePrimary}>Change menu</ListItem>
+            { secondaryMenuItems && (
+              secondaryMenuItems.map((item, i) => (
+                <ListItem
+                  key={i}
+                  to='#'
+                  onClick={item.onClick}
+                >
+                  {item.text}
+                </ListItem>
+              ))
             )}
           </StyledList>
         </InnerWrapper>

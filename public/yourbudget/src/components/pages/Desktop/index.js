@@ -24,10 +24,7 @@ const Desktop = ({ children, secondaryMenuItems, }) => (
 
 
 Desktop.propTypes = {
-  secondaryMenuItems: PropTypes.oneOfType([
-    PropTypes.object,
-    PropTypes.array,
-  ]),
+  secondaryMenuItems: PropTypes.array,
   children: PropTypes.oneOfType([
     PropTypes.array,
     PropTypes.element,

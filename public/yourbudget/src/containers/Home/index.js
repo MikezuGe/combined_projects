@@ -11,7 +11,7 @@ class Home extends React.Component {
       <ToasterContextConsumer>
         {({ addToast, }) => (
           <ModalContextConsumer>
-            {({ openModal }) => (
+            {({ openModal, }) => (
               <Desktop>
                 <div onClick={() => addToast('asdasd')}>Home</div>
                 <div onClick={() => openModal({ component: () => <div>asdasdsd</div> })}>asdasd</div>

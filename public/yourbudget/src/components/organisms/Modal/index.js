@@ -44,11 +44,10 @@ class Modal extends React.Component {
     }
   }
 
-  openModal = ({ component, }) => {
-    console.log(component);
+  openModal = ModalChild => {
     this.setState({
       active: true,
-      ModalChild: component,
+      ModalChild,
     });
     window.addEventListener('keyup', this.keyupListener, false);
   }
@@ -68,16 +67,12 @@ class Modal extends React.Component {
       <GrayoutContainer active={active} onClick={this.closeModal} onTransitionEnd={this.clearModal}>
         <Wrapper active={active}>
           <InnerWrapper onClick={e => e.stopPropagation()}>
-            {
-              ModalChild && (
-                <ModalChild
-                  onClose={() => {
-                    ModalChild.props.onClose();
-                    this.close();
-                  }}
-                />
-              )
-            }
+            {ModalChild && React.cloneElement(ModalChild, {
+              onClose: () => {
+                ModalChild.props.onClose && ModalChild.props.onClose();
+                this.closeModal();
+              },
+            })}
           </InnerWrapper>
         </Wrapper>
       </GrayoutContainer>

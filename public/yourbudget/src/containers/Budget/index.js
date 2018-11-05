@@ -14,20 +14,18 @@ class Budget extends React.Component {
     return (
       <ToasterContextConsumer>
         {({ addToast, }) => (
-          <Query
-            query={GET_FUNDS}
-            onError={({ status, statusText, }) => addToast(`${status} ${statusText}`)}
-          >
-            {({ loading, error, data, refetch, }) => (
-              <ModalContextConsumer>
-                {({ openModal, }) => (
+          <ModalContextConsumer>
+            {({ openModal, }) => (
+              <Query
+                query={GET_FUNDS}
+                onError={({ status, statusText, }) => addToast(`${status} ${statusText}`)}
+              >
+                {({ loading, error, data, refetch, }) => (
                   <Desktop
                     secondaryMenuItems={[
                       {
                         text: 'Add',
-                        onClick: () => openModal({
-                          component: BudgetAdd,
-                        }),
+                        onClick: () => openModal(<BudgetAdd />),
                       }
                     ]}
                   >
@@ -64,15 +62,14 @@ class Budget extends React.Component {
                                 ),
                               }, {
                                 title: 'Edit',
-                                onClick: rowData => console.log('Should open budget editing modal'),
+                                onClick: rowData => openModal(<BudgetAdd data={rowData} />),
                                 render: () => (
                                   <Icon icon={'pencil'} />
                                 ),
                               }, {
                                 title: 'Remove',
                                 onClick: async ({ id, }) => {
-                                  const result = await onSubmit({ ids: [ id, ], });
-                                  result && refetch();
+                                  (await onSubmit({ ids: [ id, ], })) && refetch();
                                 },
                                 render: () => (
                                   <Icon
@@ -88,9 +85,9 @@ class Budget extends React.Component {
                     )}
                   </Desktop>
                 )}
-              </ModalContextConsumer>
+              </Query>
             )}
-          </Query>
+          </ModalContextConsumer>
         )}
       </ToasterContextConsumer>
     );

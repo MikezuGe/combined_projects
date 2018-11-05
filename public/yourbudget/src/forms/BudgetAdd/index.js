@@ -5,7 +5,7 @@ import { ToasterContextConsumer, } from '../../components/contexts';
 import { Form, } from '../../components/organisms';
 import { Field, } from '../../components/molecules';
 
-import { Mutation, CREATE_FUND, UPDATE_FUND, } from '../../queries';
+import { Mutation, CREATE_FUNDS, UPDATE_FUNDS, } from '../../queries';
 
 
 const validateName = t => {
@@ -34,6 +34,10 @@ const parseDate = dateString => dateString.slice(0, dateString.indexOf('T'))
 
 class BudgetAdd extends React.Component {
 
+/**
+ * @description Some description for class
+ */
+
   static propTypes = {
     onClose: PropTypes.func,
     data: PropTypes.object,
@@ -49,7 +53,7 @@ class BudgetAdd extends React.Component {
       <ToasterContextConsumer>
         {({ addToast, }) => (
           <Mutation
-            query={id ? UPDATE_FUND : CREATE_FUND}
+            query={id ? UPDATE_FUNDS : CREATE_FUNDS}
             onError={({ status, statusText, }) => addToast(`${status} ${statusText}`)}
           >
             {({ onSubmit, }) => (

@@ -37,10 +37,6 @@ export class Query extends React.Component {
   async componentDidMount () {
     this.updateState(await this.tryFetch());
   }
-  
-  shouldComponentUpdate (nextProps, nextState) {
-    return !nextState.loading;
-  }
 
   async tryFetch () {
     const { query, variables, } = this.props;
@@ -63,7 +59,7 @@ export class Query extends React.Component {
     this.setState({
       loading: false,
       error,
-      data: error ? [] : status === 200 ? data[Object.keys(data)[0]] : null,
+      data: !error && status === 200 ? data[Object.keys(data)[0]] : null,
       status,
       statusText,
     });
@@ -134,10 +130,6 @@ export class Mutation extends React.Component {
     const result = await this.tryMutate(variables);
     this.updateState(result);
     return !result.error;
-  }
-
-  shouldComponentUpdate (nextProps, nextState) {
-    return nextState.loading;
   }
 
   render () {

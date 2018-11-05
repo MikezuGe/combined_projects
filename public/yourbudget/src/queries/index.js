@@ -5,21 +5,12 @@ axios.defaults.baseURL = `${window.location.origin}/api/graphql`;
 axios.defaults.headers = { 'Content-Type': 'application/json', };
 
 
-import { getFunds, createFunds, updateFunds, removeFunds, } from './funds';
-
-
-export const GET_FUNDS = 'GET_FUNDS';
-export const CREATE_FUND = 'CREATE_FUND';
-export const UPDATE_FUND = 'UPDATE_FUND';
-export const REMOVE_FUNDS = 'REMOVE_FUNDS';
-
-
-const queries = {
-  GET_FUNDS: getFunds,
-  CREATE_FUND: createFunds,
-  UPDATE_FUND: updateFunds,
-  REMOVE_FUNDS: removeFunds,
-};
+export {
+  GET_FUNDS,
+  CREATE_FUNDS,
+  UPDATE_FUNDS,
+  REMOVE_FUNDS,
+} from './funds';
 
 
 export class Query extends React.Component {
@@ -52,8 +43,7 @@ export class Query extends React.Component {
   }
 
   async tryFetch () {
-    const { variables, } = this.props;
-    const query = queries[this.props.query];
+    const { query, variables, } = this.props;
     let result = null;
     try {
       result = await axios.post(`/`, JSON.stringify({ query, variables, }));
@@ -113,7 +103,7 @@ export class Mutation extends React.Component {
   }
 
   async tryMutate (variables) {
-    const query = queries[this.props.query];
+    const { query, } = this.props;
     let result = null;
     try {
       result = await axios.post('/', JSON.stringify({ query, variables, }));

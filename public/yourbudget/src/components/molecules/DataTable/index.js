@@ -8,6 +8,21 @@ import {
 } from '../../atoms';
 
 
+/**
+ * 
+ * @typedef {object} rows
+ * @property {string} title - Title of a data column
+ * @property {string} dataKey - Any keys in the data property objects. Defines the order of columns.
+ * @property {func} parseValue - Function that handles each value in a column defined by dataKey. Has no effect if render property is defined.
+ * @property {func} render - Render custom content to each cell in a column defined by dataKey
+ * @property {func} onClick - Callback for when any cell is clicked in a column defined by dataKey
+ */
+/**
+ * Datatable
+ * @param {object} props
+ * @param {...rows} props.rows - Properties of cells in each column.
+ * @param {object[]} props.data - Array of data objects
+ */
 const DataTable = ({ rows, data, }) => (
   <Table>
     <TableRow>

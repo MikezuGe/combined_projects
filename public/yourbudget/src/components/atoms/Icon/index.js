@@ -10,10 +10,26 @@ align-items: center;
 
 
 const Svg = styled.svg`
-${({ rotate, }) => rotate ? `transform: rotate(${rotate}deg)` : ''}
+${({ rotate, }) => rotate ? `transform: rotate(${rotate || 0}deg)` : ''}
 `;
 
 
+/**
+ * Icon
+ * @description Displays svg icons
+ * @example
+ * <Icon
+ *   icon={'pencil'}
+ * />
+ * 
+ * @param {object} props
+ * @param {string} props.icon     - Name of the icon to display. Required
+ * @param {number} [props.width=24]  - Width of the icon in pixels. Defaults to 24
+ * @param {number} [props.height=24] - Height of the icon in pixels. Defaults to 24
+ * @param {string} [props.fill=#000]   - Fillcolor of the icon in any valid CSS color value. Defaults to #000 (black)
+ * @param {number} [props.rotate=0] - Rotation of the icon in degrees. Defaults to 0
+ * 
+ */
 const Icon = ({ icon, width, height, ...rest }) => (
   <CenterChild>
     <Svg

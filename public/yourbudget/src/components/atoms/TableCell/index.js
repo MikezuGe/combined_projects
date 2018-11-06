@@ -13,6 +13,17 @@ border-radius: 0.5em;
 `;
 
 
+/**
+ * Tablecell
+ * @param {object} props
+ * @param {bool} props.header - Set this property to display a headercell
+ * @example
+ * <TableCell
+ *  header
+ * >
+ *   {'Content'}
+ * </TableCell>
+ */
 const TableCell = ({ header, children, ...rest }) => (
   header
   ? (

@@ -2,13 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter, Route, Switch, Redirect, } from 'react-router-dom';
 
-import ThemeProvider from './components/ThemeProvider';
-import { ToasterContextProvider, ModalContextProvider, } from './components/contexts';
-import {
-  Home,
-  Budget,
-  Settings,
-} from './containers';
+import { ThemeProvider, } from '../../shared_assets/components/contexts';
+import { Home, Budget, Settings, } from './containers';
 
 
 const App = () => (
@@ -25,11 +20,7 @@ const App = () => (
 
 ReactDOM.render(
   <ThemeProvider>
-    <ToasterContextProvider>
-      <ModalContextProvider>
-        <App />
-      </ModalContextProvider>
-    </ToasterContextProvider>
+    <App />
   </ThemeProvider>,
   document.getElementById('root')
 );

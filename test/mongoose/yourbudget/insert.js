@@ -1,9 +1,11 @@
+const { logger, } = require('../../../utility');
 const Fund = require('../../../api/mongoose/models/yourbudget').Fund;
 
 
 (async () => {
   await Fund.deleteMany();
   if (!(await Fund.find()).length) {
+    logger.info('Inserting mock data into development database');
     const testData = [
       {
         name: 'Livion',

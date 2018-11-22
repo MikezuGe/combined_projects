@@ -1,11 +1,6 @@
 require('path');
 const fs = require('fs');
 
-const { logger, } = require('../utility');
-
-
-logger.info('Inserting mock data into development database');
-
 
 module.exports = fs.readdirSync(__dirname)
   .filter(file =>

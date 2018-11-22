@@ -1,4 +1,5 @@
 import React from 'react';
+import { adopt, } from 'react-adopt';
 
 import { Query, } from '../../../shared_assets/components/GraphQL';
 import { Desktop, } from '../../../shared_assets/components/pages';
@@ -8,31 +9,40 @@ import { Icon, } from '../../../shared_assets/components/atoms';
 import { GET_FUNDS, CREATE_FUNDS, UPDATE_FUNDS, REMOVE_FUNDS, } from '../queries';
 
 
-const FundQuery = ({ children, }) => (
-  <Query
-    query={GET_FUNDS}
-    onError={err => {
-      // TOAST HERE
-    }}
-  >
-    {({ loading: queryLoading, error: queryError, refetch, data, }) => (
-      children({
-        queryLoading,
-        queryError,
+const Composed = adopt({
+  query: ({ render, }) => (
+    <Query
+      query={GET_FUNDS}
+      onError={err => {
+        // TOAST HERE
+      }}
+    >
+      {({
+        loading: queryLoading,
+        error: queryError,
         refetch,
         data,
-      })
-    )}
-  </Query>
-);
+      }) => (
+        render({
+          queryLoading,
+          queryError,
+          refetch,
+          data,
+        })
+      )}
+    </Query>
+  )
+});
 
 
 export default class Budget extends React.Component {
 
   render () {
     return (
-      <FundQuery>
-        {({ queryLoading, queryError, refetch, data, some, }) => (
+      <Composed>
+        {({
+          query: { queryLoading, queryError, refetch, data, },
+        }) => (
           <Desktop>
             {
               (queryLoading && <div>{'Loading'}</div>)
@@ -68,7 +78,7 @@ export default class Budget extends React.Component {
             }
           </Desktop>
         )}
-      </FundQuery>
+      </Composed>
     );
   }
 

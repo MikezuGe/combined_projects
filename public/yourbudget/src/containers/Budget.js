@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { adopt, } from 'react-adopt';
 
 import { Query, } from '../../../shared_assets/components/GraphQL';
@@ -8,30 +9,36 @@ import { Icon, } from '../../../shared_assets/components/atoms';
 
 import { GET_FUNDS, CREATE_FUNDS, UPDATE_FUNDS, REMOVE_FUNDS, } from '../queries';
 
-
-const Composed = adopt({
-  query: ({ render, }) => (
-    <Query
-      query={GET_FUNDS}
-      onError={err => {
-        // TOAST HERE
-      }}
-    >
-      {({
-        loading: queryLoading,
-        error: queryError,
+const Q = ({ render, }) => (
+  <Query
+    query={GET_FUNDS}
+    onError={err => {
+      // TOAST HERE
+    }}
+  >
+    {({
+      loading: queryLoading,
+      error: queryError,
+      refetch,
+      data,
+    }) => (
+      render({
+        queryLoading,
+        queryError,
         refetch,
         data,
-      }) => (
-        render({
-          queryLoading,
-          queryError,
-          refetch,
-          data,
-        })
-      )}
-    </Query>
-  )
+      })
+    )}
+  </Query>
+);
+
+Q.propTypes = {
+  render: PropTypes.func,
+};
+
+
+const Composed = adopt({
+  query: Q,
 });
 
 
@@ -41,9 +48,23 @@ export default class Budget extends React.Component {
     return (
       <Composed>
         {({
-          query: { queryLoading, queryError, refetch, data, },
+          query: { queryLoading, queryError, data, },
         }) => (
-          <Desktop>
+          <Desktop
+            menuItems={[
+              {
+                primary: true,
+                title: 'Titteli',
+              }, {
+                primary: true,
+                title: 'Toinen',
+              }, {
+                secondary: false,
+                title: 'Hehheh',
+                render: () => <div>{'Rendered'}</div>
+              }
+            ]}
+          >
             {
               (queryLoading && <div>{'Loading'}</div>)
               || (queryError && <div>{`Error: ${error}`}</div>)

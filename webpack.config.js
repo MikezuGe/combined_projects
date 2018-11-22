@@ -1,4 +1,3 @@
-const webpack = require('webpack');
 const path = require('path');
 const fs = require('fs');
 const WebpackLivereloadPlugin = require('webpack-livereload-plugin');
@@ -73,10 +72,6 @@ const fileLoader = {
   },
 };
 
-const webpackDefinedPlugin = new webpack.DefinePlugin({
-  'process.env.NODE_ENV': JSON.stringify(mode),
-});
-
 const pluginHtmlWebpackPlugin = project => {
   return new HtmlWebpackPlugin({
     'filename': path.resolve(`./public/${project}/index.html`),
@@ -126,7 +121,6 @@ module.exports = {
     ],
   },
   plugins: [
-    webpackDefinedPlugin,
     openBrowserWebpackPlugin,
     webpackLivereloadPlugin,
     ...projects.map(pluginHtmlWebpackPlugin),

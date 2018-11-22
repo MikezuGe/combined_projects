@@ -1,15 +1,13 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
+
+import Sidebar from './Sidebar';
 
 
 const Header = styled.div`
 grid-area: header;
 background: ${({ theme, }) => theme.tertiaryColor};
-`;
-
-const Sidebar = styled.div`
-grid-area: sidebar;
-background: ${({ theme, }) => theme.secondaryColor};
 `;
 
 const Main = styled.div`
@@ -21,12 +19,17 @@ padding: 1em;
 
 export default class Desktop extends React.Component {
 
+  static propTypes = {
+    children: PropTypes.element.isRequired,
+    menuItems: PropTypes.array,
+  }
+
   render () {
-    const { children, } = this.props;
+    const { children, menuItems } = this.props;
     return (
       <React.Fragment>
         <Header />
-        <Sidebar />
+        <Sidebar menuItems={menuItems} />
         <Main>
           {children}
         </Main>

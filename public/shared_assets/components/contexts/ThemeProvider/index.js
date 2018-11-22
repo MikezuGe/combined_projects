@@ -3,6 +3,34 @@ import PropTypes from 'prop-types';
 import styled, { createGlobalStyle, ThemeProvider as StyledComponentThemeProvider, } from 'styled-components';
 
 
+const production = window.location.origin !== 'http://localhost:3000';
+const ColorPicker = () => {
+  const SingleColor = styled.div`
+  width: 50px;
+  height: 50px;
+  background: ${({ theme, color, }) => theme[`${color}Color`]}
+  `;
+  const Palette = styled.div`
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: flex;
+    box-sizing: border-box;
+    border: 1px solid black;
+    z-index: 10;
+  `;
+  return (
+    <Palette>
+      <SingleColor color={'primary'} />
+      <SingleColor color={'secondary'} />
+      <SingleColor color={'tertiary'} />
+      <SingleColor color={'quaternary'} />
+      <SingleColor color={'quinary'} />
+    </Palette>
+  );
+};
+
+
 const GlobalStyle = createGlobalStyle`
 * {
   font-family: 'Ubuntu', sans-serif;
@@ -58,35 +86,7 @@ const theme = {
 };
 
 
-/* Color picker component, only exists in development */
-if (process.env.NODE_ENV !== 'production') {
-  const Color = styled.div`
-  width: 50px;
-  height: 50px;
-  background: ${({ theme, color, }) => theme[`${color}Color`]}
-  `;
-  const ColorComponent = styled.div`
-    position: absolute;
-    top: 0;
-    right: 0;
-    display: flex;
-    box-sizing: border-box;
-    border: 1px solid black;
-    z-index: 10;
-  `;
-  global.ColorPicker = () => (
-    <ColorComponent>
-      <Color color={'primary'} />
-      <Color color={'secondary'} />
-      <Color color={'tertiary'} />
-      <Color color={'quaternary'} />
-      <Color color={'quinary'} />
-    </ColorComponent>
-  );
-}
-
-
-class ThemeProvider extends React.Component {
+export default class ThemeProvider extends React.Component {
 
   static propTypes = {
     children: PropTypes.element.isRequired,
@@ -108,7 +108,7 @@ class ThemeProvider extends React.Component {
           }}
         >
           <React.Fragment>
-            {ColorPicker && <ColorPicker />}
+            {!production && <ColorPicker />}
             {children}
           </React.Fragment>
         </StyledComponentThemeProvider>
@@ -118,6 +118,3 @@ class ThemeProvider extends React.Component {
   }
 
 }
-
-
-export default ThemeProvider;

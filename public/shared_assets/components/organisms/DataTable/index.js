@@ -14,14 +14,14 @@ const Row = styled.tr`
 
 const Cell = styled.td`
 background: ${({ theme, header, }) => theme[header ? 'tertiaryColor' : 'secondaryColor']}
-${({ header, }) => 'text-align: center;'}
+${({ header, }) => header && 'text-align: center;'}
 padding: 0.5em;
 border-radius: 0.5em;
 `;
 
 
 const DataTable = ({ data, columns, ...rest, }) => (
-  <Table>
+  <Table {...rest}>
     <tbody>
       {
         columns.some(({ title, }) => title) && (

@@ -9,16 +9,25 @@ background: ${({ theme, }) => theme.secondaryColor};
 overflow-x: hidden;
 `;
 
-const Menu = styled.ul`
+const AlterList = styled.div`
+position: relative;
+left: ${({ showPrimary, }) => showPrimary ? 0 : -100}%;
+transition: left 200ms;
 `;
 
-const AlterList = styled.div`
+const Menu = styled.ul`
+position: absolute;
+width: 100%;
+left: 100%;
+&:first-child {
+  left: 0;
+}
 `;
 
 const Item = styled.li`
 background: ${({ theme, }) => theme.primaryColor};
 margin: 0.5em;
-height: 3em;
+height: 4em;
 border-radius: 0.5em;
 display: flex;
 justify-content: center;
@@ -26,52 +35,62 @@ align-items: center;
 `;
 
 
+const renderMenuItems = ({ title, render, ...rest, }, i) => (
+  <Item
+    key={`item-${i}`}
+    {...rest}
+  >
+    {render
+      ? render()
+      : title
+    }
+  </Item>
+);
+
+
+const propTypesMenu = PropTypes.arrayOf(
+  PropTypes.shape({
+    title: PropTypes.string,
+    render: PropTypes.func,
+  })
+);
+
+
 export default class SideMenu extends React.Component {
 
   static propTypes = {
-    menuItems: PropTypes.arrayOf(
-      PropTypes.shape({
-        title: PropTypes.string,
-        render: PropTypes.func,
-      })
-    )
+    primaryMenuItems: propTypesMenu.isRequired,
+    secondaryMenuItems: propTypesMenu,
+  }
+
+  state = {
+    showPrimary: true,
   }
   
   render () {
-    const { menuItems, } = this.props;
-
-    const primaryItems = menuItems.filter(({ primary, }) => primary);
-    const secondaryItems = menuItems.filter(({ primary, }) => !primary);
-    console.log(primaryItems, secondaryItems);
+    const { primaryMenuItems, secondaryMenuItems, } = this.props;
+    const { showPrimary, } = this.state;
     return (
       <Sidebar>
-        <AlterList>
-          <Menu>
-            {primaryItems.map(({ title, render, ...rest, }, i) => (
-              <Item
-                key={`item-${i}`}
-                {...rest}
-              >
-                {render
-                  ? render()
-                  : title
-                }
+        <AlterList showPrimary={showPrimary}>
+          {primaryMenuItems && (
+            <Menu>
+              {secondaryMenuItems && (
+                <Item onClick={() => this.setState({ showPrimary: !showPrimary, })}>
+                  {'Change menu'}
+                </Item>
+              )}
+              {primaryMenuItems.map(renderMenuItems)}
+            </Menu>
+          )}
+          {secondaryMenuItems && (
+            <Menu>
+              <Item onClick={() => this.setState({ showPrimary: !showPrimary, })}>
+                {'Change menu'}
               </Item>
-            ))}
-          </Menu>
-          <Menu>
-            {secondaryItems.map(({ title, render, ...rest, }, i) => (
-              <Item
-                key={`item-${i}`}
-                {...rest}
-              >
-                {render
-                  ? render()
-                  : title
-                }
-              </Item>
-            ))}
-          </Menu>
+              {secondaryMenuItems.map(renderMenuItems)}
+            </Menu>
+          )}
         </AlterList>
       </Sidebar>
     );

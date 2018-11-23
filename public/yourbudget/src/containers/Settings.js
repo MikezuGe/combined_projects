@@ -8,7 +8,9 @@ export default class Settings extends React.Component {
   render () {
     return (
       <Desktop>
-        {'Settings'}
+        <div>
+          {'Settings'}
+        </div>
       </Desktop>
     );
   }

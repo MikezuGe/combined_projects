@@ -53,13 +53,10 @@ export default class Budget extends React.Component {
           <Desktop
             menuItems={[
               {
-                primary: true,
                 title: 'Titteli',
               }, {
-                primary: true,
                 title: 'Toinen',
               }, {
-                secondary: false,
                 title: 'Hehheh',
                 render: () => <div>{'Rendered'}</div>
               }
@@ -81,7 +78,7 @@ export default class Budget extends React.Component {
                     }, {
                       key: 'isIncome',
                       title: 'Direction',
-                      render: ({ isIncome, }) => (
+                      render: isIncome => (
                         <Icon
                           icon={'chevron_right'}
                           fill={isIncome ? 'green' : 'red'}

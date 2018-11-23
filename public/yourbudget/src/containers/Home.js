@@ -8,7 +8,9 @@ export default class Home extends React.Component {
   render () {
     return (
       <Desktop>
-        {'Home'}
+        <div>
+          {'Home'}
+        </div>
       </Desktop>
     );
   }

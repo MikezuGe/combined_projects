@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
+import styled from 'styled-components';import { Link,
+} from 'react-router-dom';
 
 import Sidebar from './Sidebar';
 
@@ -20,7 +21,7 @@ padding: 1em;
 export default class Desktop extends React.Component {
 
   static propTypes = {
-    children: PropTypes.element.isRequired,
+    children: PropTypes.element,
     menuItems: PropTypes.array,
   }
 
@@ -29,7 +30,14 @@ export default class Desktop extends React.Component {
     return (
       <React.Fragment>
         <Header />
-        <Sidebar menuItems={menuItems} />
+        <Sidebar
+          primaryMenuItems={[
+            { render: () => <Link to={'/home'}>{'Home'}</Link>, },
+            { render: () => <Link to={'/budget'}>{'Budget'}</Link>, },
+            { render: () => <Link to={'/settings'}>{'Settings'}</Link>, },
+          ]}
+          secondaryMenuItems={menuItems}
+        />
         <Main>
           {children}
         </Main>

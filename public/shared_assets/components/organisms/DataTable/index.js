@@ -6,6 +6,7 @@ import styled from 'styled-components';
 const Table = styled.table`
 `;
 
+// NEEDS A THEME COLOR HERE
 const Row = styled.tr`
 &:nth-child(even) > td {
   background: lightgray;
@@ -29,9 +30,7 @@ const DataTable = ({ data, columns, ...rest, }) => (
             {
               columns.map(({ title, }) => (
                 <Cell key={`header-${title}`} header>
-                  {
-                    title
-                  }
+                  {title}
                 </Cell>
               ))
             }
@@ -48,7 +47,7 @@ const DataTable = ({ data, columns, ...rest, }) => (
                   onClick={onClick && (() => onClick(d))}
                   {...rest}>
                   {
-                    (render && render(d))
+                    (render && render(key ? d[key] : d))
                     || d[key]
                   }
                 </Cell>

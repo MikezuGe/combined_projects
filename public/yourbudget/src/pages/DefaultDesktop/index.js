@@ -8,9 +8,9 @@ import { Desktop, } from '../../../../shared_assets/components/organisms';
 const DefaultDesktop = ({ children, secondaryMenuItems, }) => (
   <Desktop
     primaryMenuItems={[
-      { render: () => <Link to={'/home'}>{'Home'}</Link>, },
-      { render: () => <Link to={'/budget'}>{'Budget'}</Link>, },
-      { render: () => <Link to={'/settings'}>{'Settings'}</Link>, },
+      { render: function home () { return <Link to={'/home'}>{'Home'}</Link>; }, },
+      { render: function budget () { return <Link to={'/budget'}>{'Budget'}</Link>; }, },
+      { render: function settings () { return <Link to={'/settings'}>{'Settings'}</Link>; }, },
     ]}
     secondaryMenuItems={secondaryMenuItems}
   >

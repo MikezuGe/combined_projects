@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter, Route, Switch, Redirect, } from 'react-router-dom';
 
-import { ThemeProvider, } from '../../shared_assets/components/contexts';
+import { ThemeProvider, ToasterProvider, } from '../../shared_assets/components/contexts';
 import { Home, Budget, Settings, } from './containers';
 
 
@@ -13,6 +13,7 @@ const globalStyle = `
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  list-style-type: none;
   /*
   color: white;
   text-shadow:
@@ -56,9 +57,15 @@ const App = () => (
 );
 
 
+
+import { Toaster, } from '../../shared_assets/components/organisms';
+
 ReactDOM.render(
   <ThemeProvider globalStyle={globalStyle}>
-    <App />
+    <ToasterProvider>
+      <App />
+      <Toaster />
+    </ToasterProvider>
   </ThemeProvider>,
   document.getElementById('root')
 );

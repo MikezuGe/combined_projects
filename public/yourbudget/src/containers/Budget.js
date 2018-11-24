@@ -4,43 +4,44 @@ import { adopt, } from 'react-adopt';
 
 import { Query, } from '../../../shared_assets/components/GraphQL';
 import { Icon, } from '../../../shared_assets/components/atoms';
+import { ToasterConsumer, } from '../../../shared_assets/components/contexts';
 
 import { ListDesktop, } from '../pages';
 import { GET_FUNDS, CREATE_FUNDS, UPDATE_FUNDS, REMOVE_FUNDS, } from '../queries';
 
 
-const Q = ({ render, }) => (
-  <Query
-    query={GET_FUNDS}
-    onError={err => {
-      // TOAST HERE
-      console.warn(err); // eslint-disable-line
-    }}
-  >
-    {({
-      loading: queryLoading,
-      error: queryError,
-      refetch,
-      data,
-    }) => (
-      render({
-        queryLoading,
-        queryError,
+const Composed = adopt({
+  toaster: ({ render, }) => (
+    <ToasterConsumer>
+      {({ addToast, }) => render({ addToast, })}
+    </ToasterConsumer>
+  ), 
+  query: ({ toaster: { addToast, }, render, }) => (
+    <Query
+      query={GET_FUNDS}
+      onError={err => {
+        addToast({
+          type: 'error',
+          title: 'Error',
+          text: err,
+        });
+      }}
+    >
+      {({
+        loading: queryLoading,
+        error: queryError,
         refetch,
         data,
-      })
-    )}
-  </Query>
-);
-
-
-Q.propTypes = {
-  render: PropTypes.func,
-};
-
-
-const Composed = adopt({
-  query: Q,
+      }) => (
+        render({
+          queryLoading,
+          queryError,
+          refetch,
+          data,
+        })
+      )}
+    </Query>
+  ),
 });
 
 

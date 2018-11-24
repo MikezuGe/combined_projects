@@ -12,12 +12,11 @@ const ColorPicker = () => {
   `;
   const Palette = styled.div`
     position: absolute;
-    top: 0;
+    bottom: 0;
     right: 0;
     display: flex;
     box-sizing: border-box;
     border: 1px solid black;
-    z-index: 10;
   `;
   return (
     <Palette>
@@ -70,17 +69,18 @@ export default class ThemeProvider extends React.Component {
     const { children, globalStyle, } = this.props;
     return (
       <React.Fragment>
-        <StyledComponentThemeProvider theme={{
+        <GlobalStyle globalStyle={globalStyle} />
+        <StyledComponentThemeProvider
+          theme={{
             ...theme[this.state.active],
             changeTheme: this.changeTheme,
           }}
         >
           <React.Fragment>
-            {!production && <ColorPicker />}
             {children}
+            {!production && <ColorPicker />}
           </React.Fragment>
         </StyledComponentThemeProvider>
-        <GlobalStyle globalStyle={globalStyle} />
       </React.Fragment>
     )
   }

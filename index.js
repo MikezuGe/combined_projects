@@ -10,6 +10,12 @@ const apiRouter = require('./api');
 const gitHandlerRouter = require('./githandler');
 
 
+if (!process.env.PORT) {
+  logger.warn('No port defined in .env file, using default of 3000');
+  process.env.PORT = 3000;
+}
+
+
 const isProduction = process.env.NODE_ENV === 'production';
 const app = express();
 const server = require('http').createServer(app);
@@ -39,5 +45,5 @@ app.use(fallbackRoute);
 
 
 server.listen(process.env.PORT, () => {
-  logger.info(`Listening to port ${process.env.PORT}`);
+  logger.info(`Listening on port ${process.env.PORT}`);
 });

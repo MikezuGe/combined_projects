@@ -23,7 +23,7 @@ export default class Query extends React.Component {
     status: null,
     statusText: '',
     error: false,
-    data: null,
+    data: [],
   }
 
   async doQuery () {
@@ -41,7 +41,7 @@ export default class Query extends React.Component {
         error: false,
         status,
         statusText,
-        data: data && data[Object.keys(data)[0]],
+        data: data ? data[Object.keys(data)[0]] : [],
       };
     } catch ({ response: { status, statusText, }, }) {
       this.props.onError && this.props.onError({ status, statusText, });

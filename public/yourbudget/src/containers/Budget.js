@@ -3,17 +3,18 @@ import PropTypes from 'prop-types';
 import { adopt, } from 'react-adopt';
 
 import { Query, } from '../../../shared_assets/components/GraphQL';
-import { Desktop, } from '../../../shared_assets/components/pages';
-import { DataTable, } from '../../../shared_assets/components/organisms';
 import { Icon, } from '../../../shared_assets/components/atoms';
 
+import { ListDesktop, } from '../pages';
 import { GET_FUNDS, CREATE_FUNDS, UPDATE_FUNDS, REMOVE_FUNDS, } from '../queries';
+
 
 const Q = ({ render, }) => (
   <Query
     query={GET_FUNDS}
     onError={err => {
       // TOAST HERE
+      console.warn(err); // eslint-disable-line
     }}
   >
     {({
@@ -31,6 +32,7 @@ const Q = ({ render, }) => (
     )}
   </Query>
 );
+
 
 Q.propTypes = {
   render: PropTypes.func,
@@ -50,8 +52,8 @@ export default class Budget extends React.Component {
         {({
           query: { queryLoading, queryError, data, },
         }) => (
-          <Desktop
-            menuItems={[
+          <ListDesktop
+            secondaryMenuItems={[
               {
                 title: 'Titteli',
               }, {
@@ -61,40 +63,32 @@ export default class Budget extends React.Component {
                 render: () => <div>{'Rendered'}</div>
               }
             ]}
-          >
-            {
-              (queryLoading && <div>{'Loading'}</div>)
-              || (queryError && <div>{`Error: ${error}`}</div>)
-              || (!data && <div>{'No data found!'}</div>)
-              || (
-                <DataTable
-                  columns={[
-                    {
-                      key: 'name',
-                      title: 'Name',
-                    }, {
-                      key: 'amount',
-                      title: 'Amount',
-                    }, {
-                      key: 'isIncome',
-                      title: 'Direction',
-                      render: isIncome => (
-                        <Icon
-                          icon={'chevron_right'}
-                          fill={isIncome ? 'green' : 'red'}
-                          rotate={isIncome ? '-90' : '90'}
-                        />
-                      ),
-                    }, {
-                      key: 'date',
-                      title: 'Date',
-                    },
-                  ]}
-                  data={data}
-                />
-              )
-            }
-          </Desktop>
+            loading={queryLoading}
+            error={queryError}
+            data={data}
+            columns={[
+              {
+                key: 'name',
+                title: 'Name',
+              }, {
+                key: 'amount',
+                title: 'Amount',
+              }, {
+                key: 'isIncome',
+                title: 'Direction',
+                render: isIncome => (
+                  <Icon
+                    icon={'chevron_right'}
+                    fill={isIncome ? 'green' : 'red'}
+                    rotate={isIncome ? '-90' : '90'}
+                  />
+                ),
+              }, {
+                key: 'date',
+                title: 'Date',
+              },
+            ]}
+          />
         )}
       </Composed>
     );

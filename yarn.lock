@@ -3627,7 +3627,7 @@ get-value@^2.0.3, get-value@^2.0.6:
   resolved "https://registry.yarnpkg.com/get-value/-/get-value-2.0.6.tgz#dc15ca1c672387ca76bd37ac0a395ba2042a2c28"
   integrity sha1-3BXKHGcjh8p2vTesCjlbogQqLCg=
 
-getos@^3.1.0:
+getos@^3.1.1:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/getos/-/getos-3.1.1.tgz#967a813cceafee0156b0483f7cffa5b3eff029c5"
   integrity sha512-oUP1rnEhAr97rkitiszGP9EgDVYnmchgFzfqRzSkgtfv7ai6tEi7Ko8GgjNXts7VLWEqrTWyhsOKLe5C5b/Zkg==
@@ -4767,16 +4767,16 @@ mongodb-core@3.1.9:
     saslprep "^1.0.0"
 
 mongodb-memory-server@^2.6.0:
-  version "2.7.2"
-  resolved "https://registry.yarnpkg.com/mongodb-memory-server/-/mongodb-memory-server-2.7.2.tgz#929f2e32f33463a00af8619b5eada0495ca599a8"
-  integrity sha512-qT/iSiQf2cpBrz7Bln5Va2+rd2evkTPTO2HbQW5eZwaShPcSxkL9xhUHuemG/9+0ALUjrF9Dq+Mxvur2YRF24Q==
+  version "2.7.3"
+  resolved "https://registry.yarnpkg.com/mongodb-memory-server/-/mongodb-memory-server-2.7.3.tgz#b01d7c73d9e9ed6c07e9daa4aa87767d096021dc"
+  integrity sha512-VZ7jECwVgXacKgUM3OHP2h1UToQpYDkCb9KLTdoC4I/6kDHTRIGEXUBfk4sw0YcDCELxhDPi4TBwHW2M9K5txw==
   dependencies:
     "@babel/runtime" "^7.1.2"
     debug "^4.1.0"
     decompress "^4.2.0"
     find-cache-dir "^2.0.0"
     get-port "^4.0.0"
-    getos "^3.1.0"
+    getos "^3.1.1"
     https-proxy-agent "^2.2.1"
     lockfile "^1.0.4"
     md5-file "^4.0.0"

@@ -1,17 +1,17 @@
 import React from 'react';
 
-import { Desktop, } from '../../../shared_assets/components/pages';
+import { DefaultDesktop, } from '../pages';
 
 
 export default class Settings extends React.Component {
 
   render () {
     return (
-      <Desktop>
+      <DefaultDesktop>
         <div>
           {'Settings'}
         </div>
-      </Desktop>
+      </DefaultDesktop>
     );
   }
 

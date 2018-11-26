@@ -1,10 +1,9 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { adopt, } from 'react-adopt';
 
 import { Query, } from '../../../shared_assets/components/GraphQL';
 import { Icon, } from '../../../shared_assets/components/atoms';
-import { ToasterConsumer, } from '../../../shared_assets/components/contexts';
+import { ToasterConsumer, ModalConsumer, } from '../../../shared_assets/components/contexts';
 
 import { ListDesktop, } from '../pages';
 import { GET_FUNDS, CREATE_FUNDS, UPDATE_FUNDS, REMOVE_FUNDS, } from '../queries';
@@ -15,7 +14,12 @@ const Composed = adopt({
     <ToasterConsumer>
       {({ addToast, }) => render({ addToast, })}
     </ToasterConsumer>
-  ), 
+  ),
+  modal: ({ render, }) => (
+    <ModalConsumer>
+      {({ openModal, }) => render({ openModal, })}
+    </ModalConsumer>
+  ),
   query: ({ toaster: { addToast, }, render, }) => (
     <Query
       query={GET_FUNDS}
@@ -52,6 +56,7 @@ export default class Budget extends React.Component {
       <Composed>
         {({
           query: { queryLoading, queryError, data, },
+          modal: { openModal, },
         }) => (
           <ListDesktop
             secondaryMenuItems={[
@@ -59,6 +64,11 @@ export default class Budget extends React.Component {
                 title: 'Titteli',
               }, {
                 title: 'Toinen',
+                onClick: () => openModal({
+                  render: ({ closeModal, }) => (
+                    <div>{'Budget add form here'}</div>
+                  )
+                }),
               }, {
                 title: 'Hehheh',
                 render: () => <div>{'Rendered'}</div>

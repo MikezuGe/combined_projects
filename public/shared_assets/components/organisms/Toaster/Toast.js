@@ -14,7 +14,6 @@ border: 5px solid black;
 border-radius: 0.5em;
 transform: translate(${({ animate, nthToast, }) => `${animate ? 125 : 0}%, ${nthToast * 105}%`});
 transition: transform 500ms;
-z-index: 10;
 `;
 
 const ToastTitle = styled.h2``;

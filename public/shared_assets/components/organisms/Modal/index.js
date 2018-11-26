@@ -28,7 +28,7 @@ export default class Modal extends React.Component {
     render: null,
   }
 
-  openModal = ({ render, }) => this.setState({
+  openModal = render => this.setState({
     active: true,
     render,
   });

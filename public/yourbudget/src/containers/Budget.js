@@ -7,6 +7,7 @@ import { ToasterConsumer, ModalConsumer, } from '../../../shared_assets/componen
 
 import { ListDesktop, } from '../pages';
 import { GET_FUNDS, CREATE_FUNDS, UPDATE_FUNDS, REMOVE_FUNDS, } from '../queries';
+import { BudgetEdit, } from '../forms';
 
 
 const Composed = adopt({
@@ -64,11 +65,12 @@ export default class Budget extends React.Component {
                 title: 'Titteli',
               }, {
                 title: 'Toinen',
-                onClick: () => openModal({
-                  render: ({ closeModal, }) => (
-                    <div>{'Budget add form here'}</div>
-                  )
-                }),
+                onClick: () => openModal(({ closeModal, }) => (
+                  <BudgetEdit
+                    onSubmit={variables => { console.log('submitted in budget', variables); return true; }}
+                    onClose={closeModal}
+                  />
+                )),
               }, {
                 title: 'Hehheh',
                 render: () => <div>{'Rendered'}</div>

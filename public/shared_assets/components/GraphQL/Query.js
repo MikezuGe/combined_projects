@@ -20,13 +20,13 @@ export default class Query extends React.Component {
 
   state = {
     loading: true,
+    error: false,
     status: null,
     statusText: '',
-    error: false,
     data: [],
   }
 
-  async doQuery () {
+  doQuery = async () => {
     this.setState({
       ...(await this.tryFetch()),
     });
@@ -44,7 +44,7 @@ export default class Query extends React.Component {
         data: data ? data[Object.keys(data)[0]] : [],
       };
     } catch ({ response: { status, statusText, }, }) {
-      this.props.onError && this.props.onError({ status, statusText, });
+      this.props.onError && this.props.onError(`${status} ${statusText}`);
       return {
         loading: false,
         error: true,

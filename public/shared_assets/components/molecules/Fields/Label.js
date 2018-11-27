@@ -17,8 +17,11 @@ const Label = ({ htmlFor, children, }) => (
 
 
 Label.propTypes = {
-  htmlFor: PropTypes.func,
-  children: PropTypes.element.isRequired,
+  htmlFor: PropTypes.string,
+  children: PropTypes.oneOfType([
+    PropTypes.element,
+    PropTypes.string,
+  ]).isRequired,
 }
 
 

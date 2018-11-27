@@ -1,7 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { TextField, } from '../../molecules';
+import {
+  TextField,
+  NumberField,
+  DateField,
+  ToggleField,
+  SubmitField,
+} from '../../molecules';
 
 
 export default class Field extends React.Component {
@@ -16,41 +22,59 @@ export default class Field extends React.Component {
     pristine: true,
     touched: false,
     changed: false,
+    focused: false,
   }
 
-  onFocus = () => this.setState(prevState => ({
-    ...prevState,
+  onFocus = () => this.setState({
+    focused: true,
     touched: true,
-  }));
+  });
 
-  onChange = ({ target: { value, }, }) => {
-    const { name, validate, onChange, } = this.props;
-    this.setState(prevState => {
-      const error = (validate && validate(value)) || undefined;
-      return {
-        ...prevState,
-        error,
-        valid: !error,
-        pristine: false,
-        changed: true,
-      };
-    }, () => onChange({ name, value, valid: this.state.valid, }));
+  onBlur = ({ target: { value, }, }) => {
+    const { validate, } = this.props;
+    const error = (validate && validate(value)) || undefined;
+    this.setState({
+      error,
+      valid: !error,
+      focused: false,
+    });
+  }
+
+  onChange = ({ target: { value, checked, }, }) => {
+    const { name, type, validate, onChange, } = this.props;
+    const error = (validate && validate(value)) || undefined;
+    this.setState({
+      error,
+      valid: !error,
+      pristine: false,
+      changed: true,
+    }, () => onChange({
+      name,
+      value: type === 'toggle' || type === 'checkbox' ? checked : value,
+      valid: this.state.valid,
+    }));
   }
 
   render () {
-    const { onChange, onFocus, } = this;
+    const { onChange, onFocus, onBlur, } = this;
     const { type, ...props } = this.props;
+    const meta = this.state;
+    const fieldProps = {
+      ...props,
+      meta,
+      onChange,
+      onFocus,
+      onBlur,
+    };
     return (
       <React.Fragment>
         {
-          (type === 'text' && (
-            <TextField
-              {...props}
-              meta={this.state}
-              onFocus={onFocus}
-              onChange={onChange}
-            />
-          ))
+          (type === 'text' && <TextField {...fieldProps} />)
+          || (type === 'number' && <NumberField {...fieldProps} />)
+          || (type === 'date' && <DateField {...fieldProps} />)
+          || (type === 'toggle' && <ToggleField {...fieldProps} value={!!props.value} />)
+          || (type === 'submit' && <SubmitField {...props} />)
+          || (<div>{`No field of type ${type} exists`}</div>)
         }
       </React.Fragment>
     );

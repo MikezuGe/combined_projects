@@ -14,29 +14,35 @@ const StyledInput = styled.input`
 `;
 
 
-const TextField = ({ name, label, meta: { error, touched, focused, }, ...rest }) => (
+const NumberField = ({ name, label, onFocus, onChange, meta: { error, }, ...rest }) => (
   <Wrapper>
     {label && <Label htmlFor={name}>{label}</Label>}
     <StyledInput
       id={name}
       name={name}
-      type={'text'}
+      type={'number'}
       {...rest}
+      onChange={onChange}
+      onFocus={onFocus}
     />
-    {error && (touched && !focused) && <Label htmlFor={name}>{error}</Label>}
+    {error && <Label htmlFor={name}>{error}</Label>}
   </Wrapper>
 );
 
 
-TextField.propTypes = {
+NumberField.propTypes = {
   name: PropTypes.string.isRequired,
   label: PropTypes.string,
+  onFocus: PropTypes.func,
+  onChange: PropTypes.func,
   meta: PropTypes.shape({
     error: PropTypes.string,
+    valid: PropTypes.bool,
+    pristine: PropTypes.bool,
     touched: PropTypes.bool,
-    focused: PropTypes.bool,
+    changed: PropTypes.bool,
   }),
 };
 
 
-export default TextField;
+export default NumberField;

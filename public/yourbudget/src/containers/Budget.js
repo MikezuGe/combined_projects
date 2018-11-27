@@ -1,7 +1,7 @@
 import React from 'react';
 import { adopt, } from 'react-adopt';
 
-import { Query, } from '../../../shared_assets/components/GraphQL';
+import { Query, Mutation, } from '../../../shared_assets/components/GraphQL';
 import { Icon, } from '../../../shared_assets/components/atoms';
 import { ToasterConsumer, ModalConsumer, } from '../../../shared_assets/components/contexts';
 
@@ -11,26 +11,16 @@ import { BudgetEdit, } from '../forms';
 
 
 const Composed = adopt({
-  toaster: ({ render, }) => (
-    <ToasterConsumer>
-      {({ addToast, }) => render({ addToast, })}
-    </ToasterConsumer>
-  ),
-  modal: ({ render, }) => (
-    <ModalConsumer>
-      {({ openModal, }) => render({ openModal, })}
-    </ModalConsumer>
-  ),
-  query: ({ toaster: { addToast, }, render, }) => (
+  Toaster: <ToasterConsumer />,
+  Modal: <ModalConsumer />,
+  Query: ({ Toaster: { addToast, }, render, }) => (
     <Query
       query={GET_FUNDS}
-      onError={err => {
-        addToast({
-          type: 'error',
-          title: 'Error',
-          text: err,
-        });
-      }}
+      onError={err => addToast({
+        type: 'error',
+        title: 'Error',
+        text: err,
+      })}
     >
       {({
         loading: queryLoading,
@@ -47,6 +37,38 @@ const Composed = adopt({
       )}
     </Query>
   ),
+  Create: ({ Toaster: { addToast, }, Query: { refetch, }, render, }) => (
+    <Mutation
+      mutation={CREATE_FUNDS}
+      onSuccess={() => {
+        addToast({
+          type: 'success',
+          title: 'Success',
+          text: 'Fund was successfully created',
+        });
+        refetch();
+      }}
+      onError={err => addToast({
+        type: 'error',
+        title: 'Error',
+        text: err,
+      })}
+    >
+      {({
+        loading: createLoading,
+        error: createError,
+        mutate: upsertData,
+        data,
+      }) => (
+        render({
+          createLoading,
+          createError,
+          upsertData,
+          data,
+        })
+      )}
+    </Mutation>
+  )
 });
 
 
@@ -56,25 +78,21 @@ export default class Budget extends React.Component {
     return (
       <Composed>
         {({
-          query: { queryLoading, queryError, data, },
-          modal: { openModal, },
+          Modal: { openModal, },
+          Query: { queryLoading, queryError, data, },
+          Create: { createLoading, createError, upsertData, },
         }) => (
           <ListDesktop
             secondaryMenuItems={[
               {
-                title: 'Titteli',
-              }, {
-                title: 'Toinen',
+                title: 'Create funds',
                 onClick: () => openModal(({ closeModal, }) => (
                   <BudgetEdit
-                    onSubmit={variables => { console.log('submitted in budget', variables); return true; }}
+                    onSubmit={async input => await upsertData({ input, })}
                     onClose={closeModal}
                   />
                 )),
-              }, {
-                title: 'Hehheh',
-                render: () => <div>{'Rendered'}</div>
-              }
+              },
             ]}
             loading={queryLoading}
             error={queryError}

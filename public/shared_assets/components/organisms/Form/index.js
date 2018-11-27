@@ -11,89 +11,100 @@ padding: 1em;
 `;
 
 
+const resetForm = ({ fields, initialValues, }) => ({
+  submitting: false,
+  pristine: true,
+  valid: false,
+  fields: fields.filter(({ type, }) => type !== 'submit')
+    .map(field => {
+      const initialValue = (initialValues && initialValues[field.name]) || field.initialValue;
+      initialValue && (field.initialValue = initialValue);
+      field.value = field.initialValue || (field.type === 'toggle' || field.type === 'checkbox' ? false : '');
+      field.valid = !field.validate || !field.validate(field.value);
+      return field;
+    }, {}),
+  submitFields: fields.filter(({ type, }) => type === 'submit'),
+});
+
+
 export default class Form extends React.Component {
 
   static propTypes = {
-    children: PropTypes.func.isRequired,
     fields: PropTypes.arrayOf(PropTypes.object).isRequired,
+    children: PropTypes.func.isRequired,
+    onSubmit: PropTypes.func.isRequired,
+    onClose: PropTypes.func.isRequired,
   }
 
-  state = {
-    submitting: false,
-    pristine: true,
-    valid: false,
-    fields: this.props.fields.reduce((total, field) => {
-      if (field.type === 'submit') {
-        return total;
-      }
-      const { name, } = field;
-      field.value = this.props.initialValues && this.props.initialValues[name] || '';
-      field.valid = field.validate(field.value)
-      total[name] = field;
-      return total;
-    }, {}),
-  }
+  state = resetForm(this.props)
 
-  reset = () => this.setState({
-    submitting: false,
-    pristine: true,
-    valid: false,
-    fields: this.props.fields.reduce((total, field) => {
-      if (field.type === 'submit') {
-        return total;
-      }
-      const { name, } = field;
-      field.value = this.props.initialValues && this.props.initialValues[name] || '';
-      field.valid = field.validate(field.value)
-      total[name] = field;
-      return total;
-    }, {}),
-  })
+  reset = () => this.setState(resetForm(this.props))
   
   submit = e => {
     e.preventDefault();
-    const valid = !Object.values(this.state.fields).some(({ valid, }) => !valid);
+    const close = e.target.getAttribute('close');
+    const submit = e.target.getAttribute('submit');
+    const reset = e.target.getAttribute('reset');
+    if (!submit) {
+      return close
+        ? this.props.onClose()
+        : reset
+          ? this.reset()
+          : null;
+    }
+    const valid = !this.state.fields.some(({ type, valid, }) => type === 'submit' && !valid);
+    console.log(valid);
     this.setState({
+      pristine: false,
       submitting: valid,
       valid,
-    }, () => {
-      if (valid) {
-        const result = this.props.onSubmit(
-          Object.values(this.state.fields)
-            .reduce((total, { name, value, }) => {
-              total[name] = value;
-              return total;
-            }, {})
-        );
-        console.log(result); // eslint-disable-line
+    }, async () => {
+      if (!valid) {
+        console.log('Not valid');
+        return;
+      }
+      const input = this.state.fields.reduce((total, { name, type, value, }) => {
+        type !== 'submit' && (total[name] = value);
+        return total;
+      }, {})
+      const success = await this.props.onSubmit(input);
+      if (success) {
+        close
+          ? this.props.onClose()
+          : reset
+            ? this.reset()
+            : this.setState({ submitting: false, });
       }
     });
   }
 
   onChange = ({ name, value, valid, }) => {
     this.setState(({ fields, }) => {
-      fields = {
-        ...fields,
-        [name]: {
-          ...fields[name],
-          value,
-          valid,
-        },
+      const index = fields.findIndex(field => field.name === name);
+      fields[index] = {
+        ...fields[index],
+        value,
+        valid,
       };
       return {
         fields,
         pristine: false,
-        valid: !Object.values(fields).some(({ valid, }) => !valid),
+        valid: !fields.some(({ valid, }) => !valid),
       };
     });
   }
 
-  renderField = name => (
-    <Field
-      {...this.state.fields[name]}
-      onChange={this.onChange}
-    />
-  );
+  renderField = name => {
+    const field = this.state.fields.find(field => field.name === name)
+      || this.state.submitFields.find(field => field.name === name);
+    const { type, } = field;
+    if (type === 'submit') {
+      field.onClick = this.submit
+    } else {
+      field.onChange = this.onChange
+    }
+    return <Field {...field} />;
+  }
 
   render () {
     return (

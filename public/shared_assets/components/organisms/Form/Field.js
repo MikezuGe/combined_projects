@@ -16,64 +16,85 @@ export default class Field extends React.Component {
     type: PropTypes.string.isRequired,
   }
 
-  state = {
-    error: undefined,
-    valid: false,
-    pristine: true,
-    touched: false,
-    changed: false,
-    focused: false,
-  }
+  state = (() => {
+    const { type, initialValue, validate, } = this.props;
+    return {
+      meta: {
+        pristine: true,
+        focused: false,
+        touched: false,
+        error: validate
+          ? validate(initialValue)
+          : undefined,
+      },
+      value: initialValue
+        ? (
+          type === 'toggle' || type === 'checkbox'
+            ? !!initialValue
+            : initialValue
+          )
+        : type === 'toggle' || type === 'checkbox'
+          ? false
+          : '',
+    }
+  })()
 
-  onFocus = () => this.setState({
-    focused: true,
-    touched: true,
-  });
+  onFocus = () => this.setState(({ meta, }) => ({
+    meta: {
+      ...meta,
+      focused: true,
+    },
+  }));
 
   onBlur = ({ target: { value, }, }) => {
     const { validate, } = this.props;
     const error = (validate && validate(value)) || undefined;
-    this.setState({
-      error,
-      valid: !error,
-      focused: false,
-    });
+    this.setState(({ meta, }) => ({
+      meta: {
+        ...meta,
+        focused: false,
+        touched: true,
+        error,
+      },
+    }));
   }
 
   onChange = ({ target: { value, checked, }, }) => {
-    const { name, type, validate, onChange, } = this.props;
+    const { type, validate, } = this.props;
     const error = (validate && validate(value)) || undefined;
-    this.setState({
-      error,
-      valid: !error,
-      pristine: false,
-      changed: true,
-    }, () => onChange({
-      name,
+    this.setState(({ meta, }) => ({
+      meta: {
+        ...meta,
+        error,
+        pristine: false,
+        touched: true,
+      },
       value: type === 'toggle' || type === 'checkbox' ? checked : value,
-      valid: this.state.valid,
     }));
   }
 
   render () {
     const { onChange, onFocus, onBlur, } = this;
-    const { type, ...props } = this.props;
-    const meta = this.state;
+    const { type, formIsValid, ...props } = this.props;
+    const { value, meta, } = this.state;
     const fieldProps = {
       ...props,
-      meta,
+      value,
+      meta: {
+        ...meta
+
+      },
       onChange,
       onFocus,
       onBlur,
     };
-    (type === 'toggle' || type === 'checkbox') && (fieldProps.value = !!fieldProps.value);
     return (
       <React.Fragment>
         {
           (type === 'text' && <TextField {...fieldProps} />)
           || (type === 'number' && <NumberField {...fieldProps} />)
           || (type === 'date' && <DateField {...fieldProps} />)
-          || (type === 'toggle' && <ToggleField {...fieldProps} value={!!props.value} />)
+          || (type === 'toggle' && <ToggleField {...fieldProps} />)
           || (type === 'submit' && <SubmitField {...props} />)
           || (<div>{`No field of type ${type} exists`}</div>)
         }

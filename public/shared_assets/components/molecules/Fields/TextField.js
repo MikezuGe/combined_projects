@@ -23,7 +23,7 @@ const TextField = ({ name, label, meta: { error, touched, focused, }, ...rest })
       type={'text'}
       {...rest}
     />
-    {error && (touched && !focused) && <Label htmlFor={name}>{error}</Label>}
+    {error && touched && !focused && <Label htmlFor={name}>{error}</Label>}
   </Wrapper>
 );
 

@@ -16,14 +16,6 @@ const resetForm = ({ fields, initialValues, }) => ({
   submitting: false,
   pristine: true,
   valid: false,
-  fields: fields.filter(({ type, }) => type !== 'submit')
-    .map(field => {
-      const initialValue = (initialValues && initialValues[field.name]) || field.initialValue;
-      initialValue && (field.initialValue = initialValue);
-      field.value = field.initialValue || (field.type === 'toggle' || field.type === 'checkbox' ? false : '');
-      field.valid = !field.validate || !field.validate(field.value);
-      return field;
-    }, {}),
 });
 
 
@@ -37,6 +29,8 @@ export default class Form extends React.Component {
   }
 
   state = resetForm(this.props)
+
+  fieldRefs = []
 
   reset = () => this.setState(resetForm(this.props))
   
@@ -52,8 +46,12 @@ export default class Form extends React.Component {
           ? this.reset()
           : null;
     }
-    const { fields, } = this.state;
-    const valid = !fields.some(({ valid, }) => !valid);
+    const fieldStates = this.fieldRefs.map(({ props, state, }) => ({
+      name: props.name,
+      value: state.value,
+      error: state.meta.error,
+    }));
+    const valid = !fieldStates.some(({ error, }) => !!error);
     this.setState({
       pristine: false,
       submitting: valid,
@@ -62,9 +60,9 @@ export default class Form extends React.Component {
       if (!valid) {
         return;
       }
-      const input = fields.reduce((total, { name, value, }) => (
+      const input = fieldStates.reduce((total, { name, value, }) => (
         total[name] = value, total
-      ), {})
+      ), {});
       const success = await this.props.onSubmit(input);
       if (success) {
         close
@@ -76,25 +74,10 @@ export default class Form extends React.Component {
     });
   }
 
-  onChange = ({ name, value, valid, }) => {
-    this.setState(({ fields, }) => {
-      const index = fields.findIndex(field => field.name === name);
-      fields[index] = {
-        ...fields[index],
-        value,
-        valid,
-      };
-      return {
-        fields,
-        pristine: false,
-        valid: !fields.some(({ valid, }) => !valid),
-      };
-    });
-  }
-
   renderField = name => {
-    const field = this.state.fields.find(field => field.name === name);
-    field.onChange = this.onChange
+    const { fields, } = this.props;
+    const field = fields.find(field => field.name === name);
+    field.ref = ref => fields.length !== this.fieldRefs.length && (this.fieldRefs.push(ref));
     return <Field {...field} />;
   }
 
@@ -112,6 +95,7 @@ export default class Form extends React.Component {
           renderField: this.renderField,
           renderButton: this.renderButton,
         })}
+        {console.log(this.fieldRefs)}
       </StyledForm>
     );
   }

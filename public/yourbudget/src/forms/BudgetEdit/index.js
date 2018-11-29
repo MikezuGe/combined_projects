@@ -9,19 +9,19 @@ const validateName = value => {
   if (!value) {
     return 'Required';
   }
-}
+};
 
 const validateAmount = value => {
   if (!value) {
     return 'Required';
   }
-}
+};
 
 const validateDate = value => {
   if (!value) {
     return 'Required';
   }
-}
+};
 
 
 const BudgetEdit = ({ initialValues, onSubmit, onClose, }) => (
@@ -48,38 +48,39 @@ const BudgetEdit = ({ initialValues, onSubmit, onClose, }) => (
         label: 'Date',
         initialValue: parseDate(new Date(), 'YYYY-MM-DD'),
         validate: validateDate,
-      }, {
+      },
+      {
         name: 'isIncome',
         type: 'toggle',
         labelOff: 'Expense',
         labelOn: 'Income',
-      }, {
+      },
+    ]}
+    buttons={[
+      {
         name: 'submit&reset',
-        type: 'submit',
         text: 'Submit & add',
         actions: [ 'submit', 'reset', ],
       }, {
         name: 'submit&close',
-        type: 'submit',
         text: 'Submit & close',
         actions: [ 'submit', 'close', ],
       }, {
         name: 'close',
-        type: 'submit',
         text: 'Close',
         actions: [ 'close', ],
       },
     ]
   }>
-    {({ renderField, submit, submitting, pristine, valid, }) => (
+    {({ renderField, renderButton, }) => (
       <React.Fragment>
         {renderField('name')}
         {renderField('amount')}
         {renderField('date')}
         {renderField('isIncome')}
-        {renderField('submit&reset')}
-        {renderField('submit&close')}
-        {renderField('close')}
+        {renderButton('submit&reset')}
+        {renderButton('submit&close')}
+        {renderButton('close')}
       </React.Fragment>
     )}
   </Form>

@@ -27,6 +27,9 @@ const keyToValue = {
 
 
 module.exports = parseDate = (date, format) => {
+  if (!(date instanceof Date)) {
+    date = new Date(date);
+  }
   const f = format
     .split('')
     .reduce((total, current) => {
@@ -36,8 +39,8 @@ module.exports = parseDate = (date, format) => {
         : total[total.length] = current),
         total;
     }, [])
-    .reduce((total, current) => {
-      return (total += /[YMDhms]/.test(current) ? keyToValue[current[0]](date, current.length) : current);
-    }, '');
+    .reduce((total, current) => (
+      total += /[YMDhms]/.test(current) ? keyToValue[current[0]](date, current.length) : current
+    ), '');
   return f;
 };

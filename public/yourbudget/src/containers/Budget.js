@@ -4,6 +4,7 @@ import { adopt, } from 'react-adopt';
 import { Query, Mutation, } from '../../../shared_assets/components/GraphQL';
 import { Icon, } from '../../../shared_assets/components/atoms';
 import { ToasterConsumer, ModalConsumer, } from '../../../shared_assets/components/contexts';
+import { parseDate, } from '../../../shared_assets/components/utility';
 
 import { ListDesktop, } from '../pages';
 import { GET_FUNDS, CREATE_FUNDS, UPDATE_FUNDS, REMOVE_FUNDS, } from '../queries';
@@ -117,6 +118,7 @@ export default class Budget extends React.Component {
               }, {
                 key: 'date',
                 title: 'Date',
+                render: date => parseDate(date, 'YYYY-MM-DD'),
               },
             ]}
           />

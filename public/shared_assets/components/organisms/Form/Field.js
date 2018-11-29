@@ -66,6 +66,7 @@ export default class Field extends React.Component {
       onFocus,
       onBlur,
     };
+    (type === 'toggle' || type === 'checkbox') && (fieldProps.value = !!fieldProps.value);
     return (
       <React.Fragment>
         {

@@ -27,6 +27,9 @@ const keyToValue = {
 
 
 const parseDate = (date, format) => {
+  if (!(date instanceof Date)) {
+    date = new Date(date);
+  }
   const f = format
     .split('')
     .reduce((total, current) => {

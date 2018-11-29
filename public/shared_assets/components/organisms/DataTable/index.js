@@ -45,7 +45,8 @@ const DataTable = ({ data, columns, ...rest, }) => (
                 <Cell
                   key={`cell-${i}-${key}`}
                   onClick={onClick && (() => onClick(d))}
-                  {...rest}>
+                  {...rest}
+                >
                   {
                     (render && render(key ? d[key] : d))
                     || d[key]

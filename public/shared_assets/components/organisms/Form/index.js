@@ -8,6 +8,7 @@ import Field from './Field';
 const StyledForm = styled.form`
 background: lime;
 padding: 1em;
+border-radius: 0.5em;
 `;
 
 
@@ -23,7 +24,6 @@ const resetForm = ({ fields, initialValues, }) => ({
       field.valid = !field.validate || !field.validate(field.value);
       return field;
     }, {}),
-  submitFields: fields.filter(({ type, }) => type === 'submit'),
 });
 
 
@@ -52,21 +52,19 @@ export default class Form extends React.Component {
           ? this.reset()
           : null;
     }
-    const valid = !this.state.fields.some(({ type, valid, }) => type === 'submit' && !valid);
-    console.log(valid);
+    const { fields, } = this.state;
+    const valid = !fields.some(({ valid, }) => !valid);
     this.setState({
       pristine: false,
       submitting: valid,
       valid,
     }, async () => {
       if (!valid) {
-        console.log('Not valid');
         return;
       }
-      const input = this.state.fields.reduce((total, { name, type, value, }) => {
-        type !== 'submit' && (total[name] = value);
-        return total;
-      }, {})
+      const input = fields.reduce((total, { name, value, }) => (
+        total[name] = value, total
+      ), {})
       const success = await this.props.onSubmit(input);
       if (success) {
         close
@@ -95,15 +93,16 @@ export default class Form extends React.Component {
   }
 
   renderField = name => {
-    const field = this.state.fields.find(field => field.name === name)
-      || this.state.submitFields.find(field => field.name === name);
-    const { type, } = field;
-    if (type === 'submit') {
-      field.onClick = this.submit
-    } else {
-      field.onChange = this.onChange
-    }
+    const field = this.state.fields.find(field => field.name === name);
+    field.onChange = this.onChange
     return <Field {...field} />;
+  }
+
+  renderButton = name => {
+    const button = this.props.buttons.find(button => button.name === name);
+    button.type = 'submit';
+    button.onClick = this.submit;
+    return <Field {...button} />;
   }
 
   render () {
@@ -111,11 +110,7 @@ export default class Form extends React.Component {
       <StyledForm>
         {this.props.children({
           renderField: this.renderField,
-          submit: this.submit,
-          reset: this.reset,
-          submitting: this.state.submitting,
-          pristine: this.state.pristine,
-          valid: this.state.valid,
+          renderButton: this.renderButton,
         })}
       </StyledForm>
     );

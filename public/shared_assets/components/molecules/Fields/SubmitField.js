@@ -19,10 +19,9 @@ const SubmitField = ({ name, text, actions, onClick, ...rest }) => (
       name={name}
       type={'submit'}
       onClick={onClick}
-      {...actions.reduce((total, action) => {
-        total[action] = 'true';
-        return total;
-      }, {})}
+      {...actions.reduce((total, action) => (
+        total[action] = 'true', total
+      ), {})}
       {...rest}
     >
       {text}

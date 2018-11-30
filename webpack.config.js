@@ -63,15 +63,6 @@ const babelLoader = {
   },
 };
 
-const fileLoader = {
-  'test': /\.svg$/,
-  'exclude': /node_modules/,
-  'use': {
-    'loader': 'file-loader',
-    'options': {},
-  },
-};
-
 const pluginHtmlWebpackPlugin = project => {
   return new HtmlWebpackPlugin({
     'filename': path.resolve(`./public/${project}/index.html`),
@@ -117,7 +108,6 @@ module.exports = {
     'rules': [
       eslintLoader,
       babelLoader,
-      fileLoader,
     ],
   },
   plugins: [

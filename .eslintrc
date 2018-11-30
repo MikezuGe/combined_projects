@@ -25,6 +25,9 @@
     "propWrapperFunctions": [ "forbidExtraProps" ]
   },
   "rules": {
-
+    "array-bracket-spacing": [ "error", "always" ],
+    "comma-dangle": [ "error", "always" ],
+    "comma-spacing": [ "error", { "before": false, "after": true }],
+    "eol-last": [ "error", "always" ]
   }
 }

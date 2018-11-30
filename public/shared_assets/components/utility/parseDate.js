@@ -37,10 +37,12 @@ const parseDate = (date, format) => {
       return (t && t[0] === current
         ? total[total.length - 1] += current
         : total[total.length] = current),
-        total;
+      total;
     }, [])
     .reduce((total, current) => (
-      total += /[YMDhms]/.test(current) ? keyToValue[current[0]](date, current.length) : current
+      total += /[YMDhms]/.test(current)
+        ? keyToValue[current[0]](date, current.length)
+        : current
     ), '');
   return f;
 };

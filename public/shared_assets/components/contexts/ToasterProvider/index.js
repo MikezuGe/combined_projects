@@ -21,7 +21,7 @@ export default class ToasterProvider extends React.Component {
   render () {
     const { children, } = this.props;
     return (
-      <ToasterContext.Provider value={{ addToast: this.addToast }}>
+      <ToasterContext.Provider value={{ addToast: this.addToast, }}>
         <React.Fragment>
           {children}
           <Toaster ref={toasterRef => (this.toaster = toasterRef)} />

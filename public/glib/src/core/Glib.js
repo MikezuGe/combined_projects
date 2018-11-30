@@ -16,12 +16,12 @@ const gl = canvas.getContext('webgl2');
 
 export default class Glib {
 
-  constructor ({ elementId, canvasId }) {
+  constructor ({ elementId, canvasId, }) {
     canvas.id = canvasId || 'canvas';
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
-    windowResizeEvent.subscribe(({ target: { innerWidth, innerHeight, }}) => {
+    windowResizeEvent.subscribe(({ target: { innerWidth, innerHeight, }, }) => {
       canvas.width = innerWidth;
       canvas.height = innerHeight;
       gl.viewport(0, 0, innerWidth, innerHeight);
@@ -53,5 +53,5 @@ export default class Glib {
 
 
 export {
-  gl
+  gl,
 };

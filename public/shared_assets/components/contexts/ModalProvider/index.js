@@ -21,7 +21,7 @@ export default class ModalProvider extends React.Component {
   render () {
     const { children, } = this.props;
     return (
-      <ModalContext.Provider value={{ openModal: this.openModal }}>
+      <ModalContext.Provider value={{ openModal: this.openModal, }}>
         <React.Fragment>
           {children}
           <Modal ref={modalRef => (this.modal = modalRef)} />

@@ -34,6 +34,7 @@ const eslintLoader = {
     'loader': 'eslint-loader',
     'options': {
       'fix': false,
+      'cache': false,
       'emitWarning': true,
     },
   },

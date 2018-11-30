@@ -27,13 +27,13 @@ const isValidUrl = url => {
 
 const createResource = url => {
   switch (url.slice(url.lastIndexOf('.'))) {
-    case '.obj': return new Mesh(url);
-    case '.mtl': return new Material(url);
-    case '.png':
-    case '.jpg': return new Texture(url);
-    case '.glsl': return new ShaderSource(url);
-    case '.cnf': return new SceneSource(url);
-    default: throw new Error(`Unable to find resource with url: ${url}`);
+  case '.obj': return new Mesh(url);
+  case '.mtl': return new Material(url);
+  case '.png':
+  case '.jpg': return new Texture(url);
+  case '.glsl': return new ShaderSource(url);
+  case '.cnf': return new SceneSource(url);
+  default: throw new Error(`Unable to find resource with url: ${url}`);
   }
 }
 
@@ -90,7 +90,7 @@ export default class ResourceManager {
     callbacks.forEach(callback => { callback(resource); });
     this.loading = false;
     //setTimeout(() => {
-      this.loadNextResource();
+    this.loadNextResource();
     //}, 500);
   }
 

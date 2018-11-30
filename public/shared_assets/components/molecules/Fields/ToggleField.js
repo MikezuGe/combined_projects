@@ -50,7 +50,10 @@ const ToggleField = ({ name, label, labelOff, labelOn, value, ...rest }) => (
         type={'checkbox'}
         {...rest}
       />
-      <ToggleLabel htmlFor={name} checked={value} />
+      <ToggleLabel
+        htmlFor={name}
+        checked={value}
+      />
       {labelOn && <Label htmlFor={name}>{labelOn}</Label>}
     </InnerWrapper>
   </Wrapper>

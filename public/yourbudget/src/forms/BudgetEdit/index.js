@@ -74,8 +74,8 @@ const BudgetEdit = ({ initialValues, onSubmit, onClose, }) => (
         text: 'Close',
         actions: [ 'close', ],
       },
-    ]
-  }>
+    ]}
+  >
     {({ renderField, renderButton, }) => (
       <React.Fragment>
         {renderField('name')}

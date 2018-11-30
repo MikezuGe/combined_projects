@@ -26,7 +26,7 @@ const resetField = ({ type, initialValue, validate, }) => ({
         : type === 'date'
           ? parseDate(initialValue, 'YYYY-MM-DD')
           : initialValue
-      )
+    )
     : type === 'toggle' || type === 'checkbox'
       ? false
       : '',

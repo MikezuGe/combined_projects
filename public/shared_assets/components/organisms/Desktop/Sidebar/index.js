@@ -32,10 +32,11 @@ border-radius: 0.5em;
 display: flex;
 justify-content: center;
 align-items: center;
+cursor: pointer;
 `;
 
 
-const renderMenuItems = ({ title, render, ...rest, }, i) => (
+const renderMenuItems = ({ title, render, ...rest }, i) => (
   <Item
     key={`item-${i}`}
     {...rest}

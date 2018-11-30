@@ -33,13 +33,13 @@ export default class Renderer {
     scene.walkEnabled(node => {
       node.components.forEach(component => {
         switch (component.type) {
-          case 'Model': this.queueRenderable(component, geometryBatches); break;
-          case 'Camera':
-            if (!this.boundCamera && component.active) {
-              this.boundCamera = component;
-            }
-            break;
-          default: break;
+        case 'Model': this.queueRenderable(component, geometryBatches); break;
+        case 'Camera':
+          if (!this.boundCamera && component.active) {
+            this.boundCamera = component;
+          }
+          break;
+        default: break;
         }
       });
     });
@@ -161,13 +161,13 @@ export default class Renderer {
     const uniformLocations = this.boundShaderProgram.uniformLocations;
     const textures = this.boundMaterial.getTextures() || [ [ "COLORMAP", this.defaultTexture, ], ];
     let num = 0;
-    for (const [ define, texture ] of textures) {
+    for (const [ define, texture, ] of textures) {
       let textureUniform;
       switch (define) {
-        case 'COLORMAP': textureUniform = uniformLocations.u_color_texture; break;
-        case 'NORMALMAP': textureUniform = uniformLocations.u_normal_texture; break;
-        case 'SPECULARMAP': textureUniform = uniformLocations.u_specular_texture; break;
-        default: throw new Error(`No texture of type ${define} has been specified. Implement!`);
+      case 'COLORMAP': textureUniform = uniformLocations.u_color_texture; break;
+      case 'NORMALMAP': textureUniform = uniformLocations.u_normal_texture; break;
+      case 'SPECULARMAP': textureUniform = uniformLocations.u_specular_texture; break;
+      default: throw new Error(`No texture of type ${define} has been specified. Implement!`);
       }
       gl.activeTexture(gl.TEXTURE0 + num);
       gl.bindTexture(gl.TEXTURE_2D, texture.buffer);

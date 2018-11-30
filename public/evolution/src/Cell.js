@@ -25,9 +25,9 @@ export default class Cell {
       if (!cell) return false;
       if (!cell.entity) return true;
       switch (ENTITY_TYPE) {
-        case ENTITY_HERBIVORE: return cell.entity.ENTITY_TYPE === ENTITY_PLANT;
+      case ENTITY_HERBIVORE: return cell.entity.ENTITY_TYPE === ENTITY_PLANT;
         //case ENTITY_CARNIVORE: return cell.entity.ENTITY_TYPE !== ENTITY_CARNIVORE;
-        default: return false;
+      default: return false;
       }
     });
     return openCells.length

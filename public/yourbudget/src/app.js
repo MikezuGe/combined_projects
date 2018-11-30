@@ -48,9 +48,18 @@ html, body {
 const App = () => (
   <BrowserRouter basename={'/yourbudget'}>
     <Switch>
-      <Route path='/home' component={Home} />
-      <Route path='/budget' component={Budget} />
-      <Route path='/settings' component={Settings} />
+      <Route
+        path='/home'
+        component={Home}
+      />
+      <Route
+        path='/budget'
+        component={Budget}
+      />
+      <Route
+        path='/settings'
+        component={Settings}
+      />
       <Redirect to='/home' />
     </Switch>
   </BrowserRouter>

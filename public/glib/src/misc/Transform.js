@@ -25,15 +25,15 @@ export default class Transform {
   }
 
   translateTo (translation) {
-    this._targetTranslation = this._targetTranslation ?
-      this._targetTranslation.add(translation) :
-      this._localTranslation.add(translation);
+    this._targetTranslation = this._targetTranslation
+      ? this._targetTranslation.add(translation)
+      : this._localTranslation.add(translation);
   }
 
   rotateTo (rotation) {
-    this._targetRotation = this._targetRotation ?
-      this._targetRotation.mul(rotation) :
-      this._localRotation.mul(rotation);
+    this._targetRotation = this._targetRotation
+      ? this._targetRotation.mul(rotation)
+      : this._localRotation.mul(rotation);
   }
 
   get right () {

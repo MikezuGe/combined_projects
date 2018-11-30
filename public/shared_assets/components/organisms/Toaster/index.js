@@ -42,7 +42,7 @@ export default class Toaster extends React.Component {
     const { toasts, } = this.state;
     return (
       <StyledToaster>
-        {toasts.map((props , i) => (
+        {toasts.map((props, i) => (
           <Toast
             key={`toast-${props.id}`}
             nthToast={i}

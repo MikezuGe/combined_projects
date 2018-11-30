@@ -42,7 +42,7 @@ export default class Toast extends React.Component {
   static defaultProps = {
     timeout: 5000,
     title: 'NO TITLE PROVIDED',
-    text: 'NO TEXT PROVIDED'
+    text: 'NO TEXT PROVIDED',
   }
 
   timeoutId = null;
@@ -62,7 +62,11 @@ export default class Toast extends React.Component {
     const { animate, } = this.state;
     const { title, text, nthToast, } = this.props;
     return (
-      <StyledToast nthToast={nthToast} animate={animate} onClick={this.removeSelf}>
+      <StyledToast
+        nthToast={nthToast}
+        animate={animate}
+        onClick={this.removeSelf}
+      >
         <ToastTitle>
           {title}
         </ToastTitle>

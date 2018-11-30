@@ -9,12 +9,12 @@ const getAttributeInfo = attributes => {
   let offset = 0;
   attributes.forEach(attribute => {
     switch (attribute) {
-      case 'a_position': attr.push({ name: 'a_position', vertices: 3, offset, }); offset += 3 * 4; break;
-      case 'a_texcoord': attr.push({ name: 'a_texcoord', vertices: 2, offset, }); offset += 2 * 4; break;
-      case 'a_normal': attr.push({ name: 'a_normal', vertices: 3, offset, }); offset += 3 * 4; break;
-      case 'a_tangent': attr.push({ name: 'a_tangent', vertices: 3, offset, }); offset += 3 * 4; break;
-      case 'a_bitangent': attr.push({ name: 'a_bitangent', vertices: 3, offset, }); offset += 3 * 4; break;
-      default: throw new Error(`Unknown mesh attribute name: ${attribute}`);
+    case 'a_position': attr.push({ name: 'a_position', vertices: 3, offset, }); offset += 3 * 4; break;
+    case 'a_texcoord': attr.push({ name: 'a_texcoord', vertices: 2, offset, }); offset += 2 * 4; break;
+    case 'a_normal': attr.push({ name: 'a_normal', vertices: 3, offset, }); offset += 3 * 4; break;
+    case 'a_tangent': attr.push({ name: 'a_tangent', vertices: 3, offset, }); offset += 3 * 4; break;
+    case 'a_bitangent': attr.push({ name: 'a_bitangent', vertices: 3, offset, }); offset += 3 * 4; break;
+    default: throw new Error(`Unknown mesh attribute name: ${attribute}`);
     }
   });
   return attr;
@@ -25,12 +25,12 @@ const calculateVertexSize = attributes => {
   let size = 0;
   attributes.forEach(attribute => {
     switch (attribute) {
-      case 'a_position': size += 3 * 4; break;
-      case 'a_texcoord': size += 2 * 4; break;
-      case 'a_normal': size += 3 * 4; break;
-      case 'a_tangent': size += 3 * 4; break;
-      case 'a_bitangent': size += 3 * 4; break;
-      default: throw new Error(`Unknown mesh attribute: ${attribute}`);
+    case 'a_position': size += 3 * 4; break;
+    case 'a_texcoord': size += 2 * 4; break;
+    case 'a_normal': size += 3 * 4; break;
+    case 'a_tangent': size += 3 * 4; break;
+    case 'a_bitangent': size += 3 * 4; break;
+    default: throw new Error(`Unknown mesh attribute: ${attribute}`);
     }
   });
   return size;

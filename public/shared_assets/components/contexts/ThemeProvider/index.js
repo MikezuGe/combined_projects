@@ -47,8 +47,8 @@ const theme = {
       `,
       disabled: `
       `,
-    }
-  }
+    },
+  },
 };
 
 

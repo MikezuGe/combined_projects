@@ -48,10 +48,10 @@ export default class Mat3 {
 
   get toMat4 () {
     return new Mat4(
-        this.m00, this.m01, this.m02, 0.0,
-        this.m10, this.m11, this.m12, 0.0,
-        this.m20, this.m21, this.m22, 0.0,
-        0.0, 0.0, 0.0, 1.0,
+      this.m00, this.m01, this.m02, 0.0,
+      this.m10, this.m11, this.m12, 0.0,
+      this.m20, this.m21, this.m22, 0.0,
+      0.0, 0.0, 0.0, 1.0,
     );
   }
 

@@ -1,6 +1,6 @@
 import Component from './Component';
 import { Mat4, Vec3, Quat, } from '../math';
-import { windowResizeEvent } from '../core/Event';
+import { windowResizeEvent, } from '../core/Event';
 import input from '../core/Input';
 
 
@@ -27,7 +27,7 @@ export default class Camera extends Component {
   //set ortographic (ortographic) { this._ortographic = ortographic; }
   get ortographic () { return this._ortographic.clone; }
 
-  resize = ({ target: { innerWidth, innerHeight, }}) => {
+  resize = ({ target: { innerWidth, innerHeight, }, }) => {
     const aspectRatio = innerWidth / innerHeight;
     this._perspective = Mat4.perspective(PI * 0.25, aspectRatio, 0.01, 1000);
     this._ortographic = Mat4.orthographic(-aspectRatio, aspectRatio, -1, 1, 0.01, 1000);

@@ -39,7 +39,7 @@ background: white;
 `;
 
 
-const ToggleField = ({ name, label, labelOff, labelOn, value, onFocus, onChange, meta: { error, }, ...rest }) => (
+const ToggleField = ({ name, label, labelOff, labelOn, value, ...rest }) => (
   <Wrapper>
     {label && <Label htmlFor={name}>{label}</Label>}
     <InnerWrapper>
@@ -49,13 +49,10 @@ const ToggleField = ({ name, label, labelOff, labelOn, value, onFocus, onChange,
         name={name}
         type={'checkbox'}
         {...rest}
-        onChange={onChange}
-        onFocus={onFocus}
       />
       <ToggleLabel htmlFor={name} checked={value} />
       {labelOn && <Label htmlFor={name}>{labelOn}</Label>}
     </InnerWrapper>
-    {error && <Label htmlFor={name}>{error}</Label>}
   </Wrapper>
 );
 
@@ -64,15 +61,6 @@ ToggleField.propTypes = {
   name: PropTypes.string.isRequired,
   label: PropTypes.string,
   value: PropTypes.bool,
-  onFocus: PropTypes.func,
-  onChange: PropTypes.func,
-  meta: PropTypes.shape({
-    error: PropTypes.string,
-    valid: PropTypes.bool,
-    pristine: PropTypes.bool,
-    touched: PropTypes.bool,
-    changed: PropTypes.bool,
-  }),
 };
 
 

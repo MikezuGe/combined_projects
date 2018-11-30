@@ -58,6 +58,10 @@ const BudgetEdit = ({ initialValues, onSubmit, onClose, }) => (
     ]}
     buttons={[
       {
+        name: 'submit',
+        text: 'Submit',
+        actions: 'submit',
+      }, {
         name: 'submit&reset',
         text: 'Submit & add',
         actions: [ 'submit', 'reset', ],
@@ -78,6 +82,7 @@ const BudgetEdit = ({ initialValues, onSubmit, onClose, }) => (
         {renderField('amount')}
         {renderField('date')}
         {renderField('isIncome')}
+        {renderButton('submit')}
         {renderButton('submit&reset')}
         {renderButton('submit&close')}
         {renderButton('close')}

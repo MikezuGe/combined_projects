@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import { parseDate, } from '../../utility';
 import {
   TextField,
   NumberField,
@@ -10,41 +11,37 @@ import {
 } from '../../molecules';
 
 
+const resetField = ({ type, initialValue, validate, }) => ({
+  meta: {
+    pristine: true,
+    showError: false,
+    error: validate
+      ? validate(initialValue)
+      : undefined,
+  },
+  value: initialValue
+    ? (
+      type === 'toggle' || type === 'checkbox'
+        ? !!initialValue
+        : type === 'date'
+          ? parseDate(initialValue, 'YYYY-MM-DD')
+          : initialValue
+      )
+    : type === 'toggle' || type === 'checkbox'
+      ? false
+      : '',
+});
+
+
 export default class Field extends React.Component {
   
   static propTypes = {
     type: PropTypes.string.isRequired,
   }
 
-  state = (() => {
-    const { type, initialValue, validate, } = this.props;
-    return {
-      meta: {
-        pristine: true,
-        focused: false,
-        touched: false,
-        error: validate
-          ? validate(initialValue)
-          : undefined,
-      },
-      value: initialValue
-        ? (
-          type === 'toggle' || type === 'checkbox'
-            ? !!initialValue
-            : initialValue
-          )
-        : type === 'toggle' || type === 'checkbox'
-          ? false
-          : '',
-    }
-  })()
+  state = resetField(this.props)
 
-  onFocus = () => this.setState(({ meta, }) => ({
-    meta: {
-      ...meta,
-      focused: true,
-    },
-  }));
+  reset = () => this.setState(resetField(this.props))
 
   onBlur = ({ target: { value, }, }) => {
     const { validate, } = this.props;
@@ -52,8 +49,7 @@ export default class Field extends React.Component {
     this.setState(({ meta, }) => ({
       meta: {
         ...meta,
-        focused: false,
-        touched: true,
+        showError: !!meta.error,
         error,
       },
     }));
@@ -65,27 +61,23 @@ export default class Field extends React.Component {
     this.setState(({ meta, }) => ({
       meta: {
         ...meta,
-        error,
         pristine: false,
-        touched: true,
+        showError: !!error,
+        error,
       },
       value: type === 'toggle' || type === 'checkbox' ? checked : value,
     }));
   }
 
   render () {
-    const { onChange, onFocus, onBlur, } = this;
-    const { type, formIsValid, ...props } = this.props;
+    const { onChange, onBlur, } = this;
+    const { type, ...props } = this.props;
     const { value, meta, } = this.state;
     const fieldProps = {
       ...props,
       value,
-      meta: {
-        ...meta
-
-      },
+      meta,
       onChange,
-      onFocus,
       onBlur,
     };
     return (

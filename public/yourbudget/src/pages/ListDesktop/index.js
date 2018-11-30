@@ -12,7 +12,7 @@ const ListDesktop = ({ loading, error, data, columns, secondaryMenuItems, }) => 
     {
       (loading && <div>{'Loading'}</div>)
       || (error && <div>{`Error: ${error}`}</div>)
-      || (!data && <div>{'No data found!'}</div>)
+      || (!data || !data.length && <div>{'No data found!'}</div>)
       || (
         <DataTable
           columns={columns}

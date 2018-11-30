@@ -19,7 +19,10 @@ const SubmitField = ({ name, text, actions, onClick, ...rest }) => (
       name={name}
       type={'submit'}
       onClick={onClick}
-      {...actions.reduce((total, action) => (
+      {...(Array.isArray(actions)
+        ? actions
+        : [ actions, ]
+      ).reduce((total, action) => (
         total[action] = 'true', total
       ), {})}
       {...rest}
@@ -33,13 +36,20 @@ const SubmitField = ({ name, text, actions, onClick, ...rest }) => (
 SubmitField.propTypes = {
   name: PropTypes.string.isRequired,
   text: PropTypes.string.isRequired,
-  actions: PropTypes.arrayOf(
+  actions: PropTypes.oneOfType([
+    PropTypes.arrayOf(
+      PropTypes.oneOf([
+        'submit',
+        'reset',
+        'close',
+      ])
+    ).isRequired,
     PropTypes.oneOf([
       'submit',
       'reset',
       'close',
-    ])
-  ).isRequired,
+    ]),
+  ]),
   onClick: PropTypes.func.isRequired,
 };
 

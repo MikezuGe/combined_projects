@@ -41,9 +41,9 @@ const DataTable = ({ data, columns, ...rest, }) => (
         data.map((d, i) => (
           <Row key={`row-${i}`}>
             {
-              columns.map(({ key, render, onClick, ...rest, }) => (
+              columns.map(({ key, render, onClick, ...rest, }, k) => (
                 <Cell
-                  key={`cell-${i}-${key}`}
+                  key={`cell-${i}-${k}`}
                   onClick={onClick && (() => onClick(d))}
                   {...rest}
                 >

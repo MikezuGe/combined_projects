@@ -25,9 +25,7 @@ export default class Mutation extends React.Component {
 
   doMutation = async variables => {
     const result = await this.tryMutate(variables);
-    this.setState({
-      ...result,
-    });
+    this.setState({ ...result, });
     return !result.error;
   }
 

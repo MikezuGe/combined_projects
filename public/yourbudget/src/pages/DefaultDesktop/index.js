@@ -1,16 +1,23 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link, } from 'react-router-dom';
+import { withRouter, } from 'react-router-dom';
 
 import { Desktop, } from '../../../../shared_assets/components/organisms';
 
 
-const DefaultDesktop = ({ children, secondaryMenuItems, }) => (
+const DefaultDesktop = ({ children, history, secondaryMenuItems, }) => (
   <Desktop
     primaryMenuItems={[
-      { render: function home () { return <Link to={'/home'}>{'Home'}</Link>; }, },
-      { render: function budget () { return <Link to={'/budget'}>{'Budget'}</Link>; }, },
-      { render: function settings () { return <Link to={'/settings'}>{'Settings'}</Link>; }, },
+      {
+        title: 'Home',
+        onClick: () => history.replace('/home'),
+      }, {
+        title: 'Budget',
+        onClick: () => history.replace('/budget'),
+      }, {
+        title: 'Settings',
+        onClick: () => history.replace('/settings'),
+      },
     ]}
     secondaryMenuItems={secondaryMenuItems}
   >
@@ -21,8 +28,9 @@ const DefaultDesktop = ({ children, secondaryMenuItems, }) => (
 
 DefaultDesktop.propTypes = {
   children: PropTypes.element.isRequired,
+  history: PropTypes.object.isRequired,
   secondaryMenuItems: PropTypes.array,
 };
 
 
-export default DefaultDesktop;
+export default withRouter(DefaultDesktop);

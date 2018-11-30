@@ -45,7 +45,7 @@ const Composed = adopt({
         addToast({
           type: 'success',
           title: 'Success',
-          text: 'Fund was successfully created',
+          text: 'Fund was created successfully',
         });
         refetch();
       }}
@@ -55,76 +55,133 @@ const Composed = adopt({
         text: err,
       })}
     >
-      {({
-        loading: createLoading,
-        error: createError,
-        mutate: upsertData,
-        data,
-      }) => (
-        render({
-          createLoading,
-          createError,
-          upsertData,
-          data,
-        })
+      {({ mutate: createData, }) => (
+        render({ createData, })
       )}
     </Mutation>
-  )
+  ),
+  Update: ({ Toaster: { addToast, }, Query: { refetch, }, render, }) => (
+    <Mutation
+      mutation={UPDATE_FUNDS}
+      onSuccess={() => {
+        addToast({
+          type: 'success',
+          title: 'Success',
+          text: 'Fund was created successfully',
+        });
+        refetch();
+      }}
+      onError={err => addToast({
+        type: 'error',
+        title: 'Error',
+        text: err,
+      })}
+    >
+      {({ mutate: updateData, }) => (
+        render({ updateData, })
+      )}
+    </Mutation>
+  ),
+  Remove: ({ Toaster: { addToast, }, Query: { refetch, }, render, }) => (
+    <Mutation
+      mutation={REMOVE_FUNDS}
+      onSuccess={() => {
+        addToast({
+          type: 'success',
+          title: 'Success',
+          text: 'Fund was removed successfully',
+        });
+        refetch();
+      }}
+      onError={err => addToast({
+        type: 'error',
+        title: 'Error',
+        text: err,
+      })}
+    >
+      {({ mutate: removeData, }) => (
+        render({ removeData, })
+      )}
+    </Mutation>
+  ),
 });
 
 
-export default class Budget extends React.Component {
+const Budget = () => (
+  <Composed>
+    {({
+      Modal: { openModal, },
+      Query: { queryLoading, queryError, data, },
+      Create: { createData, },
+      Update: { updateData, },
+      Remove: { removeData, },
+    }) => (
+      <ListDesktop
+        secondaryMenuItems={[
+          {
+            title: 'Create funds',
+            onClick: () => openModal(({ closeModal, }) => (
+              <BudgetEdit
+                onSubmit={input => createData({ input, })}
+                onClose={closeModal}
+              />
+            )),
+          },
+        ]}
+        loading={queryLoading}
+        error={queryError}
+        data={data}
+        columns={[
+          {
+            key: 'name',
+            title: 'Name',
+          }, {
+            key: 'amount',
+            title: 'Amount',
+          }, {
+            key: 'isIncome',
+            title: 'Direction',
+            render: isIncome => (
+              <Icon
+                icon={'chevron_right'}
+                fill={isIncome ? 'green' : 'red'}
+                rotate={isIncome ? '-90' : '90'}
+              />
+            ),
+          }, {
+            key: 'date',
+            title: 'Date',
+            render: date => parseDate(date, 'YYYY-MM-DD'),
+          }, {
+            title: 'Edit',
+            onClick: data => openModal(({ closeModal, }) => (
+              <BudgetEdit
+                onSubmit={input => updateData({ id: data.id, input, })}
+                onClose={closeModal}
+                initialValues={data}
+              />
+            )),
+            render: () => (
+              <Icon
+                icon={'pencil'}
+                fill={'green'}
+              />
+            ),
+          }, {
+            title: 'Remove',
+            onClick: ({ id, }) => removeData({ ids: [ id, ], }),
+            render: () => (
+              <Icon
+                icon={'clear'}
+                fill={'red'}
+              />
+            ),
+          },
+        ]}
+      />
+    )}
+  </Composed>
+);
 
-  render () {
-    return (
-      <Composed>
-        {({
-          Modal: { openModal, },
-          Query: { queryLoading, queryError, data, },
-          Create: { createLoading, createError, upsertData, },
-        }) => (
-          <ListDesktop
-            secondaryMenuItems={[
-              {
-                title: 'Create funds',
-                onClick: () => openModal(({ closeModal, }) => (
-                  <BudgetEdit
-                    onSubmit={async input => await upsertData({ input, })}
-                    onClose={closeModal}
-                  />
-                )),
-              },
-            ]}
-            loading={queryLoading}
-            error={queryError}
-            data={data}
-            columns={[
-              {
-                key: 'name',
-                title: 'Name',
-              }, {
-                key: 'amount',
-                title: 'Amount',
-              }, {
-                key: 'isIncome',
-                title: 'Direction',
-                render: isIncome => (
-                  <Icon
-                    icon={'chevron_right'}
-                    fill={isIncome ? 'green' : 'red'}
-                    rotate={isIncome ? '-90' : '90'}
-                  />
-                ),
-              }, {
-                key: 'date',
-                title: 'Date',
-                render: date => parseDate(date, 'YYYY-MM-DD'),
-              },
-            ]}
-          />
-        )}
-      </Composed>
-    );
-  }
 
-}
+export default Budget;

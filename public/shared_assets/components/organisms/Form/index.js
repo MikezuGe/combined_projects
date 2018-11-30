@@ -12,7 +12,7 @@ border-radius: 0.5em;
 `;
 
 
-const resetForm = ({ fields, initialValues, }) => ({
+const resetForm = () => ({
   submitting: false,
   pristine: true,
   valid: false,
@@ -22,17 +22,34 @@ const resetForm = ({ fields, initialValues, }) => ({
 export default class Form extends React.Component {
 
   static propTypes = {
+    initialValues: PropTypes.object,
     fields: PropTypes.arrayOf(PropTypes.object).isRequired,
+    buttons: ({ buttons, }) => {
+      const checked = [];
+      for (const { name, } of buttons) {
+        if (checked.includes(name)) {
+          return new Error(`Form has 2 buttons with the same name: ${name}`);
+        }
+        checked.push(name);
+      }
+    },
     children: PropTypes.func.isRequired,
     onSubmit: PropTypes.func.isRequired,
     onClose: PropTypes.func.isRequired,
   }
 
-  state = resetForm(this.props)
+  static defaultValues = {
+    initialValue: {},
+  }
+
+  state = resetForm()
 
   fieldRefs = []
 
-  reset = () => this.setState(resetForm(this.props))
+  reset = () => {
+    this.setState(resetForm());
+    this.fieldRefs.forEach(({ reset, }) => reset());
+  }
   
   submit = e => {
     e.preventDefault();
@@ -46,6 +63,7 @@ export default class Form extends React.Component {
           ? this.reset()
           : null;
     }
+
     const fieldStates = this.fieldRefs.map(({ props, state, }) => ({
       name: props.name,
       value: state.value,
@@ -58,6 +76,7 @@ export default class Form extends React.Component {
       valid,
     }, async () => {
       if (!valid) {
+        this.forceErrorsOnFields();
         return;
       }
       const input = fieldStates.reduce((total, { name, value, }) => (
@@ -74,10 +93,20 @@ export default class Form extends React.Component {
     });
   }
 
+  forceErrorsOnFields = () => this.fieldRefs.forEach(field => (
+    field.setState(({ meta, }) => ({
+      meta: {
+        ...meta,
+        showError: true,
+      },
+    }))
+  ));
+
   renderField = name => {
-    const { fields, } = this.props;
+    const { fields, initialValues, } = this.props;
     const field = fields.find(field => field.name === name);
     field.ref = ref => fields.length !== this.fieldRefs.length && (this.fieldRefs.push(ref));
+    !field.initialValue && (field.initialValue = (initialValues && initialValues[field.name]) || '');
     return <Field {...field} />;
   }
 
@@ -95,7 +124,6 @@ export default class Form extends React.Component {
           renderField: this.renderField,
           renderButton: this.renderButton,
         })}
-        {console.log(this.fieldRefs)}
       </StyledForm>
     );
   }

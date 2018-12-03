@@ -32,6 +32,12 @@ const ColorPicker = () => {
 
 const GlobalStyle = createGlobalStyle`
 ${({ globalStyle, }) => globalStyle}
+${({ theme, }) => `
+  ${theme.breakpoints('xs', 'font-size: 8px')}
+  ${theme.breakpoints('sm', 'font-size: 10px')}
+  ${theme.breakpoints('md', 'font-size: 12px')}
+  ${theme.breakpoints('lg', 'font-size: 16px')}
+`}
 `;
 
 
@@ -42,11 +48,17 @@ const theme = {
     tertiaryColor: '#eafc40',
     quaternaryColor: '#254558',
     quinaryColor: '#2b2b3a',
-    button: {
-      active: `
-      `,
-      disabled: `
-      `,
+    breakpoints: (breakpoint, css) => {
+      const bp = breakpoint === 'xs'
+        ? '(max-width: 512px)' : breakpoint === 'sm'
+          ? '(min-width: 513px) AND (max-width: 768px)' : breakpoint === 'md'
+            ? '(min-width: 769px) AND (max-width: 1280px)' : breakpoint === 'lg'
+              ? '(min-width: 1280px)' : null;
+      return `
+        @media only screen and ${bp} {
+          ${css}
+        }
+      `;
     },
   },
 };
@@ -69,7 +81,6 @@ export default class ThemeProvider extends React.Component {
     const { children, globalStyle, } = this.props;
     return (
       <React.Fragment>
-        <GlobalStyle globalStyle={globalStyle} />
         <StyledComponentThemeProvider
           theme={{
             ...theme[this.state.active],
@@ -77,6 +88,7 @@ export default class ThemeProvider extends React.Component {
           }}
         >
           <React.Fragment>
+            <GlobalStyle globalStyle={globalStyle} />
             {children}
             {!production && <ColorPicker />}
           </React.Fragment>

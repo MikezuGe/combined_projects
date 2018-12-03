@@ -191,9 +191,9 @@ const Budget = () => (
             title: 'Edit',
             onClick: data => openModal(({ closeModal, }) => (
               <BudgetEdit
+                initialValues={data}
                 onSubmit={input => updateData({ id: data.id, input, })}
                 onClose={closeModal}
-                initialValues={data}
               />
             )),
             render: () => (

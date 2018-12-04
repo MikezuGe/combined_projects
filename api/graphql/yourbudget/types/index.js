@@ -65,7 +65,7 @@ module.exports = (() => {
     }
   };
 
-  const gqlFileRegex = /^.+\.graphqls$/;
+  const gqlFileRegex = /\.graphqls$/;
   readdirSync(__dirname)
     .filter(fileName => gqlFileRegex.test(fileName))
     .forEach(fileName => {

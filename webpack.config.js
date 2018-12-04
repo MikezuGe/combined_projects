@@ -47,19 +47,12 @@ const babelLoader = {
     'loader': 'babel-loader',
     'options': {
       'presets': [
-        [
-          '@babel/preset-env',
-          {
-            'targets': {
-              'node': true,
-            },
-          },
-        ],
-        '@babel/preset-react',
+        [ '@babel/env', { 'targets': { 'node': true, }, }, ],
+        [ '@babel/react', ],
       ],
       'plugins': [
-        '@babel/plugin-proposal-class-properties',
-      ]
+        [ '@babel/proposal-class-properties', ],
+      ],
     },
   },
 };
@@ -78,7 +71,7 @@ const pluginHtmlWebpackPlugin = project => {
       ],
     }),
   });
-}
+};
 
 const openBrowserWebpackPlugin = new OpenBrowserWebpackPlugin({
   url: 'http://localhost:3000',

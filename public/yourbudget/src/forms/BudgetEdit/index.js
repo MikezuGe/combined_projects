@@ -91,12 +91,11 @@ const BudgetEdit = ({ initialValues, onSubmit, onClose, }) => (
   </Form>
 );
 
-
 BudgetEdit.propTypes = {
   initialValues: PropTypes.object,
   onSubmit: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
-}
+};
 
 
 export default BudgetEdit;

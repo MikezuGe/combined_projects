@@ -63,7 +63,6 @@ export default class Form extends React.Component {
           ? this.reset()
           : null;
     }
-
     const fieldStates = this.fieldRefs.map(({ props, state, }) => ({
       name: props.name,
       value: state.value,
@@ -106,7 +105,7 @@ export default class Form extends React.Component {
     const { fields, initialValues, } = this.props;
     const field = fields.find(field => field.name === name);
     field.ref = ref => fields.length !== this.fieldRefs.length && (this.fieldRefs.push(ref));
-    !field.initialValue && (field.initialValue = (initialValues && initialValues[field.name]) || '');
+    initialValues && initialValues[field.name] && (field.initialValue = initialValues[field.name]);
     return <Field {...field} />;
   }
 
@@ -118,6 +117,7 @@ export default class Form extends React.Component {
   }
 
   render () {
+    console.log(this.fieldRefs);
     return (
       <StyledForm>
         {this.props.children({

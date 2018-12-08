@@ -23,7 +23,6 @@ const ListDesktop = ({ loading, error, data, columns, secondaryMenuItems, }) => 
   </DefaultDesktop>
 );
 
-
 ListDesktop.propTypes = {
   loading: PropTypes.bool.isRequired,
   error: PropTypes.bool.isRequired,

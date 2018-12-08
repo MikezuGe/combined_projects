@@ -13,28 +13,24 @@ padding: 1em;
 `;
 
 
-export default class Desktop extends React.Component {
+const Desktop = ({ children, primaryMenuItems, secondaryMenuItems, }) => (
+  <React.Fragment>
+    <Header />
+    <Sidebar
+      primaryMenuItems={primaryMenuItems}
+      secondaryMenuItems={secondaryMenuItems}
+    />
+    <Main>
+      {children}
+    </Main>
+  </React.Fragment>
+);
 
-  static propTypes = {
-    children: PropTypes.element,
-    primaryMenuItems: PropTypes.array.isRequired,
-    secondaryMenuItems: PropTypes.array,
-  }
+Desktop.propTypes = {
+  children: PropTypes.element,
+  primaryMenuItems: PropTypes.array.isRequired,
+  secondaryMenuItems: PropTypes.array,
+};
 
-  render () {
-    const { children, primaryMenuItems, secondaryMenuItems, } = this.props;
-    return (
-      <React.Fragment>
-        <Header />
-        <Sidebar
-          primaryMenuItems={primaryMenuItems}
-          secondaryMenuItems={secondaryMenuItems}
-        />
-        <Main>
-          {children}
-        </Main>
-      </React.Fragment>
-    );
-  }
 
-}
+export default Desktop;

@@ -1,4 +1,4 @@
-import React from 'react';
+import { useState, } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 
@@ -7,33 +7,22 @@ axios.defaults.baseURL = `${window.location.origin}/api/graphql`;
 axios.defaults.headers = { 'Content-Type': 'application/json', };
 
 
-export default class Mutation extends React.Component {
-
-  static propTypes = {
-    children: PropTypes.func.isRequired,
-    onError: PropTypes.func,
-    onSuccess: PropTypes.func,
-  }
-
-  state = {
+const Mutation = ({ children, onError, onSuccess, mutation, }) => {
+  const [
+    { loading, error, status, statusText, },
+    setMutationStatus,
+  ] = useState({
     loading: true,
     error: false,
     status: null,
     statusText: '',
-    data: [],
-  }
+  });
+  const [ , setData, ] = useState([]);
 
-  doMutation = async variables => {
-    const result = await this.tryMutate(variables);
-    this.setState({ ...result, });
-    return !result.error;
-  }
-
-  async tryMutate (variables) {
-    const { mutation, } = this.props;
+  const tryMutate = async variables => {
     try {
       const { status, statusText, data: { data, }, } = await axios.post(`/`, JSON.stringify({ query: mutation, variables, }));
-      this.props.onSuccess && this.props.onSuccess();
+      onSuccess && onSuccess();
       return {
         loading: false,
         error: false,
@@ -42,27 +31,39 @@ export default class Mutation extends React.Component {
         data: data ? data[Object.keys(data)[0]] : [],
       };
     } catch ({ response, response: { status, statusText, }, }) {
-      this.props.onError && this.props.onError(`${status} ${statusText}`);
+      onError && onError(`${status} ${statusText}`);
       return {
         loading: false,
         error: true,
         status,
         statusText,
+        data: [],
       };
     }
   }
 
-  render () {
-    const { children, } = this.props;
-    const { loading, error, status, statusText, } = this.state;
-    const { doMutation: mutate, } = this;
-    return (
-      children({
-        loading,
-        error: !loading && error && (`${status} ${statusText}`),
-        mutate,
-      })
-    );
+  const doMutation = async variables => {
+    const { data, ...mutationStatus } = await tryMutate(variables);
+    setMutationStatus(mutationStatus);
+    setData(data);
+    return !mutationStatus.error;
   }
 
-}
+  return (
+    children({
+      loading,
+      error: !loading && error && (`${status} ${statusText}`),
+      mutate: doMutation,
+    })
+  );
+
+};
+
+Mutation.propTypes = {
+  children: PropTypes.func.isRequired,
+  onError: PropTypes.func,
+  onSuccess: PropTypes.func,
+};
+
+
+export default Mutation;

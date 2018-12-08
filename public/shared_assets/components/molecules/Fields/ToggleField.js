@@ -59,7 +59,6 @@ const ToggleField = ({ name, label, labelOff, labelOn, value, ...rest }) => (
   </Wrapper>
 );
 
-
 ToggleField.propTypes = {
   name: PropTypes.string.isRequired,
   label: PropTypes.string,

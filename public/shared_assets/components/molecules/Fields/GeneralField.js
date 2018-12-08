@@ -27,7 +27,6 @@ const GeneralField = ({ name, label, meta: { error, showError, }, ...rest }) => 
   </Wrapper>
 );
 
-
 GeneralField.propTypes = {
   name: PropTypes.string.isRequired,
   label: PropTypes.string,

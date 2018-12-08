@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
@@ -49,6 +49,35 @@ const renderMenuItems = ({ title, render, ...rest }, i) => (
 );
 
 
+const SideMenu = ({ primaryMenuItems, secondaryMenuItems, }) => {
+  const [ showPrimary, setShowPrimary, ] = useState(true);
+  const toggleMenu = () => setShowPrimary(!showPrimary);
+  return (
+    <Sidebar>
+      <AlterList showPrimary={showPrimary}>
+        {primaryMenuItems && (
+          <Menu>
+            {secondaryMenuItems && (
+              <Item onClick={toggleMenu}>
+                {'Change menu'}
+              </Item>
+            )}
+            {primaryMenuItems.map(renderMenuItems)}
+          </Menu>
+        )}
+        {secondaryMenuItems && (
+          <Menu>
+            <Item onClick={toggleMenu}>
+              {'Change menu'}
+            </Item>
+            {secondaryMenuItems.map(renderMenuItems)}
+          </Menu>
+        )}
+      </AlterList>
+    </Sidebar>
+  );
+};
+
 const propTypesMenu = PropTypes.arrayOf(
   PropTypes.shape({
     title: PropTypes.string,
@@ -56,45 +85,10 @@ const propTypesMenu = PropTypes.arrayOf(
   })
 );
 
+SideMenu.propTypes = {
+  primaryMenuItems: propTypesMenu.isRequired,
+  secondaryMenuItems: propTypesMenu,
+};
 
-export default class SideMenu extends React.Component {
 
-  static propTypes = {
-    primaryMenuItems: propTypesMenu.isRequired,
-    secondaryMenuItems: propTypesMenu,
-  }
-
-  state = {
-    showPrimary: true,
-  }
-  
-  render () {
-    const { primaryMenuItems, secondaryMenuItems, } = this.props;
-    const { showPrimary, } = this.state;
-    return (
-      <Sidebar>
-        <AlterList showPrimary={showPrimary}>
-          {primaryMenuItems && (
-            <Menu>
-              {secondaryMenuItems && (
-                <Item onClick={() => this.setState({ showPrimary: !showPrimary, })}>
-                  {'Change menu'}
-                </Item>
-              )}
-              {primaryMenuItems.map(renderMenuItems)}
-            </Menu>
-          )}
-          {secondaryMenuItems && (
-            <Menu>
-              <Item onClick={() => this.setState({ showPrimary: !showPrimary, })}>
-                {'Change menu'}
-              </Item>
-              {secondaryMenuItems.map(renderMenuItems)}
-            </Menu>
-          )}
-        </AlterList>
-      </Sidebar>
-    );
-  }
-
-}
+export default SideMenu;

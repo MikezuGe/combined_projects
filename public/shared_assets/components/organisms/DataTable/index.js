@@ -63,7 +63,6 @@ const DataTable = ({ data, columns, ...rest }) => (
   </Table>
 );
 
-
 DataTable.propTypes = {
   data: PropTypes.array.isRequired,
   columns: PropTypes.arrayOf(PropTypes.shape({

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, } from 'react';
 import styled from 'styled-components';
 
 
@@ -21,39 +21,35 @@ transition: top 500ms ease-out;
 `;
 
 
-export default class Modal extends React.Component {
+let listener = () => {};
+export const openModal = render => listener(render);
 
-  state = {
-    active: false,
-    render: null,
-  }
 
-  openModal = render => this.setState({
-    active: true,
-    render,
-  });
-  
-  closeModal = () => {
-    this.setState({ active: false, })
-    setTimeout(() => this.setState({ render: null, }), 500)
-  }
-
-  render () {
-    const { closeModal, } = this;
-    const { active, render, } = this.state;
-    return (
-      <Grayout
+const Modal = () => {
+  const [ active, setActive, ] = useState(false);
+  const [ render, setRender, ] = useState(undefined);
+  listener = render => {
+    setActive(true);
+    setRender(() => render);
+  };
+  const closeModal = () => {
+    setActive(false);
+    setTimeout(setRender, 500)
+  };
+  return (
+    <Grayout
+      active={active}
+      onClick={closeModal}
+    >
+      <StyledModal
         active={active}
-        onClick={closeModal}
+        onClick={e => e.stopPropagation()}
       >
-        <StyledModal
-          active={active}
-          onClick={e => e.stopPropagation()}
-        >
-          {render && render({ closeModal, })}
-        </StyledModal>
-      </Grayout>
-    );
-  }
+        {render && render({ closeModal, })}
+      </StyledModal>
+    </Grayout>
+  );
+};
 
-}
+
+export default Modal;

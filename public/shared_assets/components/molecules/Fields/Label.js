@@ -15,11 +15,10 @@ const Label = ({ htmlFor, children, }) => (
   </StyledLabel>
 );
 
-
 Label.propTypes = {
   htmlFor: PropTypes.string,
   children: PropTypes.string.isRequired,
-}
+};
 
 
 export default Label;

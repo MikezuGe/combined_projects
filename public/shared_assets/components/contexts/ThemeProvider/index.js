@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, } from 'react';
 import PropTypes from 'prop-types';
 import styled, { createGlobalStyle, ThemeProvider as StyledComponentThemeProvider, } from 'styled-components';
 
@@ -64,37 +64,30 @@ const theme = {
 };
 
 
-export default class ThemeProvider extends React.Component {
+const ThemeProvider = ({ children, globalStyle, }) => {
+  const [ activeTheme, changeTheme, ] = useState('default');
+  return (
+    <React.Fragment>
+      <StyledComponentThemeProvider
+        theme={{
+          ...theme[activeTheme],
+          changeTheme,
+        }}
+      >
+        <React.Fragment>
+          <GlobalStyle globalStyle={globalStyle} />
+          {children}
+          {!production && <ColorPicker />}
+        </React.Fragment>
+      </StyledComponentThemeProvider>
+    </React.Fragment>
+  );
+};
 
-  static propTypes = {
-    children: PropTypes.element.isRequired,
-    globalStyle: PropTypes.string,
-  }
+ThemeProvider.propTypes = {
+  children: PropTypes.element.isRequired,
+  globalStyle: PropTypes.string,
+};
 
-  state = {
-    active: 'default',
-  }
 
-  changeTheme = theme => this.setState({ active: theme, })
-
-  render () {
-    const { children, globalStyle, } = this.props;
-    return (
-      <React.Fragment>
-        <StyledComponentThemeProvider
-          theme={{
-            ...theme[this.state.active],
-            changeTheme: this.changeTheme,
-          }}
-        >
-          <React.Fragment>
-            <GlobalStyle globalStyle={globalStyle} />
-            {children}
-            {!production && <ColorPicker />}
-          </React.Fragment>
-        </StyledComponentThemeProvider>
-      </React.Fragment>
-    )
-  }
-
-}
+export default ThemeProvider;

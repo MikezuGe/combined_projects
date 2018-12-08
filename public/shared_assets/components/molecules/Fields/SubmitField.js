@@ -32,7 +32,6 @@ const SubmitField = ({ name, text, actions, onClick, ...rest }) => (
   </Wrapper>
 );
 
-
 SubmitField.propTypes = {
   name: PropTypes.string.isRequired,
   text: PropTypes.string.isRequired,

@@ -1,4 +1,4 @@
-import React from 'react';
+import { useState, useEffect, } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 
@@ -7,33 +7,19 @@ axios.defaults.baseURL = `${window.location.origin}/api/graphql`;
 axios.defaults.headers = { 'Content-Type': 'application/json', };
 
 
-export default class Query extends React.Component {
-  
-  componentDidMount () {
-    this.doQuery();
-  }
-
-  static propTypes = {
-    children: PropTypes.func.isRequired,
-    onError: PropTypes.func,
-  }
-
-  state = {
+const Query = ({ query, variables, onError, children, }) => {
+  const [
+    { loading, error, status, statusText, },
+    setQueryStatus,
+  ] = useState({
     loading: true,
     error: false,
     status: null,
     statusText: '',
-    data: [],
-  }
+  });
+  const [ data, setData, ] = useState([]);
 
-  doQuery = async () => {
-    this.setState({
-      ...(await this.tryFetch()),
-    });
-  }
-
-  async tryFetch () {
-    const { query, variables, } = this.props;
+  const tryFetch = async () => {
     try {
       const { status, statusText, data: { data, }, } = await axios.post(`/`, JSON.stringify({ query, variables, }));
       return {
@@ -44,28 +30,41 @@ export default class Query extends React.Component {
         data: data ? data[Object.keys(data)[0]] : [],
       };
     } catch ({ response: { status, statusText, }, }) {
-      this.props.onError && this.props.onError(`${status} ${statusText}`);
+      onError && onError(`${status} ${statusText}`);
       return {
         loading: false,
         error: true,
         status,
         statusText,
+        data: [],
       };
     }
-  }
+  };
 
-  render () {
-    const { children, } = this.props;
-    const { loading, error, status, statusText, data, } = this.state;
-    const { doQuery: refetch, } = this;
-    return (
-      children({
-        loading,
-        error: !loading && error && (`${status} ${statusText}`),
-        refetch,
-        data,
-      })
-    );
-  }
+  const doQuery = async () => {
+    const { data, ...queryStatus } = await tryFetch();
+    setQueryStatus(queryStatus);
+    setData(data);
+  };
 
-}
+  useEffect(() => {
+    doQuery();
+  }, []);
+
+  return (
+    children({
+      loading,
+      error: !loading && error && (`${status} ${statusText}`),
+      refetch: doQuery,
+      data,
+    })
+  );
+};
+
+Query.propTypes = {
+  children: PropTypes.func.isRequired,
+  onError: PropTypes.func,
+};
+
+
+export default Query;

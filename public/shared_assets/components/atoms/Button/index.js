@@ -13,7 +13,6 @@ const Button = ({ title, type, }) => (
   </StyledButton>
 );
 
-
 Button.propTypes = {
   title: PropTypes.string.isRequired,
   type: PropTypes.string,

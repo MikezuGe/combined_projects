@@ -13,21 +13,28 @@ width: 12em;
 `;
 
 
+let nextId = 0;
+let listener = () => {};
+export const addToast = toast => listener(toast);
+
+
 export default class Toaster extends React.Component {
 
+  componentDidMount () {
+    listener = this.addToast;
+  }
+
   state = {
-    nextId: 0,
     toasts: [],
   }
 
   addToast = toast => {
-    this.setState(({ nextId, toasts, }) => ({
-      nextId: nextId + 1,
+    this.setState(({ toasts, }) => ({
       toasts: [
         ...toasts,
         {
           ...toast,
-          id: nextId,
+          id: nextId++,
         },
       ],
     }))
@@ -42,11 +49,11 @@ export default class Toaster extends React.Component {
     const { toasts, } = this.state;
     return (
       <StyledToaster>
-        {toasts.map((props, i) => (
+        {toasts.map((toast, i) => (
           <Toast
-            key={`toast-${props.id}`}
+            key={`toast-${toast.id}`}
+            {...toast}
             nthToast={i}
-            {...props}
             removeToast={removeToast}
           />))}
       </StyledToaster>

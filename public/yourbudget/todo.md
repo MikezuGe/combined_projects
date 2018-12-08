@@ -1,5 +1,3 @@
-- Toaster component
-- Form component
 - Login
 
 
@@ -9,17 +7,14 @@ Kotisivu
     - Ehdottaa lisäyksiä budgettiin, tavanomaisia, mitä tulee päivittäin
 
 Budjetti
-  - Lista kaikista
+  - Hover highlight
   - Lista aikaväliltä
   - Järjestys nimen mukaan
   - Järjestys päivänmäärän mukaan (default)
   - Järjestys suurin/pienin summa
-  
-  - Tulojen / menojen lisäys
-    - summa
-    - kohde
-    - paikka
-    - aika (default nyt)
+  - Näytä vain
+    - tulot
+    - menot
 
 Graafit
   - Kulutuskohtaiset graafit

@@ -1,18 +1,20 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 
 const Svg = styled.svg`
 display: block;
-width: 100%;
-${({ rotate, }) => rotate ? `transform: rotate(${rotate || 0}deg)` : ''}
+${({ rotate, }) => rotate ? `transform: rotate(${rotate || 0}deg)` : ''};
+width: ${({ size, }) => size};
+height: ${({ size, }) => size};
 `;
 
 
-const Icon = ({ icon, width, height, ...rest }) => (
+const Icon = ({ icon, size, ...rest }) => (
   <Svg
-    width={width || 24}
-    height={height || 24}
+    width={size}
+    height={size}
     viewBox="0 0 24 24"
     {...rest}
   >
@@ -24,6 +26,15 @@ const Icon = ({ icon, width, height, ...rest }) => (
     }
   </Svg>
 );
+
+Icon.defaultProps = {
+  size: 24,
+};
+
+Icon.propTypes = {
+  icon: PropTypes.string.isRequired,
+  size: PropTypes.number,
+};
 
 
 export default Icon;

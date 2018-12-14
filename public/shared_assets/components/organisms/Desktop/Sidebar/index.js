@@ -7,6 +7,12 @@ const Sidebar = styled.div`
 grid-area: sidebar;
 background: ${({ theme, }) => theme.secondaryColor};
 overflow-x: hidden;
+${({ theme, }) => theme.breakpoints([ 'xs', 'sm', ], `
+position: absolute;
+width: 40%;
+height: 100%;
+z-index: 1;
+`)}
 `;
 
 const AlterList = styled.div`

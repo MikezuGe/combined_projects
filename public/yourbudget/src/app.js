@@ -6,7 +6,7 @@ import { ThemeProvider, ToasterProvider, ModalProvider, } from '../../shared_ass
 import { Home, Budget, Settings, } from './containers';
 
 
-const globalStyle = `
+const globalStyle = ({ theme, }) => `
 * {
   font-family: 'Ubuntu', sans-serif;
   font-size: 16px;
@@ -39,10 +39,15 @@ html, body {
   display: grid;
   grid-template-columns: 10% 90%;
   grid-template-rows: 15% 85%;
+  ${theme.breakpoints([ 'xs', 'sm', ], `
+  grid-template-columns: 0% 100%;
+  grid-template-rows: 0% 100%;
+  `)}
   grid-template-areas:
     "header main"
     "sidebar main";
-}`;
+}
+`;
 
 
 const App = () => (

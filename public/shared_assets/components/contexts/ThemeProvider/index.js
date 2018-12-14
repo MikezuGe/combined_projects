@@ -11,12 +11,12 @@ const ColorPicker = () => {
   background: ${({ theme, color, }) => theme[`${color}Color`]}
   `;
   const Palette = styled.div`
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    display: flex;
-    box-sizing: border-box;
-    border: 1px solid black;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  display: flex;
+  box-sizing: border-box;
+  border: 1px solid black;
   `;
   return (
     <Palette>
@@ -31,12 +31,12 @@ const ColorPicker = () => {
 
 
 const GlobalStyle = createGlobalStyle`
-${({ globalStyle, }) => globalStyle}
-${({ theme, }) => `
-  ${theme.breakpoints('xs', 'font-size: 8px')}
-  ${theme.breakpoints('sm', 'font-size: 10px')}
-  ${theme.breakpoints('md', 'font-size: 12px')}
-  ${theme.breakpoints('lg', 'font-size: 16px')}
+${({ globalStyle, theme, }) => `
+  ${globalStyle && globalStyle({ theme, })}
+  ${theme.breakpoints('xs', '*{font-size: 8px}')}
+  ${theme.breakpoints('sm', '*{font-size: 10px}')}
+  ${theme.breakpoints('md', '*{font-size: 12px}')}
+  ${theme.breakpoints('lg', '*{font-size: 16px}')}
 `}
 `;
 
@@ -48,17 +48,21 @@ const theme = {
     tertiaryColor: '#eafc40',
     quaternaryColor: '#254558',
     quinaryColor: '#2b2b3a',
-    breakpoints: (breakpoint, css) => {
-      const bp = breakpoint === 'xs'
-        ? '(max-width: 512px)' : breakpoint === 'sm'
-          ? '(min-width: 513px) AND (max-width: 768px)' : breakpoint === 'md'
-            ? '(min-width: 769px) AND (max-width: 1280px)' : breakpoint === 'lg'
-              ? '(min-width: 1280px)' : null;
-      return `
-        @media only screen and ${bp} {
-          ${css}
-        }
-      `;
+    breakpoints: (breakpoints, css) => {
+      !Array.isArray(breakpoints) && (breakpoints = [ breakpoints, ]);
+      return breakpoints.reduce((total, breakpoint) => {
+        const bp = breakpoint === 'xs'
+          ? '(max-width: 512px)' : breakpoint === 'sm'
+            ? '(min-width: 513px) AND (max-width: 768px)' : breakpoint === 'md'
+              ? '(min-width: 769px) AND (max-width: 1280px)' : breakpoint === 'lg'
+                ? '(min-width: 1280px)' : null;
+        total += `
+    @media only screen and ${bp} {
+      ${css}
+    }
+    `;
+        return total;
+      }, '');
     },
   },
 };
@@ -86,7 +90,7 @@ const ThemeProvider = ({ children, globalStyle, }) => {
 
 ThemeProvider.propTypes = {
   children: PropTypes.element.isRequired,
-  globalStyle: PropTypes.string,
+  globalStyle: PropTypes.func,
 };
 
 

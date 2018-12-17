@@ -65,7 +65,11 @@ export default class Field extends React.Component {
         showError: !!error,
         error,
       },
-      value: type === 'toggle' || type === 'checkbox' ? checked : value,
+      value: type === 'number'
+        ? parseFloat(value)
+        : type === 'toggle' || type === 'checkbox'
+          ? checked
+          : value,
     }));
   }
 

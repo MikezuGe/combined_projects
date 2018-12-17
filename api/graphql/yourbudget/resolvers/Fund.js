@@ -27,16 +27,16 @@ const handleFilters = filter => {
   }
 
   if (filter.minAmount) {
-    filter.amount = { $gte: parseFloat(filter.minAmount), };
+    filter.amount = { $gte: filter.minAmount, };
     delete filter.minAmount;
   }
   if (filter.maxAmount) {
-    filter.amount = { $lte: parseFloat(filter.maxAmount), ...filter.amount, };
+    filter.amount = { $lte: filter.maxAmount, ...filter.amount, };
     delete filter.maxAmount;
   }
 
   return filter;
-}
+};
 
 
 const Query = {

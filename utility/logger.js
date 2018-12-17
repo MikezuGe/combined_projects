@@ -9,7 +9,7 @@ const notProduction = process.env.NODE_ENV !== 'production';
 
 const { isArray, } = Array;
 const { stringify, } = JSON;
-const { log, warn, } = console;
+const { log, } = console;
 const getTimeNow = () => parseDate(new Date(), 'DD.MM.YYYY hh:mm:ss');
 
 
@@ -69,7 +69,7 @@ class Logger {
     const content = `Warn   ${getTimeNow()} - ${msg}\n${!other.length ? '' : `${stringify(other, replacer, 2)}\n`}`;
     this.infoStream.write(content);
     this.debugStream.write(content);
-    notProduction && warn(content.replace(/\s/gi, ' '));
+    notProduction && log(content.replace(/\s/gi, ' '));
   }
 
   err (msg, ...other) {

@@ -117,7 +117,6 @@ export default class Form extends React.Component {
   }
 
   render () {
-    console.log(this.fieldRefs);
     return (
       <StyledForm>
         {this.props.children({

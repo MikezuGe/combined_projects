@@ -1,7 +1,7 @@
 type Fund {
   id: ID
   name: String
-  amount: String
+  amount: Float
   date: Date
   isIncome: Boolean
 }
@@ -9,22 +9,22 @@ type Fund {
 input FundFilter {
   id: ID,
   name: String,
-  minAmount: String,
-  maxAmount: String,
+  minAmount: Float,
+  maxAmount: Float,
   startDate: Date,
   endDate: Date
 }
 
 input FundInput {
   name: String!
-  amount: String!
+  amount: Float!
   date: Date!
   isIncome: Boolean!
 }
 
 input FundUpdate {
   name: String
-  amount: String
+  amount: Float
   date: Date
   isIncome: Boolean
 }

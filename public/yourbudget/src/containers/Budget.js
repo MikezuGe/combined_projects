@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, } from 'react';
 import PropTypes from 'prop-types';
 import { adopt, } from 'react-adopt';
 
@@ -25,30 +25,35 @@ Modal.propTypes = { ...propTypes, };
 
 
 propTypes.Toaster = PropTypes.object.isRequired;
-const QueryComponent = ({ Toaster: { addToast, }, render, }) => (
-  <Query
-    query={GET_FUNDS}
-    onError={err => addToast({
-      type: 'error',
-      title: 'Error',
-      text: err,
-    })}
-  >
-    {({
-      loading: queryLoading,
-      error: queryError,
-      refetch,
-      data,
-    }) => (
-      render({
-        queryLoading,
-        queryError,
+const QueryComponent = ({ Toaster: { addToast, }, render, }) => {
+  const [ queryVariables, setQueryVariables, ] = useState({ filters: null, });
+  return (
+    <Query
+      query={GET_FUNDS}
+      variables={queryVariables}
+      onError={err => addToast({
+        type: 'error',
+        title: 'Error',
+        text: err,
+      })}
+    >
+      {({
+        loading: queryLoading,
+        error: queryError,
         refetch,
         data,
-      })
-    )}
-  </Query>
-);
+      }) => (
+        render({
+          setQueryVariables,
+          queryLoading,
+          queryError,
+          refetch,
+          data,
+        })
+      )}
+    </Query>
+  );
+};
 QueryComponent.propTypes = { ...propTypes, };
 
 
@@ -142,7 +147,7 @@ const Budget = () => (
   <Composed>
     {({
       Modal: { openModal, },
-      Query: { queryLoading, queryError, data, },
+      Query: { queryLoading, queryError, setQueryVariables, data, },
       Create: { createData, },
       Update: { updateData, },
       Remove: { removeData, },
@@ -157,11 +162,24 @@ const Budget = () => (
                 onClose={closeModal}
               />
             )),
+          }, {
+            title: 'Filter by date',
+            onClick: () => setQueryVariables({ filter: {
+              startDate: new Date('2018-10-21'),
+            }, }),
           },
         ]}
         loading={queryLoading}
         error={queryError}
         data={data}
+        filters={{
+          name: 'text',
+          minAmount: 'number',
+          maxAmount: 'number',
+          startDate: 'date',
+          endDate: 'date',
+        }}
+        onFiltersChange={filters => setQueryVariables({ filters, })}
         columns={[
           {
             key: 'name',
@@ -186,7 +204,7 @@ const Budget = () => (
           }, {
             key: 'date',
             title: 'Date',
-            render: date => parseDate(date, 'YYYY-MM-DD'),
+            render: date => parseDate(date, 'DD-MM-YYYY'),
           }, {
             title: 'Edit',
             onClick: data => openModal(({ closeModal, }) => (

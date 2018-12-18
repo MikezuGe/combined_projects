@@ -1,6 +1,6 @@
 export default `
-query getFunds ($filter: FundFilter) {
-  getFunds (filter: $filter) {
+query getFunds ($filters: FundFilters) {
+  getFunds (filters: $filters) {
     id,
     name,
     amount,

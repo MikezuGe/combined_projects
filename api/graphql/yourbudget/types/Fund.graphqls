@@ -6,7 +6,7 @@ type Fund {
   isIncome: Boolean
 }
 
-input FundFilter {
+input FundFilters {
   id: ID,
   name: String,
   minAmount: Float,
@@ -30,7 +30,7 @@ input FundUpdate {
 }
 
 type Query {
-  getFunds(filter: FundFilter): [Fund]
+  getFunds(filters: FundFilters): [Fund]
 }
 
 type Mutation {

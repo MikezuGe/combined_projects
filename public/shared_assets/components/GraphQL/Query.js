@@ -21,7 +21,7 @@ const Query = ({ query, variables, onError, children, }) => {
 
   const tryFetch = async () => {
     try {
-      const { status, statusText, data: { data, }, } = await axios.post(`/`, JSON.stringify({ query, variables, }));
+      const { status, statusText, data: { data, }, } = await axios.post('/', JSON.stringify({ query, variables, }));
       return {
         loading: false,
         error: false,
@@ -49,12 +49,12 @@ const Query = ({ query, variables, onError, children, }) => {
 
   useEffect(() => {
     doQuery();
-  }, []);
+  }, [ variables, ]);
 
   return (
     children({
       loading,
-      error: !loading && error && (`${status} ${statusText}`),
+      error: !loading && error ? (`${status} ${statusText}`) : '',
       refetch: doQuery,
       data,
     })

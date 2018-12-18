@@ -8,9 +8,7 @@ const StyledLabel = styled.label`
 
 
 const Label = ({ htmlFor, children, }) => (
-  <StyledLabel
-    htmlFor={htmlFor}
-  >
+  <StyledLabel htmlFor={htmlFor}>
     {children}
   </StyledLabel>
 );

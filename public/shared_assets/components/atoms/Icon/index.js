@@ -6,8 +6,10 @@ import styled from 'styled-components';
 const Svg = styled.svg`
 display: block;
 ${({ rotate, }) => rotate ? `transform: rotate(${rotate || 0}deg)` : ''};
-width: ${({ size, }) => size};
-height: ${({ size, }) => size};
+${({ size, }) => `
+width: ${size};
+height: ${size};
+`}
 `;
 
 

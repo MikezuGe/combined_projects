@@ -1,46 +1,46 @@
 const { Fund, } = require('../../../mongoose/models/yourbudget');
 
 
-const handleFilters = filter => {
-  if (!filter) {
+const handleFilters = filters => {
+  if (!filters) {
     return {};
   }
 
-  if (filter.id) {
-    filter._id = filter.id;
-    delete filter.id;
+  if (filters.id) {
+    filters._id = filters.id;
+    delete filters.id;
   }
 
-  if (filter.name) {
-    filter.name = { $regex: filter.name, $options: 'i', };
-  } else if (filter.name === "") {
-    delete filter.name;
+  if (filters.name) {
+    filters.name = { $regex: filters.name, $options: 'i', };
+  } else if (filters.name === "") {
+    delete filters.name;
   }
 
-  if (filter.startDate) {
-    filter.date = { $gte: filter.startDate, };
-    delete filter.startDate;
+  if (filters.startDate) {
+    filters.date = { $gte: filters.startDate, };
+    delete filters.startDate;
   }
-  if (filter.endDate) {
-    filter.date = { $lte: filter.endDate, ...filter.date, };
-    delete filter.endDate;
-  }
-
-  if (filter.minAmount) {
-    filter.amount = { $gte: filter.minAmount, };
-    delete filter.minAmount;
-  }
-  if (filter.maxAmount) {
-    filter.amount = { $lte: filter.maxAmount, ...filter.amount, };
-    delete filter.maxAmount;
+  if (filters.endDate) {
+    filters.date = { $lte: filters.endDate, ...filters.date, };
+    delete filters.endDate;
   }
 
-  return filter;
+  if (filters.minAmount) {
+    filters.amount = { $gte: filters.minAmount, };
+    delete filters.minAmount;
+  }
+  if (filters.maxAmount) {
+    filters.amount = { $lte: filters.maxAmount, ...filters.amount, };
+    delete filters.maxAmount;
+  }
+
+  return filters;
 };
 
 
 const Query = {
-  getFunds: async args => await Fund.find(handleFilters(args.filter)),
+  getFunds: async args => await Fund.find(handleFilters(args.filters)),
 };
 
 

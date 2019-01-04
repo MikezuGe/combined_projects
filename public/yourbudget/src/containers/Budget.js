@@ -162,11 +162,6 @@ const Budget = () => (
                 onClose={closeModal}
               />
             )),
-          }, {
-            title: 'Filter by date',
-            onClick: () => setQueryVariables({ filter: {
-              startDate: new Date('2018-10-21'),
-            }, }),
           },
         ]}
         loading={queryLoading}

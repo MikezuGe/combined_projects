@@ -9,7 +9,12 @@ axios.defaults.headers = { 'Content-Type': 'application/json', };
 
 const Query = ({ query, variables, onError, children, }) => {
   const [
-    { loading, error, status, statusText, },
+    {
+      loading,
+      error,
+      status,
+      statusText,
+    },
     setQueryStatus,
   ] = useState({
     loading: true,
@@ -17,6 +22,7 @@ const Query = ({ query, variables, onError, children, }) => {
     status: null,
     statusText: '',
   });
+
   const [ data, setData, ] = useState([]);
 
   const tryFetch = async () => {

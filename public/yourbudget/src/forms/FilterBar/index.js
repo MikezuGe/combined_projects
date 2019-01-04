@@ -25,7 +25,7 @@ display: flex;
 align-items: center;
 `;
 
-const Suggestions = styled.ul`
+const Suggestions = styled.ul`  
 border-radius: 1.5em;
 background: ${({ theme, }) => theme.secondaryColor}};
 position: absolute;
@@ -34,11 +34,12 @@ position: absolute;
 const Suggestion = styled.li`
 display: flex;
 align-items: center;
-border-radius: 1.5em;
+border-radius: 1em;
 padding: 0 1em;
-height: 3em;
+height: 2em;
 margin: 0.5em;
 border: 1px solid black;
+cursor: pointer;
 `;
 
 const StyledInput = styled.input`
@@ -57,30 +58,41 @@ const handleFilterValue = (type, value) => {
 };
 
 
-const FilterBar = ({ filters: filterSuggestions, onFiltersChange, }) => {
+let wrapperRef = null;
+
+
+const FilterBar = ({ filters, onFiltersChange, }) => {
   const [ showSuggestions, setShowSuggestions, ] = useState(false);
   const [ filterInEdit, setFilterInEdit, ] = useState({ key: null, value: '', type: '', });
-  const [ filters, setFilters, ] = useState([]);
-
-  useEffect(() => onFiltersChange(filters.reduce((total, { key, value, type, }) => (
-    total[key] = handleFilterValue(type, value), total
-  ), {})), [ filters, ]);
+  const [ selectedFilters, setSelectedFilters, ] = useState([]);
 
   const suggestionClick = ({ key, value, }) => {
-    setFilters([ ...filters.filter(filter => filter.key !== key), ])
-    setFilterInEdit({ key, value, type: filterSuggestions[key] });
-    setShowSuggestions(!showSuggestions);
+    setSelectedFilters(selectedFilters.filter(filter => filter.key !== key))
+    setFilterInEdit({ key, value, type: filters[key] });
+    setShowSuggestions(false);
   };
 
   const inputBlur = () => {
-    filterInEdit.value && setFilters([ ...filters, filterInEdit, ]);
+    filterInEdit.value && setSelectedFilters([ ...selectedFilters, filterInEdit, ]);
     setFilterInEdit({ key: null, value: '', type: '', });
   };
 
+  useEffect(() => {
+    onFiltersChange(selectedFilters.reduce((total, { key, value, type, }) => (
+      total[key] = handleFilterValue(type, value), total
+    ), {}));
+  }, [ selectedFilters, ]);
+
+  useEffect(() => {
+    const listener = e => !wrapperRef.contains(e.target) && setShowSuggestions(false);
+    window.addEventListener('click', listener);
+    return () => window.removeEventListener('click', listener);
+  }, []);
+
   return (
-    <Wrapper>
-      <SelectionArea onClick={() => setShowSuggestions(!showSuggestions)}>
-        {filters.map(({ key, value, }) => (
+    <Wrapper onClick={() => setShowSuggestions(!showSuggestions)} ref={ref => (wrapperRef = ref)}>
+      <SelectionArea>
+        {selectedFilters.map(({ key, value, }) => (
           <Selection
             key={key}
             onClick={() => suggestionClick({ key, value, })}
@@ -103,8 +115,8 @@ const FilterBar = ({ filters: filterSuggestions, onFiltersChange, }) => {
       </SelectionArea>
       {showSuggestions && (
         <Suggestions>
-          {Object.entries(filterSuggestions)
-            .filter(([ key, ]) => !(filterInEdit.key === key || filters.find(f => f.key === key)))
+          {Object.entries(filters)
+            .filter(([ key, ]) => !(filterInEdit.key === key || selectedFilters.find(f => f.key === key)))
             .map(([ key, ]) => (
               <Suggestion 
                 key={key}

@@ -36,7 +36,6 @@ const Query = ({ query, variables, onError, children, }) => {
         data: data ? data[Object.keys(data)[0]] : [],
       };
     } catch ({ response: { status, statusText, }, }) {
-      onError && onError(`${status} ${statusText}`);
       return {
         loading: false,
         error: true,
@@ -49,6 +48,7 @@ const Query = ({ query, variables, onError, children, }) => {
 
   const doQuery = async () => {
     const { data, ...queryStatus } = await tryFetch();
+    queryStatus.error && onError && onError(`${status} ${statusText}`);
     setQueryStatus(queryStatus);
     setData(data);
   };

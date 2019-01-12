@@ -22,7 +22,6 @@ const Mutation = ({ children, onError, onSuccess, mutation, }) => {
   const tryMutate = async variables => {
     try {
       const { status, statusText, data: { data, }, } = await axios.post(`/`, JSON.stringify({ query: mutation, variables, }));
-      onSuccess && onSuccess();
       return {
         loading: false,
         error: false,
@@ -30,8 +29,7 @@ const Mutation = ({ children, onError, onSuccess, mutation, }) => {
         statusText,
         data: data ? data[Object.keys(data)[0]] : [],
       };
-    } catch ({ response, response: { status, statusText, }, }) {
-      onError && onError(`${status} ${statusText}`);
+    } catch ({ response, status, statusText, }) {
       return {
         loading: false,
         error: true,
@@ -44,6 +42,9 @@ const Mutation = ({ children, onError, onSuccess, mutation, }) => {
 
   const doMutation = async variables => {
     const { data, ...mutationStatus } = await tryMutate(variables);
+    mutationStatus.error
+      ? onError && onError(`${status} ${statusText}`)
+      : onSuccess && onSuccess();
     setMutationStatus(mutationStatus);
     setData(data);
     return !mutationStatus.error;

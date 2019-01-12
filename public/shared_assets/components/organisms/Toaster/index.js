@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, } from 'react';
 import styled from 'styled-components';
 
 import Toast from './Toast';
@@ -18,46 +18,37 @@ let listener = () => {};
 export const addToast = toast => listener(toast);
 
 
-export default class Toaster extends React.Component {
+const Toaster = () => {
+  const [ toasts, setToasts, ] = useState([]);
 
-  componentDidMount () {
-    listener = this.addToast;
+  const addToast = toast => {
+    setToasts(toasts => [
+      ...toasts,
+      {
+        ...toast,
+        id: nextId++,
+      },
+    ]);
   }
 
-  state = {
-    toasts: [],
-  }
+  const removeToast = toastId => setToasts(toasts => toasts.filter(({ id, }) => id !== toastId));
 
-  addToast = toast => {
-    this.setState(({ toasts, }) => ({
-      toasts: [
-        ...toasts,
-        {
-          ...toast,
-          id: nextId++,
-        },
-      ],
-    }))
-  }
+  useEffect(() => {
+    listener = addToast;
+  }, []);
 
-  removeToast = toastId => this.setState(({ toasts, }) => ({
-    toasts: toasts.filter(({ id, }) => id !== toastId),
-  }));
+  return (
+    <StyledToaster>
+      {toasts.map((toast, i) => (
+        <Toast
+          key={`toast-${toast.id}`}
+          {...toast}
+          nthToast={i}
+          removeToast={removeToast}
+        />))}
+    </StyledToaster>
+  );
+};
 
-  render () {
-    const { removeToast, } = this;
-    const { toasts, } = this.state;
-    return (
-      <StyledToaster>
-        {toasts.map((toast, i) => (
-          <Toast
-            key={`toast-${toast.id}`}
-            {...toast}
-            nthToast={i}
-            removeToast={removeToast}
-          />))}
-      </StyledToaster>
-    );
-  }
 
-}
+export default Toaster;

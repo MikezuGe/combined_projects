@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useState, useEffect, } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 
 const StyledToast = styled.li`
-background: ${({ theme: { secondaryColor, }, }) => secondaryColor};
+background: ${({ theme, }) => theme.secondaryColor};
 position: absolute;
 width: 100%;
 right: 0;
@@ -13,7 +13,7 @@ padding: 0.5em;
 border: 5px solid black;
 border-radius: 0.5em;
 transform: translate(${({ animate, nthToast, }) => `${animate ? 125 : 0}%, ${nthToast * 105}%`});
-transition: transform 500ms;
+transition: transform ${({ theme, }) => theme.animateSlow};
 `;
 
 const ToastTitle = styled.h2``;
@@ -21,60 +21,57 @@ const ToastTitle = styled.h2``;
 const ToastText = styled.div``;
 
 
-export default class Toast extends React.Component {
+const Toast = ({ id, title, text, nthToast, removeToast, timeout, }) => {
+  const [ animate, setAnimate, ] = useState(true);
+  const [ timeoutId, setTimeoutId, ] = useState();
+  const [ isBeingRemoved, setIsBeingRemoved, ] = useState(false);
 
-  componentDidMount () {
-    const { timeout, } = this.props;
-    setTimeout(() => this.setState({ animate: false, }), 50);
-    this.timeoutId = setTimeout(this.removeSelf, timeout);
+  const removeSelf = () => {
+    clearTimeout(timeoutId);
+    setAnimate(true);
+    setIsBeingRemoved(true);
   }
 
-  static propTypes = {
-    id: PropTypes.number.isRequired,
-    type: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
-    text: PropTypes.string.isRequired,
-    timeout: PropTypes.number.isRequired,
-    nthToast: PropTypes.number.isRequired,
-    removeToast: PropTypes.func.isRequired,
-  }
+  useEffect(() => {
+    setTimeout(() => setAnimate(false), 50);
+    setTimeoutId(setTimeout(removeSelf, timeout));
+  }, []);
 
-  static defaultProps = {
-    timeout: 5000,
-    title: 'NO TITLE PROVIDED',
-    text: 'NO TEXT PROVIDED',
-  }
+  return (
+    <StyledToast
+      nthToast={nthToast}
+      animate={animate}
+      onClick={removeSelf}
+      onTransitionEnd={() => isBeingRemoved && removeToast(id)}
+    >
+      <ToastTitle>
+        {title}
+      </ToastTitle>
+      <ToastText>
+        {text}
+      </ToastText>
+    </StyledToast>
+  );
+};
 
-  timeoutId = null;
-  state = {
-    animate: true,
-  }
 
-  removeSelf = () => {
-    const { removeToast, id, } = this.props;
-    clearTimeout(this.timeoutId);
-    this.setState({ animate: true, });
-    this.nextAction = () => removeToast(id);
-    this.timeoutId = setTimeout(() => removeToast(id), 550);
-  }
+Toast.propTypes = {
+  id: PropTypes.number.isRequired,
+  type: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  text: PropTypes.string.isRequired,
+  timeout: PropTypes.number.isRequired,
+  nthToast: PropTypes.number.isRequired,
+  removeToast: PropTypes.func.isRequired,
+  theme: PropTypes.shape({ animateSlow: PropTypes.string, }),
+};
 
-  render () {
-    const { animate, } = this.state;
-    const { title, text, nthToast, } = this.props;
-    return (
-      <StyledToast
-        nthToast={nthToast}
-        animate={animate}
-        onClick={this.removeSelf}
-      >
-        <ToastTitle>
-          {title}
-        </ToastTitle>
-        <ToastText>
-          {text}
-        </ToastText>
-      </StyledToast>
-    );
-  }
 
-}
+Toast.defaultProps = {
+  timeout: 5000,
+  title: 'NO TITLE PROVIDED',
+  text: 'NO TEXT PROVIDED',
+};
+
+
+export default Toast;

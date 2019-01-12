@@ -3,9 +3,7 @@ import PropTypes from 'prop-types';
 
 import DefaultDesktop from '../DefaultDesktop';
 import { DataTable, } from '../../../../shared_assets/components/organisms';
-
-
-import FilterBar from '../../forms/FilterBar';
+import { FilterBar, } from '../../../../shared_assets/components/molecules';
 
 
 const ListDesktop = ({ loading, error, data, columns, filters, onFiltersChange, secondaryMenuItems, }) => (
@@ -37,7 +35,7 @@ ListDesktop.propTypes = {
   error: PropTypes.string.isRequired,
   data: PropTypes.array.isRequired,
   columns: PropTypes.array,
-  filters: PropTypes.objectOf(PropTypes.string),
+  filters: PropTypes.arrayOf(PropTypes.any),
   onFiltersChange: PropTypes.func,
   secondaryMenuItems: PropTypes.array,
 };

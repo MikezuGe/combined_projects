@@ -24,22 +24,27 @@ cursor: pointer;
 `;
 
 
+const sortNumbers = (a, b) => a === b ? 0 : a < b ? -1 : 1;
+const sortStrings = (a, b) => a.localeCompare(b);
+
+
 const DataTable = ({ data, columns, ...rest }) => {
   const [ sortKey, setSortKey, ] = useState('');
   const [ reversedSort, setReversedSort, ] = useState(false);
-  const sorter = (() => {
-    if (!sortKey) {
-      return;
-    }
-    const sortBy = columns.find(({ key, }) => key && key === sortKey);
-    const sortFunc = (sortBy && sortBy.sort) || ((a, b) => ((a < b) && -1) || ((a > b) && 1) || 0);
-    return reversedSort
-      ? (a, b) => -sortFunc(a[sortKey], b[sortKey])
-      : (a, b) => sortFunc(a[sortKey], b[sortKey]);
-  })();
+  const sorter = sortKey && (
+    typeof data[0][sortKey] === 'string'
+      ? (reversedSort
+        ? (a, b) => -sortStrings(a[sortKey], b[sortKey])
+        : (a, b) => sortStrings(a[sortKey], b[sortKey])
+      )
+      : (reversedSort
+        ? (a, b) => -sortNumbers(a[sortKey], b[sortKey])
+        : (a, b) => sortNumbers(a[sortKey], b[sortKey])
+      )
+  );
   return (
     <Table {...rest}>
-      <tbody>
+      <thead>
         {
           columns.some(({ title, }) => title) && (
             <Row key={'header-row'}>
@@ -64,6 +69,8 @@ const DataTable = ({ data, columns, ...rest }) => {
             </Row>
           )
         }
+      </thead>
+      <tbody>
         {
           (sorter ? data.sort(sorter) : data).map((d, i) => (
             <Row key={`row-${i}`}>
@@ -86,7 +93,8 @@ const DataTable = ({ data, columns, ...rest }) => {
       </tbody>
     </Table>
   );
-}
+};
+
 
 DataTable.propTypes = {
   data: PropTypes.array.isRequired,

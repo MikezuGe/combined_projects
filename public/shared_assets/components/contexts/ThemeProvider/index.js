@@ -4,10 +4,12 @@ import styled, { createGlobalStyle, ThemeProvider as StyledComponentThemeProvide
 
 
 const production = window.location.origin !== 'http://localhost:3000';
+
+
 const ColorPicker = () => {
   const SingleColor = styled.div`
-  width: 50px;
-  height: 50px;
+  width: 2em;
+  height: 2em;
   background: ${({ theme, color, }) => theme[`${color}Color`]}
   `;
   const Palette = styled.div`
@@ -43,6 +45,9 @@ ${({ globalStyle, theme, }) => `
 
 const theme = {
   default: {
+    animateSlow: '500ms',
+    animateNormal: '250ms',
+    animateFast: '50ms',
     primaryColor: '#1ed2f4',
     secondaryColor: '#f4f5f6',
     tertiaryColor: '#eafc40',

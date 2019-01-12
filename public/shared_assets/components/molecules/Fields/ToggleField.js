@@ -33,7 +33,7 @@ background: white;
   height: 1em;
   border-radius: 0.5em;
   content: '';
-  transition: transform 200ms;
+  transition: transform ${({ theme, }) => theme.animateNormal};
   transform: translate(${({ checked, }) => checked ? 1.9 : 0.1}em, 0.1em);
 }
 `;

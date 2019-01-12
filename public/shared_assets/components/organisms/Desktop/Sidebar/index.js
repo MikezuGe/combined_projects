@@ -18,7 +18,7 @@ z-index: 1;
 const AlterList = styled.div`
 position: relative;
 left: ${({ showPrimary, }) => showPrimary ? 0 : -100}%;
-transition: left 200ms;
+transition: left ${({ theme, }) => theme.animateNormal};
 `;
 
 const Menu = styled.ul`

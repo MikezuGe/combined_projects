@@ -39,7 +39,7 @@ export default class Form extends React.Component {
   }
 
   static defaultValues = {
-    initialValue: {},
+    initialValues: {},
   }
 
   state = resetForm()

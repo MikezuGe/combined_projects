@@ -11,13 +11,13 @@ justify-content: center;
 align-items: center;
 visibility: ${({ active, }) => active ? 'visible' : 'hidden'};
 background: rgba(128, 128, 128, ${({ active, }) => active ? 0.5 : 0.0});
-transition: background 500ms, visibility 0ms linear ${({ active, }) => active ? 0 : 500}ms;
+transition: background ${({ theme, }) => theme.animateSlow}, visibility 0ms linear ${({ active, }) => active ? 0 : 500}ms;
 `;
 
 const StyledModal = styled.div`
 position: relative;
 top: ${({ active, }) => active ? 0 : -100}%;
-transition: top 500ms ease-out;
+transition: top ${({ theme, }) => theme.animateSlow} ease-out;
 `;
 
 

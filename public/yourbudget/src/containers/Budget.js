@@ -167,13 +167,29 @@ const Budget = () => (
         loading={queryLoading}
         error={queryError}
         data={data}
-        filters={{
-          name: 'text',
-          minAmount: 'number',
-          maxAmount: 'number',
-          startDate: 'date',
-          endDate: 'date',
-        }}
+        filters={[
+          {
+            key: 'name',
+            name: 'Name',
+            type: 'text',
+          }, {
+            key: 'minAmount',
+            name: 'Minimum amount',
+            type: 'number',
+          }, {
+            key: 'maxAmount',
+            name: 'Maximum amount',
+            type: 'number',
+          }, {
+            key: 'startDate',
+            name: 'From date',
+            type: 'date',
+          }, {
+            key: 'endDate',
+            name: 'To date',
+            type: 'date',
+          },
+        ]}
         onFiltersChange={filters => setQueryVariables({ filters, })}
         columns={[
           {

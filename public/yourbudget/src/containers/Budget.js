@@ -8,7 +8,7 @@ import { ToasterConsumer, ModalConsumer, } from '../../../shared_assets/componen
 import { parseDate, } from '../../../shared_assets/components/utility';
 
 import { ListDesktop, } from '../pages';
-import { GET_FUNDS, CREATE_FUNDS, UPDATE_FUNDS, REMOVE_FUNDS, } from '../queries';
+import { GET_FUNDS, CREATE_FUND, UPDATE_FUND, REMOVE_FUNDS, } from '../queries';
 import { BudgetEdit, } from '../forms';
 
 
@@ -60,7 +60,7 @@ QueryComponent.propTypes = { ...propTypes, };
 propTypes.Query = PropTypes.object.isRequired;
 const Create = ({ Toaster: { addToast, }, Query: { refetch, }, render, }) => (
   <Mutation
-    mutation={CREATE_FUNDS}
+    mutation={CREATE_FUND}
     onSuccess={() => {
       addToast({
         type: 'success',
@@ -75,8 +75,8 @@ const Create = ({ Toaster: { addToast, }, Query: { refetch, }, render, }) => (
       text: err,
     })}
   >
-    {({ mutate: createData, }) => (
-      render({ createData, })
+    {({ mutate: createFund, }) => (
+      render({ createFund, })
     )}
   </Mutation>
 );
@@ -85,7 +85,7 @@ Create.propTypes = { ...propTypes, };
 
 const Update = ({ Toaster: { addToast, }, Query: { refetch, }, render, }) => (
   <Mutation
-    mutation={UPDATE_FUNDS}
+    mutation={UPDATE_FUND}
     onSuccess={() => {
       addToast({
         type: 'success',
@@ -100,8 +100,8 @@ const Update = ({ Toaster: { addToast, }, Query: { refetch, }, render, }) => (
       text: err,
     })}
   >
-    {({ mutate: updateData, }) => (
-      render({ updateData, })
+    {({ mutate: updateFund, }) => (
+      render({ updateFund, })
     )}
   </Mutation>
 );
@@ -125,8 +125,8 @@ const Remove = ({ Toaster: { addToast, }, Query: { refetch, }, render, }) => (
       text: err,
     })}
   >
-    {({ mutate: removeData, }) => (
-      render({ removeData, })
+    {({ mutate: removeFunds, }) => (
+      render({ removeFunds, })
     )}
   </Mutation>
 );
@@ -148,9 +148,9 @@ const Budget = () => (
     {({
       Modal: { openModal, },
       Query: { queryLoading, queryError, setQueryVariables, data, },
-      Create: { createData, },
-      Update: { updateData, },
-      Remove: { removeData, },
+      Create: { createFund, },
+      Update: { updateFund, },
+      Remove: { removeFunds, },
     }) => (
       <ListDesktop
         secondaryMenuItems={[
@@ -158,7 +158,7 @@ const Budget = () => (
             title: 'Create funds',
             onClick: () => openModal(({ closeModal, }) => (
               <BudgetEdit
-                onSubmit={input => createData({ input, })}
+                onSubmit={input => createFund({ input, })}
                 onClose={closeModal}
               />
             )),
@@ -221,7 +221,7 @@ const Budget = () => (
             onClick: data => openModal(({ closeModal, }) => (
               <BudgetEdit
                 initialValues={data}
-                onSubmit={input => updateData({ id: data.id, input, })}
+                onSubmit={input => updateFund({ id: data.id, input, })}
                 onClose={closeModal}
               />
             )),
@@ -233,7 +233,7 @@ const Budget = () => (
             ),
           }, {
             title: 'Remove',
-            onClick: ({ id, }) => removeData({ ids: [ id, ], }),
+            onClick: ({ id, }) => removeFunds({ ids: [ id, ], }),
             render: () => (
               <Icon
                 icon={'clear'}

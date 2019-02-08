@@ -1,6 +1,6 @@
 export default `
-mutation createFunds ($input: FundInput!) {
-  createFunds (input: $input) {
+mutation createFund ($input: FundInput!) {
+  createFund (input: $input) {
     id,
     name,
     amount,

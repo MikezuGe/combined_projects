@@ -1,1 +1,1 @@
-export { GET_FUNDS, CREATE_FUNDS, UPDATE_FUNDS, REMOVE_FUNDS, } from './funds';
+export { GET_FUNDS, CREATE_FUND, UPDATE_FUND, REMOVE_FUNDS, } from './funds';

@@ -1,4 +1,4 @@
-require('dotenv').config()
+require('dotenv').config();
 const mongoose = require('mongoose');
 
 const { logger, } = require('../../utility');
@@ -17,13 +17,17 @@ if (process.env.NODE_ENV === 'production') {
 
 const connections = {};
 
+
 module.exports = dbName => {
   if (!dbName) {
     logger.err(new Error('dbName not defined for getting mongodb connection'));
   }
   if (connections[dbName]) return connections[dbName];
   const db = mongoose.createConnection();
-  db.once('open', () => logger.info(`Connected to ${dbName} at 127.0.0.1`));
+  db.once('open', () => {
+    logger.info(`Connected to ${dbName} at 127.0.0.1`)
+    connections[dbName] = db;
+  });
   db.on('error', err => logger.err('Unable to create connection', err));
   (async () => {
     try {
@@ -33,6 +37,5 @@ module.exports = dbName => {
       logger.err('Unable to open connection', err);
     }
   })();
-  connections[dbName] = db;
   return db;
 };

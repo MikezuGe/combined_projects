@@ -6,43 +6,62 @@ import PropTypes from 'prop-types';
 const Wrapper = styled.div`
 `;
 
-const FilterInput = styled.input`
+const Bar = styled.div`
+align-items: center;
+background: ${({ theme, }) => theme.secondaryColor};
+border-radius: 1.5em;
+display: flex;
+height: 3em;
+`;
+
+const Filter = styled.span`
+background: lightgray;
+border-radius: 1em;
+height: 2em;
+line-height: 2em;
+margin: 0.5em;
+padding: 0 1em;
+`;
+
+const Suggestions = styled.div`
+align-items: center;
+background: ${({ theme, }) => theme.secondaryColor};
+border-radius: 1.5em;
+display: flex;
+height: 3em;
+margin: 0.5em 0;
+`;
+
+const Suggestion = styled.span`
+background: lightgray;
+border-radius: 1em;
+height: 2em;
+line-height: 2em;
+margin: 0.5em;
+padding: 0 1em;
 `;
 
 
 const FilterBar = ({ filters, onFiltersChange, }) => {
-  const [ filterInEdit, setFilterInEdit, ] = useState(null);
-  const [ selectedFilters, setSelectedFilters, ] = useState([]);
-  const [ showSuggestions, setShowSuggestions, ] = useState(false);
-  const WrapperRef = useRef(null);
-
-  console.log('....');
-  console.log(filterInEdit);
-  console.log(showSuggestions);
-
+  console.table(filters);
   return (
-    <Wrapper ref={WrapperRef}>
-      {showSuggestions && (
-        <div>
-          {filters.filter(filter => !selectedFilters.find(({ key, }) => key === filter.key))
-            .map(filter => (
-              <div
-                key={filter.key}
-                onClick={() => {
-                  console.log('editing');
-                  setShowSuggestions(false);
-                  setFilterInEdit({
-                    ...filter,
-                    value: '',
-                  });
-                }}
-              >
-                {filter.name}
-              </div>
-            ))}
-        </div>
-      )}
-      <div onClick={() => setShowSuggestions(true)}>asdasd</div>
+    <Wrapper>
+
+
+      <Bar>
+        <Filter>
+          {'Some text'}
+        </Filter>
+      </Bar>
+
+      <Suggestions>
+        {filters.map(filter => (
+          <Suggestion key={filter.key}>
+            {filter.name}
+          </Suggestion>
+        ))}
+      </Suggestions>
+
     </Wrapper>
   );
 };

@@ -2,10 +2,10 @@ module.exports = {
   name: 'Date',
   description: 'Date custom scalar type',
   parseValue(value) {
-    return new Date(value); // value from the client
+    return new Date(value); // value from client
   },
   serialize(value) {
-    return value.getTime(); // value sent to the client
+    return value.getTime(); // value to client
   },
   parseLiteral(ast) {
     if (ast.kind === Kind.INT) {

@@ -8,7 +8,7 @@ import { ToasterConsumer, ModalConsumer, } from '../../../shared_assets/componen
 import { parseDate, } from '../../../shared_assets/components/utility';
 
 import { ListDesktop, } from '../pages';
-import { GET_FUNDS, CREATE_FUND, UPDATE_FUND, REMOVE_FUNDS, } from '../queries';
+import { GET_FUNDS, CREATE_FUND, UPDATE_FUND, REMOVE_FUND, } from '../queries';
 import { BudgetEdit, } from '../forms';
 
 
@@ -90,7 +90,7 @@ const Update = ({ Toaster: { addToast, }, Query: { refetch, }, render, }) => (
       addToast({
         type: 'success',
         title: 'Success',
-        text: 'Fund was created successfully',
+        text: 'Fund was updated successfully',
       });
       refetch();
     }}
@@ -110,7 +110,7 @@ Update.propTypes = { ...propTypes, };
 
 const Remove = ({ Toaster: { addToast, }, Query: { refetch, }, render, }) => (
   <Mutation
-    mutation={REMOVE_FUNDS}
+    mutation={REMOVE_FUND}
     onSuccess={() => {
       addToast({
         type: 'success',
@@ -125,8 +125,8 @@ const Remove = ({ Toaster: { addToast, }, Query: { refetch, }, render, }) => (
       text: err,
     })}
   >
-    {({ mutate: removeFunds, }) => (
-      render({ removeFunds, })
+    {({ mutate: removeFund, }) => (
+      render({ removeFund, })
     )}
   </Mutation>
 );
@@ -150,7 +150,7 @@ const Budget = () => (
       Query: { queryLoading, queryError, setQueryVariables, data, },
       Create: { createFund, },
       Update: { updateFund, },
-      Remove: { removeFunds, },
+      Remove: { removeFund, },
     }) => (
       <ListDesktop
         secondaryMenuItems={[
@@ -221,7 +221,7 @@ const Budget = () => (
             onClick: data => openModal(({ closeModal, }) => (
               <BudgetEdit
                 initialValues={data}
-                onSubmit={input => updateFund({ id: data.id, input, })}
+                onSubmit={input => updateFund({ filters: { id: data.id, }, input, })}
                 onClose={closeModal}
               />
             )),
@@ -233,7 +233,7 @@ const Budget = () => (
             ),
           }, {
             title: 'Remove',
-            onClick: ({ id, }) => removeFunds({ ids: [ id, ], }),
+            onClick: ({ id, }) => removeFund({ filters: { id, }, }),
             render: () => (
               <Icon
                 icon={'clear'}

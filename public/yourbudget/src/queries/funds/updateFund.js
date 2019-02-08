@@ -1,6 +1,6 @@
 export default `
-mutation updateFund ($id: ID!, $input: FundUpdate!) {
-  updateFund (id: $id, input: $input) {
+mutation updateFund ($filters: FundFilters!, $input: FundUpdate!) {
+  updateFund (filters: $filters, input: $input) {
     id,
     name,
     amount,

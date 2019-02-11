@@ -7,23 +7,24 @@ axios.defaults.baseURL = `${window.location.origin}/api/graphql`;
 axios.defaults.headers = { 'Content-Type': 'application/json', };
 
 
-const Query = ({ query, variables, onError, children, }) => {
+const Query = ({ query, variables: queryVariables, onError, children, }) => {
   const [
     {
       loading,
       error,
       status,
       statusText,
+      data,
     },
-    setQueryStatus,
+    setState,
   ] = useState({
     loading: true,
     error: false,
     status: null,
     statusText: '',
+    data: [],
   });
-
-  const [ data, setData, ] = useState([]);
+  const [ variables, setVariables, ] = useState(queryVariables);
 
   const tryFetch = async () => {
     try {
@@ -47,29 +48,32 @@ const Query = ({ query, variables, onError, children, }) => {
   };
 
   const doQuery = async () => {
-    const { data, ...queryStatus } = await tryFetch();
-    queryStatus.error && onError && onError(`${status} ${statusText}`);
-    setQueryStatus(queryStatus);
-    setData(data);
+    const result = await tryFetch();
+    result.error && onError && onError(`${result.status} ${result.statusText}`);
+    setState(result);
   };
 
   useEffect(() => {
     doQuery();
   }, [ variables, ]);
 
+
   return (
     children({
       loading,
       error: !loading && error ? (`${status} ${statusText}`) : '',
       refetch: doQuery,
+      setVariables,
       data,
     })
   );
 };
 
 Query.propTypes = {
-  children: PropTypes.func.isRequired,
+  query: PropTypes.string.isRequired,
+  variables: PropTypes.object,
   onError: PropTypes.func,
+  children: PropTypes.func.isRequired,
 };
 
 

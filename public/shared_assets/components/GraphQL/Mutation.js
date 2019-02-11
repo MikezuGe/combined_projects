@@ -7,17 +7,23 @@ axios.defaults.baseURL = `${window.location.origin}/api/graphql`;
 axios.defaults.headers = { 'Content-Type': 'application/json', };
 
 
-const Mutation = ({ children, onError, onSuccess, mutation, }) => {
+const Mutation = ({ mutation, onSuccess, onError, children, }) => {
   const [
-    { loading, error, status, statusText, },
-    setMutationStatus,
+    {
+      loading,
+      error,
+      status,
+      statusText,
+      data,
+    },
+    setState,
   ] = useState({
     loading: true,
     error: false,
     status: null,
     statusText: '',
+    data: [],
   });
-  const [ , setData, ] = useState([]);
 
   const tryMutate = async variables => {
     try {
@@ -41,13 +47,12 @@ const Mutation = ({ children, onError, onSuccess, mutation, }) => {
   }
 
   const doMutation = async variables => {
-    const { data, ...mutationStatus } = await tryMutate(variables);
-    mutationStatus.error
-      ? onError && onError(`${status} ${statusText}`)
+    const result = await tryMutate(variables);
+    result.error
+      ? onError && onError(`${result.status} ${result.statusText}`)
       : onSuccess && onSuccess();
-    setMutationStatus(mutationStatus);
-    setData(data);
-    return !mutationStatus.error;
+    setState(result);
+    return !result.error;
   }
 
   return (
@@ -61,9 +66,10 @@ const Mutation = ({ children, onError, onSuccess, mutation, }) => {
 };
 
 Mutation.propTypes = {
-  children: PropTypes.func.isRequired,
-  onError: PropTypes.func,
+  mutation: PropTypes.string.isRequired,
   onSuccess: PropTypes.func,
+  onError: PropTypes.func,
+  children: PropTypes.func.isRequired,
 };
 
 

@@ -26,11 +26,10 @@ Modal.propTypes = { ...propTypes, };
 
 propTypes.Toaster = PropTypes.object.isRequired;
 const QueryComponent = ({ Toaster: { addToast, }, render, }) => {
-  const [ queryVariables, setQueryVariables, ] = useState({ filters: null, });
   return (
     <Query
       query={GET_FUNDS}
-      variables={queryVariables}
+      variables={{}}
       onError={err => addToast({
         type: 'error',
         title: 'Error',
@@ -40,13 +39,14 @@ const QueryComponent = ({ Toaster: { addToast, }, render, }) => {
       {({
         loading: queryLoading,
         error: queryError,
+        setVariables,
         refetch,
         data,
       }) => (
         render({
-          setQueryVariables,
           queryLoading,
           queryError,
+          setVariables,
           refetch,
           data,
         })
@@ -75,9 +75,7 @@ const Create = ({ Toaster: { addToast, }, Query: { refetch, }, render, }) => (
       text: err,
     })}
   >
-    {({ mutate: createFund, }) => (
-      render({ createFund, })
-    )}
+    {({ mutate: createFund, }) => render({ createFund, })}
   </Mutation>
 );
 Create.propTypes = { ...propTypes, };
@@ -100,9 +98,7 @@ const Update = ({ Toaster: { addToast, }, Query: { refetch, }, render, }) => (
       text: err,
     })}
   >
-    {({ mutate: updateFund, }) => (
-      render({ updateFund, })
-    )}
+    {({ mutate: updateFund, }) => render({ updateFund, })}
   </Mutation>
 );
 Update.propTypes = { ...propTypes, };
@@ -125,9 +121,7 @@ const Remove = ({ Toaster: { addToast, }, Query: { refetch, }, render, }) => (
       text: err,
     })}
   >
-    {({ mutate: removeFund, }) => (
-      render({ removeFund, })
-    )}
+    {({ mutate: removeFund, }) => render({ removeFund, })}
   </Mutation>
 );
 Remove.propTypes = { ...propTypes, };
@@ -147,7 +141,7 @@ const Budget = () => (
   <Composed>
     {({
       Modal: { openModal, },
-      Query: { queryLoading, queryError, setQueryVariables, data, },
+      Query: { queryLoading, queryError, setVariables, data, },
       Create: { createFund, },
       Update: { updateFund, },
       Remove: { removeFund, },
@@ -190,7 +184,7 @@ const Budget = () => (
             type: 'date',
           },
         ]}
-        onFiltersChange={filters => setQueryVariables({ filters, })}
+        onFiltersChange={filters => setVariables({ filters, })}
         columns={[
           {
             key: 'name',

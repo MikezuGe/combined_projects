@@ -5,4 +5,4 @@ export {
   ToggleField,
   SubmitField,
 } from './Fields';
-export { default as FilterBar, } from './FilterBar';
+export { default as Searchbar, } from './Searchbar';

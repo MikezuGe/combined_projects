@@ -3,14 +3,14 @@ import PropTypes from 'prop-types';
 
 import DefaultDesktop from '../DefaultDesktop';
 import { DataTable, } from '../../../../shared_assets/components/organisms';
-import { FilterBar, } from '../../../../shared_assets/components/molecules';
+import { Searchbar, } from '../../../../shared_assets/components/molecules';
 
 
 const ListDesktop = ({ loading, error, data, columns, filters, onFiltersChange, secondaryMenuItems, }) => (
   <DefaultDesktop secondaryMenuItems={secondaryMenuItems}>
     <React.Fragment>
       {filters && (
-        <FilterBar
+        <Searchbar
           filters={filters}
           onFiltersChange={onFiltersChange}
         />

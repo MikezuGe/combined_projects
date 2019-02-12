@@ -14,7 +14,7 @@ const Mutation = ({ mutation, onSuccess, onError, children, }) => {
       error,
       status,
       statusText,
-      data,
+      //data,
     },
     setState,
   ] = useState({

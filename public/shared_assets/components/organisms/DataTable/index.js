@@ -17,9 +17,9 @@ const Cell = styled.td`
 background: ${({ theme, header, }) => theme[header ? 'tertiaryColor' : 'secondaryColor']}
 padding: 0.5em;
 border-radius: 0.5em;
-${({ header, }) => header && `
-text-align: center;
-cursor: pointer;
+${({ header, center, clickable, }) => `
+${(header || center) ? 'text-align: center;': ''}
+${(header || clickable) ? 'cursor: pointer;': ''}
 `}
 `;
 
@@ -44,57 +44,50 @@ const DataTable = ({ data, columns, ...rest }) => {
   );
   return (
     <Table {...rest}>
-      <thead>
-        {
-          columns.some(({ title, }) => title) && (
-            <Row key={'header-row'}>
-              {
-                columns.map(({ key, title, }) => (
-                  <Cell
-                    key={`header-${title}`}
-                    header
-                    onClick={key && (() => {
-                      if (key === sortKey) {
-                        setReversedSort(!reversedSort);
-                      } else {
-                        setSortKey(key);
-                        setReversedSort(false);
-                      }
-                    })}
-                  >
-                    {title}
-                  </Cell>
-                ))
-              }
-            </Row>
-          )
-        }
-      </thead>
+      {columns.some(({ title, }) => title) && (
+        <thead>
+          <Row key={'header-row'}>
+            {columns.map(({ key, title, }) => (
+              <Cell
+                key={`header-${title}`}
+                header
+                onClick={key && (() => {
+                  if (key === sortKey) {
+                    setReversedSort(!reversedSort);
+                  } else {
+                    setSortKey(key);
+                    setReversedSort(false);
+                  }
+                })}
+              >
+                {title}
+              </Cell>
+            ))}
+          </Row>
+        </thead>
+      )}
       <tbody>
-        {
-          (sorter ? data.sort(sorter) : data).map((d, i) => (
-            <Row key={`row-${i}`}>
-              {
-                columns.map(({ key, render, onClick, }, k) => (
-                  <Cell
-                    key={`cell-${i}-${k}`}
-                    onClick={onClick && (() => onClick(d))}
-                  >
-                    {
-                      (render && render(key ? d[key] : d))
-                      || d[key]
-                    }
-                  </Cell>
-                ))
-              }
-            </Row>
-          ))
-        }
+        {(sorter ? data.sort(sorter) : data).map((d, i) => (
+          <Row key={`row-${i}`}>
+            {columns.map(({ key, render, onClick, }, k) => (
+              <Cell
+                key={`cell-${i}-${k}`}
+                onClick={onClick && (() => onClick(d))}
+                clickable={!!onClick}
+                center={!!render}
+              >
+                {
+                  (render && render(key ? d[key] : d))
+                  || d[key]
+                }
+              </Cell>
+            ))}
+          </Row>
+        ))}
       </tbody>
     </Table>
   );
 };
-
 
 DataTable.propTypes = {
   data: PropTypes.array.isRequired,

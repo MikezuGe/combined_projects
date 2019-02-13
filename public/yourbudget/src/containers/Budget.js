@@ -202,8 +202,8 @@ const Budget = () => (
                   ? 'green'
                   : 'red'}
                 rotate={isIncome
-                  ? '-90'
-                  : '90'}
+                  ? -90
+                  : 90}
               />
             ),
           }, {
@@ -221,7 +221,7 @@ const Budget = () => (
             )),
             render: () => (
               <Icon
-                icon={'pencil'}
+                icon={'edit'}
                 fill={'green'}
               />
             ),

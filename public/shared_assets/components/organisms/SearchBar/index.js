@@ -34,7 +34,7 @@ const tagsReducer = (total, { key, type, value, }) => (total[key] = handleValueB
 const SearchBar = ({ filters, onFiltersChange, }) => {
   const [ tags, setTags, ] = useState([]);
   const [ suggestionsShown, setSuggestionsShown, ] = useState(false);
-  const suggestionbarRef = useRef();
+  const filterBarRef = useRef();
 
   const handleTagChangeDone = (value, i) => setTags(prevTags => {
     prevTags[i] = { ...prevTags[i], value, };
@@ -51,17 +51,15 @@ const SearchBar = ({ filters, onFiltersChange, }) => {
     if (!suggestionsShown) {
       return;
     }
-    const suggestionbar = suggestionbarRef.current;
+    const filterBar = filterBarRef.current;
     const listener = ({ target, }) =>
-      !(suggestionbar === target || suggestionbar.contains(target)) && setSuggestionsShown(false);
+      !(filterBar === target || filterBar.contains(target)) && setSuggestionsShown(false);
     document.addEventListener('click', listener);
     return () => document.removeEventListener('click', listener);
   }, [ suggestionsShown, ])
 
   return (
     <React.Fragment>
-
-
       <Bar onClick={() => setSuggestionsShown(true)}>
         <StyledIcon icon={'search'} />
         {tags.map(({ key, ...tag }, i) => (
@@ -73,10 +71,8 @@ const SearchBar = ({ filters, onFiltersChange, }) => {
           />
         ))}
       </Bar>
-
-
       {suggestionsShown && (
-        <Bar ref={suggestionbarRef}>
+        <Bar ref={filterBarRef}>
           {filters
             .filter(({ key, }) => !tags.find(tag => key === tag.key))
             .map(filter => (
@@ -92,8 +88,6 @@ const SearchBar = ({ filters, onFiltersChange, }) => {
           }
         </Bar>
       )}
-
-
     </React.Fragment>
   );
 };

@@ -39,9 +39,7 @@ const Tag = ({ name, value: defaultValue, onClick, changeDone, remove, }) => {
   const [ editing, setEditing, ] = useState(!!changeDone);
 
   const handleChangeDone = () => {
-    value
-      ? changeDone(value)
-      : remove();
+    value ? changeDone(value) : remove();
     setEditing(false);
   };
 
@@ -75,11 +73,7 @@ const Tag = ({ name, value: defaultValue, onClick, changeDone, remove, }) => {
               onBlur={handleChangeDone}
             />
           )
-          : (
-            <span>
-              {value}
-            </span>
-          )}
+          : (<span>{value}</span>)}
       </Wrapper>
       {remove && (
         <StyledIcon

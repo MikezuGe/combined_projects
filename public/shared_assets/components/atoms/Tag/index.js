@@ -7,15 +7,16 @@ import { Icon, } from '..';
 
 const Wrapper = styled.span`
 background: lightgray;
+cursor: pointer;
 height: 2em;
 line-height: 2em;
 min-width: 3em;
-${({ removeClick, }) => `
-border-radius: ${removeClick ? '1em 0 0 1em' : '1em'};
-margin: ${removeClick ? '0 0 0 0.5em' : '0 0.5em'};
-&:first-child { margin: ${removeClick ? '0' : '0 0.5em 0 0'}; }
-&:last-child { margin: ${removeClick ? '0' : '0 0 0 0.5em'}; }
-padding: ${removeClick ? '0 0.5em 0 1em' : '0 1em'};
+${({ remove, }) => `
+border-radius: ${remove ? '1em 0 0 1em' : '1em'};
+margin: ${remove ? '0 0 0 0.5em' : '0 0.5em'};
+&:first-child { margin: ${remove ? '0' : '0 0.5em 0 0'}; }
+&:last-child { margin: ${remove ? '0' : '0 0 0 0.5em'}; }
+padding: ${remove ? '0 0.5em 0 1em' : '0 1em'};
 `}
 `;
 
@@ -27,19 +28,20 @@ const StyledIcon = styled(Icon)`
 background: lightgray;
 border-left: 1px solid gray;
 border-radius: 0 1em 1em 0;
+cursor: pointer;
 height: 2em;
 width: 2em;
 `;
 
 
-const Tag = ({ name, value: defaultValue, onClick, onChangeDone, removeClick, }) => {
+const Tag = ({ name, value: defaultValue, onClick, changeDone, remove, }) => {
   const [ value, setValue, ] = useState(defaultValue);
-  const [ editing, setEditing, ] = useState(!!onChangeDone);
+  const [ editing, setEditing, ] = useState(!!changeDone);
 
-  const handleEditDone = () => {
+  const handleChangeDone = () => {
     value
-      ? onChangeDone(value)
-      : removeClick();
+      ? changeDone(value)
+      : remove();
     setEditing(false);
   };
 
@@ -48,8 +50,8 @@ const Tag = ({ name, value: defaultValue, onClick, onChangeDone, removeClick, })
       return;
     }
     const listener = ({ key, keyCode, }) => {
-      ((key === 'Enter' || keyCode === 13) && handleEditDone())
-      || ((key === 'Escape' || keyCode === 27) && removeClick());
+      (handleChangeDone && (key === 'Enter' || keyCode === 13) && handleChangeDone())
+      || (remove && (key === 'Escape' || keyCode === 27) && remove());
     };
     document.addEventListener('keyup', listener);
     return () => document.removeEventListener('keyup', listener);
@@ -59,7 +61,7 @@ const Tag = ({ name, value: defaultValue, onClick, onChangeDone, removeClick, })
     <React.Fragment>
       <Wrapper
         onClick={onClick ? onClick : !editing ? (() => setEditing(true)) : undefined}
-        removeClick={!!removeClick}
+        remove={!!remove}
       >
         <span>
           {`${name}${editing || value ? ': ' : ''}`}
@@ -70,7 +72,7 @@ const Tag = ({ name, value: defaultValue, onClick, onChangeDone, removeClick, })
               autoFocus
               value={value}
               onChange={e => setValue(e.target.value)}
-              onBlur={handleEditDone}
+              onBlur={handleChangeDone}
             />
           )
           : (
@@ -79,11 +81,11 @@ const Tag = ({ name, value: defaultValue, onClick, onChangeDone, removeClick, })
             </span>
           )}
       </Wrapper>
-      {removeClick && (
+      {remove && (
         <StyledIcon
           size={16}
           icon={'clear'}
-          onClick={removeClick}
+          onClick={remove}
         />
       )}
     </React.Fragment>
@@ -98,8 +100,8 @@ Tag.propTypes = {
   name: PropTypes.string.isRequired,
   value: PropTypes.string,
   onClick: PropTypes.func,
-  onChangeDone: PropTypes.func,
-  removeClick: PropTypes.func,
+  changeDone: PropTypes.func,
+  remove: PropTypes.func,
 };
 
 

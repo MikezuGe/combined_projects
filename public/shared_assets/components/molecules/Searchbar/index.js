@@ -1,4 +1,4 @@
-import React, { useState, } from 'react';
+import React, { useState, useEffect, useRef, } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
@@ -32,47 +32,65 @@ const tagsReducer = (total, { key, type, value, }) => (total[key] = handleValueB
 
 const Searchbar = ({ filters, onFiltersChange, }) => {
   const [ tags, setTags, ] = useState([]);
+  const [ suggestionsShown, setSuggestionsShown, ] = useState(false);
+  const suggestionbarRef = useRef();
 
   const handleTagChangeDone = (value, i) => setTags(prevTags => {
     prevTags[i] = { ...prevTags[i], value, };
     onFiltersChange(prevTags.reduce(tagsReducer, {}));
     return prevTags;
   });
-  const handleTagRemoveClick = i => setTags(prevTags => {
-    prevTags.splice(i, 1);
-    onFiltersChange(prevTags.reduce(tagsReducer, {}));
+  const handleTagRemove = i => setTags(prevTags => {
+    prevTags.splice(i, 1)[0].value
+      && onFiltersChange(prevTags.reduce(tagsReducer, {}));
     return prevTags;
   });
+
+  useEffect(() => {
+    if (!suggestionsShown) {
+      return;
+    }
+    const suggestionbar = suggestionbarRef.current;
+    const listener = ({ target, }) =>
+      !(suggestionbar === target || suggestionbar.contains(target)) && setSuggestionsShown(false);
+    document.addEventListener('click', listener);
+    return () => document.removeEventListener('click', listener);
+  }, [ suggestionsShown, ])
 
   return (
     <React.Fragment>
 
 
-      <Bar>
+      <Bar onClick={() => setSuggestionsShown(true)}>
         <StyledIcon icon={'search'} />
         {tags.map(({ key, ...tag }, i) => (
           <Tag
             key={key}
             {...tag}
-            onChangeDone={value => handleTagChangeDone(value, i)}
-            removeClick={() => handleTagRemoveClick(i)}
+            changeDone={value => handleTagChangeDone(value, i)}
+            remove={() => handleTagRemove(i)}
           />
         ))}
       </Bar>
 
 
-      <Bar>
-        {filters
-          .filter(({ key, }) => !tags.find(tag => key === tag.key))
-          .map(filter => (
-            <Tag
-              key={filter.key}
-              name={filter.name}
-              onClick={() => setTags(prevTags => [ ...prevTags, filter, ])}
-            />
-          ))
-        }
-      </Bar>
+      {suggestionsShown && (
+        <Bar ref={suggestionbarRef}>
+          {filters
+            .filter(({ key, }) => !tags.find(tag => key === tag.key))
+            .map(filter => (
+              <Tag
+                key={filter.key}
+                name={filter.name}
+                onClick={() => {
+                  setTags(prevTags => [ ...prevTags, filter, ]);
+                  setSuggestionsShown(false);
+                }}
+              />
+            ))
+          }
+        </Bar>
+      )}
 
 
     </React.Fragment>

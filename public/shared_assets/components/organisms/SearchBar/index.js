@@ -2,7 +2,8 @@ import React, { useState, useEffect, useRef, } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
-import { Icon, Tag, } from '../../atoms';
+import { Icon, } from '../../atoms';
+import { Tag, } from '../../molecules';
 
 
 const Bar = styled.div`
@@ -30,7 +31,7 @@ const handleValueByType = (type, value) =>
 const tagsReducer = (total, { key, type, value, }) => (total[key] = handleValueByType(type, value), total);
 
 
-const Searchbar = ({ filters, onFiltersChange, }) => {
+const SearchBar = ({ filters, onFiltersChange, }) => {
   const [ tags, setTags, ] = useState([]);
   const [ suggestionsShown, setSuggestionsShown, ] = useState(false);
   const suggestionbarRef = useRef();
@@ -97,7 +98,7 @@ const Searchbar = ({ filters, onFiltersChange, }) => {
   );
 };
 
-Searchbar.propTypes = {
+SearchBar.propTypes = {
   filters: PropTypes.arrayOf(
     PropTypes.shape({
       key: PropTypes.string.isRequired,
@@ -109,4 +110,4 @@ Searchbar.propTypes = {
 };
 
 
-export default Searchbar;
+export default SearchBar;

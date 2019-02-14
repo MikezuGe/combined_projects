@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 
-const Sidebar = styled.div`
+const SideBar = styled.div`
 grid-area: sidebar;
 background: ${({ theme, }) => theme.secondaryColor};
 overflow-x: hidden;
@@ -59,7 +59,7 @@ const SideMenu = ({ primaryMenuItems, secondaryMenuItems, }) => {
   const [ showPrimary, setShowPrimary, ] = useState(true);
   const toggleMenu = () => setShowPrimary(!showPrimary);
   return (
-    <Sidebar>
+    <SideBar>
       <AlterList showPrimary={showPrimary}>
         {primaryMenuItems && (
           <Menu>
@@ -80,7 +80,7 @@ const SideMenu = ({ primaryMenuItems, secondaryMenuItems, }) => {
           </Menu>
         )}
       </AlterList>
-    </Sidebar>
+    </SideBar>
   );
 };
 

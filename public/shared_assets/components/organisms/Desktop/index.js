@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 import Header from './Header';
-import Sidebar from './Sidebar';
+import SideBar from './SideBar';
 
 
 const Main = styled.div`
@@ -16,7 +16,7 @@ padding: 1em;
 const Desktop = ({ children, primaryMenuItems, secondaryMenuItems, }) => (
   <React.Fragment>
     <Header />
-    <Sidebar
+    <SideBar
       primaryMenuItems={primaryMenuItems}
       secondaryMenuItems={secondaryMenuItems}
     />

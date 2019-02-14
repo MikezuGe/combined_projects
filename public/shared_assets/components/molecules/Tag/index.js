@@ -2,7 +2,7 @@ import React, { useState, useEffect, } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
-import { Icon, } from '..';
+import { Icon, } from '../../atoms';
 
 
 const Wrapper = styled.span`

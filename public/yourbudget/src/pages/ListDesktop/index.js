@@ -2,15 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import DefaultDesktop from '../DefaultDesktop';
-import { DataTable, } from '../../../../shared_assets/components/organisms';
-import { Searchbar, } from '../../../../shared_assets/components/molecules';
+import { DataTable, SearchBar, } from '../../../../shared_assets/components/organisms';
 
 
 const ListDesktop = ({ loading, error, data, columns, filters, onFiltersChange, secondaryMenuItems, }) => (
   <DefaultDesktop secondaryMenuItems={secondaryMenuItems}>
     <React.Fragment>
       {filters && (
-        <Searchbar
+        <SearchBar
           filters={filters}
           onFiltersChange={onFiltersChange}
         />

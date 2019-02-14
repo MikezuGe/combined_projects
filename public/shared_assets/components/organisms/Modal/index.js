@@ -1,4 +1,4 @@
-import React, { useState, } from 'react';
+import React, { useState, useEffect, } from 'react';
 import styled from 'styled-components';
 
 
@@ -28,14 +28,27 @@ export const openModal = render => listener(render);
 const Modal = () => {
   const [ active, setActive, ] = useState(false);
   const [ render, setRender, ] = useState(undefined);
+  
   listener = render => {
     setActive(true);
     setRender(() => render);
   };
+
   const closeModal = () => {
     setActive(false);
     setTimeout(setRender, 500)
   };
+
+  useEffect(() => {
+    if (!active) {
+      return;
+    }
+    const listener = ({ key, keyCode, }) =>
+      (key === 'Escape' || keyCode === 27) && closeModal();
+    document.addEventListener('keyup', listener);
+    () => document.removeEventListener('keyup', listener);
+  }, [ active, ]);
+
   return (
     <Grayout
       active={active}

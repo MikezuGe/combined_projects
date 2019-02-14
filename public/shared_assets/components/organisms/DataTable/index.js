@@ -2,6 +2,8 @@ import React, { useState, } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
+import { Icon, } from '../../atoms';
+
 
 const Table = styled.table`
 `;
@@ -23,6 +25,20 @@ ${(header || clickable) ? 'cursor: pointer;': ''}
 `}
 `;
 
+const Header = styled.div`
+display: flex;
+align-items: center;
+justify-content: center;
+`;
+
+const StyledIcon = styled(Icon)`
+width: 20px;
+`;
+
+const Title = styled.div`
+margin: 0 20px 0 ${({ spaceLeft, }) => spaceLeft ? '20' : '0'}px;
+`;
+
 
 const sortNumbers = (a, b) => a === b ? 0 : a < b ? -1 : 1;
 const sortStrings = (a, b) => a.localeCompare(b);
@@ -31,6 +47,7 @@ const sortStrings = (a, b) => a.localeCompare(b);
 const DataTable = ({ data, columns, ...rest }) => {
   const [ sortKey, setSortKey, ] = useState('');
   const [ reversedSort, setReversedSort, ] = useState(false);
+
   const sorter = sortKey && (
     typeof data[0][sortKey] === 'string'
       ? (reversedSort
@@ -42,6 +59,7 @@ const DataTable = ({ data, columns, ...rest }) => {
         : (a, b) => sortNumbers(a[sortKey], b[sortKey])
       )
   );
+
   return (
     <Table {...rest}>
       {columns.some(({ title, }) => title) && (
@@ -51,16 +69,21 @@ const DataTable = ({ data, columns, ...rest }) => {
               <Cell
                 key={`header-${title}`}
                 header
-                onClick={key && (() => {
-                  if (key === sortKey) {
-                    setReversedSort(!reversedSort);
-                  } else {
-                    setSortKey(key);
-                    setReversedSort(false);
-                  }
-                })}
+                onClick={key && (key === sortKey
+                  ? (() => setReversedSort(!reversedSort))
+                  : (() => (setSortKey(key), setReversedSort(false))))
+                }
               >
-                {title}
+                <Header>
+                  {key === sortKey && (
+                    <StyledIcon
+                      size={16}
+                      icon={'chevron_right'}
+                      rotate={reversedSort ? -90 : 90}
+                    />
+                  )}
+                  <Title spaceLeft={key !== sortKey}>{title}</Title>
+                </Header>
               </Cell>
             ))}
           </Row>

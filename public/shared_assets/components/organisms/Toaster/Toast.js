@@ -1,6 +1,8 @@
-import React, { useState, useEffect, } from 'react';
+import React, { useState, useEffect, useRef, } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+
+import { Timer, } from '../../utility';
 
 
 const StyledToast = styled.li`
@@ -21,48 +23,32 @@ const ToastTitle = styled.h2``;
 const ToastText = styled.div``;
 
 
-const startTimer = ({ callback, timeLeft, }) => ({
-  id: setTimeout(callback, timeLeft),
-  startTime: Date.now(),
-  timeLeft,
-  callback,
-});
-
-const stopTimer = ({ id, startTime, timeLeft, callback, }) => {
-  clearTimeout(id)
-  return {
-    id: null,
-    startTime: null,
-    timeLeft: startTime + timeLeft - Date.now(),
-    callback,
-  };
-};
-
-
-const Toast = ({ id, title, text, nthToast, removeToast, timeout: timeLeft, }) => {
+const Toast = ({ id, title, text, nthToast, timeout, runTimer, removeToast, }) => {
   const [ animate, setAnimate, ] = useState(true);
   const [ isBeingRemoved, setIsBeingRemoved, ] = useState(false);
-  const [ timer, setTimer, ] = useState({});
+  const timerRef = useRef();
+  const { current: timer, } = timerRef;
 
   const animateAndRemove = () => !isBeingRemoved
-    && (timer.id && clearTimeout(timer.id), setAnimate(true), setIsBeingRemoved(true));
-
-  const toggleTimer = shouldStart => !isBeingRemoved && (shouldStart
-    ? !timer.id && setTimer(prevTimer => startTimer(prevTimer))
-    : timer.id && setTimer(prevTimer => stopTimer(prevTimer)));
+    && (timer && timer.stop(), setAnimate(true), setIsBeingRemoved(true));
 
   useEffect(() => {
     setTimeout(() => setAnimate(false), 50);
-    setTimer(startTimer({ callback: animateAndRemove, timeLeft, }));
+    timeout > 0 && (timerRef.current = new Timer(animateAndRemove, timeout + 50));
   }, []);
+
+  timer && useEffect(() => runTimer
+    ? timer.start()
+    : timer.stop(),
+  [ runTimer, ]);
 
   return (
     <StyledToast
       nthToast={nthToast}
       animate={animate}
       onClick={animateAndRemove}
-      onMouseOver={() => toggleTimer(false)}
-      onMouseLeave={() => toggleTimer(true)}
+      onMouseEnter={timer && timer.stop || undefined}
+      onMouseLeave={timer && timer.start || undefined}
       onTransitionEnd={() => isBeingRemoved && removeToast(id)}
     >
       <ToastTitle>
@@ -82,9 +68,9 @@ Toast.propTypes = {
   title: PropTypes.string.isRequired,
   text: PropTypes.string.isRequired,
   timeout: PropTypes.number.isRequired,
+  runTimer: PropTypes.bool.isRequired,
   nthToast: PropTypes.number.isRequired,
   removeToast: PropTypes.func.isRequired,
-  theme: PropTypes.shape({ animateSlow: PropTypes.string, }),
 };
 
 

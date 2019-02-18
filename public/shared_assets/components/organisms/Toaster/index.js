@@ -20,6 +20,7 @@ export const addToast = toast => listener(toast);
 
 const Toaster = () => {
   const [ toasts, setToasts, ] = useState([]);
+  const [ runTimers, setRunTimers, ] = useState(true);
 
   const addToast = toast => setToasts(toasts => [
     ...toasts,
@@ -34,11 +35,15 @@ const Toaster = () => {
   useEffect(() => (listener = addToast), []);
 
   return (
-    <StyledToaster>
+    <StyledToaster
+      onMouseEnter={() => setRunTimers(false)}
+      onMouseLeave={() => setRunTimers(true)}
+    >
       {toasts.map((toast, i) => (
         <Toast
           key={`toast-${toast.id}`}
           {...toast}
+          runTimer={runTimers}
           nthToast={i}
           removeToast={removeToast}
         />))}

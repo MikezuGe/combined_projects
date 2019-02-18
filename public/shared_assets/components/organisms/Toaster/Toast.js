@@ -21,27 +21,48 @@ const ToastTitle = styled.h2``;
 const ToastText = styled.div``;
 
 
-const Toast = ({ id, title, text, nthToast, removeToast, timeout, }) => {
-  const [ animate, setAnimate, ] = useState(true);
-  const [ timeoutId, setTimeoutId, ] = useState();
-  const [ isBeingRemoved, setIsBeingRemoved, ] = useState(false);
+const startTimer = ({ callback, timeLeft, }) => ({
+  id: setTimeout(callback, timeLeft),
+  startTime: Date.now(),
+  timeLeft,
+  callback,
+});
 
-  const removeSelf = () => {
-    clearTimeout(timeoutId);
-    setAnimate(true);
-    setIsBeingRemoved(true);
-  }
+const stopTimer = ({ id, startTime, timeLeft, callback, }) => {
+  clearTimeout(id)
+  return {
+    id: null,
+    startTime: null,
+    timeLeft: startTime + timeLeft - Date.now(),
+    callback,
+  };
+};
+
+
+const Toast = ({ id, title, text, nthToast, removeToast, timeout: timeLeft, }) => {
+  const [ animate, setAnimate, ] = useState(true);
+  const [ isBeingRemoved, setIsBeingRemoved, ] = useState(false);
+  const [ timer, setTimer, ] = useState({});
+
+  const animateAndRemove = () => !isBeingRemoved
+    && (timer.id && clearTimeout(timer.id), setAnimate(true), setIsBeingRemoved(true));
+
+  const toggleTimer = shouldStart => !isBeingRemoved && (shouldStart
+    ? !timer.id && setTimer(prevTimer => startTimer(prevTimer))
+    : timer.id && setTimer(prevTimer => stopTimer(prevTimer)));
 
   useEffect(() => {
     setTimeout(() => setAnimate(false), 50);
-    setTimeoutId(setTimeout(removeSelf, timeout));
+    setTimer(startTimer({ callback: animateAndRemove, timeLeft, }));
   }, []);
 
   return (
     <StyledToast
       nthToast={nthToast}
       animate={animate}
-      onClick={removeSelf}
+      onClick={animateAndRemove}
+      onMouseOver={() => toggleTimer(false)}
+      onMouseLeave={() => toggleTimer(true)}
       onTransitionEnd={() => isBeingRemoved && removeToast(id)}
     >
       <ToastTitle>

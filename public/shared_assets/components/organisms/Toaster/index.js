@@ -21,21 +21,17 @@ export const addToast = toast => listener(toast);
 const Toaster = () => {
   const [ toasts, setToasts, ] = useState([]);
 
-  const addToast = toast => {
-    setToasts(toasts => [
-      ...toasts,
-      {
-        ...toast,
-        id: nextId++,
-      },
-    ]);
-  }
+  const addToast = toast => setToasts(toasts => [
+    ...toasts,
+    {
+      ...toast,
+      id: nextId++,
+    },
+  ]);
 
   const removeToast = toastId => setToasts(toasts => toasts.filter(({ id, }) => id !== toastId));
 
-  useEffect(() => {
-    listener = addToast;
-  }, []);
+  useEffect(() => (listener = addToast), []);
 
   return (
     <StyledToaster>

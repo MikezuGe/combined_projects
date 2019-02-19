@@ -11,45 +11,44 @@ export default class Timer {
     } else if (typeof timeLeft !== 'number') {
       throw new Error(`Parameter 'timeLeft' supplied to Timer constructor must be a number`);
     }
-    this.startTime = Date.now();
     this.initialTimeLeft = timeLeft;
-    this.timeLeft = timeLeft;
-    this.timerOver = false;
-    this.callback = () => {
-      this.timerOver = true;
-      callback();
-    };
-    this.id = setTimeout(this.callback, this.timeLeft);
+    this.callback = callback;
+    this.timeoutId = null;
+    this.timerStartAt = null;
+    this.timerStopAt = null;
+    this.timerDoneAt = null;
   }
 
-  isRunning = () => !!this.id
-
-  timeLeft = () => this.startTime + this.timeLeft - Date.now()
+  getIsRunning = () => !!this.timeoutId || this.timeoutId === 0
+  getTimeLeft = () => this.timerDoneAt
+    ? this.timerDoneAt - (this.timerStopAt || Date.now())
+    : this.initialTimeLeft
+  getTimePassed = () => this.initialTimeLeft - this.getTimeLeft()
+  getPercentDone = () => this.getTimePassed() / this.initialTimeLeft;
 
   restart = () => {
-    this.timeLeft = this.initialTimeLeft;
-    this.timerOver = false;
+    const timeLeft = this.initialTimeLeft;
+    this.timeoutId = setTimeout(this.callback, timeLeft);
+    this.timerStartAt = Date.now();
+    this.timerStopAt = null;
+    this.timerDoneAt = this.timerStartAt + timeLeft;
   }
 
   start = () => {
-    if (this.timerOver || this.id) {
-      return;
-    }
-    this.id = setTimeout(this.callback, this.timeLeft);
-    this.startTime = Date.now();
+    const timeLeft = this.getTimeLeft();
+    this.timeoutId = setTimeout(this.callback, timeLeft);
+    this.timerStartAt = Date.now();
+    this.timerStopAt = null;
+    this.timerDoneAt = this.timerStartAt + timeLeft;
   }
 
   stop = () => {
-    if (!this.id) {
-      return;
-    }
-    clearTimeout(this.id);
-    this.id = null;
-    this.timeLeft = this.startTime + this.timeLeft - Date.now();
-    this.startTime = null;
+    clearTimeout(this.timeoutId);
+    this.timeoutId = null;
+    this.timerStopAt = Date.now();
   }
 
-  toggle = () => this.id
+  toggle = () => this.getIsRunning()
     ? this.stop()
     : this.start()
 

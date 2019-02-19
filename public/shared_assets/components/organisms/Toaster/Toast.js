@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useRef, } from 'react';
+import React, { useState, useEffect, } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
-import { Timer, } from '../../utility';
+import { ProgressBar, } from '../../molecules';
 
 
 const StyledToast = styled.li`
@@ -14,7 +14,7 @@ margin: 1em;
 padding: 0.5em;
 border: 5px solid black;
 border-radius: 0.5em;
-transform: translate(${({ animate, nthToast, }) => `${animate ? 125 : 0}%, ${nthToast * 105}%`});
+transform: translate(${({ inView, nthToast, }) => `${inView ? 0 : 125}%, ${nthToast * 105}%`});
 transition: transform ${({ theme, }) => theme.animateSlow};
 `;
 
@@ -24,32 +24,22 @@ const ToastText = styled.div``;
 
 
 const Toast = ({ id, title, text, nthToast, timeout, runTimer, removeToast, }) => {
-  const [ animate, setAnimate, ] = useState(true);
-  const [ isBeingRemoved, setIsBeingRemoved, ] = useState(false);
-  const timerRef = useRef();
-  const { current: timer, } = timerRef;
+  const [ inView, setInView, ] = useState(false);
+  const [ removing, setRemoving, ] = useState(false);
 
-  const animateAndRemove = () => !isBeingRemoved
-    && (timer && timer.stop(), setAnimate(true), setIsBeingRemoved(true));
+  const moveOutAndRemove = () => !removing
+    && (setInView(false), setRemoving(true));
 
   useEffect(() => {
-    setTimeout(() => setAnimate(false), 50);
-    timeout > 0 && (timerRef.current = new Timer(animateAndRemove, timeout + 50));
+    setTimeout(() => setInView(true), 50);
   }, []);
-
-  timer && useEffect(() => runTimer
-    ? timer.start()
-    : timer.stop(),
-  [ runTimer, ]);
 
   return (
     <StyledToast
       nthToast={nthToast}
-      animate={animate}
-      onClick={animateAndRemove}
-      onMouseEnter={timer && timer.stop || undefined}
-      onMouseLeave={timer && timer.start || undefined}
-      onTransitionEnd={() => isBeingRemoved && removeToast(id)}
+      inView={inView}
+      onClick={moveOutAndRemove}
+      onTransitionEnd={() => removing && removeToast(id)}
     >
       <ToastTitle>
         {title}
@@ -57,10 +47,14 @@ const Toast = ({ id, title, text, nthToast, timeout, runTimer, removeToast, }) =
       <ToastText>
         {text}
       </ToastText>
+      <ProgressBar
+        callback={moveOutAndRemove}
+        time={timeout + 50}
+        pause={!runTimer}
+      />
     </StyledToast>
   );
 };
-
 
 Toast.propTypes = {
   id: PropTypes.number.isRequired,
@@ -72,7 +66,6 @@ Toast.propTypes = {
   nthToast: PropTypes.number.isRequired,
   removeToast: PropTypes.func.isRequired,
 };
-
 
 Toast.defaultProps = {
   timeout: 5000,

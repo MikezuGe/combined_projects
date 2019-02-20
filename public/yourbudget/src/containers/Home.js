@@ -3,16 +3,16 @@ import React from 'react';
 import { DefaultDesktop, } from '../pages';
 
 
-export default class Home extends React.Component {
+const Home = () => {
 
-  render () {
-    return (
-      <DefaultDesktop>
-        <div>
-          {'Home'}
-        </div>
-      </DefaultDesktop>
-    );
-  }
+  return (
+    <DefaultDesktop>
+      <div>
+        {'Home'}
+      </div>
+    </DefaultDesktop>
+  );
+};
 
-}
+
+export default Home;

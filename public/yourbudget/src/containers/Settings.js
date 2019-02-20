@@ -3,16 +3,16 @@ import React from 'react';
 import { DefaultDesktop, } from '../pages';
 
 
-export default class Settings extends React.Component {
+const Settings = () => {
 
-  render () {
-    return (
-      <DefaultDesktop>
-        <div>
-          {'Settings'}
-        </div>
-      </DefaultDesktop>
-    );
-  }
+  return (
+    <DefaultDesktop>
+      <div>
+        {'Settings'}
+      </div>
+    </DefaultDesktop>
+  );
+};
 
-}
+
+export default Settings;

@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter, Route, Switch, Redirect, } from 'react-router-dom';
 
 import { ThemeProvider, ToasterProvider, ModalProvider, } from '../../shared_assets/components/contexts';
-import { Home, Budget, Settings, } from './containers';
+import { Home, Budget, Graph, Settings, } from './containers';
 
 
 const globalStyle = ({ theme, }) => `
@@ -60,6 +60,10 @@ const App = () => (
       <Route
         path='/budget'
         component={Budget}
+      />
+      <Route
+        path='/graph'
+        component={Graph}
       />
       <Route
         path='/settings'

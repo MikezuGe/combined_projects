@@ -15,6 +15,9 @@ const DefaultDesktop = ({ children, history, secondaryMenuItems, }) => (
         title: 'Budget',
         onClick: () => history.push('/budget'),
       }, {
+        title: 'Graph',
+        onClick: () => history.push('/graph'),
+      }, {
         title: 'Settings',
         onClick: () => history.push('/settings'),
       },
@@ -26,7 +29,7 @@ const DefaultDesktop = ({ children, history, secondaryMenuItems, }) => (
 );
 
 DefaultDesktop.propTypes = {
-  children: PropTypes.element.isRequired,
+  children: PropTypes.node.isRequired,
   history: PropTypes.object.isRequired,
   secondaryMenuItems: PropTypes.array,
 };

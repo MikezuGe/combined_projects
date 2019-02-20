@@ -32,7 +32,9 @@ const Toaster = () => {
 
   const removeToast = toastId => setToasts(toasts => toasts.filter(({ id, }) => id !== toastId));
 
-  useEffect(() => (listener = addToast), []);
+  useEffect(() => {
+    listener = addToast;
+  }, []);
 
   return (
     <StyledToaster
@@ -46,7 +48,8 @@ const Toaster = () => {
           runTimer={runTimers}
           nthToast={i}
           removeToast={removeToast}
-        />))}
+        />
+      ))}
     </StyledToaster>
   );
 };

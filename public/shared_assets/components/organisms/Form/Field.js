@@ -37,6 +37,7 @@ export default class Field extends React.Component {
   
   static propTypes = {
     type: PropTypes.string.isRequired,
+    validate: PropTypes.func,
   }
 
   state = resetField(this.props)

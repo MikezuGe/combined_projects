@@ -54,6 +54,11 @@ const renderMenuItems = ({ title, render, ...rest }, i) => (
   </Item>
 );
 
+renderMenuItems.propTypes = {
+  title: PropTypes.string,
+  render: PropTypes.func,
+};
+
 
 const SideMenu = ({ primaryMenuItems, secondaryMenuItems, }) => {
   const [ showPrimary, setShowPrimary, ] = useState(true);

@@ -46,7 +46,7 @@ const Modal = () => {
     const listener = ({ key, keyCode, }) =>
       (key === 'Escape' || keyCode === 27) && closeModal();
     document.addEventListener('keyup', listener);
-    () => document.removeEventListener('keyup', listener);
+    return () => document.removeEventListener('keyup', listener);
   }, [ active, ]);
 
   return (

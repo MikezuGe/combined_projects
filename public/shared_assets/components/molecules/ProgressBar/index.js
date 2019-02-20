@@ -8,7 +8,9 @@ import { Timer, } from '../../utility';
 const ProgressBar = ({ callback, time, pause, }) => {
   const timerRef = useRef();
 
-  useEffect(() => (timerRef.current = new Timer(callback, time), null), []);
+  useEffect(() => {
+    timerRef.current = new Timer(callback, time);
+  }, []);
 
   useEffect(() => {
     if (pause) {

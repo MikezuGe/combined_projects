@@ -63,6 +63,8 @@ ToggleField.propTypes = {
   name: PropTypes.string.isRequired,
   label: PropTypes.string,
   value: PropTypes.bool,
+  labelOff: PropTypes.string,
+  labelOn: PropTypes.string,
 };
 
 

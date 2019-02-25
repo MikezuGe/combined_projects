@@ -80,7 +80,7 @@ const Budget = () => {
           title: 'Create funds',
           onClick: () => openModal(({ closeModal, }) => (
             <BudgetEdit
-              onSubmit={input => mutation(input)}
+              onSubmit={input => mutation({ input, })}
               onClose={closeModal}
             />
           )),

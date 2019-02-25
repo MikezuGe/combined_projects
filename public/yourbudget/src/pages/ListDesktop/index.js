@@ -14,17 +14,17 @@ const ListDesktop = ({ loading, error, data, columns, filters, onFiltersChange, 
           onFiltersChange={onFiltersChange}
         />
       )}
-      {
-        (loading && <div>{'Loading'}</div>)
-        || (error && <div>{`Error: ${error}`}</div>)
-        || (!data || !data.length && <div>{'No data found!'}</div>)
-        || (
+      {data && data.length
+        ? (
           <DataTable
             columns={columns}
             data={data}
           />
         )
+        : !loading && <div>{'No data found!'}</div>
       }
+      {loading && <div>{'Loading'}</div>}
+      {error && <div>{`Error: ${error}`}</div>}
     </React.Fragment>
   </DefaultDesktop>
 );

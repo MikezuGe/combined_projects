@@ -1,10 +1,8 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { adopt, } from 'react-adopt';
+import React, { useContext, useState, useEffect, } from 'react';
 
-import { Query, Mutation, } from '../../../shared_assets/components/GraphQL';
 import { Icon, } from '../../../shared_assets/components/atoms';
-import { ToasterConsumer, ModalConsumer, } from '../../../shared_assets/components/contexts';
+import { ModalContext, ToasterContext, } from '../../../shared_assets/components/contexts';
+import callGraphQL from '../../../shared_assets/components/callGraphQL';
 import { parseDate, } from '../../../shared_assets/components/utility';
 
 import { ListDesktop, } from '../pages';
@@ -12,224 +10,158 @@ import { GET_FUNDS, CREATE_FUND, UPDATE_FUND, REMOVE_FUND, } from '../queries';
 import { BudgetEdit, } from '../forms';
 
 
-const propTypes = {};
+const Budget = () => {
+  const { addToast, } = useContext(ToasterContext);
+  const { openModal, } = useContext(ModalContext);
 
+  const [ data, setData, ] = useState([]);
+  const [ loading, setLoading, ] = useState(true);
+  const [ error, setError, ] = useState('');
 
-propTypes.Toaster = PropTypes.object.isRequired;
-const QueryComponent = ({ Toaster: { addToast, }, render, }) => {
+  const query = (variables = {}) => {
+    setLoading(true);
+    callGraphQL({
+      query: GET_FUNDS,
+      variables,
+      onSuccess: result => {
+        setLoading(false);
+        setError('');
+        setData(result.data);
+      },
+      onError: ({ status, statusText, }) => {
+        setLoading(false);
+        setError(`${status}: ${statusText}`);
+        addToast({
+          type: 'error',
+          title: 'Error',
+          text: `${status}: ${statusText}`,
+        });
+      },
+    });
+  };
+
+  const mutation = async (variables = {}, remove = false) => {
+    setLoading(true)
+    return await callGraphQL({
+      mutation: remove
+        ? REMOVE_FUND
+        : variables.filters.id
+          ? UPDATE_FUND
+          : CREATE_FUND,
+      variables,
+      onSuccess: () => {
+        setLoading(false);
+        setError('');
+        addToast({
+          type: 'success',
+          title: 'Success',
+          text: 'Fund was removed successfully',
+        });
+        query();
+      },
+      onError: ({ status, statusText, }) => {
+        setLoading(false);
+        setError(`${status}: ${statusText}`);
+        addToast({
+          type: 'error',
+          title: 'Error',
+          text: `${status}: ${statusText}`,
+        });
+      },
+    });
+  };
+
+  useEffect(() => (query(), undefined), []);
+
   return (
-    <Query
-      query={GET_FUNDS}
-      onError={err => addToast({
-        type: 'error',
-        title: 'Error',
-        text: err,
-      })}
-    >
-      {({
-        loading: queryLoading,
-        error: queryError,
-        setVariables,
-        refetch,
-        data,
-      }) => (
-        render({
-          queryLoading,
-          queryError,
-          setVariables,
-          refetch,
-          data,
-        })
-      )}
-    </Query>
+    <ListDesktop
+      secondaryMenuItems={[
+        {
+          title: 'Create funds',
+          onClick: () => openModal(({ closeModal, }) => (
+            <BudgetEdit
+              onSubmit={input => mutation(input)}
+              onClose={closeModal}
+            />
+          )),
+        },
+      ]}
+      loading={loading}
+      error={error}
+      data={data}
+      filters={[
+        {
+          key: 'name',
+          name: 'Name',
+          type: 'text',
+        }, {
+          key: 'minAmount',
+          name: 'Minimum amount',
+          type: 'number',
+        }, {
+          key: 'maxAmount',
+          name: 'Maximum amount',
+          type: 'number',
+        }, {
+          key: 'startDate',
+          name: 'From date',
+          type: 'date',
+        }, {
+          key: 'endDate',
+          name: 'To date',
+          type: 'date',
+        },
+      ]}
+      onFiltersChange={filters => query({ filters, })}
+      columns={[
+        {
+          key: 'name',
+          title: 'Name',
+        }, {
+          key: 'amount',
+          title: 'Amount',
+        }, {
+          key: 'isIncome',
+          title: 'Direction',
+          render: isIncome => (
+            <Icon
+              icon={'chevron_right'}
+              fill={isIncome ? 'green' : 'red'}
+              rotate={isIncome ? -90 : 90}
+            />
+          ),
+        }, {
+          key: 'date',
+          title: 'Date',
+          render: date => parseDate(date, 'DD-MM-YYYY'),
+        }, {
+          title: 'Edit',
+          onClick: data => openModal(({ closeModal, }) => (
+            <BudgetEdit
+              initialValues={data}
+              onSubmit={input => mutation({ filters: { id: data.id, }, input, })}
+              onClose={closeModal}
+            />
+          )),
+          render: () => (
+            <Icon
+              icon={'edit'}
+              fill={'green'}
+            />
+          ),
+        }, {
+          title: 'Remove',
+          onClick: ({ id, }) => mutation({ filters: { id, }, }, true),
+          render: () => (
+            <Icon
+              icon={'clear'}
+              fill={'red'}
+            />
+          ),
+        },
+      ]}
+    />
   );
-};
-QueryComponent.propTypes = { ...propTypes, };
-
-
-propTypes.Query = PropTypes.object.isRequired;
-const Create = ({ Toaster: { addToast, }, Query: { refetch, }, render, }) => (
-  <Mutation
-    mutation={CREATE_FUND}
-    onSuccess={() => {
-      addToast({
-        type: 'success',
-        title: 'Success',
-        text: 'Fund was created successfully',
-      });
-      refetch();
-    }}
-    onError={err => addToast({
-      type: 'error',
-      title: 'Error',
-      text: err,
-    })}
-  >
-    {({ mutate: createFund, }) => render({ createFund, })}
-  </Mutation>
-);
-Create.propTypes = { ...propTypes, };
-
-
-const Update = ({ Toaster: { addToast, }, Query: { refetch, }, render, }) => (
-  <Mutation
-    mutation={UPDATE_FUND}
-    onSuccess={() => {
-      addToast({
-        type: 'success',
-        title: 'Success',
-        text: 'Fund was updated successfully',
-      });
-      refetch();
-    }}
-    onError={err => addToast({
-      type: 'error',
-      title: 'Error',
-      text: err,
-    })}
-  >
-    {({ mutate: updateFund, }) => render({ updateFund, })}
-  </Mutation>
-);
-Update.propTypes = { ...propTypes, };
-
-
-const Remove = ({ Toaster: { addToast, }, Query: { refetch, }, render, }) => (
-  <Mutation
-    mutation={REMOVE_FUND}
-    onSuccess={() => {
-      addToast({
-        type: 'success',
-        title: 'Success',
-        text: 'Fund was removed successfully',
-      });
-      refetch();
-    }}
-    onError={err => addToast({
-      type: 'error',
-      title: 'Error',
-      text: err,
-    })}
-  >
-    {({ mutate: removeFund, }) => render({ removeFund, })}
-  </Mutation>
-);
-Remove.propTypes = { ...propTypes, };
-
-
-const Composed = adopt({
-  Toaster: <ToasterConsumer />,
-  Modal: <ModalConsumer />,
-  Query: QueryComponent,
-  Create,
-  Update,
-  Remove,
-});
-
-
-const Budget = () => (
-  <Composed>
-    {({
-      Modal: { openModal, },
-      Query: { queryLoading, queryError, setVariables, data, },
-      Create: { createFund, },
-      Update: { updateFund, },
-      Remove: { removeFund, },
-    }) => (
-      <ListDesktop
-        secondaryMenuItems={[
-          {
-            title: 'Create funds',
-            onClick: () => openModal(({ closeModal, }) => (
-              <BudgetEdit
-                onSubmit={input => createFund({ input, })}
-                onClose={closeModal}
-              />
-            )),
-          },
-        ]}
-        loading={queryLoading}
-        error={queryError}
-        data={data}
-        filters={[
-          {
-            key: 'name',
-            name: 'Name',
-            type: 'text',
-          }, {
-            key: 'minAmount',
-            name: 'Minimum amount',
-            type: 'number',
-          }, {
-            key: 'maxAmount',
-            name: 'Maximum amount',
-            type: 'number',
-          }, {
-            key: 'startDate',
-            name: 'From date',
-            type: 'date',
-          }, {
-            key: 'endDate',
-            name: 'To date',
-            type: 'date',
-          },
-        ]}
-        onFiltersChange={filters => setVariables({ filters, })}
-        columns={[
-          {
-            key: 'name',
-            title: 'Name',
-          }, {
-            key: 'amount',
-            title: 'Amount',
-          }, {
-            key: 'isIncome',
-            title: 'Direction',
-            render: isIncome => (
-              <Icon
-                icon={'chevron_right'}
-                fill={isIncome
-                  ? 'green'
-                  : 'red'}
-                rotate={isIncome
-                  ? -90
-                  : 90}
-              />
-            ),
-          }, {
-            key: 'date',
-            title: 'Date',
-            render: date => parseDate(date, 'DD-MM-YYYY'),
-          }, {
-            title: 'Edit',
-            onClick: data => openModal(({ closeModal, }) => (
-              <BudgetEdit
-                initialValues={data}
-                onSubmit={input => updateFund({ filters: { id: data.id, }, input, })}
-                onClose={closeModal}
-              />
-            )),
-            render: () => (
-              <Icon
-                icon={'edit'}
-                fill={'green'}
-              />
-            ),
-          }, {
-            title: 'Remove',
-            onClick: ({ id, }) => removeFund({ filters: { id, }, }),
-            render: () => (
-              <Icon
-                icon={'clear'}
-                fill={'red'}
-              />
-            ),
-          },
-        ]}
-      />
-    )}
-  </Composed>
-);
-
+}
 
 export default Budget;

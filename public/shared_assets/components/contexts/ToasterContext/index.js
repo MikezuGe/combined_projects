@@ -22,5 +22,5 @@ ToasterProvider.propTypes = {
 };
 
 
-export { ToasterConsumer, };
-export default ToasterProvider;
+export { ToasterConsumer, ToasterProvider, };
+export default ToasterContext;

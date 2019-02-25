@@ -22,5 +22,5 @@ ModalProvider.propTypes = {
 };
 
 
-export { ModalConsumer, };
-export default ModalProvider;
+export { ModalProvider, ModalConsumer, };
+export default ModalContext;

@@ -5646,20 +5646,6 @@ rc@^1.0.1, rc@^1.1.6, rc@^1.2.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
-react-adopt@0.6.0:
-  version "0.6.0"
-  resolved "https://registry.yarnpkg.com/react-adopt/-/react-adopt-0.6.0.tgz#e5ff903a655d3082217f82bc9d5033a4b64fafad"
-  integrity sha1-5f+QOmVdMIIhf4K8nVAzpLZPr60=
-  dependencies:
-    hoist-non-react-statics "^2.5.0"
-    react "^16.3.2"
-    react-display-name "^0.2.4"
-
-react-display-name@^0.2.4:
-  version "0.2.4"
-  resolved "https://registry.yarnpkg.com/react-display-name/-/react-display-name-0.2.4.tgz#e2a670b81d79a2204335510c01246f4c92ff12cf"
-  integrity sha512-zvU6iouW+SWwHTyThwxGICjJYCMZFk/6r/+jmOdC7ntQoPlS/Pqb81MkxaMf2bHTSq9TN3K3zX2/ayMW/jCtyA==
-
 react-dom@^16.8.2:
   version "16.8.2"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.8.2.tgz#7c8a69545dd554d45d66442230ba04a6a0a3c3d3"
@@ -5700,7 +5686,7 @@ react-router@^4.3.1:
     prop-types "^15.6.1"
     warning "^4.0.1"
 
-react@^16.3.2, react@^16.8.2:
+react@^16.8.2:
   version "16.8.2"
   resolved "https://registry.yarnpkg.com/react/-/react-16.8.2.tgz#83064596feaa98d9c2857c4deae1848b542c9c0c"
   integrity sha512-aB2ctx9uQ9vo09HVknqv3DGRpI7OIGJhCx3Bt0QqoRluEjHSaObJl+nG12GDdYH6sTgE7YiPJ6ZUyMx9kICdXw==

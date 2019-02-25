@@ -45,7 +45,7 @@ const Budget = () => {
     return await callGraphQL({
       mutation: remove
         ? REMOVE_FUND
-        : variables.filters.id
+        : variables.filters && variables.filters.id
           ? UPDATE_FUND
           : CREATE_FUND,
       variables,

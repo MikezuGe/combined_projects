@@ -15,21 +15,11 @@ import { BudgetEdit, } from '../forms';
 const propTypes = {};
 
 
-propTypes.render = PropTypes.func.isRequired;
-const Toaster = ({ render, }) => <ToasterConsumer>{render}</ToasterConsumer>
-Toaster.propTypes = { ...propTypes, };
-
-
-const Modal = ({ render, }) => <ModalConsumer>{render}</ModalConsumer>
-Modal.propTypes = { ...propTypes, };
-
-
 propTypes.Toaster = PropTypes.object.isRequired;
 const QueryComponent = ({ Toaster: { addToast, }, render, }) => {
   return (
     <Query
       query={GET_FUNDS}
-      variables={{}}
       onError={err => addToast({
         type: 'error',
         title: 'Error',
@@ -128,8 +118,8 @@ Remove.propTypes = { ...propTypes, };
 
 
 const Composed = adopt({
-  Toaster,
-  Modal,
+  Toaster: <ToasterConsumer />,
+  Modal: <ModalConsumer />,
   Query: QueryComponent,
   Create,
   Update,

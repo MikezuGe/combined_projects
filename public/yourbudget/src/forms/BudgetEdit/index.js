@@ -24,11 +24,9 @@ const validateDate = value => {
 };
 
 
-const BudgetEdit = ({ initialValues, onSubmit, onClose, }) => (
+const BudgetEdit = props => (
   <Form
-    initialValues={initialValues}
-    onSubmit={onSubmit}
-    onClose={onClose}
+    {...props}
     fields={[
       {
         name: 'name',

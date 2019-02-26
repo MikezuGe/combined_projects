@@ -2,8 +2,14 @@ type User {
   id: ID
   email: String
   username: String
-  password: String
   lastLogin: String
+  dateAdded: String
+}
+
+input UserFilters {
+  id: ID
+  email: String
+  username: String
 }
 
 input UserInput {
@@ -16,16 +22,14 @@ input UserUpdate {
   email: String
   username: String
   password: String
-  lastLogin: String
 }
 
 type Query {
-  user(id: ID!): User
-  users: [User]
+  getUsers(filters: UserFilters): [User]
 }
 
 type Mutation {
   createUser(input: UserInput!): User
-  updateUser(id: ID!, input: UserUpdate!): User
-  removeUser(id: ID!): User
+  updateUser(filters: UserFilters!, input: UserUpdate!): User
+  removeUser(filters: UserFilters!): User
 }

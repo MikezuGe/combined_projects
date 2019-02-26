@@ -7,11 +7,11 @@ type Fund {
 }
 
 input FundFilters {
-  id: ID,
-  name: String,
-  minAmount: Float,
-  maxAmount: Float,
-  startDate: Date,
+  id: ID
+  name: String
+  minAmount: Float
+  maxAmount: Float
+  startDate: Date
   endDate: Date
 }
 
@@ -37,5 +37,4 @@ type Mutation {
   createFund(input: FundInput!): Fund
   updateFund(filters: FundFilters!, input: FundUpdate!): Fund
   removeFund(filters: FundFilters!): Fund
-  removeFunds(ids: [ID!]!): [Fund]
 }

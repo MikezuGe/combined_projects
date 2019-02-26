@@ -44,16 +44,14 @@ const Query = {
 };
 
 
-const Mutations = {
+const Mutation = {
   createFund: async args => await Fund.create(args.input),
   updateFund: async args => await Fund.findOneAndUpdate(handleFilters(args.filters), args.input, { new: true, }),
   removeFund: async args => await Fund.findOneAndRemove(handleFilters(args.filters)),
-  removeFunds: async args => await Promise.all((await Fund.find({ _id: { $in: args.ids, }, })).map(fund => fund.remove())),
-  //removeFunds: async args => await Fund.findOneAndDelete({ _id: args.id, }),
 };
 
 
 module.exports = {
   ...Query,
-  ...Mutations,
+  ...Mutation,
 };

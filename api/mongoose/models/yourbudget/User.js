@@ -7,18 +7,10 @@ module.exports = db.model('User', new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     default: () => mongoose.Types.ObjectId(),
   },
-  email: {
-    type: String,
-  },
-  username: {
-    type: String,
-  },
-  password: {
-    type: String,
-  },
-  lastLogin: {
-    type: Date,
-  },
+  email: { type: String, },
+  username: { type: String, },
+  password: { type: String, },
+  lastLogin: { type: Date, },
   dateAdded: {
     type: Date,
     default: Date.now,

@@ -1,5 +1,5 @@
 const { logger, } = require('../../../utility');
-const Fund = require('../../../api/mongoose/models/yourbudget').Fund;
+const { Fund, User, } = require('../../../api/mongoose/models/yourbudget');
 
 
 (async () => {
@@ -25,5 +25,29 @@ const Fund = require('../../../api/mongoose/models/yourbudget').Fund;
       },
     ];
     await Fund.insertMany(testData);
+  }
+})();
+
+
+(async () => {
+  await User.deleteMany();
+  if (!(await User.find()).length) {
+    logger.info('Inserting mock data into development database');
+    const testData = [
+      {
+        email: 'a@a.a',
+        username: 'a',
+        password: 'aaa',
+      }, {
+        email: 'b@b.b',
+        username: 'b',
+        password: 'bbb',
+      }, {
+        email: 'c@c.c',
+        username: 'c',
+        password: 'ccc',
+      },
+    ];
+    await User.insertMany(testData);
   }
 })();

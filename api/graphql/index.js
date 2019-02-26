@@ -16,7 +16,10 @@ graphqlRoute.use('/', expressGraphql((req, res) => ({
   rootValue: { ...resolvers, ...customScalars, },
   context: { req, res, },
   graphiql: process.env.NODE_ENV !== 'production',
-  formatError: err => logger.warn(err),
+  formatError: err => {
+    logger.warn(err);
+    return err.message;
+  },
 })));
 
 

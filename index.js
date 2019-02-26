@@ -2,8 +2,6 @@ require('dotenv').config()
 
 const path = require('path');
 const express = require('express');
-const bodyParser = require('body-parser');
-const cookieParser = require('cookie-parser');
 
 const { indexRoute, fallbackRoute, logger, } = require('./utility');
 const apiRouter = require('./api');
@@ -26,9 +24,8 @@ const server = require('http').createServer(app);
 
 
 app.disable('x-powered-by');
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true, }));
-app.use(cookieParser());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true, }));
 
 
 app.all('*', (req, res, next) => {

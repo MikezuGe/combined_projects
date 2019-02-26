@@ -103,7 +103,7 @@ padding: 0.5em;
 const App = () => {
   const [ recipe, setRecipe, ] = useState(ITEMS['Green Circuit'] || null);
   const [ assembler, setAssembler, ] = useState(ASSEMBLERS['Assembler 3'] || null);
-  const [ modules, setModules, ] = useState(new Array(4).fill(MODULES['Productivity module 3']) || []);
+  const [ modules, setModules, ] = useState(Array(4).fill(MODULES['Productivity module 3']) || []);
 
   const totalModuleSpeedMultiplier = 1 - modules.reduce((total, { craftSpeedMultiplier, }) => (total += (1 - craftSpeedMultiplier || 0), total), 0);
   const totalModuleProductivityMultiplier = 1 + modules.reduce((total, { extraItemBonus, }) => (total += extraItemBonus - 1 || 0, total), 0);
@@ -130,7 +130,7 @@ const App = () => {
       />
       {recipe
         && assembler
-        && new Array(assembler.moduleSlots)
+        && Array(assembler.moduleSlots)
           .fill()
           .map((n, i) => (
             <SimpleSelector

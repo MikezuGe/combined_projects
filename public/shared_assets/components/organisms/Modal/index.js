@@ -28,16 +28,18 @@ export const openModal = render => listener(render);
 const Modal = () => {
   const [ active, setActive, ] = useState(false);
   const [ render, setRender, ] = useState(undefined);
-  
-  listener = render => {
+
+  const openModal = render => {
     setActive(true);
     setRender(() => render);
   };
 
   const closeModal = () => {
     setActive(false);
-    setTimeout(setRender, 500)
+    setTimeout(setRender, 500);
   };
+
+  useEffect(() => (listener = openModal, undefined), []);
 
   useEffect(() => {
     if (!active) {

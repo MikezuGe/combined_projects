@@ -35,7 +35,7 @@ const createFileAndGetUrl = (path='./', fileName) => {
 
 
 let replacerIteration = 0;
-const replacer = (key, value) =>
+const replacer = (undefined, value) =>
   (++replacerIteration && replacerIteration < 3 && value)
   || (typeof value !== 'object' && value)
   || (isArray(value) && '[Array]')

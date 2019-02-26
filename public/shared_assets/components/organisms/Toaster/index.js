@@ -22,8 +22,8 @@ const Toaster = () => {
   const [ toasts, setToasts, ] = useState([]);
   const [ runTimers, setRunTimers, ] = useState(true);
 
-  const addToast = toast => setToasts(toasts => [
-    ...toasts,
+  const addToast = toast => setToasts(prevToasts => [
+    ...prevToasts,
     {
       ...toast,
       id: nextId++,
@@ -32,14 +32,12 @@ const Toaster = () => {
 
   const removeToast = toastId => setToasts(toasts => toasts.filter(({ id, }) => id !== toastId));
 
-  useEffect(() => {
-    listener = addToast;
-  }, []);
+  useEffect(() => (listener = addToast, undefined), []);
 
   return (
     <StyledToaster
-      onMouseEnter={() => setRunTimers(false)}
-      onMouseLeave={() => setRunTimers(true)}
+      onMouseEnter={() => runTimers && setRunTimers(false)}
+      onMouseLeave={() => !runTimers && setRunTimers(true)}
     >
       {toasts.map((toast, i) => (
         <Toast

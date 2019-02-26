@@ -30,9 +30,7 @@ const Toast = ({ id, title, text, nthToast, timeout, runTimer, removeToast, }) =
   const moveOutAndRemove = () => !removing
     && (setInView(false), setRemoving(true));
 
-  useEffect(() => {
-    setTimeout(() => setInView(true), 50);
-  }, []);
+  useEffect(() => (setTimeout(() => setInView(true), 50), undefined), []);
 
   return (
     <StyledToast

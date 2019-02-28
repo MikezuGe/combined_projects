@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const db = require('../../getConnection')('yourbudget');
 
 
-const FundSchema = new mongoose.Schema({
+module.exports = db.model('Fund', new mongoose.Schema({
   _id: {
     type: mongoose.Schema.Types.ObjectId,
     default: () => mongoose.Types.ObjectId(),
@@ -18,7 +18,4 @@ const FundSchema = new mongoose.Schema({
 }, {
   toJSON: { virtuals: true, },
   toObject: { virtuals: true, },
-});
-
-
-module.exports = db.model('Fund', FundSchema);
+}));

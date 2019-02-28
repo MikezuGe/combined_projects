@@ -15,6 +15,13 @@ const handleFilters = filters => {
 };
 
 
+const checkForExisting = async (key, value) => ((await User.findOne({ [key]: value, })) && key);
+const checkInput = async ({ email, username, }) => (
+  (email && await checkForExisting('email', email))
+  || (username && await checkForExisting('username', username))
+);
+
+
 const Query = {
   getUsers: async args => {
     const user = await User.find(handleFilters(args.filters))
@@ -23,22 +30,21 @@ const Query = {
 };
 
 
-const checkForExisting = async (key, value) => ((await User.findOne({ [key]: value, })) && key);
-const checkInput = async ({ email, username, }) => (
-  (email && await checkForExisting('email', email))
-  || (username && await checkForExisting('username', username))
-);
-
-
 const Mutation = {
   createUser: async args => {
     const keyInUse = await checkInput(args.input);
+    // ADD EMAIL CHECKING
+    // ADD USERNAME CHECKING
+    // ADD PASSWORD HASHING
     return keyInUse
       ? new Error(`${keyInUse} is already in use`)
       : await User.create(args.input);
   },
   updateUser: async args => {
     const keyInUse = await checkInput(args.input);
+    // ADD EMAIL CHECKING
+    // ADD USERNAME CHECKING
+    // ADD PASSWORD HASHING
     return keyInUse
       ? new Error(`${keyInUse} is already in use`)
       : await User.findOneAndUpdate(handleFilters(args.filters), args.input, { new: true, });

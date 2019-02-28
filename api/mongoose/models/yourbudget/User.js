@@ -13,7 +13,7 @@ module.exports = db.model('User', new mongoose.Schema({
   lastLogin: { type: Date, },
   dateAdded: {
     type: Date,
-    default: Date.now,
+    default: () => Date.now(),
   },
 }, {
   toJSON: { virtuals: true, },

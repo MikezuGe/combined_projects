@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useContext, } from 'react'; 
 import ReactDOM from 'react-dom';
 import { BrowserRouter, Route, Switch, Redirect, } from 'react-router-dom';
 
-import { ThemeProvider, ToasterProvider, ModalProvider, } from '../../shared_assets/components/contexts';
+import { ThemeProvider, ToasterProvider, ModalProvider, AuthContext, AuthProvider, } from '../../shared_assets/components/contexts';
 import { Home, Budget, Graph, Settings, } from './containers';
 
 
@@ -50,38 +50,49 @@ html, body {
 `;
 
 
-const App = () => (
-  <BrowserRouter basename={'/yourbudget'}>
-    <Switch>
-      <Route
-        path='/home'
-        component={Home}
-      />
-      <Route
-        path='/budget'
-        component={Budget}
-      />
-      <Route
-        path='/graph'
-        component={Graph}
-      />
-      <Route
-        path='/settings'
-        component={Settings}
-      />
-      <Redirect to='/home' />
-    </Switch>
-  </BrowserRouter>
-);
+const App = () => {
+  const { isLogged, username, } = useContext(AuthContext);
+  return (
+    <BrowserRouter basename={'/yourbudget'}>
+      <Switch>
+        <Route
+          path='/home'
+          component={Home}
+        />
+        {isLogged && (
+          <Route
+            path='/budget'
+            component={Budget}
+          />
+        )}
+        {isLogged && (
+          <Route
+            path='/graph'
+            component={Graph}
+          />
+        )}
+        {isLogged && (
+          <Route
+            path='/settings'
+            component={Settings}
+          />
+        )}
+        <Redirect to='/home' />
+      </Switch>
+    </BrowserRouter>
+  );
+};
 
 
 ReactDOM.render(
-  <ThemeProvider globalStyle={globalStyle}>
-    <ToasterProvider>
-      <ModalProvider>
-        <App />
-      </ModalProvider>
-    </ToasterProvider>
-  </ThemeProvider>,
+  <AuthProvider>
+    <ThemeProvider globalStyle={globalStyle}>
+      <ToasterProvider>
+        <ModalProvider>
+          <App />
+        </ModalProvider>
+      </ToasterProvider>
+    </ThemeProvider>
+  </AuthProvider>,
   document.getElementById('root')
 );

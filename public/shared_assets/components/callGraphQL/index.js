@@ -2,12 +2,13 @@ import axios from 'axios';
 
 
 axios.defaults.baseURL = `${window.location.origin}/api/graphql`;
-axios.defaults.headers = { 'Content-Type': 'application/json', };
+axios.defaults.headers['Content-Type'] = 'application/json';
 
 
 const tryCall = async (query, variables) => {
   try {
-    const { status, statusText, data: { data, }, } = await axios.post(`/`, JSON.stringify({ query, variables, }));
+    const { status, statusText, data: { data, }, } =
+      await axios.post(`/`, JSON.stringify({ query, variables, }));
     return {
       error: false,
       status,
@@ -34,4 +35,9 @@ const callGraphQL = async ({ query, mutation, variables, onSuccess, onError, }) 
 };
 
 
+const setAuthorization = auth =>
+  axios.defaults.headers['Authorization'] = auth;
+
+
+export { setAuthorization, };
 export default callGraphQL;

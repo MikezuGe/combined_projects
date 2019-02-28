@@ -5,7 +5,7 @@ const { Fund, User, } = require('../../../api/mongoose/models/yourbudget');
 (async () => {
   await Fund.deleteMany();
   if (!(await Fund.find()).length) {
-    logger.info('Inserting mock data into development database');
+    logger.info('Inserting mock fund data into development database');
     const testData = [
       {
         name: 'Livion',
@@ -32,7 +32,7 @@ const { Fund, User, } = require('../../../api/mongoose/models/yourbudget');
 (async () => {
   await User.deleteMany();
   if (!(await User.find()).length) {
-    logger.info('Inserting mock data into development database');
+    logger.info('Inserting mock user data into development database');
     const testData = [
       {
         email: 'a@a.a',

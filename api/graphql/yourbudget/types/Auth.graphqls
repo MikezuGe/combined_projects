@@ -1,0 +1,12 @@
+type Token {
+  token: String
+}
+
+input LoginInput {
+  username: String!
+  password: String!
+}
+
+type Query {
+  login(input: LoginInput!): Token
+}

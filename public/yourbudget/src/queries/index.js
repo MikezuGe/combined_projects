@@ -5,3 +5,4 @@ export {
   REMOVE_FUND,
   REMOVE_FUNDS,
 } from './funds';
+export { LOGIN, } from './auth';

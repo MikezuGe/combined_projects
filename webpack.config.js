@@ -1,3 +1,5 @@
+require('dotenv').config();
+const webpack = require('webpack');
 const path = require('path');
 const fs = require('fs');
 const WebpackLivereloadPlugin = require('webpack-livereload-plugin');
@@ -80,6 +82,9 @@ const openBrowserWebpackPlugin = new OpenBrowserWebpackPlugin({
 
 const webpackLivereloadPlugin = new WebpackLivereloadPlugin({});
 
+const processEnvPlugin = new webpack.DefinePlugin({
+  'process.env.JWT_SECRET': JSON.stringify(process.env.JWT_SECRET),
+});
 
 const projects = fs.readdirSync('./public')
 .filter(file =>
@@ -105,6 +110,7 @@ module.exports = {
     ],
   },
   plugins: [
+    processEnvPlugin,
     openBrowserWebpackPlugin,
     webpackLivereloadPlugin,
     ...projects.map(pluginHtmlWebpackPlugin),

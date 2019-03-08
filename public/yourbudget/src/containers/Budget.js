@@ -40,14 +40,12 @@ const Budget = () => {
     });
   };
 
-  const mutation = async (variables = {}, remove = false) => {
-    setLoading(true)
+  const mutation = async (variables = {}) => {
+    setLoading(true);
     return await callGraphQL({
-      mutation: remove
-        ? REMOVE_FUND
-        : variables.filters && variables.filters.id
-          ? UPDATE_FUND
-          : CREATE_FUND,
+      mutation: variables.input
+        ? variables.filters ? UPDATE_FUND : CREATE_FUND
+        : REMOVE_FUND,
       variables,
       onSuccess: () => {
         setLoading(false);
@@ -55,7 +53,9 @@ const Budget = () => {
         addToast({
           type: 'success',
           title: 'Success',
-          text: 'Fund was removed successfully',
+          text: `Fund was ${variables.input
+            ? variables.filters ? 'updated' : 'created'
+            : 'removed'} successfully`,
         });
         query();
       },
@@ -151,7 +151,7 @@ const Budget = () => {
           ),
         }, {
           title: 'Remove',
-          onClick: ({ id, }) => mutation({ filters: { id, }, }, true),
+          onClick: ({ id, }) => mutation({ filters: { id, }, }),
           render: () => (
             <Icon
               icon={'clear'}
@@ -162,6 +162,7 @@ const Budget = () => {
       ]}
     />
   );
-}
+};
+
 
 export default Budget;

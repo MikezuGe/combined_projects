@@ -28,7 +28,7 @@ const handleValueByType = (type, value) =>
       ? parseFloat(value)
       : value;
 
-const tagsReducer = (total, { key, type, value, }) => (total[key] = handleValueByType(type, value), total);
+const tagsReducer = (total, { key, type, value, }) => ({ ...total, [key]: handleValueByType(type, value), });
 
 
 const SearchBar = ({ filters, onFiltersChange, }) => {
@@ -41,6 +41,7 @@ const SearchBar = ({ filters, onFiltersChange, }) => {
     onFiltersChange(prevTags.reduce(tagsReducer, {}));
     return prevTags;
   });
+
   const handleTagRemove = i => setTags(prevTags => {
     prevTags.splice(i, 1)[0].value
       && onFiltersChange(prevTags.reduce(tagsReducer, {}));

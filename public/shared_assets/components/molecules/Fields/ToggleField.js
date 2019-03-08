@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
-import Label from './Label';
+import { Label, } from '../../atoms';
 
 
 const Wrapper = styled.div`
@@ -11,60 +11,95 @@ flex-direction: column;
 `;
 
 const InnerWrapper = styled.div`
+align-items: center;
 display: flex;
 justify-content: space-between;
-align-items: center;
 `;
 
 const StyledInput = styled.input`
-display: none;
+display: ${({ hide, }) => hide ? 'none' : 'initial'};
 `;
 
-const ToggleLabel = styled.label`
-position: relative;
-border-radius: 0.6em;
-width: 3em;
-height: 1.2em;
+const ToggleLabel = styled(Label)`
 background: white;
+border-radius: 0.6em;
+height: 1.2em;
+position: relative;
+width: 3em;
 &:before {
-  display: block;
   background: blue;
-  width: 1em;
-  height: 1em;
   border-radius: 0.5em;
   content: '';
+  display: block;
+  height: 1em;
   transition: transform ${({ theme, }) => theme.animateNormal};
   transform: translate(${({ checked, }) => checked ? 1.9 : 0.1}em, 0.1em);
+  width: 1em;
 }
 `;
 
 
-const ToggleField = ({ name, label, labelOff, labelOn, value, ...rest }) => (
+const ToggleField = ({ name, type, label, labelAfter, labelOff, labelOn, value, ...rest }) => (
   <Wrapper>
-    {label && <Label htmlFor={name}>{label}</Label>}
+    {label && !labelAfter && (
+      <Label
+        type={'info'}
+        htmlFor={name}
+        text={label}
+      />
+    )}
     <InnerWrapper>
-      {labelOff && <Label htmlFor={name}>{labelOff}</Label>}
+      {labelOff && (
+        <Label
+          type={'info'}
+          htmlFor={name}
+          text={labelOff}
+        />
+      )}
       <StyledInput
         id={name}
-        name={name}
-        type={'checkbox'}
         {...rest}
-      />
-      <ToggleLabel
-        htmlFor={name}
+        type={'checkbox'}
         checked={value}
+        hide={type === 'toggle'}
       />
-      {labelOn && <Label htmlFor={name}>{labelOn}</Label>}
+      {type === 'toggle' && (
+        <ToggleLabel
+          type={'info'}
+          htmlFor={name}
+          checked={value}
+        />
+      )}
+      {labelOn && (
+        <Label
+          type={'info'}
+          htmlFor={name}
+          text={labelOn}
+        />
+      )}
     </InnerWrapper>
+    {label && !!labelAfter && (
+      <Label
+        type={'info'}
+        htmlFor={name}
+        text={label}
+      />
+    )}
   </Wrapper>
 );
 
 ToggleField.propTypes = {
   name: PropTypes.string.isRequired,
+  type: PropTypes.string.isRequired,
   label: PropTypes.string,
-  value: PropTypes.bool,
+  labelAfter: PropTypes.bool,
   labelOff: PropTypes.string,
   labelOn: PropTypes.string,
+  value: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+    PropTypes.bool,
+  ]),
 };
 
 

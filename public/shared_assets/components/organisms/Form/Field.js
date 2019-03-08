@@ -1,102 +1,117 @@
-import React from 'react';
+import React, { useState, useImperativeHandle, forwardRef, } from 'react';
 import PropTypes from 'prop-types';
 
-import { parseDate, } from '../../utility';
 import {
-  TextField,
-  NumberField,
-  DateField,
+  GeneralField,
   ToggleField,
-  SubmitField,
 } from '../../molecules';
+import { parseDate, } from '../../utility';
 
 
-const resetField = ({ type, initialValue, validate, }) => ({
-  meta: {
-    pristine: true,
-    showError: false,
-    error: validate
-      ? validate(initialValue)
-      : undefined,
-  },
-  value: initialValue
-    ? (
-      type === 'toggle' || type === 'checkbox'
-        ? !!initialValue
-        : type === 'date'
-          ? parseDate(initialValue, 'YYYY-MM-DD')
-          : initialValue
-    )
-    : type === 'toggle' || type === 'checkbox'
+const initialMeta = {
+  submitted: false,
+  showErrors: false,
+  valid: false,
+  error: undefined,
+};
+
+
+const parseInitialValueByType = (type, value) => (
+  type === 'date'
+    ? parseDate(value, 'YYYY-MM-DD')
+    : value || (type === 'checkbox' || type === 'toggle'
       ? false
-      : '',
+      : '')
+);
+
+const parseFieldValueByType = (type, value) => (
+  type === 'number'
+    ? parseFloat(value)
+    : type === 'date'
+      ? new Date(value)
+      : value
+);
+
+
+const Field = forwardRef(({ name, text, type, validate, initialValue, submit, ...rest }, ref) => {
+  const [ value, setValue, ] = useState(parseInitialValueByType(type, initialValue));
+  const [ meta, setMeta, ] = useState(initialMeta);
+
+  useImperativeHandle(ref, () => ({
+    validateOnSubmit: () => {
+      const error = validate ? validate(value) : undefined;
+      const valid = !error;
+      setMeta(prevMeta => ({
+        ...prevMeta,
+        submitted: true,
+        showErrors: !valid,
+        valid,
+        error,
+      }));
+      return valid;
+    },
+    reset: () => {
+      setValue(parseInitialValueByType(type, initialValue));
+      setMeta(initialMeta);
+    },
+    getFieldState: () => ({
+      name,
+      value: parseFieldValueByType(type, value),
+    }),
+  }));
+
+  const onChange = e => {
+    const value = !e
+      ? state.value
+      : type === 'checkbox' || type === 'toggle'
+        ? e.target.checked
+        : e.target.value;
+    const error = validate ? validate(value) : undefined;
+    setValue(value);
+    setMeta(prevMeta => ({
+      ...prevMeta,
+      showErrors: prevMeta.submitted && !!error,
+      valid: !error,
+      error,
+    }));
+  };
+
+  const fieldProps = {
+    ...rest,
+    name,
+    type,
+    ...(submit
+      ? {
+        onClick: submit,
+        value: text,
+      }
+      : {
+        meta,
+        value,
+        onChange,
+      }
+    ),
+  };
+
+  return (
+    type === 'checkbox' || type === 'toggle'
+      ? <ToggleField {...fieldProps} />
+      : <GeneralField {...fieldProps} />
+  );
 });
 
+Field.defaultProps = {
+  initialValue: '',
+};
 
-export default class Field extends React.Component {
-  
-  static propTypes = {
-    type: PropTypes.string.isRequired,
-    validate: PropTypes.func,
-  }
+Field.propTypes = {
+  name: PropTypes.string.isRequired,
+  type: PropTypes.string.isRequired,
+  text: PropTypes.string,
+  initialValue: PropTypes.any,
+  validate: PropTypes.func,
+  submit: PropTypes.func,
+};
 
-  state = resetField(this.props)
 
-  reset = () => this.setState(resetField(this.props))
-
-  onBlur = ({ target: { value, }, }) => {
-    const { validate, } = this.props;
-    const error = (validate && validate(value)) || undefined;
-    this.setState(({ meta, }) => ({
-      meta: {
-        ...meta,
-        showError: !!meta.error,
-        error,
-      },
-    }));
-  }
-
-  onChange = ({ target: { value, checked, }, }) => {
-    const { type, validate, } = this.props;
-    const error = (validate && validate(value)) || undefined;
-    this.setState(({ meta, }) => ({
-      meta: {
-        ...meta,
-        pristine: false,
-        showError: !!error,
-        error,
-      },
-      value: type === 'number'
-        ? parseFloat(value)
-        : type === 'toggle' || type === 'checkbox'
-          ? checked
-          : value,
-    }));
-  }
-
-  render () {
-    const { onChange, onBlur, } = this;
-    const { type, ...props } = this.props;
-    const { value, meta, } = this.state;
-    const fieldProps = {
-      ...props,
-      value,
-      meta,
-      onChange,
-      onBlur,
-    };
-    return (
-      <React.Fragment>
-        {
-          (type === 'text' && <TextField {...fieldProps} />)
-          || (type === 'number' && <NumberField {...fieldProps} />)
-          || (type === 'date' && <DateField {...fieldProps} />)
-          || (type === 'toggle' && <ToggleField {...fieldProps} />)
-          || (type === 'submit' && <SubmitField {...props} />)
-          || (<div>{`No field of type ${type} exists`}</div>)
-        }
-      </React.Fragment>
-    );
-  }
-
-}
+export default Field;

@@ -94,10 +94,8 @@ const projects = fs.readdirSync('./public')
 
 module.exports = {
   mode,
-  'entry': projects.reduce((total, current) => {
-    total[current] = `./public/${current}/src/app.js`;
-    return total;
-  }, {}),
+  'entry': projects.reduce((total, current) =>
+    ({ ...total, [current]: `./public/${current}/src/app.js`, }), {}),
   'output': {
     'path': __dirname + '/public',
     'filename': `[name]/${bundleName}`,

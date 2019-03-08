@@ -1,10 +1,21 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import { Form, } from '../../../../shared_assets/components/organisms';
 
 
 const validateEmail = value => {
+  if (!value) {
+    return 'Required';
+  }
+};
+
+const validateUsername = value => {
+  if (!value) {
+    return 'Required';
+  }
+};
+
+const validatePassword = value => {
   if (!value) {
     return 'Required';
   }
@@ -24,35 +35,30 @@ const Register = props => (
         name: 'username',
         type: 'text',
         label: 'Username',
+        validate: validateUsername,
       }, {
         name: 'password',
         type: 'password',
         label: 'Password',
-      },
-    ]}
-    buttons={[
-      {
+        validate: validatePassword,
+      }, {
         name: 'register',
+        type: 'submit',
         text: 'Register',
         actions: [ 'submit', 'close', ],
       },
     ]}
   >
-    {({ renderField, renderButton, }) => (
-      <React.Fragment>
+    {({ renderField, }) => (
+      <div style={{ width: '500px', }}>
         {renderField('email')}
         {renderField('username')}
         {renderField('password')}
-        {renderButton('register')}
-      </React.Fragment>
+        {renderField('register')}
+      </div>
     )}
   </Form>
 );
-
-Register.propTypes = {
-  onSubmit: PropTypes.func.isRequired,
-  onClose: PropTypes.func.isRequired,
-};
 
 
 export default Register;

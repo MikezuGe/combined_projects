@@ -23,10 +23,15 @@ const Budget = () => {
     callGraphQL({
       query: GET_FUNDS,
       variables,
-      onSuccess: result => {
+      onSuccess: ({ data, errors, }) => {
         setLoading(false);
         setError('');
-        setData(result.data);
+        setData(data);
+        errors && addToast({
+          type: 'error',
+          title: 'Error',
+          text: errors.join('. '),
+        });
       },
       onError: ({ status, statusText, }) => {
         setLoading(false);
@@ -42,20 +47,22 @@ const Budget = () => {
 
   const mutation = async (variables = {}) => {
     setLoading(true);
-    return await callGraphQL({
+    const result = await callGraphQL({
       mutation: variables.input
         ? variables.filters ? UPDATE_FUND : CREATE_FUND
         : REMOVE_FUND,
       variables,
-      onSuccess: () => {
+      onSuccess: ({ errors, }) => {
         setLoading(false);
         setError('');
         addToast({
-          type: 'success',
-          title: 'Success',
-          text: `Fund was ${variables.input
-            ? variables.filters ? 'updated' : 'created'
-            : 'removed'} successfully`,
+          type: errors ? 'error' : 'success',
+          title: errors ? 'Error' : 'Success',
+          text: errors
+            ? errors.join('. ')
+            : `Fund was ${variables.input
+              ? variables.filters ? 'updated' : 'created'
+              : 'removed'} successfully`,
         });
         query();
       },
@@ -69,6 +76,7 @@ const Budget = () => {
         });
       },
     });
+    return !result.error;
   };
 
   useEffect(() => (query(), undefined), []);

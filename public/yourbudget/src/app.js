@@ -51,7 +51,7 @@ html, body {
 
 
 const App = () => {
-  const { isLogged, username, } = useContext(AuthContext);
+  const { isLogged, } = useContext(AuthContext);
   return (
     <BrowserRouter basename={'/yourbudget'}>
       <Switch>

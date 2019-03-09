@@ -62,7 +62,7 @@ const Field = forwardRef(({ name, text, type, validate, initialValue, submit, ..
 
   const onChange = e => {
     const value = !e
-      ? state.value
+      ? value
       : type === 'checkbox' || type === 'toggle'
         ? e.target.checked
         : e.target.value;

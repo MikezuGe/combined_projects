@@ -3,6 +3,10 @@ export {
   CREATE_FUND,
   UPDATE_FUND,
   REMOVE_FUND,
-  REMOVE_FUNDS,
-} from './funds';
+} from './funds';export {
+  GET_USERS,
+  CREATE_USER,
+  UPDATE_USER,
+  REMOVE_USER,
+} from './users';
 export { LOGIN, } from './auth';

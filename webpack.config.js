@@ -105,7 +105,7 @@ module.exports = {
       'components': path.resolve('./public/shared_assets/components'),
     }
   },
-  'devtool': isProduction ? 'hidden-source-map' : 'source-map',
+  'devtool': isProduction ? 'hidden-source-map' : 'eval-source-map',
   'module': {
     'rules': [
       eslintLoader,

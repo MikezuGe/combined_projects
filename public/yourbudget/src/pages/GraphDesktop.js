@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import DefaultDesktop from '../DefaultDesktop';
+import DefaultDesktop from './DefaultDesktop';
 
 
 const GraphDesktop = ({ secondaryMenuItems, children, }) => (

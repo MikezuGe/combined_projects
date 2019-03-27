@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { Form, } from '../../../shared_assets/components/organisms';
+import { Form, } from 'components/organisms';
 
 
 const Login = props => (

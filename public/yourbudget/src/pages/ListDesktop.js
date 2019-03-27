@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import DefaultDesktop from '../DefaultDesktop';
-import { DataTable, SearchBar, } from '../../../../shared_assets/components/organisms';
+import DefaultDesktop from './DefaultDesktop';
+import { DataTable, SearchBar, } from 'components/organisms';
 
 
 const ListDesktop = ({ loading, error, data, columns, filters, onFiltersChange, secondaryMenuItems, }) => (

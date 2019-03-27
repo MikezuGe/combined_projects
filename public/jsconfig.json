@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "components/*": [ "./shared_assets/components/*" ],
+      "yourbudget/*": [ "./yourbudget/*" ],
+      "evolution/*": [ "./evolution/*" ],
+      "glib/*": [ "./glib/*" ],
+      "factoriolator/*": [ "./factoriolator/*" ],
+    }
+  },
+  "exclude": ["node_modules"]
+}

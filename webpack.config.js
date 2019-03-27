@@ -100,6 +100,11 @@ module.exports = {
     'path': __dirname + '/public',
     'filename': `[name]/${bundleName}`,
   },
+  'resolve': {
+    'alias': {
+      'components': path.resolve('./public/shared_assets/components'),
+    }
+  },
   'devtool': isProduction ? 'hidden-source-map' : 'source-map',
   'module': {
     'rules': [

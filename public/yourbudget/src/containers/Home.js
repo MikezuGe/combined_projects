@@ -4,8 +4,8 @@ import { DefaultDesktop, } from '../pages';
 import { Register, } from '../forms';
 import { CREATE_USER, } from '../queries';
 
-import callGraphQL from '../../../shared_assets/components/callGraphQL';
-import { ToasterContext, } from '../../../shared_assets/components/contexts';
+import callGraphQL from 'components/callGraphQL/callGraphQL';
+import { ToasterContext, } from 'components/contexts';
 
 
 const Home = () => {

@@ -1,9 +1,9 @@
 import React, { useContext, useState, useEffect, } from 'react';
 
-import { Icon, } from '../../../shared_assets/components/atoms';
-import { ModalContext, ToasterContext, } from '../../../shared_assets/components/contexts';
-import callGraphQL from '../../../shared_assets/components/callGraphQL';
-import { parseDate, } from '../../../shared_assets/components/utility';
+import { Icon, } from 'components/atoms';
+import { ModalContext, ToasterContext, } from 'components/contexts';
+import callGraphQL from 'components/callGraphQL/callGraphQL';
+import { parseDate, } from 'components/utility';
 
 import { ListDesktop, } from '../pages';
 import { GET_FUNDS, CREATE_FUND, UPDATE_FUND, REMOVE_FUND, } from '../queries';

@@ -2,7 +2,7 @@ import React, { useContext, } from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter, Route, Switch, Redirect, } from 'react-router-dom';
 
-import { ThemeProvider, ToasterProvider, ModalProvider, AuthContext, AuthProvider, } from '../../shared_assets/components/contexts';
+import { ThemeProvider, ToasterProvider, ModalProvider, AuthContext, AuthProvider, } from 'components/contexts';
 import { Home, Budget, Graph, Settings, } from './containers';
 
 

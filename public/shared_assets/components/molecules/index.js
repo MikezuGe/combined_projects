@@ -1,5 +1,5 @@
-export { default as Tag, } from './Tag';
-export { default as ProgressBar, } from './ProgressBar';
+export { default as Tag, } from './Tag/Tag';
+export { default as ProgressBar, } from './ProgressBar/ProgressBar';
 export {
   GeneralField,
   ToggleField,

@@ -1,3 +1,4 @@
+import { useState, useMemo, } from 'react';
 import axios from 'axios';
 
 
@@ -5,35 +6,50 @@ axios.defaults.baseURL = `${window.location.origin}/api/graphql`;
 axios.defaults.headers['Content-Type'] = 'application/json';
 
 
-const tryCall = async (query, variables) => {
+const tryCall = async ({ query, variables, }) => {
   try {
     const { status, statusText, data: { data, errors, }, } = 
       await axios.post(`/`, JSON.stringify({ query, variables, }));
+    const error = status !== 200 ? `${status}: ${statusText}` : '';
     return {
-      error: false,
-      status,
-      statusText,
+      loading: false,
       data: data ? data[Object.keys(data)[0]] : [],
-      errors: errors && errors.length ? errors : null,
+      error: errors ? `${error}, ${errors.join('. ')}` : error,
     };
-  } catch ({ response: { status, statusText, }, }) {
+  } catch ({ response, request, }) {
+    const { status, statusText, data: { data, errors, }, } = (response || request);
+    const error = status !== 200 ? `${status}: ${statusText}` : '';
     return {
-      error: true,
-      status,
-      statusText,
-      data: [],
-      errors: null,
+      loading: false,
+      data: data ? data[Object.keys(data)[0]] : [],
+      error: errors ? `${error}, ${errors.join('. ')}` : error,
     };
   }
 };
 
 
-const callGraphQL = async ({ query, mutation, variables, onSuccess, onError, }) => {
-  const result = await tryCall(query || mutation, variables);
-  result.error
-    ? onError && onError(result)
-    : onSuccess && onSuccess(result);
-  return result;
+const callGraphQL = ({ onSuccess, onError, } = {}) => {
+  const [ state, setState, ] = useState({
+    loading: false,
+    data: [],
+    error: '',
+    variables: undefined,
+  });
+
+  const q = useMemo(() => async ({ query, mutation, variables, }) => {
+    setState(prevResult => ({ ...prevResult, loading: true, }))
+    const result = {
+      ...(await tryCall({ query: query || mutation, variables, })),
+      variables,
+    };
+    result.error
+      ? onError && onError(result)
+      : onSuccess && onSuccess(result);
+    setState(result);
+    return !result.error;
+  }, []);
+
+  return [ state, q, ];
 };
 
 

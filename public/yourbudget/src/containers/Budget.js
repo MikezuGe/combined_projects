@@ -14,72 +14,46 @@ const Budget = () => {
   const { addToast, } = useContext(ToasterContext);
   const { openModal, } = useContext(ModalContext);
 
-  const [ data, setData, ] = useState([]);
-  const [ loading, setLoading, ] = useState(true);
-  const [ error, setError, ] = useState('');
-
-  const query = (variables = {}) => {
-    setLoading(true);
-    callGraphQL({
-      query: GET_FUNDS,
-      variables,
-      onSuccess: ({ data, errors, }) => {
-        setLoading(false);
-        setError('');
-        setData(data);
-        errors && addToast({
+  const [{
+    data,
+    loading: queryLoading,
+    error: queryError,
+  }, query, ] = callGraphQL({
+    onError: ({ error, }) => addToast({
+      type: 'error',
+      title: 'Error',
+      text: error,
+    }),
+  });
+  const [{
+    loading: mutationLoading,
+    error: mutationError,
+  }, mutate, ] = callGraphQL({
+    onSuccess: ({ variables, error, }) => {
+      addToast(error
+        ? {
           type: 'error',
           title: 'Error',
-          text: errors.join('. '),
-        });
-      },
-      onError: ({ status, statusText, }) => {
-        setLoading(false);
-        setError(`${status}: ${statusText}`);
-        addToast({
-          type: 'error',
-          title: 'Error',
-          text: `${status}: ${statusText}`,
-        });
-      },
-    });
-  };
+          text: error,
+        }
+        : {
+          type: 'success',
+          title: 'Success',
+          text: `Fund was ${variables.input
+            ? variables.filters ? 'updated' : 'created'
+            : 'removed'} successfully`,
+        }
+      );
+      query({ query: GET_FUNDS, });
+    },
+    onError: ({ error, }) => addToast({
+      type: 'error',
+      title: 'Error',
+      text: error,
+    }),
+  });
 
-  const mutation = async (variables = {}) => {
-    setLoading(true);
-    const result = await callGraphQL({
-      mutation: variables.input
-        ? variables.filters ? UPDATE_FUND : CREATE_FUND
-        : REMOVE_FUND,
-      variables,
-      onSuccess: ({ errors, }) => {
-        setLoading(false);
-        setError('');
-        addToast({
-          type: errors ? 'error' : 'success',
-          title: errors ? 'Error' : 'Success',
-          text: errors
-            ? errors.join('. ')
-            : `Fund was ${variables.input
-              ? variables.filters ? 'updated' : 'created'
-              : 'removed'} successfully`,
-        });
-        query();
-      },
-      onError: ({ status, statusText, }) => {
-        setLoading(false);
-        setError(`${status}: ${statusText}`);
-        addToast({
-          type: 'error',
-          title: 'Error',
-          text: `${status}: ${statusText}`,
-        });
-      },
-    });
-    return !result.error;
-  };
-
-  useEffect(() => (query(), undefined), []);
+  useEffect(() => (query({ query: GET_FUNDS, }), undefined), []);
 
   return (
     <ListDesktop
@@ -88,14 +62,14 @@ const Budget = () => {
           title: 'Create funds',
           onClick: () => openModal(({ closeModal, }) => (
             <BudgetEdit
-              onSubmit={input => mutation({ input, })}
+              onSubmit={input => mutate({ mutation: CREATE_FUND, variables: { input, }, })}
               onClose={closeModal}
             />
           )),
         },
       ]}
-      loading={loading}
-      error={error}
+      loading={queryLoading || mutationLoading}
+      error={queryError || mutationError}
       data={data}
       filters={[
         {
@@ -120,7 +94,7 @@ const Budget = () => {
           type: 'date',
         },
       ]}
-      onFiltersChange={filters => query({ filters, })}
+      onFiltersChange={filters => query({ query: GET_FUNDS, variables: { filters, }, })}
       columns={[
         {
           key: 'name',
@@ -147,7 +121,7 @@ const Budget = () => {
           onClick: data => openModal(({ closeModal, }) => (
             <BudgetEdit
               initialValues={data}
-              onSubmit={input => mutation({ filters: { id: data.id, }, input, })}
+              onSubmit={input => mutate({ mutation: UPDATE_FUND, variables: { filters: { id: data.id, }, input, }, })}
               onClose={closeModal}
             />
           )),
@@ -159,7 +133,7 @@ const Budget = () => {
           ),
         }, {
           title: 'Remove',
-          onClick: ({ id, }) => mutation({ filters: { id, }, }),
+          onClick: ({ id, }) => mutate({ mutation: REMOVE_FUND, variables: { filters: { id, }, }, }),
           render: () => (
             <Icon
               icon={'clear'}

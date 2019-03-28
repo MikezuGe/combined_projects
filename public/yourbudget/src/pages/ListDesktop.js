@@ -39,5 +39,11 @@ ListDesktop.propTypes = {
   secondaryMenuItems: PropTypes.array,
 };
 
+ListDesktop.defaultProps = {
+  loading: true,
+  error: false,
+  data: [],
+};
+
 
 export default ListDesktop;

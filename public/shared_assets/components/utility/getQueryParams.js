@@ -1,8 +1,8 @@
-const getQueryParams = search => (!search && {}) || search.slice(1)
+const getQueryParams = (search = window.location.search) => search.slice(1)
   .split('&')
   .reduce((total, current) => {
     const [ key, value, ] = current.split('=');
-    key && (total[key] = value || null);
+    total[key] = value || undefined;
     return total;
   }, {});
 

@@ -39,7 +39,7 @@ const Home = () => {
     <DefaultDesktop>
       <Register
         onSubmit={async input => await createUser({ input, })}
-        onClose={test => console.log('Closing', test)}
+        onClose={test => { test }}
       />
     </DefaultDesktop>
   );

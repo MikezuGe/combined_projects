@@ -1,8 +1,5 @@
-const keyToValue = {
-  'Y': (date, charAmount) => {
-    const t = date.getFullYear().toString().slice(-(charAmount));
-    return t;
-  },
+const parsers = {
+  'Y': (date, charAmount) => date.getFullYear().toString().slice(-(charAmount)),
   'M': (date, charAmount) => {
     const t = (date.getMonth() + 1).toString();
     return (charAmount === 1 || t.length === 2 ? '' : '0') + t;
@@ -26,23 +23,22 @@ const keyToValue = {
 };
 
 
-module.exports = parseDate = (date, format) => {
-  if (!(date instanceof Date)) {
-    date = new Date(date);
-  }
-  const f = format
-    .split('')
-    .reduce((total, current) => {
-      let t = total[total.length - 1];
-      return (t && t[0] === current
-        ? total[total.length - 1] += current
-        : total[total.length] = current),
-      total;
-    }, [])
-    .reduce((total, current) => (
-      total += /[YMDhms]/.test(current)
-        ? keyToValue[current[0]](date, current.length)
-        : current
-    ), '');
-  return f;
+const keyToValue = (date, chars) => /\w/.test(chars)
+  ? parsers[chars[0]](date, chars.length)
+  : chars;
+
+/**
+ * 
+ * @param {Date} [date=Date] - JS date object of desired date
+ * @param {string} format - String to extract from given date.
+ * E.g. 'ss:mm:hh DD.MM.YYYY' would return date in format 11:11:11 11.11.1971
+ * Allowed characters: s m h D M Y /:.-
+ * @returns {string} - Formatted date string
+ */
+const parseDate = (date, format) => {
+  return format.match(/([smhDM])\1?|YYYY|YY|[/:.-\s]/gi)
+    .reduce((total, current) => (total += keyToValue(date, current), total), '');
 };
+
+
+module.exports = parseDate;

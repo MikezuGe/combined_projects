@@ -1,7 +1,7 @@
 require('dotenv').config();
 const fs = require('fs');
 
-const parseDate = require('./parsedate');
+const parseDate = require('./parseDate');
 
 
 const notProduction = process.env.NODE_ENV !== 'production';

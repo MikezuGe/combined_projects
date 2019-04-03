@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect, } from 'react';
+import React, { useContext, useEffect, } from 'react';
 
 import { Icon, } from 'components/atoms';
 import { ModalContext, ToasterContext, } from 'components/contexts';
@@ -14,7 +14,7 @@ const Budget = () => {
   const { addToast, } = useContext(ToasterContext);
   const { openModal, } = useContext(ModalContext);
 
-  const [{
+  const [ {
     data,
     loading: queryLoading,
     error: queryError,
@@ -25,7 +25,7 @@ const Budget = () => {
       text: error,
     }),
   });
-  const [{
+  const [ {
     loading: mutationLoading,
     error: mutationError,
   }, mutate, ] = callGraphQL({

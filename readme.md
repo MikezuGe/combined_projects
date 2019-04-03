@@ -14,7 +14,7 @@ Each application should have a readme file that contains a list of node modules 
 - Projects can be found from ./public/
 - React components are in ./public/shared_assets
 - Ensure you are using dev branch!
-- You don't ever have to make changes in master branch, only in dev and feature branches based on dev!
+- You don't ever have to make changes in master branch, only in dev and feature branches, which are based on dev branch!
 
 
 * Not a project
@@ -39,6 +39,7 @@ yarn
 # Add a folder named src to your project folder
 # Add app.js file to your project's src folder
 # Use the created app.js file as the root of you new project
+# Unfortunately you have to run 'yarn start' twice, so the index.html served by the server includes new project link
 yarn start
 ```
 

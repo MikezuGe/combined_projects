@@ -19,7 +19,7 @@ const htmlTemplate = ({ title, jsSources, }) => `<!DOCTYPE html>
   </head>
   <body>
     <div id='root'></div>
-    ${jsSources.filter(source => !!source).map(source => `<script type='text/javascript' src='${source}'></script>`).join('\n    ')}
+    ${jsSources.filter(source => source).map(source => `<script type='text/javascript' src='${source}'></script>`).join('\n    ')}
   </body>
 </html>
 `;

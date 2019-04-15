@@ -111,13 +111,13 @@ export default class Renderer {
     };
   }
 
-  setupWorldRender (world) {
-    canvas.width = world.width * 10;
-    canvas.height = world.height * 10;
+  setupWorldRender ({ width, height, field, }) {
+    canvas.width = width * 10;
+    canvas.height = height * 10;
     gl.viewport(0, 0, canvas.width, canvas.height);
 
     const { vertices, varying, } = this;
-    for (const { renderingPosition, } of world.field) {
+    for (const { renderingPosition, } of field) {
       vertices.push(
         renderingPosition.x,
         renderingPosition.y,
@@ -132,6 +132,7 @@ export default class Renderer {
     gl.bindBuffer(gl.ARRAY_BUFFER, this.positionBuffer);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
 
+    // Varying buffer is left last to be bound. This is important!
     gl.bindBuffer(gl.ARRAY_BUFFER, this.varyingBuffer);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(varying), gl.DYNAMIC_DRAW);
 
@@ -140,10 +141,6 @@ export default class Renderer {
       gl.enableVertexAttribArray(attribute);
       gl.vertexAttribPointer(attribute, size, type, false, stride, offset);
     }
-    // Varying buffer is left last to be bound. This is important!
-
-    gl.clearColor(0.4, 0.4, 0.4, 1.0);
-    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
   }
 
   renderWorld ({ field, dimension, }) {

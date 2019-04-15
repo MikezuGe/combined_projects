@@ -37,13 +37,13 @@ export default class World {
       });
     }
     for (let i = 0; i < dimension; i++) {
-      // Get adjacent cells
-      const adjacentCells = [];
-      adjacentCells[0] = (field[i - width]) ? field[i - width] : null;
-      adjacentCells[1] = ((i + 1) % width !== 0 && field[i + 1]) ? field[i + 1] : null;
-      adjacentCells[2] = (field[i + width]) ? field[i + width] : null;
-      adjacentCells[3] = (i % width !== 0 && field[i - 1]) ? field[i - 1] : null;
-      field[i].adjacentCells = adjacentCells;
+      // Set adjacent cells
+      field[i].adjacentCells.push(
+        field[i - width] ? field[i - width] : null,
+        (i + 1) % width !== 0 && field[i + 1] ? field[i + 1] : null,
+        field[i + width] ? field[i + width] : null,
+        i % width !== 0 && field[i - 1] ? field[i - 1] : null,
+      );
     }
   }
 

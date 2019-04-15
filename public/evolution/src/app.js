@@ -40,7 +40,7 @@ window.addEventListener('keyup', e => {
 }, false)
 let updTime = 3;
 
-const world = new World(190, 75);
+const world = new World(/*190, 75*/50, 50);
 const renderer = new Renderer();
 renderer.setupWorldRender(world);
 //renderer.renderWorld(world);

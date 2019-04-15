@@ -26,7 +26,7 @@ export default class Cell {
       if (!cell.entity) return true;
       switch (ENTITY_TYPE) {
       case ENTITY_HERBIVORE: return cell.entity.ENTITY_TYPE === ENTITY_PLANT;
-        //case ENTITY_CARNIVORE: return cell.entity.ENTITY_TYPE !== ENTITY_CARNIVORE;
+      //case ENTITY_CARNIVORE: return cell.entity.ENTITY_TYPE !== ENTITY_CARNIVORE;
       default: return false;
       }
     });
@@ -34,11 +34,17 @@ export default class Cell {
       ? openCells[floor(random() * openCells.length)]
       : null;
   }
+  
+  moveEntityTo (cell) {
+    const entity = this.entity;
+    this.removeEntity();
+    cell.setEntity(entity);
+  }
 
   setEntity (entity) {
     this.entity && this.removeEntity();
-    this.entity = entity;
     entity.cell = this;
+    this.entity = entity;
   }
 
   removeEntity () {

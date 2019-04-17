@@ -31,11 +31,13 @@ const tryCall = async ({ query, variables, }) => {
 /**
  * 
  * @param {Object} props
+ * @param {string} props.query - GraphQL query string. Use either query or mutation parameter
+ * @param {string} props.mutation - GraphQL query string. Use either this or query parameter
  * @param {Function} props.onSuccess
  * @param {Function} props.onError
  * @returns {[state, doQuery]} - Array of that contains state and a function to do queries
  */
-const callGraphQL = ({ onSuccess, onError, } = {}) => {
+const callGraphQL = ({ query: initialQuery, mutation: initialMutation, onSuccess, onError, } = {}) => {
   const [ state, setState, ] = useState({
     loading: false,
     data: [],
@@ -52,17 +54,17 @@ const callGraphQL = ({ onSuccess, onError, } = {}) => {
      * @param {Object} [props.variables] - GraphQL variables to send with this or mutation
      * @returns {boolean} - True if query was successfull, or false
      */
-    const q = async ({ query, mutation, variables, }) => {
+    const q = async ({ query, mutation, variables, } = {}) => {
       setState(prevResult => ({ ...prevResult, loading: true, }))
       const result = {
-        ...(await tryCall({ query: query || mutation, variables, })),
+        ...(await tryCall({ query: query || initialQuery || mutation || initialMutation, variables, })),
         variables,
       };
       result.error
         ? onError && onError(result)
         : onSuccess && onSuccess(result);
       setState(result);
-      return !result.error;
+      return result;
     }
     return q;
   }, []);

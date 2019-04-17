@@ -19,6 +19,7 @@ const Budget = () => {
     loading: queryLoading,
     error: queryError,
   }, query, ] = callGraphQL({
+    query: GET_FUNDS,
     onError: ({ error, }) => addToast({
       type: 'error',
       title: 'Error',
@@ -44,7 +45,7 @@ const Budget = () => {
             : 'removed'} successfully`,
         }
       );
-      query({ query: GET_FUNDS, });
+      query();
     },
     onError: ({ error, }) => addToast({
       type: 'error',
@@ -53,7 +54,7 @@ const Budget = () => {
     }),
   });
 
-  useEffect(() => (query({ query: GET_FUNDS, }), undefined), []);
+  useEffect(() => (query(), undefined), []);
 
   return (
     <ListDesktop
@@ -94,7 +95,7 @@ const Budget = () => {
           type: 'date',
         },
       ]}
-      onFiltersChange={filters => query({ query: GET_FUNDS, variables: { filters, }, })}
+      onFiltersChange={filters => query({ variables: { filters, }, })}
       columns={[
         {
           key: 'name',

@@ -10,28 +10,28 @@ import { ToasterContext, } from 'components/contexts';
 
 const Home = () => {
   const { addToast, } = useContext(ToasterContext);
+  const [ , register, ] = callGraphQL({
+    mutation: CREATE_USER,
+    onSuccess: ({ data: { username, }, errors, }) => {
+      addToast({
+        type: errors ? 'error' : 'success',
+        title: errors ? 'Error' : 'Success',
+        text: errors
+          ? `${errors.join('. ')}.`
+          : `User ${username} created successfully`,
+      });
+    },
+    onError: ({ status, statusText, }) => {
+      addToast({
+        type: 'error',
+        title: 'Error',
+        text: `${status}: ${statusText}`,
+      });
+    },
+  });
 
   const createUser = async variables => {
-    const result = await callGraphQL({
-      mutation: CREATE_USER,
-      variables,
-      onSuccess: ({ data: { username, }, errors, }) => {
-        addToast({
-          type: errors ? 'error' : 'success',
-          title: errors ? 'Error' : 'Success',
-          text: errors
-            ? `${errors.join('. ')}.`
-            : `User ${username} created successfully`,
-        });
-      },
-      onError: ({ status, statusText, }) => {
-        addToast({
-          type: 'error',
-          title: 'Error',
-          text: `${status}: ${statusText}`,
-        });
-      },
-    });
+    const result = await register({ variables, });
     return !result.error;
   };
 

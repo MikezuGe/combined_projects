@@ -14,7 +14,7 @@ const StyledInput = styled(props => <input {...props} />)`
 `;
 
 
-const GeneralField = ({ name, type, label, labelAfter, actions, meta, ...rest }) => {
+const GeneralField = ({ name, type, label, labelAfter, meta, ...rest }) => {
   const { showErrors, error, } = meta;
   return (
     <Wrapper>
@@ -29,10 +29,6 @@ const GeneralField = ({ name, type, label, labelAfter, actions, meta, ...rest })
         id={name}
         type={type === 'number' ? 'text' : type}
         {...rest}
-        {...(actions && (Array.isArray(actions)
-          ? actions.reduce((total, action) => ({ ...total, [action]: 'true', }), {})
-          : { [actions]: 'true', }
-        ))}
       />
       {label && !!labelAfter && (
         <Label

@@ -1,4 +1,4 @@
-import React, { useState, useImperativeHandle, forwardRef, } from 'react';
+import React, { useState, } from 'react';
 import PropTypes from 'prop-types';
 
 import {
@@ -33,32 +33,9 @@ const parseFieldValueByType = (type, value) => (
 );
 
 
-const Field = forwardRef(({ name, text, type, validate, initialValue, submit, ...rest }, ref) => {
+const Field = ({ name, text, type, validate, initialValue, submit, children, ...rest }) => {
   const [ value, setValue, ] = useState(parseInitialValueByType(type, initialValue));
   const [ meta, setMeta, ] = useState(initialMeta);
-
-  useImperativeHandle(ref, () => ({
-    validateOnSubmit: () => {
-      const error = validate ? validate(value) : undefined;
-      const valid = !error;
-      setMeta(prevMeta => ({
-        ...prevMeta,
-        submitted: true,
-        showErrors: !valid,
-        valid,
-        error,
-      }));
-      return valid;
-    },
-    reset: () => {
-      setValue(parseInitialValueByType(type, initialValue));
-      setMeta(initialMeta);
-    },
-    getFieldState: () => ({
-      name,
-      value: parseFieldValueByType(type, value),
-    }),
-  }));
 
   const onChange = e => {
     const value = !e
@@ -94,11 +71,35 @@ const Field = forwardRef(({ name, text, type, validate, initialValue, submit, ..
   };
 
   return (
-    type === 'checkbox' || type === 'toggle'
-      ? <ToggleField {...fieldProps} />
-      : <GeneralField {...fieldProps} />
+    <React.Fragment>
+      {type !== 'submit' && children({
+        getFieldState: () => ({
+          name,
+          value: parseFieldValueByType(type, value),
+        }),
+        validateOnSubmit: () => {
+          const error = validate ? validate(value) : undefined;
+          const valid = !error;
+          setMeta(prevMeta => ({
+            ...prevMeta,
+            submitted: true,
+            showErrors: !valid,
+            valid,
+            error,
+          }));
+          return valid;
+        },
+        reset: () => {
+          setValue(parseInitialValueByType(type, initialValue));
+          setMeta(initialMeta);
+        },
+      })}
+      {type === 'checkbox' || type === 'toggle'
+        ? <ToggleField {...fieldProps} />
+        : <GeneralField {...fieldProps} />}
+    </React.Fragment>
   );
-});
+};
 
 Field.defaultProps = {
   initialValue: '',
@@ -111,6 +112,7 @@ Field.propTypes = {
   initialValue: PropTypes.any,
   validate: PropTypes.func,
   submit: PropTypes.func,
+  children: PropTypes.func.isRequired,
 };
 
 

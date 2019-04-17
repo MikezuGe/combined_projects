@@ -16,11 +16,9 @@ const Login = props => (
         name: 'password',
         type: 'text',
         label: 'Password',
-      },
-    ]}
-    buttons={[
-      {
+      }, {
         name: 'login',
+        type: 'submit',
         text: 'Login',
         actions: [ 'submit', 'close', ],
       },

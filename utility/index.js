@@ -1,4 +1,4 @@
-const createDataFolderStructure = require('./createdatafolderstructure');
+const createDataFolderStructure = require('./createDataFolderStructure');
 const fallbackRoute = require('./fallbackRoute');
 const indexRoute = require('./indexRoute');
 const logger = require('./logger');

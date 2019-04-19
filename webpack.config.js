@@ -7,14 +7,15 @@ const OpenBrowserWebpackPlugin = require('open-browser-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 
-const htmlTemplate = ({ title, jsSources, }) => `<!DOCTYPE html>
+const htmlTemplate = ({ title, jsSources, headContent }) => `<!DOCTYPE html>
 
 <html>
   <head>
     <meta charset='utf-8'>
     <meta name='viewport' content='width=device-width, initial-scale=1.0, shrink-to-fit=no'>
     <link rel='icon' type='image/gif' href='/shared_assets/favico/favicogifslow.gif'>
-    <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet'>
+    ${headContent.join('\n    ')}
     <title>${title}</title>
   </head>
   <body>
@@ -59,6 +60,16 @@ const babelLoader = {
   },
 };
 
+
+
+const projectSpecialCases = {
+  'minesweeper': {
+    'headContent': [
+      `<script defer src='https://use.fontawesome.com/releases/v5.8.1/js/all.js' integrity='sha384-g5uSoOSBd7KkhAMlnQILrecXvzst9TdC09/VM+pjDTCM+1il8RHz5fKANTFFb+gQ' crossorigin='anonymous'></script>`
+    ],
+  },
+};
+
 const pluginHtmlWebpackPlugin = project => {
   return new HtmlWebpackPlugin({
     'filename': path.resolve(`./public/${project}/index.html`),
@@ -67,7 +78,11 @@ const pluginHtmlWebpackPlugin = project => {
     'minify': isProduction,
     'templateContent': htmlTemplate({
       'title': project,
+      'headContent': [
+        ...((projectSpecialCases[project] && projectSpecialCases[project].headContent) || []),
+      ],
       'jsSources': [
+        ...((projectSpecialCases[project] && projectSpecialCases[project].jsSources) || []),
         `/${project}/${bundleName}`,
         isProduction ? '' : 'http://localhost:35729/livereload.js',
       ],
@@ -80,7 +95,11 @@ const openBrowserWebpackPlugin = new OpenBrowserWebpackPlugin({
   //ignoreErrors: true,
 });
 
-const webpackLivereloadPlugin = new WebpackLivereloadPlugin({});
+const webpackLivereloadPlugin = new WebpackLivereloadPlugin({
+  'protocol': 'http',
+  'port': 35729,
+  'host': 'localhost',
+});
 
 const processEnvPlugin = new webpack.DefinePlugin({
   'process.env.JWT_SECRET': JSON.stringify(process.env.JWT_SECRET),

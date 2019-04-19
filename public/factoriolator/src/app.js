@@ -27,7 +27,7 @@ const App = () => {
 
   const setModulesAmount = amount => setModules(prevModules =>
     Object.entries(prevModules).reduce((total, [ key, value, ], i) =>
-      ({ ...total, [key]: i < amount ? value : undefined }), {}));
+      ({ ...total, [key]: i < amount ? value : undefined, }), {}));
 
   const filterModules = allowed => setModules(prevModules =>
     Object.entries(prevModules).reduce((total, [ key, value, ]) =>

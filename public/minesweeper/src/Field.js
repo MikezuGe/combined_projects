@@ -90,7 +90,6 @@ class Field {
   }
 
   checkIfVictory () {
-    console.log(this.cellsOpened, this.cellsOpenToWin);
     if (this.cellsOpened === this.cellsOpenToWin) {
       this.winGame();
     }

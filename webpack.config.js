@@ -102,7 +102,7 @@ const webpackLivereloadPlugin = new WebpackLivereloadPlugin({
 });
 
 const processEnvPlugin = new webpack.DefinePlugin({
-  'process.env.JWT_SECRET': JSON.stringify(process.env.JWT_SECRET),
+  'JWT_SECRET': JSON.stringify(process.env.JWT_SECRET),
 });
 
 const projects = fs.readdirSync('./public')

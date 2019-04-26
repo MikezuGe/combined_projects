@@ -30,7 +30,7 @@ const Form = ({ fields, initialValues, children, onSubmit, onClose, }) => {
   const submit = async actions => {
     if (!actions.includes('submit')) {
       actions.includes('reset') && Object.values(refs).forEach(({ current, }) => current.reset());
-      actions.includes('close') && onClose();
+      onClose && actions.includes('close') && onClose();
       return;
     }
     const _refs = Object.values(refs);
@@ -46,7 +46,7 @@ const Form = ({ fields, initialValues, children, onSubmit, onClose, }) => {
     }, {});
     if (await onSubmit(keyValuePairs)) {
       actions.includes('reset') && _refs.forEach(({ current, }) => current.reset());
-      actions.includes('close') && onClose();
+      onClose && actions.includes('close') && onClose();
     }
   };
 
@@ -87,7 +87,7 @@ Form.propTypes = {
   initialValues: PropTypes.object,
   children: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
-  onClose: PropTypes.func.isRequired,
+  onClose: PropTypes.func,
 };
 
 

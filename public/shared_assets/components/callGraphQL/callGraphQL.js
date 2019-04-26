@@ -30,11 +30,23 @@ const tryCall = async ({ query, variables, }) => {
 
 /**
  * 
+ * @callback onSuccuessOrError
+ * @param {Object} data
+ * @param {boolean} data.loading
+ * @param {Object} data.data
+ * @param {Array} data.error
+ * @param {Object} data.variables
+ * 
+ */
+
+
+/**
+ * 
  * @param {Object} props
  * @param {string} props.query - GraphQL query string. Use either query or mutation parameter
  * @param {string} props.mutation - GraphQL query string. Use either this or query parameter
- * @param {Function} props.onSuccess
- * @param {Function} props.onError
+ * @param {onSuccuessOrError} props.onSuccess
+ * @param {onSuccuessOrError} props.onError
  * @returns {[state, doQuery]} - Array of that contains state and a function to do queries
  */
 const callGraphQL = ({ query: initialQuery, mutation: initialMutation, onSuccess, onError, } = {}) => {

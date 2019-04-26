@@ -4,6 +4,19 @@ import PropTypes from 'prop-types';
 import { Form, } from 'components/organisms';
 
 
+const validateUsername = username => {
+  if (!username) {
+    return 'Required';
+  }
+};
+
+const validatePassword = password => {
+  if (!password) {
+    return 'Required';
+  }
+};
+
+
 const Login = props => (
   <Form
     {...props}
@@ -12,10 +25,12 @@ const Login = props => (
         name: 'username',
         type: 'text',
         label: 'Username',
+        validate: validateUsername,
       }, {
         name: 'password',
         type: 'text',
         label: 'Password',
+        validate: validatePassword,
       }, {
         name: 'login',
         type: 'submit',
@@ -24,19 +39,19 @@ const Login = props => (
       },
     ]}
   >
-    {({ renderField, renderButton, }) => (
-      <React.Fragment>
+    {({ renderField, }) => (
+      <div style={{ width: '500px', }}>
         {renderField('username')}
         {renderField('password')}
-        {renderButton('login')}
-      </React.Fragment>
+        {renderField('login')}
+      </div>
     )}
   </Form>
 );
 
 Login.propTypes = {
   onSubmit: PropTypes.func.isRequired,
-  onClose: PropTypes.func.isRequired,
+  onClose: PropTypes.func,
 };
 
 

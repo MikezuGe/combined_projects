@@ -35,6 +35,10 @@ const { Fund, User, } = require('../../../api/mongoose/models/yourbudget');
     logger.info('Inserting mock user data into development database');
     const testData = [
       {
+        email: 'admin@admin.admin',
+        username: 'admin',
+        password: 'admin',
+      }, {
         email: 'a@a.a',
         username: 'a',
         password: 'aaa',

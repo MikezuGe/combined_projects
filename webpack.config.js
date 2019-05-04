@@ -55,6 +55,7 @@ const babelLoader = {
       ],
       'plugins': [
         [ '@babel/proposal-class-properties', ],
+        [ '@babel/plugin-syntax-dynamic-import', ],
       ],
     },
   },
@@ -118,13 +119,16 @@ module.exports = {
   'output': {
     'path': __dirname + '/public',
     'filename': `[name]/${bundleName}`,
+    'chunkFilename': `[name]/${bundleName}`,
+    'publicPath': '/',
   },
   'resolve': {
     'alias': {
       'components': path.resolve('./public/shared_assets/components'),
     }
   },
-  'devtool': isProduction ? 'hidden-source-map' : 'eval-source-map',
+  //'devtool': isProduction ? 'hidden-source-map' : 'eval-source-map',
+  'devtool': isProduction ? 'hidden-source-map' : 'source-map',
   'module': {
     'rules': [
       eslintLoader,

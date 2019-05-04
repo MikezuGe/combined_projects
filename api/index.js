@@ -1,10 +1,12 @@
 const express = require('express');
-const router = express.Router();
+const apiRouter = express.Router();
 
 
-router
+apiRouter
   .use('/graphql', require('./graphql'))
-  .use('/glib', require('./routes/glib'));
+  .use('/glib', require('./routes/glib'))
+  .use('/test', require('./routes/test'))
+  .all('*', (req, res) => res.send('No such api route'));
 
 
-module.exports = router;
+module.exports = apiRouter;

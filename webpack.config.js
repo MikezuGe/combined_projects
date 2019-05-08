@@ -93,6 +93,7 @@ const pluginHtmlWebpackPlugin = project => {
 
 const openBrowserWebpackPlugin = new OpenBrowserWebpackPlugin({
   url: 'http://localhost:3000',
+  browser: 'chrome',
   //ignoreErrors: true,
 });
 

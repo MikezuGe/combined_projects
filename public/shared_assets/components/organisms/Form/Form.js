@@ -2,93 +2,139 @@ import React, { useRef, } from 'react';
 import PropTypes from 'prop-types';
 
 import Field from './Field';
+import SubmitButton from './SubmitButton';
 
 
-const getValidatorByType = type => {
-  switch (type) {
-  case 'number': return value => /^\d+\.\d+$/.test(value) || 'Must be a number';
-  default: return undefined;
-  }
-};
 
-
-const createValidator = (type, validate) => {
-  const validateByType = getValidatorByType(type);
-  return validateByType
-    ? validate
-      ? value => validateByType(value) && validate(value)
-      : value => validateByType(value)
-    : validate && (value => validate(value));
-};
-
-
-const Form = ({ fields, initialValues, children, onSubmit, onClose, }) => {
+/**
+ * @param {Object} props
+ * @param {onSubmit} props.onSubmit - Asynchronous, called whenever a field with type 'submit' and action 'submit' is clicked
+ * @param {func} [props.onClose] - Called whenever a field with type 'submit' and action 'close' is clicked
+ * @param {func} [props.onReset] - Called whenever a field with type 'submit' and action 'reset' is clicked
+ * @param {Object} [props.initialValues] - Key value pair of initial values
+ * @param {field[]} props.fields - Array of field objects
+ * @param {children} props.children - Callback function, whose parameter provides form controlling functions
+ */
+const Form = ({ onSubmit, onClose, onReset, initialValues, fields, children, }) => {
   const refs = fields
-    .filter(({ type, }) => type !== 'submit')
+    .filter(field => field.type !== 'submit')
     .reduce((total, { name, }) => ({ ...total, [name]: useRef(), }), {});
-
-  const submit = async actions => {
-    if (!actions.includes('submit')) {
-      actions.includes('reset') && Object.values(refs).forEach(({ current, }) => current.reset());
-      actions.includes('close') && onClose();
-      return;
-    }
-    const _refs = Object.values(refs);
-    const formIsValid = !_refs
-      .map(({ current, }) => current.validateOnSubmit())
-      .some(valid => !valid);
-    if (!formIsValid) {
-      return;
-    }
-    const keyValuePairs = _refs.reduce((total, { current, }) => {
-      const { name, value, } = current.getFieldState();
-      return { ...total, [name]: value, };
-    }, {});
-    if (await onSubmit(keyValuePairs)) {
-      actions.includes('reset') && _refs.forEach(({ current, }) => current.reset());
-      actions.includes('close') && onClose();
-    }
-  };
-
+  
   const renderField = name => {
-    const { validate, actions, ...fieldProps } = fields.find(field => field.name === name);
-    if (!fieldProps) {
-      throw new Error(`No field with name '${name}' found in fields`);
+    const field = fields.find(field => field.name === name);
+    if (field.type !== 'submit') {
+      !field.initialValue && (field.initialValue = initialValues[name] || '');
+      return (
+        <Field {...field}>
+          {field => (refs[name].current = field, undefined)}
+        </Field>
+      );
     }
-
-    fieldProps.type === 'submit'
-      ? (fieldProps.submit = () => submit(actions))
-      : (fieldProps.validate = createValidator(fieldProps.type, validate));
-
-    initialValues && initialValues.hasOwnProperty(name)
-      && (fieldProps.initialValue = initialValues[name]);
-
+    const { actions, ...props } = field;
+    props.onClick = async () => {
+      const fieldRefs = Object.entries(refs).map(([ key, { current, }, ]) => ({ key, current, }));
+      if (!actions.includes('submit')) {
+        if (actions.includes('close')) {
+          onClose && onClose()
+        } else if (actions.includes('reset')) {
+          onReset && (fieldRefs.forEach(field => field.current.reset()), onReset());
+        }
+        return;
+      }
+      // Form meta setting 'submitted'
+      const valid = fieldRefs.reduce((valid, field) => valid ? field.current.validate() : (field.current.validate(), false), true);
+      if (!valid) {
+        return;
+      }
+      const data = fieldRefs.reduce((total, { key, current, }) => ({ ...total, [key]: current.getValue(), }), {});
+      if (await onSubmit(data)) {
+        if (actions.includes('close')) {
+          onClose && onClose()
+        } else if (actions.includes('reset')) {
+          onReset && (fieldRefs.forEach(field => field.current.reset()), onReset());
+        }
+      }
+    };
     return (
-      <Field
-        {...fieldProps}
-        key={name}
-      >
-        {handlers => (refs[name].current = handlers, undefined)}
-      </Field>
+      <SubmitButton {...props} />
     );
   };
 
-  return children({ renderField, });
+  return (
+    children({ renderField, })
+  );
 };
 
 Form.propTypes = {
-  fields: PropTypes.arrayOf(PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    type: PropTypes.string.isRequired,
-    validate: PropTypes.func,
-    initialValue: PropTypes.any,
-    actions: PropTypes.arrayOf(PropTypes.string.isRequired),
-  })).isRequired,
-  initialValues: PropTypes.object,
-  children: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
-  onClose: PropTypes.func.isRequired,
+  onClose: PropTypes.func,
+  onReset: PropTypes.func,
+  initialValues: PropTypes.object,
+  fields: PropTypes.array.isRequired,
+  children: PropTypes.func.isRequired,
+};
+
+Form.defaultProps = {
+  initialValues: {},
 };
 
 
 export default Form;
+
+
+/**
+ * @callback onSubmit
+ * @async
+ * @param {Object} data - Key value pairs where key is the name of a field and value is the value of that field
+ */
+
+/**
+ * @typedef {'text'|'password'|'number'|'date'|'toggle'|'checkbox'|'radio'|'select'|'submit'} fieldTypes
+ */
+
+/**
+ * @callback onChange
+ * @param {string|bool|Date} value - Field value
+ */
+
+/**
+ * @callback validate
+ * @param {string|bool|Date} value - Field value to validate
+ * @returns {string|undefined} - Error string, or a falsy value if no errors
+ */
+
+/**
+ * @typedef option
+ * @property {string} text - Text displayed in the option
+ * @property {string} value - Value of the option
+ * @property {string} group - Group name the option belongs to. Groups can be shown/hidden
+ */
+
+/**
+ * @typedef field
+ * @property {string} name - Name of a field
+ * @property {fieldTypes} [type=text] - Type of a field
+ * @property {string} [label] - Displayed title of the field
+ * @property {string} [placeholder] - Value displayed in the field, when there is no value
+ * @property {string|bool|Date} [initialValue] - Value of a field, after form has been initialized
+ * @property {onChange} onChange - Function that is called whenever field's value changes
+ * @property {validate|validate[]} [validate] - Function, or an array of functions, which validates if user inputs correct values
+ * @property {bool} [labelAfter] - If true, places label (title) after the input. Normally label is displayed before the input
+ * @property {option[]} [options] - Selectable options, required for fields with type 'select' and 'radio'
+ */
+
+/**
+ * @callback renderField
+ * @param {string} name - Name of the field to render
+ * @returns {JSX.Element} - The field as JSX element
+ */
+
+/**
+ * @typedef formChildProps
+ * @property {renderField} renderField
+ */
+
+/**
+ * @callback children
+ * @param {formChildProps} props
+ */

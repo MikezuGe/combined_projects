@@ -42,9 +42,18 @@ const Register = props => (
         label: 'Password',
         validate: validatePassword,
       }, {
+        name: 'test',
+        type: 'select',
+        label: 'Test',
+        options: [
+          {},
+          { text: 'Test1', value: 'test1', group: '1', },
+          { text: 'Test2', value: 'test2', group: '2', },
+        ],
+      }, {
         name: 'register',
         type: 'submit',
-        text: 'Register',
+        title: 'Register',
         actions: [ 'submit', 'close', ],
       },
     ]}
@@ -54,6 +63,7 @@ const Register = props => (
         {renderField('email')}
         {renderField('username')}
         {renderField('password')}
+        {renderField('test')}
         {renderField('register')}
       </div>
     )}

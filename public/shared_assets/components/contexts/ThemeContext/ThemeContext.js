@@ -53,6 +53,9 @@ const theme = {
     tertiaryColor: '#eafc40',
     quaternaryColor: '#254558',
     quinaryColor: '#2b2b3a',
+    shadowColor: '#666666',
+    // x, y, blur, area, color
+    defaultShadow: '1px 1px 2px 1px #666666',
     breakpoints: (breakpoints, css) => {
       !Array.isArray(breakpoints) && (breakpoints = [ breakpoints, ]);
       return breakpoints.reduce((total, breakpoint) => {

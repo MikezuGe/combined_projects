@@ -1,119 +1,116 @@
-import React, { useState, } from 'react';
+import React, { Fragment, useState, useMemo, } from 'react';
 import PropTypes from 'prop-types';
 
-import {
-  GeneralField,
-  ToggleField,
-} from '../../molecules';
-import { parseDate, } from '../../utility';
+import { Field as InputField, } from 'components/molecules';
 
 
 const initialMeta = {
-  submitted: false,
-  showErrors: false,
+  error: '',
   valid: false,
-  error: undefined,
+  showError: false,
 };
 
 
-const parseInitialValueByType = (type, value) => (
-  type === 'date'
-    ? parseDate(value, 'YYYY-MM-DD')
-    : value || (type === 'checkbox' || type === 'toggle'
-      ? false
-      : '')
-);
-
-const parseFieldValueByType = (type, value) => (
-  type === 'number'
-    ? parseFloat(value)
-    : type === 'date'
-      ? new Date(value)
-      : value
-);
-
-
-const Field = ({ name, text, type, validate, initialValue, submit, children, ...rest }) => {
-  const [ value, setValue, ] = useState(parseInitialValueByType(type, initialValue));
+/**
+ * @param {Object} props
+ * @param {string|bool|Date} props.initialValue
+ * @param {func} props.onChange
+ * @param {func|func[]} props.validate
+ * @param {children} children
+ */
+const Field = ({ initialValue, onChange, validate: initialValidators, children, ...rest }) => {
+  const [ value, setValue, ] = useState(initialValue);
   const [ meta, setMeta, ] = useState(initialMeta);
 
-  const onChange = e => {
-    const value = !e
-      ? value
-      : type === 'checkbox' || type === 'toggle'
-        ? e.target.checked
-        : e.target.value;
-    const error = validate ? validate(value) : undefined;
-    setValue(value);
-    setMeta(prevMeta => ({
-      ...prevMeta,
-      showErrors: prevMeta.submitted && !!error,
-      valid: !error,
-      error,
-    }));
-  };
+  const setMetaError = useMemo(() => error => setMeta(prevMeta => ({
+    ...prevMeta,
+    valid: !error,
+    error,
+    showError: prevMeta.showError && !!error,
+  })), []);
 
-  const fieldProps = {
-    ...rest,
-    name,
-    type,
-    ...(submit
-      ? {
-        onClick: submit,
-        value: text,
-      }
-      : {
-        meta,
-        value,
-        onChange,
-      }
-    ),
+  const validators = useMemo(
+    () => initialValidators ?
+      Array.isArray(initialValidators) ?
+        initialValidators :
+        [ initialValidators, ] :
+      [],
+    [ initialValidators, ]
+  );
+
+  const childProps = {
+    addValidator: fn => validators.push(fn),
+    removeValidator: fn => {
+      const index = validators.indexOf(fn);
+      index !== -1 && validators.splice(index);
+    },
+    setValue: value => setValue(value),
+    getValue: () => value,
+    getMeta: () => meta,
+    validate: () => {
+      const error = validators.reduce((error, validate) => error || validate(value), '');
+      setMeta(prevMeta => ({
+        ...prevMeta,
+        valid: !error,
+        error,
+        showError: !!error,
+      }));
+      return !error;
+    },
+    reset: () => {
+      setMeta({ ...initialMeta, });
+      setValue(initialValue);
+    },
   };
 
   return (
-    <React.Fragment>
-      {type !== 'submit' && children({
-        getFieldState: () => ({
-          name,
-          value: parseFieldValueByType(type, value),
-        }),
-        validateOnSubmit: () => {
-          const error = validate ? validate(value) : undefined;
-          const valid = !error;
-          setMeta(prevMeta => ({
-            ...prevMeta,
-            submitted: true,
-            showErrors: !valid,
-            valid,
-            error,
-          }));
-          return valid;
-        },
-        reset: () => {
-          setValue(parseInitialValueByType(type, initialValue));
-          setMeta(initialMeta);
-        },
-      })}
-      {type === 'checkbox' || type === 'toggle'
-        ? <ToggleField {...fieldProps} />
-        : <GeneralField {...fieldProps} />}
-    </React.Fragment>
+    <Fragment>
+      {children(childProps)}
+      <InputField
+        {...rest}
+        value={value}
+        onChange={useMemo(() => onChange ?
+          value => {
+            const error = validators.reduce((error, validate) => error || validate(value), '');
+            setValue(value);
+            setMetaError(error);
+            onChange(value);
+          } :
+          value => {
+            const error = validators.reduce((error, validate) => error || validate(value), '');
+            setValue(value);
+            setMetaError(error);
+          }, [ onChange, ]
+        )}
+        meta={meta}
+      />
+    </Fragment>
   );
 };
 
-Field.defaultProps = {
-  initialValue: '',
-};
-
 Field.propTypes = {
-  name: PropTypes.string.isRequired,
-  type: PropTypes.string.isRequired,
-  text: PropTypes.string,
-  initialValue: PropTypes.any,
-  validate: PropTypes.func,
-  submit: PropTypes.func,
+  initialValue: PropTypes.oneOfType([
+    PropTypes.bool,
+    PropTypes.string,
+    PropTypes.instanceOf(Date),
+  ]),
+  onChange: PropTypes.func,
+  validate: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.func),
+    PropTypes.func,
+  ]),
   children: PropTypes.func.isRequired,
 };
 
 
 export default Field;
+
+/**
+ * @typedef fieldChildProps
+ * @property {function} isValid - Returns true if field has a valid value
+ */
+
+/**
+ * @callback children
+ * @param {fieldChildProps} props
+ */

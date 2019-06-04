@@ -1,18 +1,25 @@
 const express = require('express');
 const { exec, } = require('child_process');
 const { lstat, } = require('fs');
-const gitHandlerRouter = express.Router();
 
 const logger = require('./utility/logger');
+
+
+const gitHandlerRouter = express.Router();
 
 
 gitHandlerRouter.post('/', (req, res, next) => {
   if (!req.header('User-Agent')
     || !req.header('X-GitHub-Event')
-    || req.header('X-GitHub-Event') !== 'push'
+    || !(req.header('X-GitHub-Event') === 'push')
     || !req.header('X-GitHub-Delivery')) {
       next();
   } else {
+    if (!(req.body.ref === 'refs/heads/master')) {
+      logger.info(`Git upgraded on branch '${req.body.ref}', no actions taken`);
+      res.send(`Git upgraded on branch '${req.body.ref}', no actions taken`);
+      return;
+    }
     lstat('./githook.sh', (err, stats) => {
       if (err) {
         if (err.code === 'ENOENT') {

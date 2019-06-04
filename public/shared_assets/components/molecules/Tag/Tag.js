@@ -34,8 +34,8 @@ width: 2em;
 `;
 
 
-const Tag = ({ name, value: defaultValue, onClick, changeDone, remove, }) => {
-  const [ value, setValue, ] = useState(defaultValue);
+const Tag = ({ name, value: initialValue, onClick, changeDone, remove, }) => {
+  const [ value, setValue, ] = useState(initialValue);
   const [ editing, setEditing, ] = useState(!!changeDone);
 
   const handleChangeDone = () => {
@@ -56,7 +56,7 @@ const Tag = ({ name, value: defaultValue, onClick, changeDone, remove, }) => {
   }, [ editing, value, ]);
 
   return (
-    <React.Fragment>
+    <>
       <Wrapper
         onClick={onClick ? onClick : !editing ? (() => setEditing(true)) : undefined}
         remove={!!remove}
@@ -82,7 +82,7 @@ const Tag = ({ name, value: defaultValue, onClick, changeDone, remove, }) => {
           onClick={remove}
         />
       )}
-    </React.Fragment>
+    </>
   );
 };
 

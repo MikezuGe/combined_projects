@@ -1,4 +1,4 @@
-import React, { useContext, } from 'react';
+import React, { useContext, useMemo, } from 'react';
 
 import { DefaultDesktop, } from '../pages';
 import { Register, } from '../forms';
@@ -10,6 +10,7 @@ import { ToasterContext, } from 'components/contexts';
 
 const Home = () => {
   const { addToast, } = useContext(ToasterContext);
+
   const [ , register, ] = callGraphQL({
     mutation: CREATE_USER,
     onSuccess: ({ data: { username, }, errors, }) => {
@@ -30,15 +31,15 @@ const Home = () => {
     },
   });
 
-  const createUser = async variables => {
+  const createUser = useMemo(() => async variables => {
     const result = await register({ variables, });
     return !result.error;
-  };
+  }, []);
 
   return (
     <DefaultDesktop>
       <Register
-        onSubmit={async input => await createUser({ input, })}
+        onSubmit={useCallback(() => async input => await createUser({ input, }), [])}
         onClose={test => { test }}
       />
     </DefaultDesktop>

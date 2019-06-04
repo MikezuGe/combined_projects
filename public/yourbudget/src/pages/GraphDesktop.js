@@ -6,10 +6,10 @@ import DefaultDesktop from './DefaultDesktop';
 
 const GraphDesktop = ({ secondaryMenuItems, children, }) => (
   <DefaultDesktop secondaryMenuItems={secondaryMenuItems}>
-    <React.Fragment>
+    <>
       <div>{'Graphdesktop'}</div>
       {children()}
-    </React.Fragment>
+    </>
   </DefaultDesktop>
 );
 

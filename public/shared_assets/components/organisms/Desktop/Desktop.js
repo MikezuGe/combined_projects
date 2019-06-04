@@ -14,7 +14,7 @@ padding: 1em;
 
 
 const Desktop = ({ children, primaryMenuItems, secondaryMenuItems, }) => (
-  <React.Fragment>
+  <>
     <Header />
     <SideBar
       primaryMenuItems={primaryMenuItems}
@@ -23,7 +23,7 @@ const Desktop = ({ children, primaryMenuItems, secondaryMenuItems, }) => (
     <Main>
       {children}
     </Main>
-  </React.Fragment>
+  </>
 );
 
 Desktop.propTypes = {

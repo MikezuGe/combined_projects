@@ -25,11 +25,11 @@ const Login = props => (
     ]}
   >
     {({ renderField, }) => (
-      <React.Fragment>
+      <>
         {renderField('username')}
         {renderField('password')}
         {renderField('login')}
-      </React.Fragment>
+      </>
     )}
   </Form>
 );

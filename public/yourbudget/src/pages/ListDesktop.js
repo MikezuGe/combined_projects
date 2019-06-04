@@ -7,7 +7,7 @@ import { DataTable, SearchBar, } from 'components/organisms';
 
 const ListDesktop = ({ loading, error, data, columns, filters, onFiltersChange, secondaryMenuItems, }) => (
   <DefaultDesktop secondaryMenuItems={secondaryMenuItems}>
-    <React.Fragment>
+    <>
       {filters && (
         <SearchBar
           filters={filters}
@@ -25,7 +25,7 @@ const ListDesktop = ({ loading, error, data, columns, filters, onFiltersChange, 
       }
       {loading && <div>{'Loading'}</div>}
       {error && <div>{`Error: ${error}`}</div>}
-    </React.Fragment>
+    </>
   </DefaultDesktop>
 );
 

@@ -43,8 +43,7 @@ const SearchBar = ({ filters, onFiltersChange, }) => {
   });
 
   const handleTagRemove = i => setTags(prevTags => {
-    prevTags.splice(i, 1)[0].value
-      && onFiltersChange(prevTags.reduce(tagsReducer, {}));
+    prevTags.splice(i, 1)[0].value && onFiltersChange(prevTags.reduce(tagsReducer, {}));
     return prevTags;
   });
 
@@ -60,7 +59,7 @@ const SearchBar = ({ filters, onFiltersChange, }) => {
   }, [ suggestionsShown, ])
 
   return (
-    <React.Fragment>
+    <>
       <Bar onClick={() => setSuggestionsShown(true)}>
         <StyledIcon icon={'search'} />
         {tags.map(({ key, ...tag }, i) => (
@@ -89,7 +88,7 @@ const SearchBar = ({ filters, onFiltersChange, }) => {
           }
         </Bar>
       )}
-    </React.Fragment>
+    </>
   );
 };
 

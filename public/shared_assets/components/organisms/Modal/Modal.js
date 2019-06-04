@@ -1,4 +1,5 @@
 import React, { useState, useEffect, } from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 
@@ -21,11 +22,7 @@ transition: top ${({ theme, }) => theme.animateSlow} ease-out;
 `;
 
 
-let listener = () => {};
-export const openModal = render => listener(render);
-
-
-const Modal = () => {
+const Modal = ({ children, }) => {
   const [ active, setActive, ] = useState(false);
   const [ render, setRender, ] = useState(undefined);
 
@@ -38,8 +35,6 @@ const Modal = () => {
     setActive(false);
     setTimeout(setRender, 500);
   };
-
-  useEffect(() => (listener = openModal, undefined), []);
 
   useEffect(() => {
     if (!active) {
@@ -56,6 +51,7 @@ const Modal = () => {
       active={active}
       onClick={closeModal}
     >
+      {children({ openModal, })}
       <StyledModal
         active={active}
         onClick={e => e.stopPropagation()}
@@ -64,6 +60,10 @@ const Modal = () => {
       </StyledModal>
     </Grayout>
   );
+};
+
+Modal.propTypes = {
+  children: PropTypes.func.isRequired,
 };
 
 

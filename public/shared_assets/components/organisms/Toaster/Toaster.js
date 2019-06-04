@@ -1,4 +1,5 @@
-import React, { useState, useEffect, } from 'react';
+import React, { useState, useMemo, } from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 import Toast from './Toast';
@@ -14,11 +15,8 @@ width: 12em;
 
 
 let nextId = 0;
-let listener = () => {};
-export const addToast = toast => listener(toast);
 
-
-const Toaster = () => {
+const Toaster = ({ children, }) => {
   const [ toasts, setToasts, ] = useState([]);
   const [ runTimers, setRunTimers, ] = useState(true);
 
@@ -31,8 +29,6 @@ const Toaster = () => {
   ]);
 
   const removeToast = toastId => setToasts(toasts => toasts.filter(({ id, }) => id !== toastId));
-
-  useEffect(() => (listener = addToast, undefined), []);
 
   return (
     <StyledToaster
@@ -48,8 +44,13 @@ const Toaster = () => {
           removeToast={removeToast}
         />
       ))}
+      {useMemo(() => children({ addToast, }), [])}
     </StyledToaster>
   );
+};
+
+Toaster.propTypes = {
+  children: PropTypes.func.isRequired,
 };
 
 

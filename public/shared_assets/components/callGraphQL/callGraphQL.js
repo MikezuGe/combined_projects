@@ -29,7 +29,6 @@ const tryCall = async ({ query, variables, }) => {
 
 
 /**
- * 
  * @param {Object} props
  * @param {string} props.query - GraphQL query string. Use either query or mutation parameter
  * @param {string} props.mutation - GraphQL query string. Use either this or query parameter
@@ -47,12 +46,11 @@ const callGraphQL = ({ query: initialQuery, mutation: initialMutation, onSuccess
 
   const doQuery = useMemo(() => {
     /**
-     * 
      * @param {Object} props
      * @param {string} [props.query] - GraphQL query string. Use either query or mutation parameter
-     * @param {string} [props.mutation] - GraphQL query string. Use either this or query parameter
-     * @param {Object} [props.variables] - GraphQL variables to send with this or mutation
-     * @returns {boolean} - True if query was successfull, or false
+     * @param {string} [props.mutation] - GraphQL query string. Use either mutation or query parameter
+     * @param {Object} [props.variables] - GraphQL variables to send with this query or mutation
+     * @returns {boolean} - True if query was successfull, otherwise false
      */
     const q = async ({ query, mutation, variables, } = {}) => {
       setState(prevResult => ({ ...prevResult, loading: true, }))

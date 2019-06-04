@@ -73,7 +73,7 @@ const BudgetEdit = props => (
     ]}
   >
     {({ renderField, }) => (
-      <React.Fragment>
+      <>
         {renderField('name')}
         {renderField('amount')}
         {renderField('date')}
@@ -82,7 +82,7 @@ const BudgetEdit = props => (
         {renderField('submit&reset')}
         {renderField('submit&close')}
         {renderField('close')}
-      </React.Fragment>
+      </>
     )}
   </Form>
 );

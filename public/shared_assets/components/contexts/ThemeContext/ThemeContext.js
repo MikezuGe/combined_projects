@@ -65,10 +65,10 @@ const theme = {
               ? '(min-width: 769px) AND (max-width: 1280px)' : breakpoint === 'lg'
                 ? '(min-width: 1280px)' : null;
         total += `
-    @media only screen and ${bp} {
-      ${css}
-    }
-    `;
+        @media only screen and ${bp} {
+          ${css}
+        }
+        `;
         return total;
       }, '');
     },
@@ -79,20 +79,18 @@ const theme = {
 const ThemeProvider = ({ children, globalStyle, }) => {
   const [ activeTheme, changeTheme, ] = useState('default');
   return (
-    <React.Fragment>
-      <StyledComponentThemeProvider
-        theme={{
-          ...theme[activeTheme],
-          changeTheme,
-        }}
-      >
-        <React.Fragment>
-          <GlobalStyle globalStyle={globalStyle} />
-          {children}
-          {!production && <ColorPicker />}
-        </React.Fragment>
-      </StyledComponentThemeProvider>
-    </React.Fragment>
+    <StyledComponentThemeProvider
+      theme={{
+        ...theme[activeTheme],
+        changeTheme,
+      }}
+    >
+      <>
+        <GlobalStyle globalStyle={globalStyle} />
+        {children}
+        {!production && <ColorPicker />}
+      </>
+    </StyledComponentThemeProvider>
   );
 };
 

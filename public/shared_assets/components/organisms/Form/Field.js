@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useMemo, } from 'react';
+import React, { useState, useMemo, } from 'react';
 import PropTypes from 'prop-types';
 
 import { Field as InputField, } from 'components/molecules';
@@ -64,7 +64,7 @@ const Field = ({ initialValue, onChange, validate: initialValidators, children, 
   };
 
   return (
-    <Fragment>
+    <>
       {children(childProps)}
       <InputField
         {...rest}
@@ -84,7 +84,7 @@ const Field = ({ initialValue, onChange, validate: initialValidators, children, 
         )}
         meta={meta}
       />
-    </Fragment>
+    </>
   );
 };
 

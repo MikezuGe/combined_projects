@@ -36,8 +36,5 @@ AuthProvider.propTypes = {
 };
 
 
-const AuthConsumer = AuthContext.Consumer;
-
-
-export { AuthProvider, AuthConsumer, };
+export { AuthProvider, };
 export default AuthContext;

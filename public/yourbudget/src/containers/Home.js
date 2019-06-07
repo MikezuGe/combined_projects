@@ -39,7 +39,7 @@ const Home = () => {
   return (
     <DefaultDesktop>
       <Register
-        onSubmit={useCallback(() => async input => await createUser({ input, }), [])}
+        onSubmit={async input => await createUser({ input, })}
         onClose={test => { test }}
       />
     </DefaultDesktop>

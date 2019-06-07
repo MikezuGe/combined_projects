@@ -19,7 +19,7 @@
     "deploy:build": "cross-env NODE_ENV=production webpack",
     "deploy:amend": "git add . && git commit --amend --no-edit && git push",
     "deploy:return": "git checkout dev && git merge master && git push",
-    "deploy:reverse": "git reset HEAD~ --hard && git push -f && git checkout master && git reset HEAD~ --hard && git push -f && git checkout dev"
+    "deploy:reverse": "cross-var git tag --delete $npm_package_config_defveract && git reset HEAD~ --hard && git push -f && git checkout master && git reset HEAD~ --hard && git push -f && git checkout dev"
   },
   "author": "",
   "license": "ISC",

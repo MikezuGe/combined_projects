@@ -6,19 +6,17 @@ const handleFilters = filters => {
     return {};
   }
 
-  if (filters.id) {
-    filters._id = filters.id;
-    delete filters.id;
-  }
+  const resultFilters = {};
+  filters.id && (resultFilters._id = filters.id);
 
-  return filters;
+  return resultFilters;
 };
 
 
 const checkForExisting = async (key, value) => ((await User.findOne({ [key]: value, })) && key);
 const checkInput = async ({ email, username, }) => (
-  (email && await checkForExisting('email', email))
-  || (username && await checkForExisting('username', username))
+  (email && await checkForExisting('email', email)) ||
+  (username && await checkForExisting('username', username))
 );
 
 

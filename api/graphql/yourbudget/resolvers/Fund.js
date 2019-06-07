@@ -6,36 +6,15 @@ const handleFilters = filters => {
     return {};
   }
 
-  if (filters.id) {
-    filters._id = filters.id;
-    delete filters.id;
-  }
+  const resultFilters = {};
+  filters.id && (resultFilters._id = filters.id);
+  filters.name && (resultFilters.name = { $regex: filters.name, $options: 'i', });
+  filters.startDate && (resultFilters.date = { $gte: filters.startDate, });
+  filters.endDate && (resultFilters.date = { $lte: filters.endDate, ...resultFilters.date, });
+  filters.minAmount && (resultFilters.amount = { $gte: filters.minAmount, });
+  filters.maxAmount && (resultFilters.amount = { $lte: filters.maxAmount, ...resultFilters.amount, });
 
-  if (filters.name) {
-    filters.name = { $regex: filters.name, $options: 'i', };
-  } else if (filters.name === "") {
-    delete filters.name;
-  }
-
-  if (filters.startDate) {
-    filters.date = { $gte: filters.startDate, };
-    delete filters.startDate;
-  }
-  if (filters.endDate) {
-    filters.date = { $lte: filters.endDate, ...filters.date, };
-    delete filters.endDate;
-  }
-
-  if (filters.minAmount) {
-    filters.amount = { $gte: filters.minAmount, };
-    delete filters.minAmount;
-  }
-  if (filters.maxAmount) {
-    filters.amount = { $lte: filters.maxAmount, ...filters.amount, };
-    delete filters.maxAmount;
-  }
-
-  return filters;
+  return resultFilters;
 };
 
 

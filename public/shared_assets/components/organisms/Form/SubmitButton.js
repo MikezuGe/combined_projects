@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { Button, } from 'components/atoms';
+import { Button, } from '@components/atoms';
 
 
 const StyledButton = styled(Button)`

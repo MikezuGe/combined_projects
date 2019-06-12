@@ -37,7 +37,7 @@ const keyToValue = (date, chars) => /\w/.test(chars)
  */
 const parseDate = (date, format) => {
   return format.match(/([smhDM])\1?|YYYY|YY|[/:.-\s]/gi)
-    .reduce((total, current) => (total += keyToValue(date instanceof Date ? date : new Date(date), current), total), '');
+    .reduce((total, current) => total + keyToValue(date instanceof Date ? date : new Date(date), current), '');
 };
 
 

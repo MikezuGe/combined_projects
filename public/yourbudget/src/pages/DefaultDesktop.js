@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withRouter, } from 'react-router-dom';
 
-import { Desktop, } from 'components/organisms';
+import { Desktop, } from '@components/organisms';
 
 
 const DefaultDesktop = ({ children, history, secondaryMenuItems, }) => (

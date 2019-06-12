@@ -125,8 +125,8 @@ module.exports = {
   },
   'resolve': {
     'alias': {
-      'components': path.resolve('./public/shared_assets/components'),
-    }
+      '@components': path.resolve('./public/shared_assets/components'),
+    },
   },
   //'devtool': isProduction ? 'hidden-source-map' : 'eval-source-map',
   'devtool': isProduction ? 'hidden-source-map' : 'source-map',

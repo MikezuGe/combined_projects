@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, } from 'react';
-import { math, } from 'components/utility';
+import { math, } from '@components/utility';
 const { Vec2, } = math;
 
 

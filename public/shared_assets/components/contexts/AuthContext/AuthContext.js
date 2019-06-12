@@ -17,8 +17,8 @@ const AuthProvider = ({ children, }) => {
     // handle auth, get username and email from token
     _setAuth(prevAuth => ({
       ...prevAuth,
-      isLogged: true,
-      token,
+      isLogged: !!token,
+      token: token || '',
       //email,
       //username,
     }));

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Form, } from 'components/organisms';
+import { Form, } from '@components/organisms';
 
 
 const validateName = value => {

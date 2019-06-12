@@ -2,8 +2,9 @@ import React, { useContext, } from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter, Route, Switch, Redirect, } from 'react-router-dom';
 
-import { ThemeProvider, ToasterProvider, ModalProvider, AuthContext, AuthProvider, } from 'components/contexts';
-import { Home, Budget, Graph, Settings, } from './containers';
+import { ThemeProvider, ToasterProvider, ModalProvider, AuthContext, AuthProvider, } from '@components/contexts';
+
+import { Budget, Frontpage, Graph, Home, Settings, } from './containers';
 
 
 const globalStyle = ({ theme, }) => `
@@ -40,8 +41,8 @@ html, body {
   grid-template-columns: 10% 90%;
   grid-template-rows: 15% 85%;
   ${theme.breakpoints([ 'xs', 'sm', ], `
-  grid-template-columns: 0% 100%;
-  grid-template-rows: 0% 100%;
+    grid-template-columns: 0% 100%;
+    grid-template-rows: 0% 100%;
   `)}
   grid-template-areas:
     "header main"
@@ -55,10 +56,18 @@ const App = () => {
   return (
     <BrowserRouter basename={'/yourbudget'}>
       <Switch>
-        <Route
-          path='/home'
-          component={Home}
-        />
+        {!isLogged && (
+          <Route
+            path='/frontpage'
+            component={Frontpage}
+          />
+        )}
+        {isLogged && (
+          <Route
+            path='/home'
+            component={Home}
+          />
+        )}
         {isLogged && (
           <Route
             path='/budget'
@@ -77,7 +86,7 @@ const App = () => {
             component={Settings}
           />
         )}
-        <Redirect to='/home' />
+        <Redirect to={`/${isLogged ? 'home' : 'frontpage'}`} />
       </Switch>
     </BrowserRouter>
   );

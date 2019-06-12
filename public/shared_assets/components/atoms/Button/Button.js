@@ -13,18 +13,23 @@ min-width: 6em;
 padding: 0.5em;
 `;
 
-
-const Button = ({ title, type, ...rest }) => (
+/**
+ * @param {object} props
+ * @param {string} props.label - Text displayed in the button
+ * @param {'success'|'warning'|'danger'} [props.type=success] - Determines button style
+ * @param {func} props.onClick - Self explanatory
+ */
+const Button = ({ label, type, ...rest }) => (
   <StyledButton
     {...rest}
     type={type}
   >
-    {title}
+    {label}
   </StyledButton>
 );
 
 Button.propTypes = {
-  title: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
   type: PropTypes.string,
   onClick: PropTypes.func.isRequired,
 };

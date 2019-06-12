@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
-import { Input, Label, } from 'components/atoms';
+import { Input, Label, } from '@components/atoms';
 
 
 const Wrapper = styled.div`

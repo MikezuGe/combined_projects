@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter, Route, Switch, } from 'react-router-dom';
 import axios from 'axios';
 
-import { ThemeProvider, } from 'components/contexts';
+import { ThemeProvider, } from '@components/contexts';
 
 
 const globalStyle = ({ theme, }) => `

@@ -66,7 +66,7 @@ Toast.propTypes = {
 };
 
 Toast.defaultProps = {
-  timeout: 5000,
+  timeout: 10000,
   title: 'NO TITLE PROVIDED',
   text: 'NO TEXT PROVIDED',
 };

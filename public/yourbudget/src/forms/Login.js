@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { Form, } from 'components/organisms';
+import { Form, } from '@components/organisms';
 
 
 const Login = props => (
@@ -19,17 +19,17 @@ const Login = props => (
       }, {
         name: 'login',
         type: 'submit',
-        text: 'Login',
+        label: 'Login',
         actions: [ 'submit', 'close', ],
       },
     ]}
   >
     {({ renderField, }) => (
-      <>
+      <div style={{ width: '500px', }}>
         {renderField('username')}
         {renderField('password')}
         {renderField('login')}
-      </>
+      </div>
     )}
   </Form>
 );

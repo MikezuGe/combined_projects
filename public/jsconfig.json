@@ -1,13 +1,12 @@
 {
   "compilerOptions": {
     "baseUrl": ".",
+    "jsx": "react",
+    "module": "commonjs",
     "paths": {
-      "components/*": [ "./shared_assets/components/*" ],
-      "yourbudget/*": [ "./yourbudget/*" ],
-      "evolution/*": [ "./evolution/*" ],
-      "glib/*": [ "./glib/*" ],
-      "factoriolator/*": [ "./factoriolator/*" ],
-    }
+      "@components/*": [ "./shared_assets/components/*" ],
+    },
+    "target": "esnext"
   },
   "exclude": ["node_modules"]
 }

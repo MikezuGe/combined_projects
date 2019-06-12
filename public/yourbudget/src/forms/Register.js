@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Form, } from 'components/organisms';
+import { Form, } from '@components/organisms';
 
 
 const validateEmail = value => {
@@ -53,7 +53,7 @@ const Register = props => (
       }, {
         name: 'register',
         type: 'submit',
-        title: 'Register',
+        label: 'Register',
         actions: [ 'submit', 'close', ],
       },
     ]}

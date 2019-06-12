@@ -1,9 +1,8 @@
 import React, { useContext, useEffect, } from 'react';
 
-import { Icon, } from 'components/atoms';
-import { ModalContext, ToasterContext, } from 'components/contexts';
-import callGraphQL from 'components/callGraphQL/callGraphQL';
-import { parseDate, } from 'components/utility';
+import { Icon, } from '@components/atoms';
+import { ModalContext, ToasterContext, } from '@components/contexts';
+import { callGraphQL, parseDate, } from '@components/utility';
 
 import { ListDesktop, } from '../pages';
 import { GET_FUNDS, CREATE_FUND, UPDATE_FUND, REMOVE_FUND, } from '../queries';
